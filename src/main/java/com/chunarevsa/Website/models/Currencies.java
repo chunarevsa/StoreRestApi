@@ -6,7 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Products {
+public class Currencies {
 	// Товар определяется уникальным идентификатором и обязательно должен иметь SKU,
 	// имя, тип, стоимость.
 	@Id

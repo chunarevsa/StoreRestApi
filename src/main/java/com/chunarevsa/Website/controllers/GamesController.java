@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.controllers;
 
-import com.chunarevsa.Website.models.Products;
+import com.chunarevsa.Website.models.Games;
 import com.chunarevsa.Website.repo.GamesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,8 +14,8 @@ public class GamesController {
 	private GamesRepository gamesRepository;
 
  	@GetMapping ("/games")
- 	public String gamesgMain (Model model) {
-		 Iterable<Products> games = gamesRepository.findAll();
+ 	public String gamesMain (Model model) {
+		 Iterable<Games> games = gamesRepository.findAll();
 		 model.addAttribute("games", games); // Массив данных из таблицы
 		 return "games-main";
 
