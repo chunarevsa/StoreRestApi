@@ -41,4 +41,10 @@ public class Controller1 {
 		return "blog-main";  
 	}   */
 
+	// @GetMapping("/games") 
+	// public String games (Model model) { 
+	// 	model.addAttribute("title", "Игры"); 
+	// 	return "games-main"; 
+	// }
+
 }
