@@ -27,18 +27,18 @@
 	 
 			 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 				
-				<div th:each="ell : ${products}" class="alert alert-info mt-2">
+				<div th:each="games : ${games}" class="alert alert-info mt-2">
 					<div class="col">
 						<div class="card shadow-sm">
 						  <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
 					
 						  <div class="card-body">
-							 <small th:text="'Артикул: ' + ${ell.id}" class="text-muted"></small>
-							 <h4 th:text="${ell.name}" class="card-text mt-2"></h4>
-							 <p th:text="${ell.cost} + ' $'"></p>
+							 <small th:text="'Артикул: ' + ${games.id}" class="text-muted"></small>
+							 <h4 th:text="${games.name}" class="card-text mt-2"></h4>
+							 <p th:text="${games.cost} + ' $'"></p>
 							 <div class="d-flex justify-content-between align-items-center">
 								<div class="btn-group">
-									<a th:href="'/games' + ${ell.id}" class="btn btn-warning">Обновить</a>
+									<a th:href="'/games' + ${games.id}" class="btn btn-warning">Обновить</a>
 								</div>
 							 </div>
 							 <div class="d-flex mt-2 justify-content-between align-items-center">
