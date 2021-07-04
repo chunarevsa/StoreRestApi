@@ -57,4 +57,15 @@ public class Merchs {
 		this.cost = cost;
 	}
 
+
+	public Merchs() {
+	}
+
+
+	public Merchs(String name, String description, int cost) {
+		this.name = name;
+		this.description = description;
+		this.cost = cost;
+	}
+
 }

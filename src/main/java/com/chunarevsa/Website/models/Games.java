@@ -57,4 +57,14 @@ public class Games {
 		this.cost = cost;
 	}
 
+	public Games() { 
+	}
+
+	public Games(String name, String description, int cost) {
+		this.name = name;
+		this.description = description;
+		this.cost = cost;
+	}
+
+
 }

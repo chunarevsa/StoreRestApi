@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller // добавляем, чтобы указать, что это контроллер
 public class GamesController {
@@ -21,4 +23,16 @@ public class GamesController {
 
  	}
 
-}
+	@GetMapping ("/games/add") // Добавление игры
+ 	public String gamesAdd (Model model) { 		 
+		  return "games-add";
+
+ 	} 
+	@PostMapping ("/games/add") // Добавление игры
+	public String gamesPostAdd (@RequestParam String name, @RequestParam String description, @RequestParam int cost, Model model) {
+		Games game = new Games (name, description, cost);
+		game.setType("Игра");
+		gamesRepository.save(game);
+		return "redirect:/games";
+	}
+ }

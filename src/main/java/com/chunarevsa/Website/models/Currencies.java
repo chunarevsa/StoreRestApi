@@ -57,4 +57,17 @@ public class Currencies {
 		this.cost = cost;
 	}
 
+
+	public Currencies() {
+	}
+
+
+	public Currencies(String name, String description, int cost) {
+		this.name = name;
+		this.description = description;
+		this.cost = cost;
+	}
+
+
+
 }
