@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<div th:each="merch : ${merch}" class="mt-2"> 
+		<title th:text="${merch.name}"></title>
+	</div> 
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
+</head>
+<body>
+	<header th:insert="blocks/header:: header"></header>	
+    <main>
+		<div th:each="merch : ${merch}" class="mt-2">
+			<section class="py-3 text-center container">
+				<div class="row py-lg-5">
+				  <div class="col-lg-6 col-md-8 mx-auto">
+					 <h1 th:text="${merch.name}" class="fw-light"></h1>
+						 <small th:text="'Артикул: ' + ${merch.id}" class="text-muted"></small>
+					 <p th:text="${merch.description}" class="lead text-muted"></p>
+					 <p>
+						<a href="'/merch/' + ${merch.id} + '/edit'" class="btn btn-primary my-2">Редактировать</a>
+						<a href="'/merch/' + ${merch.id} + '/remove'" class="btn btn-primary my-2">Удалить</a>
+					 </p>
+				  </div>
+				</div>
+			 </section>
+		</div>
+		
+
+	 </main>
+	 <div th:insert="blocks/footer:: footer"></div>
+</body>
+</html>

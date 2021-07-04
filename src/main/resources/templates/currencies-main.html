@@ -15,7 +15,7 @@
 				<h1 class="fw-light">Валюта</h1>
 				<p class="lead text-muted">Наша Валюта</p>
 				<p>
-				  <a href="/currencies/add" class="btn btn-primary my-2">Добавить новую Валюту</a>
+				  <a href="/currencies/add" class="btn btn-primary my-2">Добавить новую валюту</a>
 				</p>       
 			 </div>
 		  </div>
@@ -38,12 +38,17 @@
 							 <p th:text="${currencies.cost} + ' $'"></p>
 							 <div class="d-flex justify-content-between align-items-center">
 								<div class="btn-group">
-									<a th:href="'/currencies' + ${currencies.id}" class="btn btn-warning">Обновить</a>
+									<a th:href="'/currencies/' + ${currencies.id}" class="btn btn-warning">Детальнее</a>
 								</div>
 							 </div>
 							 <div class="d-flex mt-2 justify-content-between align-items-center">
 								<div class="btn-group">
-									<a th:href="'/currencies'" class="btn btn-warning">Удалить</a>
+									<a th:href="'/currencies/' + ${currencies.id} + '/edit'" class="btn btn-warning">Изменить</a>
+								</div>
+							 </div>
+							 <div class="d-flex mt-2 justify-content-between align-items-center">
+								<div class="btn-group">
+									<a th:href="'/currencies/' + ${currencies.id} + '/remove'" class="btn btn-warning">Удалить</a>
 								</div>
 							 </div>
 						  </div>

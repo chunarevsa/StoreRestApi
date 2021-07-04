@@ -1,11 +1,15 @@
 package com.chunarevsa.Website.controllers;
 
+import java.util.ArrayList;
+import java.util.Optional;
+
 import com.chunarevsa.Website.models.Currencies;
 import com.chunarevsa.Website.repo.СurrenciesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -35,5 +39,18 @@ public class СurrenciesController {
 		 currenciesRepository.save(сurrency);
 		 return "redirect:/currencies";
 	 }
+
+	 // Обработчки Динамической ссылки
+	@GetMapping ("/currencies/{id}") 
+	public String currenciesDetails (@PathVariable(value = "id") long id, Model model) {
+		 if (!currenciesRepository.existsById(id)){ 
+		  return "redirect:/currencies";
+		 } 
+		 Optional<Currencies> сurrency = currenciesRepository.findById(id);
+		 ArrayList<Currencies> res = new ArrayList<>();
+		 сurrency.ifPresent(res::add);
+		 model.addAttribute("currency", res);
+		 return "currencies-details";
+	}
 
 }
