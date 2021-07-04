@@ -48,7 +48,10 @@
 							 </div>
 							 <div class="d-flex mt-2 justify-content-between align-items-center">
 								<div class="btn-group">
-									<a th:href="'/games/' + ${games.id} + '/remove'" class="btn btn-warning">Удалить</a>
+									<form th:action="'/games/' + ${games.id} + '/remove'" method="POST">
+										<button class="btn btn-warning " type="submit">Удалить</button>
+									</form>
+									
 								</div>
 							 </div>
 						  </div>

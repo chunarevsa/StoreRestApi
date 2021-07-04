@@ -19,8 +19,11 @@
 						 <small th:text="'Артикул: ' + ${game.id}" class="text-muted"></small>
 					 <p th:text="${game.description}" class="lead text-muted"></p>
 					 <p>
-						<a href="'/games/' + ${game.id} + '/edit'" class="btn btn-primary my-2">Редактировать</a>
-						<a href="'/games/' + ${game.id} + '/remove'" class="btn btn-primary my-2">Удалить</a>
+						<a th:href="'/games/' + ${game.id} + '/edit'" class="btn btn-primary my-2">Изменить</a>
+						<form th:action="'/games/' + ${game.id} + '/remove'" method="POST">
+							<button class="btn btn-warning " type="submit">Удалить</button>
+						</form>
+						
 					 </p>
 				  </div>
 				</div>

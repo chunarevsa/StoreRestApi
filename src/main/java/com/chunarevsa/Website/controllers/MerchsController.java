@@ -53,5 +53,34 @@ public class MerchsController {
 		  model.addAttribute("merch", res);
 		  return "merch-details";
  	}
-	 
+
+	// Изменение
+	 @GetMapping ("/merch/{id}/edit") 
+ 	public String gamesEdit (@PathVariable(value = "id") long id, Model model) {
+		  if (!merchsRepository.existsById(id)){ 
+			return "redirect:/merch";
+		  } 
+		  Optional<Merchs> game = merchsRepository.findById(id);
+		  ArrayList<Merchs> res = new ArrayList<>();
+		  game.ifPresent(res::add);
+		  model.addAttribute("merch", res);
+		  return "merchs-edit";
+ 	}
+	@PostMapping ("/merch/{id}/edit") 
+	public String merchsPostUpdate (@PathVariable(value = "id") long id, @RequestParam String name, @RequestParam String description, @RequestParam int cost, Model model) {
+		Merchs merch = merchsRepository.findById(id).orElseThrow();
+		merch.setName(name);
+		merch.setDescription(description);
+		merch.setCost(cost);
+		merchsRepository.save(merch);
+		return "redirect:/merch";
+	}
+	
+	// Удаление 
+	@PostMapping ("/merch/{id}/remove") 
+	public String merchsPostDelete (@PathVariable(value = "id") long id, Model model) {
+		Merchs merch = merchsRepository.findById(id).orElseThrow();
+		merchsRepository.delete(merch);
+		return "redirect:/merch";
+	}
 }

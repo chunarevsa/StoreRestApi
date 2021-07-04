@@ -53,4 +53,33 @@ public class СurrenciesController {
 		 return "currencies-details";
 	}
 
+	// Изменение
+	@GetMapping ("/currencies/{id}/edit") 
+	public String currenciesEdit (@PathVariable(value = "id") long id, Model model) {
+		 if (!currenciesRepository.existsById(id)){ 
+		  return "redirect:/currencies";
+		 } 
+		 Optional<Currencies> currency = currenciesRepository.findById(id);
+		 ArrayList<Currencies> res = new ArrayList<>();
+		 currency.ifPresent(res::add);
+		 model.addAttribute("currency", res);
+		 return "currencies-edit";
+	}
+  @PostMapping ("/currencies/{id}/edit") 
+  public String currenciesPostUpdate (@PathVariable(value = "id") long id, @RequestParam String name, @RequestParam String description, @RequestParam int cost, Model model) {
+	  Currencies currency = currenciesRepository.findById(id).orElseThrow();
+	  currency.setName(name);
+	  currency.setDescription(description);
+	  currency.setCost(cost);
+	  currenciesRepository.save(currency);
+	  return "redirect:/currencies";
+  }
+
+  // Удаление 
+	@PostMapping ("/currencies/{id}/remove") 
+	public String currenciesPostDelete (@PathVariable(value = "id") long id, Model model) {
+		Currencies currency = currenciesRepository.findById(id).orElseThrow();
+		currenciesRepository.delete(currency);
+		return "redirect:/currencies";
+	}
 }

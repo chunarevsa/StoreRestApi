@@ -53,6 +53,33 @@ public class GamesController {
 		  return "games-details";
  	}
 
+	 // Изменение
+	 @GetMapping ("/games/{id}/edit") 
+ 	public String gamesEdit (@PathVariable(value = "id") long id, Model model) {
+		  if (!gamesRepository.existsById(id)){ 
+			return "redirect:/games";
+		  } 
+		  Optional<Games> game = gamesRepository.findById(id);
+		  ArrayList<Games> res = new ArrayList<>();
+		  game.ifPresent(res::add);
+		  model.addAttribute("game", res);
+		  return "games-edit";
+ 	}
+	@PostMapping ("/games/{id}/edit") 
+	public String gamesPostUpdate (@PathVariable(value = "id") long id, @RequestParam String name, @RequestParam String description, @RequestParam int cost, Model model) {
+		Games game = gamesRepository.findById(id).orElseThrow();
+		game.setName(name);
+		game.setDescription(description);
+		game.setCost(cost);
+		gamesRepository.save(game);
+		return "redirect:/games";
+	} 
 
-	 
+   // Удаление 
+	@PostMapping ("/games/{id}/remove") 
+	public String gamesPostDelete (@PathVariable(value = "id") long id, Model model) {
+		Games game = gamesRepository.findById(id).orElseThrow();
+		gamesRepository.delete(game);
+		return "redirect:/games";
+	}
  }

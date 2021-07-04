@@ -18,8 +18,12 @@
 						 <small th:text="'Артикул: ' + ${merch.id}" class="text-muted"></small>
 					 <p th:text="${merch.description}" class="lead text-muted"></p>
 					 <p>
-						<a href="'/merch/' + ${merch.id} + '/edit'" class="btn btn-primary my-2">Редактировать</a>
-						<a href="'/merch/' + ${merch.id} + '/remove'" class="btn btn-primary my-2">Удалить</a>
+						 
+						<a th:href="'/merch/' + ${merch.id} + '/edit'" class="btn btn-primary my-2">Изменить</a>
+						<form th:action="'/merch/' + ${merch.id} + '/remove'" method="POST">
+							<button class="btn btn-warning " type="submit">Удалить</button>
+						</form>
+
 					 </p>
 				  </div>
 				</div>

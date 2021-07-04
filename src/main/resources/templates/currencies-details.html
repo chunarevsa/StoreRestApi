@@ -19,8 +19,12 @@
 						 <small th:text="'Артикул: ' + ${currency.id}" class="text-muted"></small>
 					 <p th:text="${currency.description}" class="lead text-muted"></p>
 					 <p>
-						<a href="'/currencies/' + ${currency.id} + '/edit'" class="btn btn-primary my-2">Редактировать</a>
-						<a href="'/currencies/' + ${currency.id} + '/remove'" class="btn btn-primary my-2">Удалить</a>
+
+						<a th:href="'/currencies/' + ${currency.id} + '/edit'" class="btn btn-primary my-2">Изменить</a>
+						<form th:action="'/currencies/' + ${currency.id} + '/remove'" method="POST">
+							<button class="btn btn-warning " type="submit">Удалить</button>
+						</form>
+					 
 					 </p>
 				  </div>
 				</div>
