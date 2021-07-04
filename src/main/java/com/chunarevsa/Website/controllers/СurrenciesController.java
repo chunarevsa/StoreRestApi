@@ -15,7 +15,7 @@ public class СurrenciesController {
 	@Autowired
 	private СurrenciesRepository currenciesRepository;
 
- 	@GetMapping ("/сurrencies")
+ 	@GetMapping ("/currencies")
  	public String currenciesMain (Model model) {
 		 Iterable<Currencies> currencies = currenciesRepository.findAll();
 		 model.addAttribute("currencies", currencies); // Массив данных из таблицы
@@ -23,17 +23,17 @@ public class СurrenciesController {
 
  	}
 
-	 @GetMapping ("/сurrencies/add")
+	 @GetMapping ("/currencies/add")
 	 public String currenciesAdd (Model model) {
-		 return "сurrencies-add";
+		 return "currencies-add";
 	 }
 
-	 @PostMapping ("/сurrencies/add")
+	 @PostMapping ("/currencies/add")
 	 public String currenciesPostAdd (@RequestParam String name, @RequestParam String description, @RequestParam int cost, Model model) {
 		 Currencies сurrency = new Currencies(name, description, cost);
 		 сurrency.setType("Валюта");
 		 currenciesRepository.save(сurrency);
-		 return "redirect:/сurrencies/add";
+		 return "redirect:/currencies";
 	 }
 
 }
