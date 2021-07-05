@@ -35,16 +35,5 @@ public class Controller1 {
 		return "contacts"; 
 	}
 
-	 /*  @GetMapping("/blog") 
-	public String blog (Model model) { 
-		model.addAttribute("title", "Наш блог"); 
-		return "blog-main";  
-	}   */
-
-	// @GetMapping("/games") 
-	// public String games (Model model) { 
-	// 	model.addAttribute("title", "Игры"); 
-	// 	return "games-main"; 
-	// }
 
 }
