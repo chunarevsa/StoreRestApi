@@ -11,6 +11,9 @@
 <header th:insert="blocks/header:: header"></header>
 	<div th:each="currency : ${currency}" class="mt-2">
 		<div class="container mt-5 mb-5" >
+			 <p>
+				<a href="/currencies" class="lead text-muted">Назад</a>
+			 </p><br>
 			<h1 th:text="'Редактирование ' + ${currency.name}"></h1><br>
 			<form method="post">
 				<input type="text" th:value="${currency.name}" name="name" placeholder="Введите название игры" class="form-control"><br>
