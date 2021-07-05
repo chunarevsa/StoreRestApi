@@ -58,17 +58,17 @@ public class Controller1 {
 		return "contacts"; 
 	}
 
+	// Поиск по ID
 	@PostMapping ("/") 
 	public String searchId(@RequestParam long id, Model model) {
-		
-		 if (gamesRepository.existsById(id)) { 
+
+		 if (gamesRepository.existsById(id) ) { 
 		  Optional<Games> game = gamesRepository.findById(id);
 		  ArrayList<Games> res = new ArrayList<>();
 		  game.ifPresent(res::add);
 		  model.addAttribute("game", res);
 		  return "games-details";
 		  } 
-		
 		  if (merchsRepository.existsById(id)) { 
 			Optional<Merchs> merch = merchsRepository.findById(id);
 			ArrayList<Merchs> res = new ArrayList<>();
