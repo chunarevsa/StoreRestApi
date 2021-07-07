@@ -23,7 +23,10 @@
 						<a th:href="'/currencies/' + ${currency.id} + '/edit'" class="btn btn-primary my-2">Изменить</a>
 						<form th:action="'/currencies/' + ${currency.id} + '/remove'" method="POST">
 							<button class="btn btn-warning " type="submit">Удалить</button>
-						</form>
+						</form><br>
+						<p>
+							<a href="/currencies" class="lead text-muted">Назад</a>
+						 </p>
 					 
 					 </p>
 				  </div>

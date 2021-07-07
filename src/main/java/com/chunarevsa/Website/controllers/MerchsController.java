@@ -60,9 +60,9 @@ public class MerchsController {
 		  if (!merchsRepository.existsById(id)){ 
 			return "redirect:/merch";
 		  } 
-		  Optional<Merchs> game = merchsRepository.findById(id);
+		  Optional<Merchs> merch = merchsRepository.findById(id);
 		  ArrayList<Merchs> res = new ArrayList<>();
-		  game.ifPresent(res::add);
+		  merch.ifPresent(res::add);
 		  model.addAttribute("merch", res);
 		  return "merchs-edit";
  	}

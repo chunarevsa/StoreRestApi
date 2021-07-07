@@ -22,7 +22,10 @@
 						<a th:href="'/merch/' + ${merch.id} + '/edit'" class="btn btn-primary my-2">Изменить</a>
 						<form th:action="'/merch/' + ${merch.id} + '/remove'" method="POST">
 							<button class="btn btn-warning " type="submit">Удалить</button>
-						</form>
+						</form><br>
+						<p>
+							<a href="/merch" class="lead text-muted">Назад</a>
+						 </p>
 
 					 </p>
 				  </div>
