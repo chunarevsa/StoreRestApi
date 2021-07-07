@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.chunarevsa.Website.models.Games;
 import com.chunarevsa.Website.repo.GamesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,26 +16,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller // добавляем, чтобы указать, что это контроллер
+
+// УБРАТЬ ЕСЛИ НЕ СРАБОТАЕТ 
+@RequestMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE)
 public class GamesController {
 
 	@Autowired
 	private GamesRepository gamesRepository;
 
- 	/* @GetMapping ("/games")
+ 	 @GetMapping ("/games")
  	public String gamesMain (Model model) {
 		 Iterable<Games> games = gamesRepository.findAll();
 		 model.addAttribute("games", games); // Массив данных из таблицы
 		 return "games-main";
 
- 	} */
+ 	} 
 
-	 @RequestMapping (value = "/games", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	 public RestResponse restMethod(String name) {
-		 RestResponse result = new RestResponse();
-		 result.setParam1("Hello");
-		 result.setParam2(name);
-		 return result;
-	 } 
+	 /* @RequestMapping (value = "/games", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	 public GamesRepository restMethod(String name, String description, int cost) {
+		Iterable<Games> games = gamesRepository.findAll();
+		
+		 return games;
+	 }  */
 
 	// Добавление игры 
 	@GetMapping ("/games/add") 

@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+
 @Entity
 public class Games {
 	// Товар определяется уникальным идентификатором и обязательно должен иметь SKU,
@@ -60,11 +62,19 @@ public class Games {
 	public Games() { 
 	}
 
-	public Games(String name, String description, int cost) {
+	 public Games(String name, String description, int cost) {
 		this.name = name;
 		this.description = description;
 		this.cost = cost;
-	}
-
+	} 
+ 	
+	/* @RequestMapping (value = "/games", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	 public Games restMethod(String name, String description, int cost) {
+		 Games games = new Games();
+		 Iterable<Games> games = gamesRepository.findAll();
+		 games.setParam1("Hello");
+		 games.setParam2(name);
+		 return games;
+	 }  */
 
 }
