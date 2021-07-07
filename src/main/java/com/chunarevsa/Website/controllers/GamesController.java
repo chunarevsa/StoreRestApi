@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller // добавляем, чтобы указать, что это контроллер
@@ -19,13 +20,21 @@ public class GamesController {
 	@Autowired
 	private GamesRepository gamesRepository;
 
- 	@GetMapping ("/games")
+ 	/* @GetMapping ("/games")
  	public String gamesMain (Model model) {
 		 Iterable<Games> games = gamesRepository.findAll();
 		 model.addAttribute("games", games); // Массив данных из таблицы
 		 return "games-main";
 
- 	}
+ 	} */
+
+	 @RequestMapping (value = "/games", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	 public RestResponse restMethod(String name) {
+		 RestResponse result = new RestResponse();
+		 result.setParam1("Hello");
+		 result.setParam2(name);
+		 return result;
+	 } 
 
 	// Добавление игры 
 	@GetMapping ("/games/add") 
