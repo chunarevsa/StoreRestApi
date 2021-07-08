@@ -11,9 +11,6 @@ import com.chunarevsa.Website.repo.MerchsRepository;
 import com.chunarevsa.Website.repo.СurrenciesRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-// копируем с https://spring.io/guides/gs/serving-web-content/
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

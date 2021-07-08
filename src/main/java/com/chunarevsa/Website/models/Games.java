@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.springframework.web.bind.annotation.RequestBody;
+
 @Entity
 public class Games {
 	// Товар определяется уникальным идентификатором и обязательно должен иметь SKU,
@@ -65,6 +67,9 @@ public class Games {
 		this.description = description;
 		this.cost = cost;
 	}
-
+	public void saveGames () {
+		
+	}  
+	
 
 }
