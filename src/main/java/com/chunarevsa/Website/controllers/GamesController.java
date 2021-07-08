@@ -41,32 +41,8 @@ public class GamesController {
 		}	
 
 	 // Изменение
-
-	// Оригинал
-	/*  @GetMapping ("/games/{id}/edit") 
- 	public String gamesEdit (@PathVariable(value = "id") long id, Model model) {
-		  if (!gamesRepository.existsById(id)){ 
-			return "redirect:/games";
-		  } 
-		  Optional<Games> game = gamesRepository.findById(id);
-		  ArrayList<Games> res = new ArrayList<>();
-		  game.ifPresent(res::add);
-		  model.addAttribute("game", res);
-		  return "games-edit";
- 	}
-	@PostMapping ("/games/{id}/edit") 
-	public String gamesPostUpdate (@PathVariable(value = "id") long id, @RequestParam String name, @RequestParam String description, @RequestParam int cost, Model model) {
-		Games game = gamesRepository.findById(id).orElseThrow();
-		game.setName(name);
-		game.setDescription(description);
-		game.setCost(cost);
-		gamesRepository.save(game);
-		return "redirect:/games";
-	} */ 
-
 	@PutMapping(value = "/games/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Games editGames (@PathVariable(value = "id") long id, @RequestBody Games gameBody)	{
-
 		Games game = gamesRepository.findById(id).orElseThrow();
 		game.setSku(gameBody.getSku());
 		game.setName(gameBody.getName());
@@ -77,15 +53,6 @@ public class GamesController {
 	} 
 
    // Удаление
-
-	// Оригинал
-	/* @ PostMapping ("/games/{id}/remove") 
-	public String gamesPostDelete (@PathVariable(value = "id") long id, Model model) {
-		Games game = gamesRepository.findById(id).orElseThrow();
-		gamesRepository.delete(game);
-		return "redirect:/games";
-	} */
-
 	@DeleteMapping(value = "/games/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Games deleteGames (@PathVariable(value = "id") long id, @RequestBody Games gameBody)	{
 		gamesRepository.deleteById(id);
