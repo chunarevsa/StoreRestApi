@@ -5,8 +5,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import org.springframework.web.bind.annotation.RequestBody;
-
 @Entity
 public class Games {
 	// Товар определяется уникальным идентификатором и обязательно должен иметь SKU,
@@ -14,10 +12,19 @@ public class Games {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 
-	private Long id; // SKU
-
+	private Long id; 
+	// SKU
+	private String sku;
 	private String name, type, description;
 	private int cost;
+
+	public String getSku() {
+		return this.sku;
+	}
+
+	public void setSku(String sku) {
+		this.sku = sku;
+	}
 
 	public Long getId() {
 		return this.id;
@@ -62,14 +69,19 @@ public class Games {
 	public Games() { 
 	}
 
-	public Games(String name, String description, int cost) {
+	public Games(String sku, String name, String description, int cost) {
+		this.sku = sku;
 		this.name = name;
 		this.description = description;
 		this.cost = cost;
 	}
-	public void saveGames () {
-		
-	}  
+
+	public Games(Games newGames) {
+		this.name = newGames.name;
+		this.description = newGames.description;
+		this.cost = newGames.cost;
+		this.type = newGames.type;
+	}
 	
 
 }
