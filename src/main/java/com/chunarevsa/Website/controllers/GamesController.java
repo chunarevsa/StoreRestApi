@@ -27,6 +27,7 @@ public class GamesController {
 		this.gamesRepository = gamesRepository;
 	}
 	
+	// Получение списка всех Игр
 	@RequestMapping (path = "/games", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Iterable<Games> gamesMethod () { 
 		Iterable<Games> games = gamesRepository.findAll();
@@ -54,9 +55,9 @@ public class GamesController {
 
    // Удаление
 	@DeleteMapping(value = "/games/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Games deleteGames (@PathVariable(value = "id") long id, @RequestBody Games gameBody)	{
+	public long deleteGames (@PathVariable(value = "id") long id)	{
 		gamesRepository.deleteById(id);
-		return gameBody;
+		return id;
 	} 
 
  }
