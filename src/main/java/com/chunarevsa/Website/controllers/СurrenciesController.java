@@ -4,6 +4,10 @@ import com.chunarevsa.Website.models.Currencies;
 import com.chunarevsa.Website.repo.СurrenciesRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,19 +25,30 @@ public class СurrenciesController {
 	
 	@Autowired
 	private СurrenciesRepository currenciesRepository;
+	public СurrenciesController (СurrenciesRepository currenciesRepository) {
+		this.currenciesRepository = currenciesRepository;
+	}
 
-	// Получение списка всех валют
+	// Получение списка всех валют с ограничением страницы (10)
 	@RequestMapping (path = "/currencies", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Iterable<Currencies> currenciesMethod () { 
-		Iterable<Currencies> currencies = currenciesRepository.findAll();
-		return currencies;
-	} 
+	public Page<Currencies> gamesFindAll (@PageableDefault(sort = { "id"}, direction = Sort.Direction.DESC) Pageable pageable) { 
+		Page<Currencies> pageCurrencies = currenciesRepository.findAll(pageable);
+		return pageCurrencies;
+	}
+	
+	// Получение валюты по id
+	@RequestMapping (path = "/currencies/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Currencies gamesMethod (@PathVariable(value = "id") long id) { 
+		Currencies currency = currenciesRepository.findById(id).orElseThrow();
+		return currency;
+	}
 
 	// Добавление валюты
 	@PostMapping(value = "/currencies", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus (value = HttpStatus.CREATED)	
-	public Currencies createdMerch (@RequestBody Currencies newMCurrency) {		
-		return currenciesRepository.save(newMCurrency);
+	public long createdMerch (@RequestBody Currencies newMCurrency) {		
+		currenciesRepository.save(newMCurrency);
+		return newMCurrency.getId();
 		} 
 
 	// Изменение

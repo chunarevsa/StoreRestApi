@@ -4,6 +4,10 @@ import com.chunarevsa.Website.models.Merchs;
 import com.chunarevsa.Website.repo.MerchsRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,16 +31,24 @@ public class MerchsController {
 
 	 // Получение списка всего мерча
 	@RequestMapping (path = "/merchs", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Iterable<Merchs> merchsMethod () { 
-		Iterable<Merchs> merchs = merchsRepository.findAll();
-		return merchs;
+	public Page<Merchs> merchFindAll (@PageableDefault(sort = { "id"}, direction = Sort.Direction.DESC) Pageable pageable) { 
+		Page<Merchs> pageMerchs = merchsRepository.findAll(pageable);
+		return pageMerchs;
+	}
+
+	// Получение мерча по id
+	@RequestMapping (path = "/merchs/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Merchs merchsMethod (@PathVariable(value = "id") long id) { 
+		Merchs merch = merchsRepository.findById(id).orElseThrow();
+		return merch;
 	} 
-	 
+
 	// Добавление мерча
 	@PostMapping(value = "/merchs", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus (value = HttpStatus.CREATED)	
-	public Merchs createdMerch (@RequestBody Merchs newMerch) {		
-		return merchsRepository.save(newMerch);
+	public long createdMerch (@RequestBody Merchs newMerch) {		
+		merchsRepository.save(newMerch);
+		return newMerch.getId();
 		} 
 
 	// Изменение
