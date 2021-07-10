@@ -7,17 +7,15 @@ import javax.persistence.Id;
 
 @Entity
 public class Games {
-	// Товар определяется уникальным идентификатором и обязательно должен иметь SKU,
-	// имя, тип, стоимость.
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 
 	private Long id; 
-	// SKU
-	private String sku;
-	private String name, type, description;
+	private String sku, name, type, description;
 	private int cost;
 
+	// Getter and Setter
 	public String getSku() {
 		return this.sku;
 	}
@@ -66,6 +64,7 @@ public class Games {
 		this.cost = cost;
 	}
 
+	// Конструкторы
 	public Games() { 
 	}
 
@@ -75,7 +74,7 @@ public class Games {
 		this.description = description;
 		this.cost = cost;
 	}
-
+		//Body
 	public Games(Games newGames) {
 		this.name = newGames.name;
 		this.description = newGames.description;

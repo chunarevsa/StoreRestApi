@@ -1,86 +1,60 @@
 package com.chunarevsa.Website.controllers;
 
-import java.util.ArrayList;
-import java.util.Optional;
-
 import com.chunarevsa.Website.models.Merchs;
 import com.chunarevsa.Website.repo.MerchsRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 public class MerchsController {
 	
 	@Autowired
 	private MerchsRepository merchsRepository;
-
- 	@GetMapping ("/merch")
- 	public String merchsMain (Model model) {
-		 Iterable<Merchs> merchs = merchsRepository.findAll();
-		 model.addAttribute("merchs", merchs); // Массив данных из таблицы
-		 return "merch-main";
-
- 	}
-
-	@GetMapping ("/merch/add") // добавление мерча
- 	public String merchAdd(Model model) {
-		 return "merch-add";
-
- 	} 
-
-	@PostMapping ("/merch/add")
-	public String merchsPostAdd(@RequestParam String name, @RequestParam String description, @RequestParam int cost, Model model) {
-		Merchs merch = new Merchs(name, description, cost);
-		merch.setType("Мерч");
-		merchsRepository.save(merch);
-		return "redirect:/merch";
+	public MerchsController (MerchsRepository merchsRepository) {
+		this.merchsRepository = merchsRepository;
 	}
 
-	// Обработчки Динамической ссылки
-	@GetMapping ("/merch/{id}") 
- 	public String merchsDetails (@PathVariable(value = "id") long id, Model model) {
-		  if (!merchsRepository.existsById(id)){ 
-			return "redirect:/merch";
-		  } 
-		  Optional<Merchs> merch = merchsRepository.findById(id);
-		  ArrayList<Merchs> res = new ArrayList<>();
-		  merch.ifPresent(res::add);
-		  model.addAttribute("merch", res);
-		  return "merch-details";
- 	}
+	 // Получение списка всего мерча
+	@RequestMapping (path = "/merchs", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Iterable<Merchs> merchsMethod () { 
+		Iterable<Merchs> merchs = merchsRepository.findAll();
+		return merchs;
+	} 
+	 
+	// Добавление мерча
+	@PostMapping(value = "/merchs", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus (value = HttpStatus.CREATED)	
+	public Merchs createdMerch (@RequestBody Merchs newMerch) {		
+		return merchsRepository.save(newMerch);
+		} 
 
 	// Изменение
-	 @GetMapping ("/merch/{id}/edit") 
- 	public String gamesEdit (@PathVariable(value = "id") long id, Model model) {
-		  if (!merchsRepository.existsById(id)){ 
-			return "redirect:/merch";
-		  } 
-		  Optional<Merchs> merch = merchsRepository.findById(id);
-		  ArrayList<Merchs> res = new ArrayList<>();
-		  merch.ifPresent(res::add);
-		  model.addAttribute("merch", res);
-		  return "merchs-edit";
- 	}
-	@PostMapping ("/merch/{id}/edit") 
-	public String merchsPostUpdate (@PathVariable(value = "id") long id, @RequestParam String name, @RequestParam String description, @RequestParam int cost, Model model) {
+	@PutMapping(value = "/merchs/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Merchs editMerch (@PathVariable(value = "id") long id, @RequestBody Merchs merchBody)	{
 		Merchs merch = merchsRepository.findById(id).orElseThrow();
-		merch.setName(name);
-		merch.setDescription(description);
-		merch.setCost(cost);
+		merch.setSku(merchBody.getSku());
+		merch.setName(merchBody.getName());
+		merch.setDescription(merchBody.getDescription());
+		merch.setCost(merchBody.getCost());
 		merchsRepository.save(merch);
-		return "redirect:/merch";
-	}
-	
-	// Удаление 
-	@PostMapping ("/merch/{id}/remove") 
-	public String merchsPostDelete (@PathVariable(value = "id") long id, Model model) {
-		Merchs merch = merchsRepository.findById(id).orElseThrow();
-		merchsRepository.delete(merch);
-		return "redirect:/merch";
+		return merch;
+	} 
+
+	/// Удаление
+	@DeleteMapping(value = "/merchs/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public long deleteMerch (@PathVariable(value = "id") long id)	{
+		merchsRepository.deleteById(id);
+		return id;
 	}
 }

@@ -7,15 +7,22 @@ import javax.persistence.Id;
 
 @Entity
 public class Currencies {
-	// Товар определяется уникальным идентификатором и обязательно должен иметь SKU,
-	// имя, тип, стоимость.
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 
 	private Long id; // SKU
 
-	private String name, type, description;
+	private String sku, name, type, description;
 	private int cost;
+
+	// Getter and Setter
+	public String getSku() {
+		return this.sku;
+	}
+
+	public void setSku(String sku) {
+		this.sku = sku;
+	}
 
 	public Long getId() {
 		return this.id;
@@ -57,10 +64,9 @@ public class Currencies {
 		this.cost = cost;
 	}
 
-
+	// Конструкторы
 	public Currencies() {
 	}
-
 
 	public Currencies(String name, String description, int cost) {
 		this.name = name;
@@ -68,6 +74,13 @@ public class Currencies {
 		this.cost = cost;
 	}
 
+		//Body
+	public Currencies(Currencies newCurrency) {
+		this.name = newCurrency.name;
+		this.description = newCurrency.description;
+		this.cost = newCurrency.cost;
+		this.type = newCurrency.type;
+	}
 
 
 }
