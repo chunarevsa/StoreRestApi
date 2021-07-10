@@ -13,22 +13,12 @@
 		  <div class="row py-lg-5">
 			 <div class="col-lg-6 col-md-8 mx-auto">
 				<h1 class="fw-light">Добро пожаловать в ваш личный кабинет!</h1>
-<<<<<<< HEAD
-				<p class="lead text-muted">Здесь вы можете добавлять и новые товары 
-					Выберите категорию товаров
-				</p>
-				<p>
-				  <a href="#" class="btn btn-primary my-2">Найти товар</a>
-				  <a href="#" class="btn btn-secondary my-2">Что-нибудь ещё</a>
-				</p>
-=======
 				<p class="lead text-muted"> Выбирите категорюю товаров</p>
 				<p class="lead text-muted"> или воспользуйтесь поиском</p>
 				<form action="/" method="post">
 				  <input type="text" name="id" placeholder="Введите Id" class="form-control"><br>
 				  <button type="submit" class="btn btn-success">Найти</button>
 			  </form>
->>>>>>> f0190002144f82bc2a2da0e1ca1eb5bea691b628
 			 </div>
 		  </div>
 		</section>
@@ -45,8 +35,11 @@
 						<p class="card-text">Игры</p>
 						<div class="d-flex justify-content-between align-items-center">
 						  <div class="btn-group">
-							 <a th:href="'/games'" class="btn btn-warning">Детальнее</a>
+							 <a th:href="'/games'" class="btn btn-warning m-lg-2">Детальнее</a>
 						  </div>
+						  <div class="btn-group">
+							<a th:href="'/games'" class="btn btn-warning m-lg-2">API</a>
+						 </div>
 						</div>
 					 </div>
 				  </div>
@@ -59,8 +52,11 @@
 						 <p class="card-text">Мерч</p>
 						 <div class="d-flex justify-content-between align-items-center">
 							<div class="btn-group">
-							  <a th:href="'/merch'" class="btn btn-warning">Детальнее</a>
+							  <a th:href="'/games'" class="btn btn-warning">Детальнее</a>
 							</div>
+							<div class="btn-group">
+								<a th:href="'/merchs'" class="btn btn-warning">API</a>
+							 </div>
 						 </div>
 					  </div>
 					</div>
@@ -73,8 +69,11 @@
 						 <p class="card-text">Валюта</p>
 						 <div class="d-flex justify-content-between align-items-center">
 							<div class="btn-group">
-							  <a th:href="'/currencies'" class="btn btn-warning">Детальнее</a>
+								<a th:href="'/games'" class="btn btn-warning">Детальнее</a>
 							</div>
+							<div class="btn-group">
+								<a th:href="'/games'" class="btn btn-warning">API</a>
+							 </div>
 						 </div>
 					  </div>
 					</div>
