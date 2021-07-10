@@ -15,7 +15,7 @@
 				<h1 class="fw-light">Игры</h1>
 				<p class="lead text-muted">Игры ...</p>
 				<p>
-				  <a href="/games/add" class="btn btn-primary my-2">Добавить новую игру</a>
+				  <a href="/games/gui/add" class="btn btn-primary my-2">Добавить новую игру</a>
 				</p>
 				<p>
 					<a href="/#" class="lead text-muted">Назад</a>
@@ -38,17 +38,17 @@
 							 <p th:text="${games.cost} + ' $'"></p>
 							 <div class="d-flex justify-content-between align-items-center">
 								<div class="btn-group">
-									<a th:href="'/games/' + ${games.id}" class="btn btn-warning">Детальнее</a>
+									<a th:href="'/games/gui/' + ${games.id}" class="btn btn-warning">Детальнее</a>
 								</div>
 							 </div>
 							 <div class="d-flex mt-2 justify-content-between align-items-center">
 								<div class="btn-group">
-									<a th:href="'/games/' + ${games.id} + '/edit'" class="btn btn-warning">Изменить</a>
+									<a th:href="'/games/gui/' + ${games.id} + '/edit'" class="btn btn-warning">Изменить</a>
 								</div>
 							 </div>
 							 <div class="d-flex mt-2 justify-content-between align-items-center">
 								<div class="btn-group">
-									<form th:action="'/games/' + ${games.id} + '/remove'" method="POST">
+									<form th:action="'/games/gui/' + ${games.id} + '/remove'" method="POST">
 										<button class="btn btn-warning " type="submit">Удалить</button>
 									</form>
 									

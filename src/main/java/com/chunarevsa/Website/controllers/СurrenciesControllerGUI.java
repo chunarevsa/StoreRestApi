@@ -30,21 +30,21 @@ public class СurrenciesControllerGUI {
 	}
 
 	// Получение списка всех валют с ограничением страницы (10)
-	@RequestMapping (path = "/currencies", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping (path = "/currencies/gui", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Page<Currencies> gamesFindAll (@PageableDefault(sort = { "id"}, direction = Sort.Direction.DESC) Pageable pageable) { 
 		Page<Currencies> pageCurrencies = currenciesRepository.findAll(pageable);
 		return pageCurrencies;
 	}
 	
 	// Получение валюты по id
-	@RequestMapping (path = "/currencies/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping (path = "/currencies/gui/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Currencies gamesMethod (@PathVariable(value = "id") long id) { 
 		Currencies currency = currenciesRepository.findById(id).orElseThrow();
 		return currency;
 	}
 
 	// Добавление валюты
-	@PostMapping(value = "/currencies", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/currencies/gui", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus (value = HttpStatus.CREATED)	
 	public long createdMerch (@RequestBody Currencies newMCurrency) {		
 		currenciesRepository.save(newMCurrency);
@@ -52,7 +52,7 @@ public class СurrenciesControllerGUI {
 		} 
 
 	// Изменение
-	@PutMapping(value = "/currencies/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(value = "/currencies/gui/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Currencies editCurrency (@PathVariable(value = "id") long id, @RequestBody Currencies currencyhBody)	{
 		Currencies currency = currenciesRepository.findById(id).orElseThrow();
 		currency.setSku(currencyhBody.getSku());
@@ -64,7 +64,7 @@ public class СurrenciesControllerGUI {
 	} 
 
 	/// Удаление
-	@DeleteMapping(value = "/currencies/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@DeleteMapping(value = "/currencies/gui/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public long deleteMerch (@PathVariable(value = "id") long id)	{
 		currenciesRepository.deleteById(id);
 		return id;

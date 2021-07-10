@@ -68,8 +68,9 @@ public class Games {
 	public Games() { 
 	}
 
-	public Games(String sku, String name, String description, int cost) {
+	public Games(String sku, String name, String type, String description, int cost) {
 		this.sku = sku;
+		this.type = type;
 		this.name = name;
 		this.description = description;
 		this.cost = cost;

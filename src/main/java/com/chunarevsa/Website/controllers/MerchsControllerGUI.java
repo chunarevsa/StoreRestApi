@@ -30,21 +30,21 @@ public class MerchsControllerGUI {
 	}
 
 	 // Получение списка всего мерча
-	@RequestMapping (path = "/merchs", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping (path = "/merchs/gui", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Page<Merchs> merchFindAll (@PageableDefault(sort = { "id"}, direction = Sort.Direction.DESC) Pageable pageable) { 
 		Page<Merchs> pageMerchs = merchsRepository.findAll(pageable);
 		return pageMerchs;
 	}
 
 	// Получение мерча по id
-	@RequestMapping (path = "/merchs/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping (path = "/merchs/gui/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Merchs merchsMethod (@PathVariable(value = "id") long id) { 
 		Merchs merch = merchsRepository.findById(id).orElseThrow();
 		return merch;
 	} 
 
 	// Добавление мерча
-	@PostMapping(value = "/merchs", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/merchs/gui", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus (value = HttpStatus.CREATED)	
 	public long createdMerch (@RequestBody Merchs newMerch) {		
 		merchsRepository.save(newMerch);
@@ -52,7 +52,7 @@ public class MerchsControllerGUI {
 		} 
 
 	// Изменение
-	@PutMapping(value = "/merchs/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(value = "/merchs/gui/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Merchs editMerch (@PathVariable(value = "id") long id, @RequestBody Merchs merchBody)	{
 		Merchs merch = merchsRepository.findById(id).orElseThrow();
 		merch.setSku(merchBody.getSku());
@@ -64,7 +64,7 @@ public class MerchsControllerGUI {
 	} 
 
 	/// Удаление
-	@DeleteMapping(value = "/merchs/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@DeleteMapping(value = "/merchs/gui/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public long deleteMerch (@PathVariable(value = "id") long id)	{
 		merchsRepository.deleteById(id);
 		return id;

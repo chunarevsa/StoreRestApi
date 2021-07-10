@@ -17,14 +17,18 @@
 				  <div class="col-lg-6 col-md-8 mx-auto">
 					 <h1 th:text="${game.name}" class="fw-light"></h1>
 						 <small th:text="'Артикул: ' + ${game.id}" class="text-muted"></small>
-					 <p th:text="${game.description}" class="lead text-muted"></p>
+					 <p th:text="'Sku ' + ${game.sku}" class="text-muted"></p>
+					 <p th:text="'Описание'" class="mt-4"></p>
+					 <p th:text="${game.description}" ></p>
+					 <p th:text="'Sku ' + ${game.sku}" ></p>
+					 <p th:text="'Цена ' + ${game.cost} + ' $'" ></p>
 					 <p>
-						<a th:href="'/games/' + ${game.id} + '/edit'" class="btn btn-primary my-2">Изменить</a>
-						<form th:action="'/games/' + ${game.id} + '/remove'" method="POST">
+						<a th:href="'/games/gui/' + ${game.id} + '/edit'" class="btn btn-primary my-2">Изменить</a>
+						<form th:action="'/games/gui/' + ${game.id} + '/remove'" method="POST">
 							<button class="btn btn-warning " type="submit">Удалить</button>
 						</form><br>
 						<p>
-							<a href="/games" class="lead text-muted">Назад</a>
+							<a href="/games/gui" class="lead text-muted">Назад</a>
 						 </p>
 						
 					 </p>
