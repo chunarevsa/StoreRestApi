@@ -41,7 +41,7 @@ mysql://${MYSQL_HOST:localhost}:3306/website-xsolla
 - /currencies/{id}
 
  ### Создание товара и возварщение его уникального идентификатора:
- Пример входных данных 
+ #### Пример входных данных 
  - {
  "sku": "160",
  "name": "The Witcher 3: Wild Hunt ",
@@ -49,20 +49,21 @@ mysql://${MYSQL_HOST:localhost}:3306/website-xsolla
  "type": "Game",
  "cost": 1000
  } 
+ #### Путь: 
 - /games
 - /merchs
 - /currencies
 
  ### Редактирование товара по его идентификатору:
- Пример входных данных: 
-{ 
+ #### Пример входных данных: 
+- { 
  "sku": "112",
  "name": "Half-Life 2",
  "description": "Проснитесь и пойте Mr.Freeman",
  "type": "Game",
  "cost": 5000
 }
- Путь:
+ #### Путь:
 - /games/{id}
 - /merchs/{id}
 - /currencies/{id}
