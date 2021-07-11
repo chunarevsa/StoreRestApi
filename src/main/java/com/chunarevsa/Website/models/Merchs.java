@@ -68,8 +68,10 @@ public class Merchs {
 	public Merchs() {
 	}
 
-	public Merchs(String name, String description, int cost) {
+	public Merchs(String sku, String name, String type, String description, int cost) {
 		this.name = name;
+		this.sku = sku;
+		this.type = type;
 		this.description = description;
 		this.cost = cost;
 	}

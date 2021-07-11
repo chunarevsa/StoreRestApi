@@ -68,7 +68,9 @@ public class Currencies {
 	public Currencies() {
 	}
 
-	public Currencies(String name, String description, int cost) {
+	public Currencies(String sku, String name, String type, String description, int cost) {
+		this.sku = sku;
+		this.type = type;
 		this.name = name;
 		this.description = description;
 		this.cost = cost;

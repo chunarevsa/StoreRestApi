@@ -16,15 +16,17 @@
 				  <div class="col-lg-6 col-md-8 mx-auto">
 					 <h1 th:text="${merch.name}" class="fw-light"></h1>
 						 <small th:text="'Артикул: ' + ${merch.id}" class="text-muted"></small>
-					 <p th:text="${merch.description}" class="lead text-muted"></p>
+					 <p th:text="'Sku ' + ${merch.sku}" class="text-muted"></p>
+					 <p th:text="'Описание'" class="mt-4"></p>
+					 <p th:text="${merch.description}" ></p>
+					 <p th:text="'Цена ' + ${merch.cost} + ' $'" ></p>
 					 <p>
-						 
-						<a th:href="'/merch/' + ${merch.id} + '/edit'" class="btn btn-primary my-2">Изменить</a>
-						<form th:action="'/merch/' + ${merch.id} + '/remove'" method="POST">
+						<a th:href="'/merchs/gui/' + ${merch.id} + '/edit'" class="btn btn-primary my-2">Изменить</a>
+						<form th:action="'/merchs/gui/' + ${merch.id} + '/remove'" method="POST">
 							<button class="btn btn-warning " type="submit">Удалить</button>
 						</form><br>
 						<p>
-							<a href="/merch" class="lead text-muted">Назад</a>
+							<a href="/merchs/gui" class="lead text-muted">Назад</a>
 						 </p>
 
 					 </p>

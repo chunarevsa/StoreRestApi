@@ -10,14 +10,16 @@
 
 	 <div class="container mt-5 mb-5" >
 		 <p>
-			<a href="/merch" class="lead text-muted">Назад</a>
+			<a href="/merchs/gui" class="lead text-muted">Назад</a>
 		 </p><br>>
 		 <h1>Добавление мерча</h1>
-	 	<form action="/merch/add" method="post">
-		 	<input type="text" name="name" placeholder="Введите название игры" class="form-control"><br>
+	 	<form action="/merchs/gui/add" method="post">
+			<input type="text" name="name" placeholder="Введите название" class="form-control"><br>
 			<textarea name="description" placeholder="Введите описание" class="form-control"></textarea><br>
 			<input type="text" name="cost" placeholder="Введите сумму" class="form-control"><br>
-			<button type="submit" class="btn btn-success">Добавить мерч</button>
+			<input type="text" name="sku" placeholder="Введите sku" class="form-control"><br>
+			<input type="text" name="type" placeholder="Введите тип товара" class="form-control"><br>
+			<button type="submit" class="btn btn-success">Добавить</button>
 		</form>	 
 	 </div>
 
