@@ -6,8 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Games {
-	
+public class Items {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 
@@ -16,20 +15,20 @@ public class Games {
 	private int cost;
 
 	// Getter and Setter
-	public String getSku() {
-		return this.sku;
-	}
-
-	public void setSku(String sku) {
-		this.sku = sku;
-	}
-
 	public Long getId() {
 		return this.id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getSku() {
+		return this.sku;
+	}
+
+	public void setSku(String sku) {
+		this.sku = sku;
 	}
 
 	public String getName() {
@@ -65,23 +64,22 @@ public class Games {
 	}
 
 	// Конструкторы
-	public Games() { 
+	public Items () {
 	}
 
-	public Games(String sku, String name, String type, String description, int cost) {
+	public Items (String sku, String name,String type, String description, int cost) {
 		this.sku = sku;
 		this.type = type;
 		this.name = name;
 		this.description = description;
 		this.cost = cost;
 	}
-		//Body
-	public Games(Games newGames) {
-		this.name = newGames.name;
-		this.description = newGames.description;
-		this.cost = newGames.cost;
-		this.type = newGames.type;
-	}
-	
 
+	public Items (Items itemsBody) {
+		this.sku = itemsBody.sku;
+		this.type = itemsBody.type;
+		this.name = itemsBody.name;
+		this.description = itemsBody.description;
+		this.cost = itemsBody.cost;
+	}
 }

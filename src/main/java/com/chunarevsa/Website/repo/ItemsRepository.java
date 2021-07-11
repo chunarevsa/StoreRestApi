@@ -1,11 +1,11 @@
 package com.chunarevsa.Website.repo;
 
-import com.chunarevsa.Website.models.Currencies;
+import com.chunarevsa.Website.models.Items;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 
-public interface СurrenciesRepository extends CrudRepository<Currencies, Long> {
-	Page<Currencies> findAll (Pageable pageable);
+public interface ItemsRepository extends CrudRepository <Items, Long> {
+	Page <Items> findAll (Pageable pageable);	
 }

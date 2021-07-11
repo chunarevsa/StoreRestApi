@@ -13,15 +13,8 @@ Xsolla Summer School 2021 BE. Тестовое задание.
 - Редактирование товара по его идентификатору.
 - Удаление товара по его идентификатору.
 
-  ### Созданы 3 репозитория:
-- Игры - GamesRepository.
-- Мерч - MerchsRepository.
-- Валюты - СurrenciesRepository.
-
-
 ## Требования
 * MYSQL
-
 
 ## Запуск
 
@@ -29,47 +22,41 @@ Xsolla Summer School 2021 BE. Тестовое задание.
 mysql://${MYSQL_HOST:localhost}:3306/website-xsolla
 
 ## RestAPI
-
  ### Получение каталога товаров:
-- /games
-- /merchs
-- /currencies
-
+- /items
  ### Получение информации о товарове по уникальному идентификатору:
-- /games/{id}
-- /merchs/{id}
-- /currencies/{id}
-
+- /items/{id}
  ### Создание товара и возварщение его уникального идентификатора:
- #### Пример входных данных 
+ - /items
+ #### Пример входных данных (Body): 
  - {
  "sku": "160",
+ "type": "Game",
  "name": "The Witcher 3: Wild Hunt ",
  "description": "Чеканная монета",
- "type": "Game",
- "cost": 1000
- } 
- #### Путь: 
-- /games
-- /merchs
-- /currencies
-
+ "cost": 9999
+ }
+ #### Response 
+ - {id}
  ### Редактирование товара по его идентификатору:
+ - /items/{id}
  #### Пример входных данных: 
 - { 
  "sku": "112",
  "name": "Half-Life 2",
- "description": "Проснитесь и пойте Mr.Freeman",
  "type": "Game",
+ "description": "Проснитесь и пойте Mr.Freeman",
  "cost": 5000
 }
- #### Путь:
-- /games/{id}
-- /merchs/{id}
-- /currencies/{id}
-
+#### Response 
+ - {
+ "id": {id},	  
+ "sku": "112",
+ "name": "Half-Life 2",
+ "type": "Game",
+ "description": "Проснитесь и пойте Mr.Freeman",
+ "cost": 5000
+}
  ### Удаление товара по его идентификатору.
-- /games/{id}
-- /merchs/{id}
-- /currencies/{id}
+/items/{id}
  
