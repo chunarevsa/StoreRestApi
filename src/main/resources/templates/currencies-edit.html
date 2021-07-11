@@ -12,13 +12,15 @@
 	<div th:each="currency : ${currency}" class="mt-2">
 		<div class="container mt-5 mb-5" >
 			 <p>
-				<a href="/currencies" class="lead text-muted">Назад</a>
+				<a href="/currencies/gui" class="lead text-muted">Назад</a>
 			 </p><br>
 			<h1 th:text="'Редактирование ' + ${currency.name}"></h1><br>
 			<form method="post">
 				<input type="text" th:value="${currency.name}" name="name" placeholder="Введите название игры" class="form-control"><br>
 				<textarea name="description" placeholder="Введите описание" class="form-control" th:text="${currency.description}"/><br>
 				<input type="text" th:value="${currency.cost}" name="cost" placeholder="Введите сумму" class="form-control"><br>
+				<input type="text" th:value="${currency.sku}" name="sku" placeholder="Введите sku" class="form-control"><br>
+				<input type="text" th:value="${currency.type}" name="type" placeholder="Введите тип товара" class="form-control"><br>
 				<button type="submit" class="btn btn-success">Внести изменения</button>
 			</form>	 
 		</div>

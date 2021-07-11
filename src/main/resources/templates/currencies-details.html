@@ -17,15 +17,19 @@
 				  <div class="col-lg-6 col-md-8 mx-auto">
 					 <h1 th:text="${currency.name}" class="fw-light"></h1>
 						 <small th:text="'Артикул: ' + ${currency.id}" class="text-muted"></small>
-					 <p th:text="${currency.description}" class="lead text-muted"></p>
+					 <p th:text="'Sku ' + ${currency.sku}" class="text-muted"></p>
+					 <p th:text="'Описание'" class="mt-4"></p>
+					 <p th:text="${currency.description}" ></p>
+					 <p th:text="'Sku ' + ${currency.sku}" ></p>
+					 <p th:text="'Цена ' + ${currency.cost} + ' $'" ></p>	 
 					 <p>
 
-						<a th:href="'/currencies/' + ${currency.id} + '/edit'" class="btn btn-primary my-2">Изменить</a>
-						<form th:action="'/currencies/' + ${currency.id} + '/remove'" method="POST">
+						<a th:href="'/currencies/gui/' + ${currency.id} + '/edit'" class="btn btn-primary my-2">Изменить</a>
+						<form th:action="'/currencies/gui/' + ${currency.id} + '/remove'" method="POST">
 							<button class="btn btn-warning " type="submit">Удалить</button>
 						</form><br>
 						<p>
-							<a href="/currencies" class="lead text-muted">Назад</a>
+							<a href="/currencies/gui" class="lead text-muted">Назад</a>
 						 </p>
 					 
 					 </p>

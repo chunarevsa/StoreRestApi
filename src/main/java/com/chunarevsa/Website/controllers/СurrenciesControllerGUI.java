@@ -1,26 +1,19 @@
 package com.chunarevsa.Website.controllers;
 
+import java.util.ArrayList;
+import java.util.Optional;
+
 import com.chunarevsa.Website.models.Currencies;
 import com.chunarevsa.Website.repo.СurrenciesRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 
-@RestController
+@Controller
 public class СurrenciesControllerGUI {
 	
 	@Autowired
@@ -29,45 +22,68 @@ public class СurrenciesControllerGUI {
 		this.currenciesRepository = currenciesRepository;
 	}
 
-	// Получение списка всех валют с ограничением страницы (10)
-	@RequestMapping (path = "/currencies/gui", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<Currencies> gamesFindAll (@PageableDefault(sort = { "id"}, direction = Sort.Direction.DESC) Pageable pageable) { 
-		Page<Currencies> pageCurrencies = currenciesRepository.findAll(pageable);
-		return pageCurrencies;
-	}
-	
-	// Получение валюты по id
-	@RequestMapping (path = "/currencies/gui/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Currencies gamesMethod (@PathVariable(value = "id") long id) { 
-		Currencies currency = currenciesRepository.findById(id).orElseThrow();
-		return currency;
-	}
+	// Показать весь список валют
+ 	@GetMapping ("/currencies/gui")
+ 	public String currenciesMain (Model model) {
+		 Iterable<Currencies> currencies = currenciesRepository.findAll();
+		 model.addAttribute("currencies", currencies); 
+		 return "currencies-main";
+ 	}
 
-	// Добавление валюты
-	@PostMapping(value = "/currencies/gui", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus (value = HttpStatus.CREATED)	
-	public long createdMerch (@RequestBody Currencies newMCurrency) {		
-		currenciesRepository.save(newMCurrency);
-		return newMCurrency.getId();
-		} 
+	 // Добавление валюты
+	 @GetMapping ("/currencies/gui/add")
+	 public String currenciesAdd (Model model) {
+		 return "currencies-add";
+	 }
+	 @PostMapping ("/currencies/gui/add")
+	 public String currenciesPostAdd (@RequestParam String sku, @RequestParam String name, @RequestParam String type, @RequestParam String description, @RequestParam int cost, Model model) {
+		 Currencies сurrency = new Currencies(sku, name, type, description, cost);
+		 currenciesRepository.save(сurrency);
+		 return "redirect:/currencies/gui";
+	 }
+
+	 // Обработчки Динамической ссылки
+	@GetMapping ("/currencies/gui/{id}") 
+	public String currenciesDetails (@PathVariable(value = "id") long id, Model model) {
+		 if (!currenciesRepository.existsById(id)){ 
+		  return "redirect:/currencies/gui";
+		 } 
+		 Optional<Currencies> сurrency = currenciesRepository.findById(id);
+		 ArrayList<Currencies> res = new ArrayList<>();
+		 сurrency.ifPresent(res::add);
+		 model.addAttribute("currency", res);
+		 return "currencies-details";
+	}
 
 	// Изменение
-	@PutMapping(value = "/currencies/gui/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Currencies editCurrency (@PathVariable(value = "id") long id, @RequestBody Currencies currencyhBody)	{
-		Currencies currency = currenciesRepository.findById(id).orElseThrow();
-		currency.setSku(currencyhBody.getSku());
-		currency.setName(currencyhBody.getName());
-		currency.setDescription(currencyhBody.getDescription());
-		currency.setCost(currencyhBody.getCost());
-		currenciesRepository.save(currency);
-		return currency;
-	} 
-
-	/// Удаление
-	@DeleteMapping(value = "/currencies/gui/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public long deleteMerch (@PathVariable(value = "id") long id)	{
-		currenciesRepository.deleteById(id);
-		return id;
+	@GetMapping ("/currencies/gui/{id}/edit") 
+	public String currenciesEdit (@PathVariable(value = "id") long id, Model model) {
+		 if (!currenciesRepository.existsById(id)){ 
+		  return "redirect:/currencies/gui";
+		 } 
+		 Optional<Currencies> currency = currenciesRepository.findById(id);
+		 ArrayList<Currencies> res = new ArrayList<>();
+		 currency.ifPresent(res::add);
+		 model.addAttribute("currency", res);
+		 return "currencies-edit";
 	}
+  @PostMapping ("/currencies/gui/{id}/edit") 
+  public String currenciesPostUpdate (@PathVariable(value = "id") long id, @RequestParam String sku, @RequestParam String name, @RequestParam String type, @RequestParam String description, @RequestParam int cost, Model model) {
+	  Currencies currency = currenciesRepository.findById(id).orElseThrow();
+	  currency.setType(type);
+	  currency.setSku(sku);
+	  currency.setName(name);
+	  currency.setDescription(description);
+	  currency.setCost(cost);
+	  currenciesRepository.save(currency);
+	  return "redirect:/currencies/gui";
+  }
 
+  // Удаление 
+	@PostMapping ("/currencies/gui/{id}/remove") 
+	public String currenciesPostDelete (@PathVariable(value = "id") long id, Model model) {
+		Currencies currency = currenciesRepository.findById(id).orElseThrow();
+		currenciesRepository.delete(currency);
+		return "redirect:/currencies/gui";
+	}
 }
