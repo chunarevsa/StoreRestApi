@@ -40,6 +40,9 @@
 								<div class="btn-group">
 									<a th:href="'/games/gui/' + ${games.id}" class="btn btn-warning">Детальнее</a>
 								</div>
+								<div class="btn-group">
+									<a th:href="'/games/' + ${games.id}" class="btn btn-warning">Api</a>
+								</div>
 							 </div>
 							 <div class="d-flex mt-2 justify-content-between align-items-center">
 								<div class="btn-group">
@@ -51,8 +54,9 @@
 									<form th:action="'/games/gui/' + ${games.id} + '/remove'" method="POST">
 										<button class="btn btn-warning " type="submit">Удалить</button>
 									</form>
-									
 								</div>
+								
+
 							 </div>
 						  </div>
 						</div>

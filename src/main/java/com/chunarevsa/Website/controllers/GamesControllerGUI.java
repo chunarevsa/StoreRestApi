@@ -11,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller 
@@ -23,12 +22,11 @@ public class GamesControllerGUI {
 		this.gamesRepository = gamesRepository;
 	} 
 
-
-	// ДОДЕЛАТЬ КОММЕНТЫ И PAGE
- 	@GetMapping ("/games/gui")
+	// Показать весь список игр
+	 @GetMapping ("/games/gui")
  	public String gamesMainGUI (Model model) {
-		 Iterable<Games> games = gamesRepository.findAll();
-		 model.addAttribute("games", games); // Массив данных из таблицы
+		Iterable <Games> games = gamesRepository.findAll();
+		 model.addAttribute("games", games); 
 		 return "games-main";
  	}
 
