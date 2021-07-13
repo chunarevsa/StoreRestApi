@@ -54,7 +54,7 @@ public class ItemsController {
 				
 	 // Изменение
 	@PutMapping(value = "/items/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Items editItem (@PathVariable(value = "id") long id, @RequestBody Items editItems)	{
+	public Items editItem (@PathVariable(value = "id") long id, @RequestBody Items editItems) {
 		Items item = itemsRepository.findById(id).orElseThrow();
 		item.setSku(editItems.getSku());
 		item.setName(editItems.getName());
@@ -67,9 +67,14 @@ public class ItemsController {
 
    // Удаление
 	@DeleteMapping(value = "/items/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public long deleteItem (@PathVariable(value = "id") long id)	{
+	public String deleteItem (@PathVariable(value = "id") long id) {
+		 Boolean item = itemsRepository.findById(id).isPresent();
+		if (!item == true) {
+			return "Нет такого олух";
+		}  
 		itemsRepository.deleteById(id);
-		return id;
+		
+		return "Удалено"; 
 	}
 
 
