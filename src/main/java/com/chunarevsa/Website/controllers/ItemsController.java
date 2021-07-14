@@ -70,7 +70,7 @@ public class ItemsController {
 	public String deleteItem (@PathVariable(value = "id") long id) {
 		 Boolean item = itemsRepository.findById(id).isPresent();
 		if (!item == true) {
-			return "Нет такого олух";
+			return "Нет такого";
 		}  
 		itemsRepository.deleteById(id);
 		

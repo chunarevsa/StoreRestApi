@@ -1,5 +1,5 @@
-package com.chunarevsa.Website.controllers;
+/* package com.chunarevsa.Website.controllers;
 
 public class ThereIsNoSuchException extends RuntimeException{
 	
-}
+} */

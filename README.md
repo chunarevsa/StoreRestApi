@@ -15,7 +15,8 @@ Xsolla Summer School 2021 BE. Тестовое задание.
 
 ## Требования
 * MYSQL
-
+* Git
+* Java
 ## Запуск
 
 Система будет запущена по адресу https://localhost:8081
