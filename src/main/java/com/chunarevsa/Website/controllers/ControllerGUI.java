@@ -86,6 +86,10 @@ public class ControllerGUI {
   	public String itemsPostUpdate (@PathVariable(value = "id") long id,@RequestParam String sku, @RequestParam String name,@RequestParam String type, @RequestParam String description, @RequestParam int cost, Model model) {
 	  Items item = itemsRepository.findById(id).orElseThrow();
 	  item.setName(name);
+	  item.setSku(sku);
+	  item.setType(type);
+     item.setDescription(description);
+	  item.setCost(cost);
 	  itemsRepository.save(item);
 	  return "redirect:/";
   }

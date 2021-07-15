@@ -21,8 +21,12 @@ Xsolla Summer School 2021 BE. Тестовое задание.
 
 ## Запуск
 
-Система будет запущена по адресу https://localhost:8081
-mysql://${MYSQL_HOST:localhost}:3306/website-xsolla
+1) Запуститить локальный сервер базы данных
+2) Внести изменения в фаил application.properties в зависимости от выбранной програмы для запуска локального сервера
+3) Запустить фаил WebsiteApplication или командой mvn spring-boot:run
+
+Система будет запущена по адресу https://localhost:8080/items
+GUI - https://localhost:8080
 
 ## RestAPI
  ### Получение каталога товаров:
@@ -64,4 +68,4 @@ mysql://${MYSQL_HOST:localhost}:3306/website-xsolla
 /items/{id}
   ####
  P.s: для себя сделал небольшой визуальный интерфейс.
-	Доступен по https://localhost:8081/
+	Доступен по https://localhost:8080
