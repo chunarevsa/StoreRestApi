@@ -1,4 +1,4 @@
-package com.chunarevsa.Website.models;
+package com.chunarevsa.Website.Entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

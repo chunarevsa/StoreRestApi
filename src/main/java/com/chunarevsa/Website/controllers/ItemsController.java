@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.controllers;
 
-import com.chunarevsa.Website.models.Items;
+import com.chunarevsa.Website.Entity.Items;
 import com.chunarevsa.Website.repo.ItemsRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
