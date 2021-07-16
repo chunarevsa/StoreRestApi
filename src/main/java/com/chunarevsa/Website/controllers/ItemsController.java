@@ -43,7 +43,7 @@ public class ItemsController {
 		Items item = itemsRepository.findById(id).orElseThrow();
 		return item;
 	} 
-	 
+
 	// Добавление 
 	@PostMapping(value = "/items", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus (value = HttpStatus.CREATED)	
@@ -73,7 +73,6 @@ public class ItemsController {
 			return "Нет такого";
 		}  
 		itemsRepository.deleteById(id);
-		
 		return "Удалено"; 
 	}
 
