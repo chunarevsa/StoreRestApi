@@ -1,6 +1,7 @@
 package com.chunarevsa.Website.controllers;
 
 import com.chunarevsa.Website.Entity.Items;
+import com.chunarevsa.Website.Exception.NotFoundItems;
 import com.chunarevsa.Website.repo.ItemsRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
 public class ItemsController {
@@ -39,7 +41,11 @@ public class ItemsController {
 
 	// Получение по id
 	@RequestMapping (path = "/items/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Items itemsMethod (@PathVariable(value = "id") long id) { 
+	public Items itemsMethod (@PathVariable(value = "id") long id)  throws NotFoundItems { 
+		Boolean item1 = itemsRepository.findById(id).isPresent();
+		if (!item1 == true) {
+			throw new NotFoundItems(404, "Item not found123123123");
+		} 
 		Items item = itemsRepository.findById(id).orElseThrow();
 		return item;
 	} 
