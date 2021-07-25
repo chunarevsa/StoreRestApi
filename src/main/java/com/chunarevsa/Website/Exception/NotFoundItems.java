@@ -2,6 +2,10 @@ package com.chunarevsa.Website.Exception;
 
 import java.util.NoSuchElementException;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "Нет такого")
 public class NotFoundItems extends NoSuchElementException {
 
 	private int code;
