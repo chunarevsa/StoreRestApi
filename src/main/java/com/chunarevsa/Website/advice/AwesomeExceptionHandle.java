@@ -1,6 +1,6 @@
-package com.chunarevsa.Website.controllers;
+package com.chunarevsa.Website.advice;
 
-import com.chunarevsa.Website.Exception.AwesomeException;
+import com.chunarevsa.Website.dto.AwesomeException;
 import com.chunarevsa.Website.Exception.NotFoundItems;
 
 import org.springframework.http.HttpStatus;

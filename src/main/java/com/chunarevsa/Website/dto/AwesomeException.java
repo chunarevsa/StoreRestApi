@@ -1,4 +1,4 @@
-package com.chunarevsa.Website.Exception;
+package com.chunarevsa.Website.dto;
 
 public class AwesomeException {
 	
@@ -28,7 +28,4 @@ public class AwesomeException {
 		this.code = code;
 		this.message = message;
 	}
-	
-
-
 }
