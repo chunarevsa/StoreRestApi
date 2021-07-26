@@ -44,7 +44,7 @@ public class ItemsController {
 	public Items itemsMethod (@PathVariable(value = "id") long id)  throws NotFoundItems { 
 		Boolean item1 = itemsRepository.findById(id).isPresent();
 		if (!item1 == true) {
-			throw new NotFoundItems(404, "Item not found123123123");
+			throw new NotFoundItems();
 		} 
 		Items item = itemsRepository.findById(id).orElseThrow();
 		return item;
@@ -60,7 +60,11 @@ public class ItemsController {
 				
 	 // Изменение
 	@PutMapping(value = "/items/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Items editItem (@PathVariable(value = "id") long id, @RequestBody Items editItems) {
+	public Items editItem (@PathVariable(value = "id") long id, @RequestBody Items editItems) throws NotFoundItems {
+		Boolean item1 = itemsRepository.findById(id).isPresent();
+		if (!item1 == true) {
+			throw new NotFoundItems();
+		} 
 		Items item = itemsRepository.findById(id).orElseThrow();
 		item.setSku(editItems.getSku());
 		item.setName(editItems.getName());
@@ -73,11 +77,11 @@ public class ItemsController {
 
    // Удаление
 	@DeleteMapping(value = "/items/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public String deleteItem (@PathVariable(value = "id") long id) {
-		 Boolean item = itemsRepository.findById(id).isPresent();
-		if (!item == true) {
-			return "Нет такого";
-		}  
+	public String deleteItem (@PathVariable(value = "id") long id) throws NotFoundItems {
+		Boolean item1 = itemsRepository.findById(id).isPresent();
+		if (!item1 == true) {
+			throw new NotFoundItems();
+		}   
 		itemsRepository.deleteById(id);
 		return "Удалено"; 
 	}
