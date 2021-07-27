@@ -1,6 +1,7 @@
 package com.chunarevsa.Website.controllers;
 
 import com.chunarevsa.Website.Entity.Items;
+import com.chunarevsa.Website.Exception.InvalidFormat;
 import com.chunarevsa.Website.Exception.NotFoundItem;
 import com.chunarevsa.Website.repo.ItemsRepository;
 
@@ -53,8 +54,12 @@ public class ItemsController {
 	// Добавление 
 	@PostMapping(value = "/items", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus (value = HttpStatus.CREATED)	
-	public long createdItem (@RequestBody Items newItems) {
-		itemsRepository.save(newItems);
+	public long createdItem (@RequestBody Items newItems) throws InvalidFormat {
+		try {
+			itemsRepository.save(newItems);
+		} catch (Exception e) {
+			throw new InvalidFormat();
+		}
 		return newItems.getId();
 		} 	
 				

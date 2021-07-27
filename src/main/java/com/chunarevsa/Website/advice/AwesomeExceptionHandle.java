@@ -1,6 +1,7 @@
 package com.chunarevsa.Website.advice;
 
 import com.chunarevsa.Website.dto.AwesomeException;
+import com.chunarevsa.Website.Exception.InvalidFormat;
 import com.chunarevsa.Website.Exception.NotFoundItem;
 
 import org.springframework.http.HttpStatus;
@@ -16,9 +17,10 @@ public class AwesomeExceptionHandle extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(new AwesomeException(404, "Item not found"), HttpStatus.NOT_FOUND);
   }
 
-  @ExceptionHandler(NotFoundItem.class)
-	protected ResponseEntity<AwesomeException> handleThereIsNoSuchUserException() {
-		return new ResponseEntity<>(new AwesomeException(404, "Item not found"), HttpStatus.NOT_FOUND);
+  @ExceptionHandler(InvalidFormat.class)
+	protected ResponseEntity<AwesomeException> handleInvalidFormat() {
+		return new ResponseEntity<>(new AwesomeException(400, "InvalidFormat"), HttpStatus.BAD_REQUEST);
   }
+
 
 }
