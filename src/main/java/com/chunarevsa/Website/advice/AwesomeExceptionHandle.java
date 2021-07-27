@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class AwesomeExceptionHandle extends ResponseEntityExceptionHandler {
+	
 	@ExceptionHandler(NotFoundItem.class)
 	protected ResponseEntity<AwesomeException> handleNotFoundItem() {
 		return new ResponseEntity<>(new AwesomeException(404, "Item not found"), HttpStatus.NOT_FOUND);
@@ -19,7 +20,7 @@ public class AwesomeExceptionHandle extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(InvalidFormat.class)
 	protected ResponseEntity<AwesomeException> handleInvalidFormat() {
-		return new ResponseEntity<>(new AwesomeException(400, "InvalidFormat"), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(new AwesomeException(400, "InvalidFormat"), HttpStatus.CREATED);
   }
 
 

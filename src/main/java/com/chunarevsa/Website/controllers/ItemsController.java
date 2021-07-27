@@ -65,7 +65,7 @@ public class ItemsController {
 				
 	 // Изменение
 	@PutMapping(value = "/items/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Items editItem (@PathVariable(value = "id") long id, @RequestBody Items editItems) throws NotFoundItem {
+	public Items editItem (@PathVariable(value = "id") long id, @RequestBody Items editItems) {
 		Boolean item1 = itemsRepository.findById(id).isPresent();
 		if (!item1 == true) {
 			throw new NotFoundItem();
