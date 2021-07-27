@@ -1,7 +1,7 @@
 package com.chunarevsa.Website.controllers;
 
 import com.chunarevsa.Website.Entity.Items;
-import com.chunarevsa.Website.Exception.NotFoundItems;
+import com.chunarevsa.Website.Exception.NotFoundItem;
 import com.chunarevsa.Website.repo.ItemsRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,11 +41,11 @@ public class ItemsController {
 
 	// Получение по id
 	@RequestMapping (path = "/items/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Items itemsMethod (@PathVariable(value = "id") long id)  throws NotFoundItems { 
+	public Items itemsMethod (@PathVariable(value = "id") long id) throws NotFoundItem { 
 		Boolean item1 = itemsRepository.findById(id).isPresent();
 		if (!item1 == true) {
-			throw new NotFoundItems();
-		} 
+			throw new NotFoundItem();
+		}  
 		Items item = itemsRepository.findById(id).orElseThrow();
 		return item;
 	} 
@@ -60,10 +60,10 @@ public class ItemsController {
 				
 	 // Изменение
 	@PutMapping(value = "/items/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Items editItem (@PathVariable(value = "id") long id, @RequestBody Items editItems) throws NotFoundItems {
+	public Items editItem (@PathVariable(value = "id") long id, @RequestBody Items editItems) throws NotFoundItem {
 		Boolean item1 = itemsRepository.findById(id).isPresent();
 		if (!item1 == true) {
-			throw new NotFoundItems();
+			throw new NotFoundItem();
 		} 
 		Items item = itemsRepository.findById(id).orElseThrow();
 		item.setSku(editItems.getSku());
@@ -77,10 +77,10 @@ public class ItemsController {
 
    // Удаление
 	@DeleteMapping(value = "/items/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public String deleteItem (@PathVariable(value = "id") long id) throws NotFoundItems {
+	public String deleteItem (@PathVariable(value = "id") long id) throws NotFoundItem {
 		Boolean item1 = itemsRepository.findById(id).isPresent();
 		if (!item1 == true) {
-			throw new NotFoundItems();
+			throw new NotFoundItem();
 		}   
 		itemsRepository.deleteById(id);
 		return "Удалено"; 

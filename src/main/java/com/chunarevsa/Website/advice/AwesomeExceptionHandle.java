@@ -1,7 +1,7 @@
 package com.chunarevsa.Website.advice;
 
 import com.chunarevsa.Website.dto.AwesomeException;
-import com.chunarevsa.Website.Exception.NotFoundItems;
+import com.chunarevsa.Website.Exception.NotFoundItem;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,8 +11,14 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class AwesomeExceptionHandle extends ResponseEntityExceptionHandler {
-	@ExceptionHandler(NotFoundItems.class)
+	@ExceptionHandler(NotFoundItem.class)
+	protected ResponseEntity<AwesomeException> handleNotFoundItem() {
+		return new ResponseEntity<>(new AwesomeException(404, "Item not found"), HttpStatus.NOT_FOUND);
+  }
+
+  @ExceptionHandler(NotFoundItem.class)
 	protected ResponseEntity<AwesomeException> handleThereIsNoSuchUserException() {
 		return new ResponseEntity<>(new AwesomeException(404, "Item not found"), HttpStatus.NOT_FOUND);
   }
+
 }
