@@ -55,12 +55,18 @@ public class ItemsController {
 	@PostMapping(value = "/items", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus (value = HttpStatus.CREATED)	
 	public long createdItem (@RequestBody Items newItems) throws InvalidFormat {
-		Items item2 = new Items ();
-		try { 
-			int i = Integer.parseInt(item2.getCost());
+		try {
+			// Проверка на формат числа
+			int i = Integer.parseInt(newItems.getCost());
+			// Проверка на незаполеннные данные
+			if (i <= 0 || newItems.getName().isEmpty() == true || 
+			newItems.getSku().isEmpty() == true || newItems.getType().isEmpty() == true || 
+			newItems.getDescription().isEmpty() == true || newItems.getCost().isEmpty() == true) {
+				throw new NumberFormatException();
+			}
 		} catch (NumberFormatException e) {
 			throw new InvalidFormat();
-		} 
+		}
 		itemsRepository.save(newItems);
 		return newItems.getId();
 	} 	

@@ -20,7 +20,7 @@ public class AwesomeExceptionHandle extends ResponseEntityExceptionHandler {
 
    @ExceptionHandler(InvalidFormat.class)
 	protected ResponseEntity<AwesomeException> handleInvalidFormat() {
-		return new ResponseEntity<>(new AwesomeException(400, "InvalidFormat"), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(new AwesomeException(400, "Invalid format cost"), HttpStatus.BAD_REQUEST);
   } 
 
 
