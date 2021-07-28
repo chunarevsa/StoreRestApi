@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.dto;
 
-public class AwesomeException {
+public class Response {
 	
 	private String message;
 	private int code;
@@ -21,11 +21,12 @@ public class AwesomeException {
 		this.code = code;
 	}
 
-	public AwesomeException() {
+	public Response() {
 	}
 
-	public AwesomeException(int code, String message) {
+	public Response(int code, String message) {
 		this.code = code;
 		this.message = message;
 	}
+	
 }

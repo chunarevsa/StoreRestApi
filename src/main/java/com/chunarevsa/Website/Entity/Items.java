@@ -65,7 +65,7 @@ public class Items {
 	// Конструкторы
 	public Items () {
 	}
-
+		// Для Controller GUI
 	public Items (String sku, String name,String type, String description, String cost) {
 		this.sku = sku;
 		this.cost = cost;
@@ -73,7 +73,7 @@ public class Items {
 		this.name = name;
 		this.description = description;
 	}
-
+		// Для ItemsController
 	public Items (Items itemsBody) {
 		this.sku = itemsBody.sku;
 		this.cost = itemsBody.cost;

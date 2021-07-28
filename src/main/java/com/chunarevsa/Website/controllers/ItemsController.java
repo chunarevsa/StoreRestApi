@@ -3,6 +3,7 @@ package com.chunarevsa.Website.controllers;
 import com.chunarevsa.Website.Entity.Items;
 import com.chunarevsa.Website.Exception.InvalidFormat;
 import com.chunarevsa.Website.Exception.NotFoundItem;
+import com.chunarevsa.Website.dto.Response;
 import com.chunarevsa.Website.repo.ItemsRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,7 @@ public class ItemsController {
 	// Получение по id
 	@RequestMapping (path = "/items/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Items itemsMethod (@PathVariable(value = "id") long id) throws NotFoundItem { 
+		// Проверка на наличие Item
 		Boolean item1 = itemsRepository.findById(id).isPresent();
 		if (!item1 == true) {
 			throw new NotFoundItem();
@@ -74,6 +76,7 @@ public class ItemsController {
 	 // Изменение
 	@PutMapping(value = "/items/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Items editItem (@PathVariable(value = "id") long id, @RequestBody Items editItems) {
+		// Проверка на наличие Item
 		Boolean item1 = itemsRepository.findById(id).isPresent();
 		if (!item1 == true) {
 			throw new NotFoundItem();
@@ -84,19 +87,34 @@ public class ItemsController {
 		item.setType(editItems.getType());
 		item.setDescription(editItems.getDescription());
 		item.setCost(editItems.getCost());
+		try {
+			// Проверка на формат числа
+			int i = Integer.parseInt(editItems.getCost());
+			// Проверка на незаполеннные данные
+			if (i <= 0 || editItems.getName().isEmpty() == true || 
+			editItems.getSku().isEmpty() == true || editItems.getType().isEmpty() == true || 
+			editItems.getDescription().isEmpty() == true || editItems.getCost().isEmpty() == true) {
+				throw new NumberFormatException();
+			}
+		} catch (NumberFormatException e) {
+			throw new InvalidFormat();
+		}
 		itemsRepository.save(item);
 		return item;
 	} 
 
    // Удаление
 	@DeleteMapping(value = "/items/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public String deleteItem (@PathVariable(value = "id") long id) throws NotFoundItem {
+	public Response deleteItem (@PathVariable(value = "id") long id) throws NotFoundItem {
+		// Проверка на наличие Item
 		Boolean item1 = itemsRepository.findById(id).isPresent();
 		if (!item1 == true) {
 			throw new NotFoundItem();
 		}   
 		itemsRepository.deleteById(id);
-		return "Удалено"; 
+		Response response = new Response(200, "OK");
+		return response;
+
 	}
 
 
