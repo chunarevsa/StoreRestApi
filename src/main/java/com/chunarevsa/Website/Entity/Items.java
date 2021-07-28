@@ -5,17 +5,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.chunarevsa.Website.Exception.InvalidFormat;
-
-
 @Entity
 public class Items {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 
 	private Long id; 
-	private String sku, name, type, description; 
-	private int cost;
+	private String sku, name, type, description, cost;
 
 	// Getter and Setter
 	public Long getId() {
@@ -58,29 +54,19 @@ public class Items {
 		this.description = description;
 	}
 
-	public int getCost() {
+	public String getCost() {
 		return this.cost;
 	}
 
-	public void setCost(int cost) throws InvalidFormat {
+	public void setCost(String cost) {
 		this.cost = cost;
 	} 
-	
-	public void setCost(String cost) throws InvalidFormat {
-		try {
-			int i = Integer.parseInt(cost);
-			this.cost = i;
-		} catch (Throwable e) {
-			this.cost = 9999;
-		}
-		
-	}
 
 	// Конструкторы
 	public Items () {
 	}
 
-	public Items (String sku, String name,String type, String description, int cost) {
+	public Items (String sku, String name,String type, String description, String cost) {
 		this.sku = sku;
 		this.cost = cost;
 		this.type = type;

@@ -51,7 +51,7 @@ public class ControllerGUI {
 		 return "items-add";
 	 }
 	 @PostMapping ("/items/gui/add")
-	 public String itemsPostAdd (@RequestParam String sku, @RequestParam String name,@RequestParam String type, @RequestParam String description, @RequestParam int cost, Model model) {
+	 public String itemsPostAdd (@RequestParam String sku, @RequestParam String name,@RequestParam String type, @RequestParam String description, @RequestParam String cost, Model model) {
 		 Items item = new Items(sku, name, type, description, cost);
 		 itemsRepository.save(item);
 		 return "redirect:/";
@@ -83,7 +83,7 @@ public class ControllerGUI {
 		 return "items-edit";
 	}
   	@PostMapping ("/items/gui/{id}/edit") 
-  	public String itemsPostUpdate (@PathVariable(value = "id") long id,@RequestParam String sku, @RequestParam String name,@RequestParam String type, @RequestParam String description, @RequestParam int cost, Model model) {
+  	public String itemsPostUpdate (@PathVariable(value = "id") long id,@RequestParam String sku, @RequestParam String name,@RequestParam String type, @RequestParam String description, @RequestParam String cost, Model model) {
 	  Items item = itemsRepository.findById(id).orElseThrow();
 	  item.setName(name);
 	  item.setSku(sku);

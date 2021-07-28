@@ -55,6 +55,12 @@ public class ItemsController {
 	@PostMapping(value = "/items", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus (value = HttpStatus.CREATED)	
 	public long createdItem (@RequestBody Items newItems) throws InvalidFormat {
+		Items item2 = new Items ();
+		try { 
+			int i = Integer.parseInt(item2.getCost());
+		} catch (NumberFormatException e) {
+			throw new InvalidFormat();
+		} 
 		itemsRepository.save(newItems);
 		return newItems.getId();
 	} 	
