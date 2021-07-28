@@ -3,6 +3,7 @@ package com.chunarevsa.Website.controllers;
 import com.chunarevsa.Website.Entity.Items;
 import com.chunarevsa.Website.Exception.InvalidFormat;
 import com.chunarevsa.Website.Exception.NotFoundItem;
+import com.chunarevsa.Website.dto.Id;
 import com.chunarevsa.Website.dto.Response;
 import com.chunarevsa.Website.repo.ItemsRepository;
 
@@ -56,7 +57,7 @@ public class ItemsController {
 	// Добавление 
 	@PostMapping(value = "/items", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus (value = HttpStatus.CREATED)	
-	public long createdItem (@RequestBody Items newItems) throws InvalidFormat {
+	public Id createdItem (@RequestBody Items newItems) throws InvalidFormat {
 		try {
 			// Проверка на формат числа
 			int i = Integer.parseInt(newItems.getCost());
@@ -70,7 +71,8 @@ public class ItemsController {
 			throw new InvalidFormat();
 		}
 		itemsRepository.save(newItems);
-		return newItems.getId();
+		Id id = new Id(newItems.getId());
+		return id;
 	} 	
 				
 	 // Изменение
