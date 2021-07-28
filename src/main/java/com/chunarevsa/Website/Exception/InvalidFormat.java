@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.Exception;
 
 
-public class InvalidFormat extends Exception {
+public class InvalidFormat extends NumberFormatException {
 
 }

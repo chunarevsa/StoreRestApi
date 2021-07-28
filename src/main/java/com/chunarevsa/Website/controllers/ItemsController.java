@@ -55,13 +55,9 @@ public class ItemsController {
 	@PostMapping(value = "/items", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus (value = HttpStatus.CREATED)	
 	public long createdItem (@RequestBody Items newItems) throws InvalidFormat {
-		try {
-			itemsRepository.save(newItems);
-		} catch (Exception e) {
-			throw new InvalidFormat();
-		}
+		itemsRepository.save(newItems);
 		return newItems.getId();
-		} 	
+	} 	
 				
 	 // Изменение
 	@PutMapping(value = "/items/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

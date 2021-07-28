@@ -18,10 +18,10 @@ public class AwesomeExceptionHandle extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(new AwesomeException(404, "Item not found"), HttpStatus.NOT_FOUND);
   }
 
-  @ExceptionHandler(InvalidFormat.class)
+   @ExceptionHandler(InvalidFormat.class)
 	protected ResponseEntity<AwesomeException> handleInvalidFormat() {
-		return new ResponseEntity<>(new AwesomeException(400, "InvalidFormat"), HttpStatus.CREATED);
-  }
+		return new ResponseEntity<>(new AwesomeException(400, "InvalidFormat"), HttpStatus.BAD_REQUEST);
+  } 
 
 
 }
