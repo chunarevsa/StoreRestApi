@@ -114,6 +114,14 @@ public class ItemsController {
 		itemsRepository.deleteById(id);
 		Response response = new Response(200, "OK");
 		return response;
+		// Поменять 200 на htttpStatus.Ok
+		// Сделать контроллер для валют отдельно, и репу естественно
+		// сделать фабрику выводов
+		// Рефаторинг 
+		// объектно ориентированая парадигма
+		// https://www.atlassian.com/ru/git/tutorials/comparing-workflows/gitflow-workflow
+		// https://testworku.atlassian.net/browse/TSA-5
+		// ORM 
 
 	}
 
