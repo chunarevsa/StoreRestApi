@@ -51,6 +51,9 @@ public class ItemsController {
 			throw new NotFound();
 		}  
 		Items item = itemsRepository.findById(id).orElseThrow();
+		if (item.getActive() == false) {
+			throw new NotFound(item.getActive());
+		}
 		return item;
 	} 
 
@@ -112,7 +115,9 @@ public class ItemsController {
 		Boolean item1 = itemsRepository.findById(id).isPresent();
 		if (!item1 == true) {
 			throw new NotFound();
-		}   
+		}
+		Items item = itemsRepository.findById(id).orElseThrow();
+		item.setActive(false);
 		itemsRepository.deleteById(id);
 		Response response = new Response(200, "OK");
 		return response;

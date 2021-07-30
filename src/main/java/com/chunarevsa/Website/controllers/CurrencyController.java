@@ -34,7 +34,7 @@ public class CurrencyController {
 		this.currencyRepository = currencyRepository;
 	}
 
-	// Получение списка всех Items с ограничением страницы (10)
+	// Получение списка всех Currency с ограничением страницы (10)
 	@RequestMapping (path = "/currency", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Page<Currency> currencyFindAll (@PageableDefault(sort = { "id"}, direction = Sort.Direction.DESC) Pageable pageable) { 
 		Page<Currency> pageCurrency = currencyRepository.findAll(pageable);
@@ -62,6 +62,9 @@ public class CurrencyController {
 	@ResponseStatus (value = HttpStatus.CREATED)	
 	public Id createdCurrency (@RequestBody Currency newCurrency) {
 		newCurrency.setActive(true);
+		if (newCurrency.getCode().isEmpty() == true) {
+			throw new NumberFormatException();
+		}
 		currencyRepository.save(newCurrency);
 		Id id = new Id(newCurrency.getId());
 		return id;
@@ -70,9 +73,15 @@ public class CurrencyController {
 	 // Изменение
 	@PutMapping(value = "/currency/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Currency editCurrency (@PathVariable(value = "id") long id, @RequestBody Currency editCurrency) {
+		Boolean currencyBoolean = currencyRepository.findById(id).isPresent();
+		if (!currencyBoolean == true) {
+			throw new NotFound();
+		}
 		Currency currency = currencyRepository.findById(id).orElseThrow();
 		currency.setCode(editCurrency.getCode());
-		currency.setActive(editCurrency.getActive());
+		if (editCurrency.getCode().isEmpty() == true) {
+			throw new NumberFormatException();
+		}
 		currencyRepository.save(currency);
 		return currency;
 	} 
@@ -80,6 +89,10 @@ public class CurrencyController {
    // Удаление
 	@DeleteMapping(value = "/currency/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Response deleteCurrency (@PathVariable(value = "id") long id) {
+		Boolean currencyBoolean = currencyRepository.findById(id).isPresent();
+		if (!currencyBoolean == true) {
+			throw new NotFound();
+		}
 		Currency currency = currencyRepository.findById(id).orElseThrow();
 		currency.setActive(false);
 		Response response = new Response(200, "OK");
