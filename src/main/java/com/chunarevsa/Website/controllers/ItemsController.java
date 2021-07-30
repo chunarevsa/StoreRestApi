@@ -2,7 +2,7 @@ package com.chunarevsa.Website.controllers;
 
 import com.chunarevsa.Website.Entity.Items;
 import com.chunarevsa.Website.Exception.InvalidFormat;
-import com.chunarevsa.Website.Exception.NotFoundItem;
+import com.chunarevsa.Website.Exception.NotFound;
 import com.chunarevsa.Website.dto.Id;
 import com.chunarevsa.Website.dto.Response;
 import com.chunarevsa.Website.repo.ItemsRepository;
@@ -44,11 +44,11 @@ public class ItemsController {
 
 	// Получение по id
 	@RequestMapping (path = "/items/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Items itemsMethod (@PathVariable(value = "id") long id) throws NotFoundItem { 
+	public Items itemsMethod (@PathVariable(value = "id") long id) throws NotFound { 
 		// Проверка на наличие Item
 		Boolean item1 = itemsRepository.findById(id).isPresent();
 		if (!item1 == true) {
-			throw new NotFoundItem();
+			throw new NotFound();
 		}  
 		Items item = itemsRepository.findById(id).orElseThrow();
 		return item;
@@ -81,7 +81,7 @@ public class ItemsController {
 		// Проверка на наличие Item
 		Boolean item1 = itemsRepository.findById(id).isPresent();
 		if (!item1 == true) {
-			throw new NotFoundItem();
+			throw new NotFound();
 		} 
 		Items item = itemsRepository.findById(id).orElseThrow();
 		item.setSku(editItems.getSku());
@@ -107,11 +107,11 @@ public class ItemsController {
 
    // Удаление
 	@DeleteMapping(value = "/items/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Response deleteItem (@PathVariable(value = "id") long id) throws NotFoundItem {
+	public Response deleteItem (@PathVariable(value = "id") long id) throws NotFound {
 		// Проверка на наличие Item
 		Boolean item1 = itemsRepository.findById(id).isPresent();
 		if (!item1 == true) {
-			throw new NotFoundItem();
+			throw new NotFound();
 		}   
 		itemsRepository.deleteById(id);
 		Response response = new Response(200, "OK");
