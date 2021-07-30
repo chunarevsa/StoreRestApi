@@ -74,7 +74,7 @@ public class CurrencyController {
 
    // Удаление
 	@DeleteMapping(value = "/currency/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Response deleteCurrency (@PathVariable(value = "id") long id) throws NotFound {
+	public Response deleteCurrency (@PathVariable(value = "id") long id) {
 		currencyRepository.deleteById(id);
 		Response response = new Response(200, "OK");
 		return response;
