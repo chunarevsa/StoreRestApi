@@ -48,8 +48,12 @@ public class CurrencyController {
 		Boolean currencyBoolean = currencyRepository.findById(id).isPresent();
 		if (!currencyBoolean == true) {
 			throw new NotFound();
-		}  
+		}
 		Currency currency = currencyRepository.findById(id).orElseThrow();
+		// Вывести только в случае active = true
+		if (currency.getActive() == false) {
+			throw new NotFound(currency.getActive());
+		}
 		return currency;
 	} 
 
@@ -57,6 +61,7 @@ public class CurrencyController {
 	@PostMapping(value = "/currency", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus (value = HttpStatus.CREATED)	
 	public Id createdCurrency (@RequestBody Currency newCurrency) {
+		newCurrency.setActive(true);
 		currencyRepository.save(newCurrency);
 		Id id = new Id(newCurrency.getId());
 		return id;
@@ -75,7 +80,8 @@ public class CurrencyController {
    // Удаление
 	@DeleteMapping(value = "/currency/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Response deleteCurrency (@PathVariable(value = "id") long id) {
-		currencyRepository.deleteById(id);
+		Currency currency = currencyRepository.findById(id).orElseThrow();
+		currency.setActive(false);
 		Response response = new Response(200, "OK");
 		return response;
 	}

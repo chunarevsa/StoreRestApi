@@ -44,7 +44,7 @@ public class Currency {
 	
 	public Currency() {
 	}
-
+	
 	public Currency(Currency currencyBody) {
 		this.code = currencyBody.code;
 		this.active = currencyBody.active;
