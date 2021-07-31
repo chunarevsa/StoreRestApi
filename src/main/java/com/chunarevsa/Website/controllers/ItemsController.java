@@ -51,9 +51,10 @@ public class ItemsController {
 			throw new NotFound();
 		}  
 		Items item = itemsRepository.findById(id).orElseThrow();
-		/* if (item.getActive() == false) {
+		// Вывести только в случае active = true
+		if (item.getActive() == false) {
 			throw new NotFound(item.getActive());
-		} */
+		} 
 		return item;
 	} 
 
@@ -82,9 +83,9 @@ public class ItemsController {
 	 // Изменение
 	@PutMapping(value = "/items/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Items editItem (@PathVariable(value = "id") long id, @RequestBody Items editItems) {
-		// Проверка на наличие Item
-		Boolean item1 = itemsRepository.findById(id).isPresent();
-		if (!item1 == true) {
+		// Проверка на наличие
+		Boolean itemBoolean = itemsRepository.findById(id).isPresent();
+		if (!itemBoolean == true) {
 			throw new NotFound();
 		} 
 		Items item = itemsRepository.findById(id).orElseThrow();
@@ -93,6 +94,8 @@ public class ItemsController {
 		item.setType(editItems.getType());
 		item.setDescription(editItems.getDescription());
 		item.setCost(editItems.getCost());
+		// Возможность вернуть удалённый (active = false) обратно (active = true)
+		item.setActive(editItems.getActive());
 		try {
 			// Проверка на формат числа
 			int i = Integer.parseInt(editItems.getCost());
@@ -119,7 +122,7 @@ public class ItemsController {
 		}
 		Items item = itemsRepository.findById(id).orElseThrow();
 		item.setActive(false);
-		itemsRepository.deleteById(id);
+		itemsRepository.save(item);
 		Response response = new Response(200, "OK");
 		return response;
 

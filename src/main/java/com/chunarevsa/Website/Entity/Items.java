@@ -63,12 +63,16 @@ public class Items {
 		this.cost = cost;
 	} 
 
-	public boolean setActive(boolean active) {
+	public boolean isActive() {
 		return this.active;
 	}
 
 	public boolean getActive() {
 		return this.active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 	// Конструкторы
@@ -90,5 +94,6 @@ public class Items {
 		this.name = itemsBody.name;
 		this.description = itemsBody.description;
 		this.active = itemsBody.active;
-	}
+	} 
+
 }

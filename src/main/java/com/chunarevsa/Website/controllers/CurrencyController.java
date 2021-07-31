@@ -61,10 +61,10 @@ public class CurrencyController {
 	@PostMapping(value = "/currency", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus (value = HttpStatus.CREATED)	
 	public Id createdCurrency (@RequestBody Currency newCurrency) {
-		newCurrency.setActive(true);
 		if (newCurrency.getCode().isEmpty() == true) {
 			throw new NumberFormatException();
 		}
+		newCurrency.setActive(true);
 		currencyRepository.save(newCurrency);
 		Id id = new Id(newCurrency.getId());
 		return id;
@@ -73,12 +73,15 @@ public class CurrencyController {
 	 // Изменение
 	@PutMapping(value = "/currency/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Currency editCurrency (@PathVariable(value = "id") long id, @RequestBody Currency editCurrency) {
+		// Проверка на наличие 
 		Boolean currencyBoolean = currencyRepository.findById(id).isPresent();
 		if (!currencyBoolean == true) {
 			throw new NotFound();
 		}
 		Currency currency = currencyRepository.findById(id).orElseThrow();
 		currency.setCode(editCurrency.getCode());
+		// Возможность вернуть удалённую (active = false) обратно (active = true)
+		currency.setActive(editCurrency.getActive());
 		if (editCurrency.getCode().isEmpty() == true) {
 			throw new NumberFormatException();
 		}
@@ -89,14 +92,12 @@ public class CurrencyController {
    // Удаление
 	@DeleteMapping(value = "/currency/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Response deleteCurrency (@PathVariable(value = "id") long id) {
+		// Проверка на наличие
 		Boolean currencyBoolean = currencyRepository.findById(id).isPresent();
 		if (!currencyBoolean == true) {
 			throw new NotFound();
 		}
 		Currency currency = currencyRepository.findById(id).orElseThrow();
-		if (currency.getActive() == false) {
-			throw new NotFound(currency.getActive());
-		}
 		currency.setActive(false);
 		currencyRepository.save(currency);
 		Response response = new Response(200, "OK");
