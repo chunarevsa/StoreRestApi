@@ -4,21 +4,22 @@ import java.util.NoSuchElementException;
 
 public class NotFound extends NoSuchElementException {
 
-	private boolean i;
+	private String message;
 
-	public boolean getI() {
-		return this.i;
+	public String getMessage() {
+		return this.message;
 	}
 
-	public void setI(boolean i) {
-		this.i = i;
-	}
-
-	public NotFound(boolean i) {
-		this.i = i;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 	public NotFound() {
 	}
+	
+	public NotFound(String message) {
+		this.message = message;
+	}
+
 
 }

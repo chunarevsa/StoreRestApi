@@ -53,7 +53,7 @@ public class ItemsController {
 		Items item = itemsRepository.findById(id).orElseThrow();
 		// Вывести только в случае active = true
 		if (item.getActive() == false) {
-			throw new NotFound(item.getActive());
+			throw new NotFound("item.getActive()");
 		} 
 		return item;
 	} 
@@ -123,7 +123,7 @@ public class ItemsController {
 		Items item = itemsRepository.findById(id).orElseThrow();
 		item.setActive(false);
 		itemsRepository.save(item);
-		Response response = new Response(200, "OK");
+		Response response = new Response(HttpStatus.OK);
 		return response;
 
 	}

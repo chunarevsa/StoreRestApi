@@ -48,12 +48,12 @@ public class CurrencyController {
 		// Проверка на наличие 
 		Boolean currencyBoolean = currencyRepository.findById(id).isPresent();
 		if (!currencyBoolean == true) {
-			throw new NotFound();
+			throw new NotFound("Такой валюты нет");
 		}
 		Currency currency = currencyRepository.findById(id).orElseThrow();
 		// Вывести только в случае active = true
 		if (currency.getActive() == false) {
-			throw new NotFound(currency.getActive());
+			throw new NotFound("Этот элемент был удалён");
 		}
 		return currency;
 	} 
@@ -63,7 +63,7 @@ public class CurrencyController {
 	@ResponseStatus (value = HttpStatus.CREATED)	
 	public Id createdCurrency (@RequestBody Currency newCurrency) {
 		if (newCurrency.getCode().isEmpty() == true) {
-			throw new NumberFormatException();
+			throw new NumberFormatException("Пустое поле");
 		}
 		newCurrency.setActive(true);
 		currencyRepository.save(newCurrency);
@@ -77,14 +77,14 @@ public class CurrencyController {
 		// Проверка на наличие 
 		Boolean currencyBoolean = currencyRepository.findById(id).isPresent();
 		if (!currencyBoolean == true) {
-			throw new NotFound();
+			throw new NotFound("Такой валюты нет");
 		}
 		Currency currency = currencyRepository.findById(id).orElseThrow();
 		currency.setCode(editCurrency.getCode());
 		// Возможность вернуть удалённую (active = false) обратно (active = true)
 		currency.setActive(editCurrency.getActive());
 		if (editCurrency.getCode().isEmpty() == true) {
-			throw new NumberFormatException();
+			throw new NumberFormatException("Пустое поле");
 		}
 		currencyRepository.save(currency);
 		return currency;
@@ -96,12 +96,11 @@ public class CurrencyController {
 		// Проверка на наличие
 		Boolean currencyBoolean = currencyRepository.findById(id).isPresent();
 		if (!currencyBoolean == true) {
-			throw new NotFound();
+			throw new NotFound("Такой валюты нет");
 		}
 		Currency currency = currencyRepository.findById(id).orElseThrow();
 		currency.setActive(false);
-		currencyRepository.save(currency);
-		Response response = new Response(200, "OK");
+		Response response = new Response(HttpStatus.OK);
 		return response;
 	}
 }

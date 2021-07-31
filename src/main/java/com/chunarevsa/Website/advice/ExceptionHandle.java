@@ -17,12 +17,12 @@ public class ExceptionHandle extends ResponseEntityExceptionHandler {
 	// Not Found Item
 	@ExceptionHandler(NotFound.class)
 	protected ResponseEntity<Response> handleNotFoundItem() {
-		return new ResponseEntity<>(new Response(404, "Item not found"), HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND), HttpStatus.NOT_FOUND);
   }
 
    // Неверный тип данных, неверная сумма, пустая срока
    @ExceptionHandler(InvalidFormat.class)
 	protected ResponseEntity<Response> handleInvalidFormat() {
-		return new ResponseEntity<>(new Response(400, "Invalid format"), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
   } 
 }
