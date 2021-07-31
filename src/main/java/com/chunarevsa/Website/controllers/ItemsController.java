@@ -37,7 +37,7 @@ public class ItemsController {
 
 	// Получение списка всех Items с ограничением страницы (10)
 	@RequestMapping (path = "/items", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<Items> itemsFindAll (@PageableDefault(sort = { "id"}, direction = Sort.Direction.DESC) Pageable pageable) { 
+	public Page<Items> itemsFindAll (@PageableDefault(sort = { "active"}, direction = Sort.Direction.DESC) Pageable pageable) { 
 		Page<Items> pageGames = itemsRepository.findAll(pageable);
 		return pageGames;
 	}
@@ -51,9 +51,9 @@ public class ItemsController {
 			throw new NotFound();
 		}  
 		Items item = itemsRepository.findById(id).orElseThrow();
-		if (item.getActive() == false) {
+		/* if (item.getActive() == false) {
 			throw new NotFound(item.getActive());
-		}
+		} */
 		return item;
 	} 
 
@@ -73,6 +73,7 @@ public class ItemsController {
 		} catch (NumberFormatException e) {
 			throw new InvalidFormat();
 		}
+		newItems.setActive(true);
 		itemsRepository.save(newItems);
 		Id id = new Id(newItems.getId());
 		return id;

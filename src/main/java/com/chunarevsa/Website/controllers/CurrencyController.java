@@ -36,7 +36,7 @@ public class CurrencyController {
 
 	// Получение списка всех Currency с ограничением страницы (10)
 	@RequestMapping (path = "/currency", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<Currency> currencyFindAll (@PageableDefault(sort = { "id"}, direction = Sort.Direction.DESC) Pageable pageable) { 
+	public Page<Currency> currencyFindAll (@PageableDefault(sort = { "active"}, direction = Sort.Direction.ASC) Pageable pageable) { 
 		Page<Currency> pageCurrency = currencyRepository.findAll(pageable);
 		return pageCurrency;
 	}
@@ -94,7 +94,11 @@ public class CurrencyController {
 			throw new NotFound();
 		}
 		Currency currency = currencyRepository.findById(id).orElseThrow();
+		if (currency.getActive() == false) {
+			throw new NotFound(currency.getActive());
+		}
 		currency.setActive(false);
+		currencyRepository.save(currency);
 		Response response = new Response(200, "OK");
 		return response;
 	}
