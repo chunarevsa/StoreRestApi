@@ -36,8 +36,9 @@ public class CurrencyController {
 
 	// Получение списка всех Currency с ограничением страницы (10)
 	@RequestMapping (path = "/currency", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<Currency> currencyFindAll (@PageableDefault(sort = { "active"}, direction = Sort.Direction.ASC) Pageable pageable) { 
-		Page<Currency> pageCurrency = currencyRepository.findAll(pageable);
+	public Page<Currency> currencyFindAll (@PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) { 
+		// Сортировка по 10 элементов и только со значением active = true
+		Page<Currency> pageCurrency =  currencyRepository.findByActive(true, pageable);
 		return pageCurrency;
 	}
 

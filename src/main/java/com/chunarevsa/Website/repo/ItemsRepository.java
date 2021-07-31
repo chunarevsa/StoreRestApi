@@ -9,6 +9,9 @@ import org.springframework.data.repository.CrudRepository;
 public interface ItemsRepository extends CrudRepository <Items, Long> {
 	
 	// Для сортировки и подачи по частям 
-	Page <Items> findAll (Pageable pageable);	
+		// Общий список
+	Page <Items> findAll (Pageable pageable);
+		// Только active = true
+	Page <Items> findByActive (boolean active, Pageable pageable);
 	
 }

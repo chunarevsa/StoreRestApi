@@ -8,7 +8,10 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface CurrencyRepository extends CrudRepository <Currency, Long> {
 	
-	// Для сортировкf и подачf по частям 
-	Page <Currency> findAll (Pageable pageable);	
-	
+	// Для сортировки и подачи по частям 
+		// Общий список
+	Page <Currency> findAll (Pageable pageable);
+		// Только active = true
+	Page <Currency> findByActive (boolean active, Pageable pageable);
+
 }

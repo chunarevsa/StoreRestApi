@@ -38,7 +38,7 @@ public class ItemsController {
 	// Получение списка всех Items с ограничением страницы (10)
 	@RequestMapping (path = "/items", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Page<Items> itemsFindAll (@PageableDefault(sort = { "active"}, direction = Sort.Direction.DESC) Pageable pageable) { 
-		Page<Items> pageGames = itemsRepository.findAll(pageable);
+		Page<Items> pageGames = itemsRepository.findByActive(true, pageable);
 		return pageGames;
 	}
 
