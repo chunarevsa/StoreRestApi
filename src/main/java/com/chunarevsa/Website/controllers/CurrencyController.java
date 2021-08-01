@@ -1,7 +1,9 @@
 package com.chunarevsa.Website.controllers;
 
 import com.chunarevsa.Website.Entity.Currency;
+import com.chunarevsa.Website.Exception.AllException;
 import com.chunarevsa.Website.Exception.NotFound;
+import com.chunarevsa.Website.Exception.FormatException;
 import com.chunarevsa.Website.dto.Id;
 import com.chunarevsa.Website.dto.Response;
 import com.chunarevsa.Website.repo.CurrencyRepository;
@@ -44,16 +46,16 @@ public class CurrencyController {
 
 	// Получение по id
 	@RequestMapping (path = "/currency/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Currency currencyMethod (@PathVariable(value = "id") long id) throws NotFound { 
+	public Currency currencyMethod (@PathVariable(value = "id") long id) throws AllException { 
 		// Проверка на наличие 
 		Boolean currencyBoolean = currencyRepository.findById(id).isPresent();
 		if (!currencyBoolean == true) {
-			throw new NotFound("Такой валюты нет");
+			throw new NotFound(HttpStatus.NOT_FOUND);
 		}
 		Currency currency = currencyRepository.findById(id).orElseThrow();
 		// Вывести только в случае active = true
 		if (currency.getActive() == false) {
-			throw new NotFound("Этот элемент был удалён");
+			throw new NotFound(HttpStatus.NOT_FOUND, currency.getActive());
 		}
 		return currency;
 	} 
@@ -61,9 +63,9 @@ public class CurrencyController {
 	// Добавление 
 	@PostMapping(value = "/currency", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus (value = HttpStatus.CREATED)	
-	public Id createdCurrency (@RequestBody Currency newCurrency) {
+	public Id createdCurrency (@RequestBody Currency newCurrency) throws AllException {
 		if (newCurrency.getCode().isEmpty() == true) {
-			throw new NumberFormatException("Пустое поле");
+			throw new FormatException(HttpStatus.BAD_REQUEST, newCurrency.getCode().isEmpty());
 		}
 		newCurrency.setActive(true);
 		currencyRepository.save(newCurrency);
@@ -73,34 +75,38 @@ public class CurrencyController {
 				
 	 // Изменение
 	@PutMapping(value = "/currency/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Currency editCurrency (@PathVariable(value = "id") long id, @RequestBody Currency editCurrency) {
+	public Currency editCurrency (@PathVariable(value = "id") long id, @RequestBody Currency editCurrency) throws AllException {
 		// Проверка на наличие 
 		Boolean currencyBoolean = currencyRepository.findById(id).isPresent();
 		if (!currencyBoolean == true) {
-			throw new NotFound("Такой валюты нет");
+			throw new NotFound(HttpStatus.NOT_FOUND);
 		}
 		Currency currency = currencyRepository.findById(id).orElseThrow();
 		currency.setCode(editCurrency.getCode());
+		if (editCurrency.getCode().isEmpty() == true ) {
+			throw new FormatException(HttpStatus.BAD_REQUEST, editCurrency.getCode().isEmpty());
+		}
 		// Возможность вернуть удалённую (active = false) обратно (active = true)
 		currency.setActive(editCurrency.getActive());
-		if (editCurrency.getCode().isEmpty() == true) {
-			throw new NumberFormatException("Пустое поле");
-		}
 		currencyRepository.save(currency);
 		return currency;
 	} 
 
    // Удаление
 	@DeleteMapping(value = "/currency/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Response deleteCurrency (@PathVariable(value = "id") long id) {
+	public Response deleteCurrency (@PathVariable(value = "id") long id) throws AllException {
 		// Проверка на наличие
 		Boolean currencyBoolean = currencyRepository.findById(id).isPresent();
 		if (!currencyBoolean == true) {
-			throw new NotFound("Такой валюты нет");
+			throw new NotFound(HttpStatus.NOT_FOUND);
 		}
 		Currency currency = currencyRepository.findById(id).orElseThrow();
+		if (currency.getActive() == false) {
+			throw new NotFound(HttpStatus.NOT_FOUND, currency.getActive());
+		}
 		currency.setActive(false);
-		Response response = new Response(HttpStatus.OK);
+		currencyRepository.save(currency);
+		Response response = new Response("Успешное удаленние", HttpStatus.OK);
 		return response;
 	}
 }

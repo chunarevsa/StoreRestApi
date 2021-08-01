@@ -1,25 +1,19 @@
 package com.chunarevsa.Website.Exception;
 
-import java.util.NoSuchElementException;
+import org.springframework.http.HttpStatus;
 
-public class NotFound extends NoSuchElementException {
-
-	private String message;
-
-	public String getMessage() {
-		return this.message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
+public class NotFound extends AllException {
 
 	public NotFound() {
 	}
+
+	public NotFound(HttpStatus httpStatus) {
+		this.clientMessage = "Такого элемента не существует";
+		this.httpStatus = httpStatus;
+	}	
 	
-	public NotFound(String message) {
-		this.message = message;
+	public NotFound(HttpStatus httpStatus, boolean active) {
+		this.clientMessage = "Этот элемент был удалён";
+		this.httpStatus = httpStatus;
 	}
-
-
 }

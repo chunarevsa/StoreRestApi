@@ -1,8 +1,10 @@
 package com.chunarevsa.Website.controllers;
 
 import com.chunarevsa.Website.Entity.Items;
+import com.chunarevsa.Website.Exception.AllException;
 import com.chunarevsa.Website.Exception.InvalidFormat;
 import com.chunarevsa.Website.Exception.NotFound;
+import com.chunarevsa.Website.Exception.FormatException;
 import com.chunarevsa.Website.dto.Id;
 import com.chunarevsa.Website.dto.Response;
 import com.chunarevsa.Website.repo.ItemsRepository;
@@ -38,22 +40,23 @@ public class ItemsController {
 	// Получение списка всех Items с ограничением страницы (10)
 	@RequestMapping (path = "/items", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Page<Items> itemsFindAll (@PageableDefault(sort = { "active"}, direction = Sort.Direction.DESC) Pageable pageable) { 
+		// Сортировка по 10 элементов и только со значением active = true
 		Page<Items> pageGames = itemsRepository.findByActive(true, pageable);
 		return pageGames;
 	}
 
 	// Получение по id
 	@RequestMapping (path = "/items/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Items itemsMethod (@PathVariable(value = "id") long id) throws NotFound { 
-		// Проверка на наличие Item
+	public Items itemsMethod (@PathVariable(value = "id") long id) throws AllException { 
+		// Проверка на наличие 
 		Boolean item1 = itemsRepository.findById(id).isPresent();
 		if (!item1 == true) {
-			throw new NotFound();
+			throw new NotFound(HttpStatus.NOT_FOUND);
 		}  
 		Items item = itemsRepository.findById(id).orElseThrow();
 		// Вывести только в случае active = true
 		if (item.getActive() == false) {
-			throw new NotFound("item.getActive()");
+			throw new NotFound(HttpStatus.NOT_FOUND, item.getActive());
 		} 
 		return item;
 	} 
@@ -61,18 +64,22 @@ public class ItemsController {
 	// Добавление 
 	@PostMapping(value = "/items", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus (value = HttpStatus.CREATED)	
-	public Id createdItem (@RequestBody Items newItems) throws InvalidFormat {
+	public Id createdItem (@RequestBody Items newItems) throws AllException {
+		int i;
+		// Проверка на формат числа
 		try {
-			// Проверка на формат числа
-			int i = Integer.parseInt(newItems.getCost());
-			// Проверка на незаполеннные данные
-			if (i <= 0 || newItems.getName().isEmpty() == true || 
-			newItems.getSku().isEmpty() == true || newItems.getType().isEmpty() == true || 
-			newItems.getDescription().isEmpty() == true || newItems.getCost().isEmpty() == true) {
-				throw new NumberFormatException();
+			i = Integer.parseInt(newItems.getCost());
+			if (i < 0) {
+				throw new InvalidFormat(HttpStatus.BAD_REQUEST);
 			}
 		} catch (NumberFormatException e) {
-			throw new InvalidFormat();
+			throw new InvalidFormat(HttpStatus.BAD_REQUEST);
+		}	
+		// Проверка на незаполеннные данные
+		if (newItems.getName().isEmpty() == true || 
+		newItems.getSku().isEmpty() == true || newItems.getType().isEmpty() == true || 
+		newItems.getDescription().isEmpty() == true || newItems.getCost().isEmpty() == true) {
+			throw new FormatException(HttpStatus.BAD_REQUEST, true);
 		}
 		newItems.setActive(true);
 		itemsRepository.save(newItems);
@@ -82,11 +89,11 @@ public class ItemsController {
 				
 	 // Изменение
 	@PutMapping(value = "/items/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Items editItem (@PathVariable(value = "id") long id, @RequestBody Items editItems) {
+	public Items editItem (@PathVariable(value = "id") long id, @RequestBody Items editItems) throws AllException {
 		// Проверка на наличие
 		Boolean itemBoolean = itemsRepository.findById(id).isPresent();
 		if (!itemBoolean == true) {
-			throw new NotFound();
+			throw new NotFound(HttpStatus.NOT_FOUND);
 		} 
 		Items item = itemsRepository.findById(id).orElseThrow();
 		item.setSku(editItems.getSku());
@@ -94,36 +101,43 @@ public class ItemsController {
 		item.setType(editItems.getType());
 		item.setDescription(editItems.getDescription());
 		item.setCost(editItems.getCost());
-		// Возможность вернуть удалённый (active = false) обратно (active = true)
-		item.setActive(editItems.getActive());
+		int i;
+		// Проверка на формат числа
 		try {
-			// Проверка на формат числа
-			int i = Integer.parseInt(editItems.getCost());
-			// Проверка на незаполеннные данные
-			if (i <= 0 || editItems.getName().isEmpty() == true || 
-			editItems.getSku().isEmpty() == true || editItems.getType().isEmpty() == true || 
-			editItems.getDescription().isEmpty() == true || editItems.getCost().isEmpty() == true) {
-				throw new NumberFormatException();
+			i = Integer.parseInt(editItems.getCost());
+			if (i < 0) {
+				throw new InvalidFormat(HttpStatus.BAD_REQUEST);
 			}
 		} catch (NumberFormatException e) {
-			throw new InvalidFormat();
+			throw new InvalidFormat(HttpStatus.BAD_REQUEST);
 		}
+		// Проверка на незаполеннные данные
+		if (editItems.getName().isEmpty() == true || editItems.getSku().isEmpty() == true ||
+		   editItems.getType().isEmpty() == true || editItems.getDescription().isEmpty() == true || 
+			editItems.getCost().isEmpty() == true) {
+				throw new FormatException(HttpStatus.BAD_REQUEST, true);
+		}
+		// Возможность вернуть удалённый (active = false) обратно (active = true)
+		item.setActive(editItems.getActive());
 		itemsRepository.save(item);
 		return item;
 	} 
 
    // Удаление
 	@DeleteMapping(value = "/items/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Response deleteItem (@PathVariable(value = "id") long id) throws NotFound {
+	public Response deleteItem (@PathVariable(value = "id") long id) throws AllException {
 		// Проверка на наличие Item
 		Boolean item1 = itemsRepository.findById(id).isPresent();
 		if (!item1 == true) {
-			throw new NotFound();
+			throw new NotFound(HttpStatus.NOT_FOUND);
 		}
 		Items item = itemsRepository.findById(id).orElseThrow();
+		if (item.getActive() == false) {
+			throw new NotFound(HttpStatus.NOT_FOUND, item.getActive());
+		}
 		item.setActive(false);
 		itemsRepository.save(item);
-		Response response = new Response(HttpStatus.OK);
+		Response response = new Response("Успешное удаленние", HttpStatus.OK);
 		return response;
 
 	}
