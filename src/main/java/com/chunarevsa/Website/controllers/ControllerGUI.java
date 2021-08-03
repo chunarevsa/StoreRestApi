@@ -101,4 +101,4 @@ public class ControllerGUI {
 		itemsRepository.delete(item);
 		return "redirect:/";
 	}
-}
+} 

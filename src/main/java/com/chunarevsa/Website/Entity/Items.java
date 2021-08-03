@@ -12,6 +12,7 @@ public class Items {
 
 	private Long id; 
 	private String sku, name, type, description, cost;
+	private boolean active;
 
 	// Getter and Setter
 	public Long getId() {
@@ -62,6 +63,18 @@ public class Items {
 		this.cost = cost;
 	} 
 
+	public boolean isActive() {
+		return this.active;
+	}
+
+	public boolean getActive() {
+		return this.active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
 	// Конструкторы
 	public Items () {
 	}
@@ -80,5 +93,7 @@ public class Items {
 		this.type = itemsBody.type;
 		this.name = itemsBody.name;
 		this.description = itemsBody.description;
-	}
+		this.active = itemsBody.active;
+	} 
+
 }
