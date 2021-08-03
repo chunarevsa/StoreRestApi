@@ -1,4 +1,4 @@
-package com.chunarevsa.Website.advice;
+package com.chunarevsa.Website.Middleware;
 
 import com.chunarevsa.Website.dto.Response;
 import com.chunarevsa.Website.Exception.AllException;

@@ -2,9 +2,9 @@ package com.chunarevsa.Website.controllers;
 
 import com.chunarevsa.Website.Entity.Items;
 import com.chunarevsa.Website.Exception.AllException;
-import com.chunarevsa.Website.Exception.InvalidFormat;
+import com.chunarevsa.Website.Exception.InvalidPriceFormat;
 import com.chunarevsa.Website.Exception.NotFound;
-import com.chunarevsa.Website.Exception.FormatException;
+import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.dto.Id;
 import com.chunarevsa.Website.dto.Response;
 import com.chunarevsa.Website.repo.ItemsRepository;
@@ -56,7 +56,7 @@ public class ItemsController {
 		Items item = itemsRepository.findById(id).orElseThrow();
 		// Вывести только в случае active = true
 		if (item.getActive() == false) {
-			throw new NotFound(HttpStatus.NOT_FOUND, item.getActive());
+			throw new NotFound(HttpStatus.NOT_FOUND);
 		} 
 		return item;
 	} 
@@ -70,16 +70,16 @@ public class ItemsController {
 		try {
 			i = Integer.parseInt(newItems.getCost());
 			if (i < 0) {
-				throw new InvalidFormat(HttpStatus.BAD_REQUEST);
+				throw new InvalidPriceFormat(HttpStatus.BAD_REQUEST);
 			}
 		} catch (NumberFormatException e) {
-			throw new InvalidFormat(HttpStatus.BAD_REQUEST);
+			throw new InvalidPriceFormat(HttpStatus.BAD_REQUEST);
 		}	
 		// Проверка на незаполеннные данные
 		if (newItems.getName().isEmpty() == true || 
 		newItems.getSku().isEmpty() == true || newItems.getType().isEmpty() == true || 
 		newItems.getDescription().isEmpty() == true || newItems.getCost().isEmpty() == true) {
-			throw new FormatException(HttpStatus.BAD_REQUEST, true);
+			throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
 		}
 		newItems.setActive(true);
 		itemsRepository.save(newItems);
@@ -106,16 +106,16 @@ public class ItemsController {
 		try {
 			i = Integer.parseInt(editItems.getCost());
 			if (i < 0) {
-				throw new InvalidFormat(HttpStatus.BAD_REQUEST);
+				throw new InvalidPriceFormat(HttpStatus.BAD_REQUEST);
 			}
 		} catch (NumberFormatException e) {
-			throw new InvalidFormat(HttpStatus.BAD_REQUEST);
+			throw new InvalidPriceFormat(HttpStatus.BAD_REQUEST);
 		}
 		// Проверка на незаполеннные данные
 		if (editItems.getName().isEmpty() == true || editItems.getSku().isEmpty() == true ||
 		   editItems.getType().isEmpty() == true || editItems.getDescription().isEmpty() == true || 
 			editItems.getCost().isEmpty() == true) {
-				throw new FormatException(HttpStatus.BAD_REQUEST, true);
+				throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
 		}
 		// Возможность вернуть удалённый (active = false) обратно (active = true)
 		item.setActive(editItems.getActive());
@@ -133,7 +133,7 @@ public class ItemsController {
 		}
 		Items item = itemsRepository.findById(id).orElseThrow();
 		if (item.getActive() == false) {
-			throw new NotFound(HttpStatus.NOT_FOUND, item.getActive());
+			throw new NotFound(HttpStatus.NOT_FOUND);
 		}
 		item.setActive(false);
 		itemsRepository.save(item);

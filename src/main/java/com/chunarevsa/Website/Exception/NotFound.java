@@ -12,8 +12,4 @@ public class NotFound extends AllException {
 		this.httpStatus = httpStatus;
 	}	
 	
-	public NotFound(HttpStatus httpStatus, boolean active) {
-		this.clientMessage = "Этот элемент был удалён";
-		this.httpStatus = httpStatus;
-	}
 }

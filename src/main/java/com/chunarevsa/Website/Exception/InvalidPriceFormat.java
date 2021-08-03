@@ -2,12 +2,12 @@ package com.chunarevsa.Website.Exception;
 
 import org.springframework.http.HttpStatus;
 
-public class InvalidFormat extends AllException {
+public class InvalidPriceFormat extends AllException {
 
-	public InvalidFormat() {
+	public InvalidPriceFormat() {
 	}
 	
-	public InvalidFormat(HttpStatus httpStatus) {
+	public InvalidPriceFormat(HttpStatus httpStatus) {
 		this.clientMessage = "Неверный формат цены";
 		this.httpStatus = httpStatus;
 	}

@@ -3,7 +3,7 @@ package com.chunarevsa.Website.controllers;
 import com.chunarevsa.Website.Entity.Currency;
 import com.chunarevsa.Website.Exception.AllException;
 import com.chunarevsa.Website.Exception.NotFound;
-import com.chunarevsa.Website.Exception.FormatException;
+import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.dto.Id;
 import com.chunarevsa.Website.dto.Response;
 import com.chunarevsa.Website.repo.CurrencyRepository;
@@ -55,7 +55,7 @@ public class CurrencyController {
 		Currency currency = currencyRepository.findById(id).orElseThrow();
 		// Вывести только в случае active = true
 		if (currency.getActive() == false) {
-			throw new NotFound(HttpStatus.NOT_FOUND, currency.getActive());
+			throw new NotFound(HttpStatus.NOT_FOUND);
 		}
 		return currency;
 	} 
@@ -65,7 +65,7 @@ public class CurrencyController {
 	@ResponseStatus (value = HttpStatus.CREATED)	
 	public Id createdCurrency (@RequestBody Currency newCurrency) throws AllException {
 		if (newCurrency.getCode().isEmpty() == true) {
-			throw new FormatException(HttpStatus.BAD_REQUEST, newCurrency.getCode().isEmpty());
+			throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
 		}
 		newCurrency.setActive(true);
 		currencyRepository.save(newCurrency);
@@ -84,7 +84,7 @@ public class CurrencyController {
 		Currency currency = currencyRepository.findById(id).orElseThrow();
 		currency.setCode(editCurrency.getCode());
 		if (editCurrency.getCode().isEmpty() == true ) {
-			throw new FormatException(HttpStatus.BAD_REQUEST, editCurrency.getCode().isEmpty());
+			throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
 		}
 		// Возможность вернуть удалённую (active = false) обратно (active = true)
 		currency.setActive(editCurrency.getActive());
@@ -102,7 +102,7 @@ public class CurrencyController {
 		}
 		Currency currency = currencyRepository.findById(id).orElseThrow();
 		if (currency.getActive() == false) {
-			throw new NotFound(HttpStatus.NOT_FOUND, currency.getActive());
+			throw new NotFound(HttpStatus.NOT_FOUND);
 		}
 		currency.setActive(false);
 		currencyRepository.save(currency);
