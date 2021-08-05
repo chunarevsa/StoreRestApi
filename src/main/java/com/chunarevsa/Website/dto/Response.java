@@ -1,5 +1,7 @@
 package com.chunarevsa.Website.dto;
 
+import com.chunarevsa.Website.Entity.Items;
+
 import org.springframework.http.HttpStatus;
 
 public class Response {
@@ -51,6 +53,14 @@ public class Response {
 		this.code = httpMessage[0];
 		this.message = httpStatus2.getReasonPhrase();
 		this.clientMessage = clientMessage;
+	}
+
+	public Response (Items itemIsDelet, boolean active) {
+		HttpStatus httpStatus2 = HttpStatus.OK;
+		String[] httpMessage = httpStatus2.toString().split(" ");
+		this.code = httpMessage[0];
+		this.message = httpStatus2.getReasonPhrase();
+		this.clientMessage = "Успешное удаленние";
 	}
 
 }

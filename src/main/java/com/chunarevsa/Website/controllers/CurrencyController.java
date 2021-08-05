@@ -4,7 +4,7 @@ import com.chunarevsa.Website.Entity.Currency;
 import com.chunarevsa.Website.Exception.AllException;
 import com.chunarevsa.Website.Exception.NotFound;
 import com.chunarevsa.Website.Exception.FormIsEmpty;
-import com.chunarevsa.Website.dto.Id;
+import com.chunarevsa.Website.dto.IdByJson;
 import com.chunarevsa.Website.dto.Response;
 import com.chunarevsa.Website.repo.CurrencyRepository;
 
@@ -63,13 +63,13 @@ public class CurrencyController {
 	// Добавление 
 	@PostMapping(value = "/currency", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus (value = HttpStatus.CREATED)	
-	public Id createdCurrency (@RequestBody Currency newCurrency) throws AllException {
+	public IdByJson createdCurrency (@RequestBody Currency newCurrency) throws AllException {
 		if (newCurrency.getCode().isEmpty() == true) {
 			throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
 		}
 		newCurrency.setActive(true);
 		currencyRepository.save(newCurrency);
-		Id id = new Id(newCurrency.getId());
+		IdByJson id = new IdByJson(newCurrency.getId());
 		return id;
 	} 	
 				
