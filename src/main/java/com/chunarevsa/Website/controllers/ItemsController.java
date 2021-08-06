@@ -7,6 +7,7 @@ import com.chunarevsa.Website.Exception.NotFound;
 import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.dto.IdByJson;
 import com.chunarevsa.Website.dto.Response;
+import com.chunarevsa.Website.dto.Item.ItemValidator;
 import com.chunarevsa.Website.repo.ItemsRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,12 @@ public class ItemsController {
 	
 	@Autowired
 	private ItemsRepository itemsRepository;
-	public ItemsController (ItemsRepository itemsRepository) {
+	@Autowired
+	private ItemValidator itemValidator;
+	
+	public ItemsController (ItemsRepository itemsRepository, ItemValidator itemValidator ) {
 		this.itemsRepository = itemsRepository;
+		this.itemValidator = itemValidator;
 	}
 
 	// Получение списка всех Items с ограничением страницы (10)
@@ -47,8 +52,11 @@ public class ItemsController {
 	// Получение по id
 	@RequestMapping (path = "/items/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Items itemsMethod (@PathVariable(value = "id") long id) throws AllException { 
+		
+
 		// Проверка на наличие 
-		itemIsPresent(id);
+		itemValidator.itemIsPresent(id, itemsRepository);
+
 		Items item = itemsRepository.findById(id).orElseThrow();
 		// Выводим только в случае active = true 
 		activeValidate(item.getId(), item);
@@ -73,7 +81,7 @@ public class ItemsController {
 	@PutMapping(value = "/items/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Items editItem (@PathVariable(value = "id") long id, @RequestBody Items editItem) throws AllException {
 		// Проверка на наличие
-		itemIsPresent(id);
+
 		// Проверка на формат числа
 		costValidate(editItem);
 		// Проверка на незаполеннные данные
@@ -88,7 +96,7 @@ public class ItemsController {
 	@DeleteMapping(value = "/items/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Response deleteItem (@PathVariable(value = "id") long id) throws AllException {
 		// Проверка на наличие Item
-		itemIsPresent(id);
+
 		Items item = itemsRepository.findById(id).orElseThrow();
 		// Проверка не выключен ли active = true
 		activeValidate(item.getId(), item);
@@ -102,12 +110,12 @@ public class ItemsController {
 	
 
 	// Проверка на наличие 
-	public void itemIsPresent (long id) throws NotFound {
+	/* public void itemIsPresent (long id) throws NotFound {
 		Boolean item1 = itemsRepository.findById(id).isPresent();
 		if (item1 == false) {
 			throw new NotFound(HttpStatus.NOT_FOUND);
 		}	 
-	}
+	} */
 
 	// Проверка не выключен ли active = true
 	public void activeValidate (long id, Items item) throws NotFound {
