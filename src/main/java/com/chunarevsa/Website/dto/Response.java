@@ -1,7 +1,5 @@
 package com.chunarevsa.Website.dto;
 
-import com.chunarevsa.Website.Entity.Items;
-
 import org.springframework.http.HttpStatus;
 
 public class Response {
@@ -34,19 +32,8 @@ public class Response {
 
 	public Response() {
 	}
-
-	public Response(String code, String message) {
-		this.code = code;
-		this.message = message;
-	}
 	
-	public Response(HttpStatus httpStatus) {
-		HttpStatus httpStatus2 = httpStatus;
-		String[] httpMessage = httpStatus2.toString().split(" ");
-		this.code = httpMessage[0];
-		this.message = httpStatus.getReasonPhrase();
-	}
-
+	// Ответ для исключений из AllException
 	public Response(String clientMessage, HttpStatus httpStatus) {
 		HttpStatus httpStatus2 = httpStatus;
 		String[] httpMessage = httpStatus2.toString().split(" ");
@@ -54,8 +41,8 @@ public class Response {
 		this.message = httpStatus2.getReasonPhrase();
 		this.clientMessage = clientMessage;
 	}
-
-	public Response (Items itemIsDelet, boolean active) {
+	// Ответ при удалении
+	public Response (boolean active) {
 		HttpStatus httpStatus2 = HttpStatus.OK;
 		String[] httpMessage = httpStatus2.toString().split(" ");
 		this.code = httpMessage[0];

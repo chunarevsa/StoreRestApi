@@ -2,10 +2,9 @@ package com.chunarevsa.Website.controllers;
 
 import com.chunarevsa.Website.Entity.Currency;
 import com.chunarevsa.Website.Exception.AllException;
-import com.chunarevsa.Website.Exception.NotFound;
-import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.dto.IdByJson;
 import com.chunarevsa.Website.dto.Response;
+import com.chunarevsa.Website.dto.Currency.CurrencyValidator;
 import com.chunarevsa.Website.repo.CurrencyRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +29,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class CurrencyController {
 	
 	@Autowired
-
 	private CurrencyRepository currencyRepository;
-	public CurrencyController (CurrencyRepository currencyRepository) {
+	@Autowired
+	private CurrencyValidator currencyValidator;
+	public CurrencyController (CurrencyRepository currencyRepository, CurrencyValidator currencyValidator) {
 		this.currencyRepository = currencyRepository;
+		this.currencyValidator = currencyValidator;
 	}
 
 	// Получение списка всех Currency с ограничением страницы (10)
@@ -48,46 +49,33 @@ public class CurrencyController {
 	@RequestMapping (path = "/currency/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Currency currencyMethod (@PathVariable(value = "id") long id) throws AllException { 
 		// Проверка на наличие 
-		Boolean currencyBoolean = currencyRepository.findById(id).isPresent();
-		if (!currencyBoolean == true) {
-			throw new NotFound(HttpStatus.NOT_FOUND);
-		}
+		currencyValidator.currencyIsPresent(id, currencyRepository);
 		Currency currency = currencyRepository.findById(id).orElseThrow();
 		// Вывести только в случае active = true
-		if (currency.getActive() == false) {
-			throw new NotFound(HttpStatus.NOT_FOUND);
-		}
+		currencyValidator.activeValidate(currency.getId(), currency);
 		return currency;
 	} 
 
 	// Добавление 
 	@PostMapping(value = "/currency", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus (value = HttpStatus.CREATED)	
-	public IdByJson createdCurrency (@RequestBody Currency newCurrency) throws AllException {
-		if (newCurrency.getCode().isEmpty() == true) {
-			throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
-		}
-		newCurrency.setActive(true);
-		currencyRepository.save(newCurrency);
-		IdByJson id = new IdByJson(newCurrency.getId());
-		return id;
+	public IdByJson createdCurrency (@RequestBody Currency bodyCurrency) throws AllException {
+		currencyValidator.bodyIsNotEmpty(bodyCurrency);
+		// Включение (active = true) 
+		bodyCurrency.setActive(true);
+		// Представление Id в JSON
+		return currencyValidator.getIdByJson(bodyCurrency, currencyRepository);
 	} 	
 				
 	 // Изменение
 	@PutMapping(value = "/currency/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Currency editCurrency (@PathVariable(value = "id") long id, @RequestBody Currency editCurrency) throws AllException {
+	public Currency editCurrency (@PathVariable(value = "id") long id, @RequestBody Currency bodyCurrency) throws AllException {
 		// Проверка на наличие 
-		Boolean currencyBoolean = currencyRepository.findById(id).isPresent();
-		if (!currencyBoolean == true) {
-			throw new NotFound(HttpStatus.NOT_FOUND);
-		}
-		Currency currency = currencyRepository.findById(id).orElseThrow();
-		currency.setCode(editCurrency.getCode());
-		if (editCurrency.getCode().isEmpty() == true ) {
-			throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
-		}
-		// Возможность вернуть удалённую (active = false) обратно (active = true)
-		currency.setActive(editCurrency.getActive());
+		currencyValidator.currencyIsPresent(id, currencyRepository);
+		// Проверка на запленные данные
+		currencyValidator.bodyIsNotEmpty(bodyCurrency);
+		// Запись параметров
+		Currency currency = currencyValidator.overrideItem(id, bodyCurrency, currencyRepository);
 		currencyRepository.save(currency);
 		return currency;
 	} 
@@ -96,17 +84,15 @@ public class CurrencyController {
 	@DeleteMapping(value = "/currency/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Response deleteCurrency (@PathVariable(value = "id") long id) throws AllException {
 		// Проверка на наличие
-		Boolean currencyBoolean = currencyRepository.findById(id).isPresent();
-		if (!currencyBoolean == true) {
-			throw new NotFound(HttpStatus.NOT_FOUND);
-		}
+		currencyValidator.currencyIsPresent(id, currencyRepository);
 		Currency currency = currencyRepository.findById(id).orElseThrow();
-		if (currency.getActive() == false) {
-			throw new NotFound(HttpStatus.NOT_FOUND);
-		}
+		// Проверка не выключен ли active = true
+		currencyValidator.activeValidate(currency.getId(), currency);
+		// Выключение active = false
 		currency.setActive(false);
 		currencyRepository.save(currency);
-		Response response = new Response("Успешное удаленние", HttpStatus.OK);
+		// Вывод об успешном удалении
+		Response response = new Response(currency.getActive());
 		return response;
 	}
 }

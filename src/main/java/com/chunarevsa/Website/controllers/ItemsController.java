@@ -97,7 +97,7 @@ public class ItemsController {
 		item.setActive(false);
 		itemsRepository.save(item);
 		// Вывод об успешном удалении
-		Response response = new Response(item, item.getActive());
+		Response response = new Response(item.getActive());
 		return response;
 	}
 

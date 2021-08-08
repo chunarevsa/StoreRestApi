@@ -1,5 +1,6 @@
 package com.chunarevsa.Website;
 
+import com.chunarevsa.Website.dto.Currency.CurrencyValidator;
 import com.chunarevsa.Website.dto.Item.ItemValidator;
 
 import org.springframework.boot.SpringApplication;
@@ -12,6 +13,11 @@ public class WebsiteApplication {
 	@Bean
 	public ItemValidator itemValidator() {
 		return new ItemValidator();
+	}
+
+	@Bean
+	public CurrencyValidator currencyValidator() {
+		return new CurrencyValidator();
 	}
 
 	public static void main(String[] args) throws Throwable {
