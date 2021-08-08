@@ -2,9 +2,6 @@ package com.chunarevsa.Website.controllers;
 
 import com.chunarevsa.Website.Entity.Items;
 import com.chunarevsa.Website.Exception.AllException;
-import com.chunarevsa.Website.Exception.InvalidPriceFormat;
-import com.chunarevsa.Website.Exception.NotFound;
-import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.dto.IdByJson;
 import com.chunarevsa.Website.dto.Response;
 import com.chunarevsa.Website.dto.Item.ItemValidator;
@@ -32,11 +29,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class ItemsController {
 	
 	@Autowired
-	private ItemsRepository itemsRepository;
+	private ItemsRepository itemsRepository;	
 	@Autowired
 	private ItemValidator itemValidator;
-	
-	public ItemsController (ItemsRepository itemsRepository, ItemValidator itemValidator ) {
+	public ItemsController (ItemsRepository itemsRepository, ItemValidator itemValidator) {
 		this.itemsRepository = itemsRepository;
 		this.itemValidator = itemValidator;
 	}
@@ -52,14 +48,11 @@ public class ItemsController {
 	// Получение по id
 	@RequestMapping (path = "/items/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Items itemsMethod (@PathVariable(value = "id") long id) throws AllException { 
-		
-
 		// Проверка на наличие 
 		itemValidator.itemIsPresent(id, itemsRepository);
-
 		Items item = itemsRepository.findById(id).orElseThrow();
 		// Выводим только в случае active = true 
-		activeValidate(item.getId(), item);
+		itemValidator.activeValidate(item.getId(), item);
 		return item;
 	} 
 
@@ -67,27 +60,27 @@ public class ItemsController {
 	@PostMapping(value = "/items", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus (value = HttpStatus.CREATED)	
 	public IdByJson createdItem (@RequestBody Items newItem) throws AllException {
-		// Проверка на формат числа
-		costValidate(newItem);
 		// Проверка на незаполеннные данные
-		bodyIsNotEmpty(newItem);
+		itemValidator.bodyIsNotEmpty(newItem);
+		// Проверка на формат числа
+		itemValidator.costValidate(newItem);
 		// Включение (active = true) 
 		newItem.setActive(true);
 		// Представление Id в JSON
-		return getIdByJson(newItem);
+		return itemValidator.getIdByJson(newItem, itemsRepository);
 	} 	
 				
 	 // Изменение
 	@PutMapping(value = "/items/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Items editItem (@PathVariable(value = "id") long id, @RequestBody Items editItem) throws AllException {
-		// Проверка на наличие
-
-		// Проверка на формат числа
-		costValidate(editItem);
+		// Проверка на наличие 
+		itemValidator.itemIsPresent(id, itemsRepository);
 		// Проверка на незаполеннные данные
-		bodyIsNotEmpty(editItem);
+		itemValidator.bodyIsNotEmpty(editItem);
+		// Проверка на формат числа
+		itemValidator.costValidate(editItem);
 		// Запись параметров
-		Items item = overrideItem(id, editItem);
+		Items item = itemValidator.overrideItem(id, editItem, itemsRepository);
 		itemsRepository.save(item);
 		return item;
 	} 
@@ -95,11 +88,11 @@ public class ItemsController {
    // Удаление
 	@DeleteMapping(value = "/items/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Response deleteItem (@PathVariable(value = "id") long id) throws AllException {
-		// Проверка на наличие Item
-
+		// Проверка на наличие 
+		itemValidator.itemIsPresent(id, itemsRepository);
 		Items item = itemsRepository.findById(id).orElseThrow();
 		// Проверка не выключен ли active = true
-		activeValidate(item.getId(), item);
+		itemValidator.activeValidate(item.getId(), item);
 		// Выключение active = false
 		item.setActive(false);
 		itemsRepository.save(item);
@@ -107,59 +100,5 @@ public class ItemsController {
 		Response response = new Response(item, item.getActive());
 		return response;
 	}
-	
-
-	// Проверка на наличие 
-	/* public void itemIsPresent (long id) throws NotFound {
-		Boolean item1 = itemsRepository.findById(id).isPresent();
-		if (item1 == false) {
-			throw new NotFound(HttpStatus.NOT_FOUND);
-		}	 
-	} */
-
-	// Проверка не выключен ли active = true
-	public void activeValidate (long id, Items item) throws NotFound {
-		if (item.getActive() == false) {
-			throw new NotFound(HttpStatus.NOT_FOUND);
-		}
-	}
-
-	// Проверка на формат числа
-	public void costValidate (Items newItem) throws InvalidPriceFormat {
-		int i = Integer.parseInt(newItem.getCost());
-		if (i < 0) {
-				throw new InvalidPriceFormat(HttpStatus.BAD_REQUEST);
-			}
-	}
-
-	// Проверка на незаполеннные данные
-	public void bodyIsNotEmpty (Items newItem) throws FormIsEmpty {
-		if (newItem.getName().isEmpty() == true || newItem.getSku().isEmpty() == true || 
-		newItem.getType().isEmpty() == true || newItem.getDescription().isEmpty() == true || 
-		newItem.getCost().isEmpty() == true) {
-			throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
-		}
-	}
-
-	// Представление Id в JSON
-	public IdByJson getIdByJson (Items newItem) {
-		itemsRepository.save(newItem);
-		IdByJson idByJson = new IdByJson(newItem.getId());
-		return idByJson;
-	}
-
-	// Запись параметров
-	public Items overrideItem (long id, Items editItem) {
-		Items item = itemsRepository.findById(id).orElseThrow();
-		item.setSku(editItem.getSku());
-		item.setName(editItem.getName());
-		item.setType(editItem.getType());
-		item.setDescription(editItem.getDescription());
-		item.setCost(editItem.getCost());
-		// Возможность вернуть удалённый (active = false) обратно (active = true)
-		item.setActive(editItem.getActive());
-		return item;
-	}
-
 
 }
