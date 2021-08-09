@@ -49,11 +49,16 @@ public class CurrencyValidator implements CurrencyService{
 
 	// Запись параметров
 	@Override
-	public Currency overrideItem (long id, Currency bodyCurrency, CurrencyRepository currencyRepository) {
+	public Currency overrideItem (long id, Currency bodyCurrency, CurrencyRepository currencyRepository) throws DublicateCurrency {
 		Currency currency = currencyRepository.findById(id).orElseThrow();
 		currency.setCode(bodyCurrency.getCode());
 		// Возможность вернуть удалённый (active = false) обратно (active = true)
 		currency.setActive(bodyCurrency.getActive());
+		try {
+			currencyRepository.save(currency);
+		} catch (Exception e) {
+			throw new DublicateCurrency();
+		}
 		return currency;
 	}
 

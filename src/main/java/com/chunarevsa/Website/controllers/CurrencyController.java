@@ -76,7 +76,6 @@ public class CurrencyController {
 		currencyValidator.bodyIsNotEmpty(bodyCurrency);
 		// Запись параметров
 		Currency currency = currencyValidator.overrideItem(id, bodyCurrency, currencyRepository);
-		currencyRepository.save(currency);
 		return currency;
 	} 
 

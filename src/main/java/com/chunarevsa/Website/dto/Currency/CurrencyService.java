@@ -13,5 +13,5 @@ public interface CurrencyService {
 	void activeValidate (long id, Currency currency) throws NotFound;
 	void bodyIsNotEmpty (Currency bodyCurrency) throws FormIsEmpty;
 	IdByJson getIdByJson (Currency bodyCurrency, CurrencyRepository currencyRepository) throws DublicateCurrency;
-	Currency overrideItem (long id, Currency bodyCurrency, CurrencyRepository currencyRepository);
+	Currency overrideItem (long id, Currency bodyCurrency, CurrencyRepository currencyRepository) throws DublicateCurrency;
 } 
