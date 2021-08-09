@@ -11,7 +11,20 @@ public class Item {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 
 	private Long id; 
-	private String sku, name, type, description, cost;
+	private String sku, name, type, description;
+	private String cost;
+	
+	
+	private String [] price;
+
+	public String[] getPrice() {
+		return this.price;
+	}
+
+	public void setPrice(String[] price) {
+		this.price = price;
+	}
+
 	private boolean active;
 
 	// Getter and Setter
