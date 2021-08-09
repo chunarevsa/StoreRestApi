@@ -1,6 +1,7 @@
 package com.chunarevsa.Website.dto.Currency;
 
 import com.chunarevsa.Website.Entity.Currency;
+import com.chunarevsa.Website.Exception.DublicateCurrency;
 import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.Exception.NotFound;
 import com.chunarevsa.Website.dto.IdByJson;
@@ -36,8 +37,12 @@ public class CurrencyValidator implements CurrencyService{
 
 	// Представление Id в JSON
 	@Override
-	public IdByJson getIdByJson (Currency bodyCurrency, CurrencyRepository currencyRepository) {
-		currencyRepository.save(bodyCurrency);
+	public IdByJson getIdByJson (Currency bodyCurrency, CurrencyRepository currencyRepository) throws DublicateCurrency {
+		try {
+			currencyRepository.save(bodyCurrency);
+		} catch (Exception e) {
+			throw new DublicateCurrency();
+		}
 		IdByJson idByJson = new IdByJson(bodyCurrency.getId());
 		return idByJson;
 	}

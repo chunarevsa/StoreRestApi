@@ -2,7 +2,7 @@ package com.chunarevsa.Website.Exception;
 
 import org.springframework.http.HttpStatus;
 
-public class AllException extends Exception{
+public class AllException extends Throwable {
 	
 	public String clientMessage;
 	public HttpStatus httpStatus;
