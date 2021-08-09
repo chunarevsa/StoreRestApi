@@ -7,9 +7,10 @@ import com.chunarevsa.Website.dto.IdByJson;
 import com.chunarevsa.Website.repo.CurrencyRepository;
 import org.springframework.http.HttpStatus;
 
-public class CurrencyValidator {
+public class CurrencyValidator implements CurrencyService{
 
-	// Проверка на наличие 
+	// Проверка на наличие
+	@Override 
 	public void currencyIsPresent (long id, CurrencyRepository currencyRepository) throws NotFound{
 		Boolean currencyBoolean = currencyRepository.findById(id).isPresent();
 		if (currencyBoolean == false) {
@@ -18,24 +19,31 @@ public class CurrencyValidator {
 	}
 
 	// Проверка не выключен ли active = true
+	@Override
 	public void activeValidate (long id, Currency currency) throws NotFound {
 		if (currency.getActive() == false) {
 			throw new NotFound(HttpStatus.NOT_FOUND);
 		}
 	}
 
-	public void bodyIsNotEmpty (Currency newCurrency) throws FormIsEmpty {
-		if (newCurrency.getCode().isEmpty() == true) {
+	// Проверка на незаполеннные данные
+	@Override
+	public void bodyIsNotEmpty (Currency bodyCurrency) throws FormIsEmpty {
+		if (bodyCurrency.getCode().isEmpty() == true) {
 			throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
 		}
 	}
 
-	public IdByJson getIdByJson (Currency newCurrency, CurrencyRepository currencyRepository) {
-		currencyRepository.save(newCurrency);
-		IdByJson idByJson = new IdByJson(newCurrency.getId());
+	// Представление Id в JSON
+	@Override
+	public IdByJson getIdByJson (Currency bodyCurrency, CurrencyRepository currencyRepository) {
+		currencyRepository.save(bodyCurrency);
+		IdByJson idByJson = new IdByJson(bodyCurrency.getId());
 		return idByJson;
 	}
 
+	// Запись параметров
+	@Override
 	public Currency overrideItem (long id, Currency bodyCurrency, CurrencyRepository currencyRepository) {
 		Currency currency = currencyRepository.findById(id).orElseThrow();
 		currency.setCode(bodyCurrency.getCode());

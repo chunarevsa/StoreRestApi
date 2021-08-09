@@ -6,7 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Items {
+public class Item {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 
@@ -76,10 +76,10 @@ public class Items {
 	}
 
 	// Конструкторы
-	public Items () {
+	public Item () {
 	}
 		// Для Controller GUI
-	public Items (String sku, String name,String type, String description, String cost) {
+	public Item (String sku, String name,String type, String description, String cost) {
 		this.sku = sku;
 		this.cost = cost;
 		this.type = type;
@@ -87,13 +87,13 @@ public class Items {
 		this.description = description;
 	}
 		// Для ItemsController
-	public Items (Items itemsBody) {
-		this.sku = itemsBody.sku;
-		this.cost = itemsBody.cost;
-		this.type = itemsBody.type;
-		this.name = itemsBody.name;
-		this.description = itemsBody.description;
-		this.active = itemsBody.active;
+	public Item (Item itemBody) {
+		this.sku = itemBody.sku;
+		this.cost = itemBody.cost;
+		this.type = itemBody.type;
+		this.name = itemBody.name;
+		this.description = itemBody.description;
+		this.active = itemBody.active;
 	} 
 
 }

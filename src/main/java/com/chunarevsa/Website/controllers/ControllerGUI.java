@@ -3,8 +3,8 @@ package com.chunarevsa.Website.controllers;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import com.chunarevsa.Website.Entity.Items;
-import com.chunarevsa.Website.repo.ItemsRepository;
+import com.chunarevsa.Website.Entity.Item;
+import com.chunarevsa.Website.repo.ItemRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ControllerGUI {
 
 	@Autowired
-	private ItemsRepository itemsRepository;
+	private ItemRepository itemsRepository;
 
 	// Список всех товаров
 	@GetMapping ("/")
  	public String itemsMain (Model model) {
-		 Iterable<Items> items = itemsRepository.findAll();
+		 Iterable<Item> items = itemsRepository.findAll();
 		 model.addAttribute("items", items); 
 		 return "home";
  	}
@@ -38,8 +38,8 @@ public class ControllerGUI {
 	// Поиск по ID
 	@PostMapping ("/") 
 	public String searchId(@RequestParam long id, Model model) {
-		  Optional<Items> item = itemsRepository.findById(id);
-		  ArrayList<Items> res = new ArrayList<>();
+		  Optional<Item> item = itemsRepository.findById(id);
+		  ArrayList<Item> res = new ArrayList<>();
 		  item.ifPresent(res::add);
 		  model.addAttribute("item", res);
 		  return "items-details";
@@ -52,7 +52,7 @@ public class ControllerGUI {
 	 }
 	 @PostMapping ("/items/gui/add")
 	 public String itemsPostAdd (@RequestParam String sku, @RequestParam String name,@RequestParam String type, @RequestParam String description, @RequestParam String cost, Model model) {
-		 Items item = new Items(sku, name, type, description, cost);
+		 Item item = new Item(sku, name, type, description, cost);
 		 itemsRepository.save(item);
 		 return "redirect:/";
 	 }
@@ -63,8 +63,8 @@ public class ControllerGUI {
 		 if (!itemsRepository.existsById(id)){ 
 		  return "redirect:/";
 		 } 
-		 Optional<Items> item = itemsRepository.findById(id);
-		 ArrayList<Items> res = new ArrayList<>();
+		 Optional<Item> item = itemsRepository.findById(id);
+		 ArrayList<Item> res = new ArrayList<>();
 		 item.ifPresent(res::add);
 		 model.addAttribute("item", res);
 		 return "items-details";
@@ -76,15 +76,15 @@ public class ControllerGUI {
 		 if (!itemsRepository.existsById(id)){ 
 		  return "redirect:/";
 		 } 
-		 Optional<Items> item = itemsRepository.findById(id);
-		 ArrayList<Items> res = new ArrayList<>();
+		 Optional<Item> item = itemsRepository.findById(id);
+		 ArrayList<Item> res = new ArrayList<>();
 		 item.ifPresent(res::add);
 		 model.addAttribute("item", res);
 		 return "items-edit";
 	}
   	@PostMapping ("/items/gui/{id}/edit") 
   	public String itemsPostUpdate (@PathVariable(value = "id") long id,@RequestParam String sku, @RequestParam String name,@RequestParam String type, @RequestParam String description, @RequestParam String cost, Model model) {
-	  Items item = itemsRepository.findById(id).orElseThrow();
+	  Item item = itemsRepository.findById(id).orElseThrow();
 	  item.setName(name);
 	  item.setSku(sku);
 	  item.setType(type);
@@ -97,7 +97,7 @@ public class ControllerGUI {
   // Удаление 
 	@PostMapping ("/items/gui/{id}/remove") 
 	public String itemsPostDelete (@PathVariable(value = "id") long id, Model model) {
-		Items item = itemsRepository.findById(id).orElseThrow();
+		Item item = itemsRepository.findById(id).orElseThrow();
 		itemsRepository.delete(item);
 		return "redirect:/";
 	}

@@ -1,17 +1,17 @@
 package com.chunarevsa.Website.repo;
 
-import com.chunarevsa.Website.Entity.Items;
+import com.chunarevsa.Website.Entity.Item;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 
-public interface ItemsRepository extends CrudRepository <Items, Long> {
+public interface ItemRepository extends CrudRepository <Item, Long> {
 	
 	// Для сортировки и подачи по частям 
 		// Общий список
-	Page <Items> findAll (Pageable pageable);
+	Page <Item> findAll (Pageable pageable);
 		// Только active = true
-	Page <Items> findByActive (boolean active, Pageable pageable);
+	Page <Item> findByActive (boolean active, Pageable pageable);
 	
 }

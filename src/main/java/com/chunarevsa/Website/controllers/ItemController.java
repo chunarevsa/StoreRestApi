@@ -1,11 +1,11 @@
 package com.chunarevsa.Website.controllers;
 
-import com.chunarevsa.Website.Entity.Items;
+import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Exception.AllException;
 import com.chunarevsa.Website.dto.IdByJson;
 import com.chunarevsa.Website.dto.Response;
 import com.chunarevsa.Website.dto.Item.ItemValidator;
-import com.chunarevsa.Website.repo.ItemsRepository;
+import com.chunarevsa.Website.repo.ItemRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,76 +26,76 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-public class ItemsController {
+public class ItemController {
 	
 	@Autowired
-	private ItemsRepository itemsRepository;	
+	private ItemRepository itemRepository;	
 	@Autowired
 	private ItemValidator itemValidator;
-	public ItemsController (ItemsRepository itemsRepository, ItemValidator itemValidator) {
-		this.itemsRepository = itemsRepository;
+	public ItemController (ItemRepository itemRepository, ItemValidator itemValidator) {
+		this.itemRepository = itemRepository;
 		this.itemValidator = itemValidator;
 	}
 
 	// Получение списка всех Items с ограничением страницы (10)
-	@RequestMapping (path = "/items", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<Items> itemsFindAll (@PageableDefault(sort = { "active"}, direction = Sort.Direction.DESC) Pageable pageable) { 
+	@RequestMapping (path = "/item", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Page<Item> itemsFindAll (@PageableDefault(sort = { "active"}, direction = Sort.Direction.DESC) Pageable pageable) { 
 		// Сортировка по 10 элементов и только со значением active = true
-		Page<Items> pageGames = itemsRepository.findByActive(true, pageable);
+		Page<Item> pageGames = itemRepository.findByActive(true, pageable);
 		return pageGames;
 	}
 
 	// Получение по id
-	@RequestMapping (path = "/items/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Items itemsMethod (@PathVariable(value = "id") long id) throws AllException { 
+	@RequestMapping (path = "/item/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Item itemsMethod (@PathVariable(value = "id") long id) throws AllException { 
 		// Проверка на наличие 
-		itemValidator.itemIsPresent(id, itemsRepository);
-		Items item = itemsRepository.findById(id).orElseThrow();
+		itemValidator.itemIsPresent(id, itemRepository);
+		Item item = itemRepository.findById(id).orElseThrow();
 		// Выводим только в случае active = true 
 		itemValidator.activeValidate(item.getId(), item);
 		return item;
 	} 
 
 	// Добавление 
-	@PostMapping(value = "/items", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/item", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus (value = HttpStatus.CREATED)	
-	public IdByJson createdItem (@RequestBody Items newItem) throws AllException {
+	public IdByJson createdItem (@RequestBody Item bodyItem) throws AllException {
 		// Проверка на незаполеннные данные
-		itemValidator.bodyIsNotEmpty(newItem);
+		itemValidator.bodyIsNotEmpty(bodyItem);
 		// Проверка на формат числа
-		itemValidator.costValidate(newItem);
+		itemValidator.costValidate(bodyItem);
 		// Включение (active = true) 
-		newItem.setActive(true);
+		bodyItem.setActive(true);
 		// Представление Id в JSON
-		return itemValidator.getIdByJson(newItem, itemsRepository);
+		return itemValidator.getIdByJson(bodyItem, itemRepository);
 	} 	
 				
 	 // Изменение
-	@PutMapping(value = "/items/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Items editItem (@PathVariable(value = "id") long id, @RequestBody Items editItem) throws AllException {
+	@PutMapping(value = "/item/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Item editItem (@PathVariable(value = "id") long id, @RequestBody Item bodyItem) throws AllException {
 		// Проверка на наличие 
-		itemValidator.itemIsPresent(id, itemsRepository);
+		itemValidator.itemIsPresent(id, itemRepository);
 		// Проверка на незаполеннные данные
-		itemValidator.bodyIsNotEmpty(editItem);
+		itemValidator.bodyIsNotEmpty(bodyItem);
 		// Проверка на формат числа
-		itemValidator.costValidate(editItem);
+		itemValidator.costValidate(bodyItem);
 		// Запись параметров
-		Items item = itemValidator.overrideItem(id, editItem, itemsRepository);
-		itemsRepository.save(item);
+		Item item = itemValidator.overrideItem(id, bodyItem, itemRepository);
+		itemRepository.save(item);
 		return item;
 	} 
 
    // Удаление
-	@DeleteMapping(value = "/items/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@DeleteMapping(value = "/item/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Response deleteItem (@PathVariable(value = "id") long id) throws AllException {
 		// Проверка на наличие 
-		itemValidator.itemIsPresent(id, itemsRepository);
-		Items item = itemsRepository.findById(id).orElseThrow();
+		itemValidator.itemIsPresent(id, itemRepository);
+		Item item = itemRepository.findById(id).orElseThrow();
 		// Проверка не выключен ли active = true
 		itemValidator.activeValidate(item.getId(), item);
 		// Выключение active = false
 		item.setActive(false);
-		itemsRepository.save(item);
+		itemRepository.save(item);
 		// Вывод об успешном удалении
 		Response response = new Response(item.getActive());
 		return response;
