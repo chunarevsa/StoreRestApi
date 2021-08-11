@@ -1,5 +1,8 @@
 package com.chunarevsa.Website.Entity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,19 +16,20 @@ public class Item {
 	private Long id; 
 	private String sku, name, type, description;
 	private String cost;
-	
-	
-	private String [] price;
-
-	public String[] getPrice() {
-		return this.price;
-	}
-
-	public void setPrice(String[] price) {
-		this.price = price;
-	}
-
 	private boolean active;
+	
+	Map<String, String> map1;
+
+	public Map<String,String> getMap1() {
+		return this.map1;
+	}
+
+	public void setMap1(String cost, String currency) {
+		map1 = new HashMap<>();
+		map1.put(cost, "value");
+		this.map1 = map1;
+	}
+
 
 	// Getter and Setter
 	public Long getId() {
@@ -74,6 +78,11 @@ public class Item {
 
 	public void setCost(String cost) {
 		this.cost = cost;
+
+		String costtt = cost;
+		this.price = new String[2];
+		price[0] = costtt;
+		price[1] = "USD";
 	} 
 
 	public boolean isActive() {
