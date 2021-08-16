@@ -1,36 +1,69 @@
 package com.chunarevsa.Website.Entity;
 
+import java.util.ArrayList;
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import antlr.collections.List;
+
+
 
 @Entity
-public class Item {
+public class Item 
+{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-
 	private Long id; 
+
 	private String sku, name, type, description;
 	private String cost;
-	
-	
-	private String [] price;
+	private boolean active;
 
-	public String[] getPrice() {
+	// ПЕРВЫЙ ВАР - раб
+	/* @OneToMany (mappedBy = "item")
+	private Price price;
+
+	public Price getPrice() {
 		return this.price;
 	}
 
-	public void setPrice(String[] price) {
+	public void setPrice(Price price) {
 		this.price = price;
+	}  */
+
+	// ВТОРОЙ ВАР - раб
+	/* @OneToMany
+	private Set<Price> price;
+
+	public Set<Price> getPrice() {
+		return this.price;
 	}
 
-	private boolean active;
+	public void setPrice( Set<Price> price) {
+		this.price = price;
+	} */
+
+	// 3 ВАР 
+	@OneToMany
+	private ArrayList<Price> price;
+
+	public ArrayList<Price> getPrice() {
+		return this.price;
+	}
+
+	public void setPrice( ArrayList<Price> price) {
+		this.price = price;
+	} 
 
 	// Getter and Setter
 	public Long getId() {
 		return this.id;
-	}
+}
 
 	public void setId(Long id) {
 		this.id = id;
@@ -107,6 +140,7 @@ public class Item {
 		this.name = itemBody.name;
 		this.description = itemBody.description;
 		this.active = itemBody.active;
+		this.price = itemBody.price;
 	} 
 
 }
