@@ -1,17 +1,11 @@
 package com.chunarevsa.Website.Entity;
 
-import java.util.ArrayList;
 import java.util.Set;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-
-import antlr.collections.List;
-
-
 
 @Entity
 public class Item 
@@ -25,6 +19,19 @@ public class Item
 	private boolean active;
 
 	// ПЕРВЫЙ ВАР - раб
+	@OneToMany
+	// @JoinColumn  (name = "column_from_item")
+	private Set<Price> prices;
+
+	public Set<Price> getPrice() {
+		return this.prices;
+	}
+
+	public void setPrice( Set<Price> prices) {
+		this.prices = prices;
+	}
+
+	// ВТОРОЙ ВАР - раб
 	/* @OneToMany (mappedBy = "item")
 	private Price price;
 
@@ -36,20 +43,9 @@ public class Item
 		this.price = price;
 	}  */
 
-	// ВТОРОЙ ВАР - раб
-	/* @OneToMany
-	private Set<Price> price;
-
-	public Set<Price> getPrice() {
-		return this.price;
-	}
-
-	public void setPrice( Set<Price> price) {
-		this.price = price;
-	} */
 
 	// 3 ВАР 
-	@OneToMany
+	/* @OneToMany
 	private ArrayList<Price> price;
 
 	public ArrayList<Price> getPrice() {
@@ -58,7 +54,19 @@ public class Item
 
 	public void setPrice( ArrayList<Price> price) {
 		this.price = price;
-	} 
+	}  */
+
+	// 4 ВАР 
+	/* @OneToMany
+	private List<Price> price;
+
+	public List<Price> getPrice() {
+		return this.price;
+	}
+
+	public void setPrice( List<Price> price) {
+		this.price = price;
+	} */ 
 
 	// Getter and Setter
 	public Long getId() {
@@ -140,7 +148,7 @@ public class Item
 		this.name = itemBody.name;
 		this.description = itemBody.description;
 		this.active = itemBody.active;
-		this.price = itemBody.price;
+		this.prices = itemBody.prices;
 	} 
 
 }

@@ -1,28 +1,34 @@
 package com.chunarevsa.Website.Entity;
 
-
-import java.util.Set;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Price 
 {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	private String amount;
-	private String currency; 
+	@OneToOne
+	private Currency currency; 
+
+	public Currency getCurrency() {
+		return this.currency;
+	}
+
+	public void setCurrency(Currency currency) {
+		this.currency = currency;
+	}
 	
 	// Рабочий вар
-	@ManyToOne
-	@JoinColumn(name = "Price_price")
+	/* @ManyToOne
+	@JoinColumn //(name = "colum_price")
 	public Price price;
 
 	public Price getPrice() {
@@ -30,9 +36,9 @@ public class Price
 	}
 	public void setPrice(Price price) {
 		this.price = price;
-	}
+	} */
 
-	// Второй вар - не раб
+	// Второй вар - не раб	
 	/* @ManyToOne
 	@JoinColumn(name = "SetPrice")
 	
@@ -44,7 +50,7 @@ public class Price
 
 	public void setPrice(Set<Price> price) {
 		this.price = price;
-	} */  
+	}  */ 
 
 	// 3 вар - не раб
 
@@ -69,6 +75,19 @@ public class Price
 		this.setprice = setprice;
 	} */
 
+	// вар 4 - раб
+	@ManyToOne
+	// @JoinColumn(name = "column_from_price", nullable = false)
+	private Item item;
+
+	public Item getItem() {
+		return this.item;
+	}
+
+	public void setItem(Item item) {
+		this.item = item;
+	}
+
 	public String getAmount() {
 		return this.amount;
 	}
@@ -85,20 +104,12 @@ public class Price
 		this.id = id;
 	}
 
-	public String getCurrency() {
-		return this.currency;
-	}
-
-	public void setCurrency(String currency) {
-		this.currency = currency;
-	}
-
 	public Price() {
 	}
 
-	public Price(String amount, String currency) {
+	public Price(Item item, Currency currency) {
 		this.currency = currency;
-		this.amount = amount;
+		this.item = item;
 	}
 	
 }
