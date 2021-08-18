@@ -9,35 +9,8 @@ import javax.persistence.OneToOne;
 
 @Entity
 public class Price 
-{
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	private String amount;
-	@OneToOne
-	private Currency currency; 
-
-	public Currency getCurrency() {
-		return this.currency;
-	}
-
-	public void setCurrency(Currency currency) {
-		this.currency = currency;
-	}
-	
+{	
 	// Рабочий вар
-	/* @ManyToOne
-	@JoinColumn //(name = "colum_price")
-	public Price price;
-
-	public Price getPrice() {
-		return this.price;
-	}
-	public void setPrice(Price price) {
-		this.price = price;
-	} */
-
 	// Второй вар - не раб	
 	/* @ManyToOne
 	@JoinColumn(name = "SetPrice")
@@ -75,6 +48,32 @@ public class Price
 		this.setprice = setprice;
 	} */
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
+	private String amount;
+	private String currency_Str;
+
+	public String getCurrency_Str() {
+		return this.currency_Str;
+	}
+
+	public void setCurrency_Str(String currency_Str) {
+		this.currency_Str = currency_Str;
+	}
+
+	/* @OneToOne // рабочая - при Currency currency
+	private Currency currency; 
+
+	public Currency getCurrency() {
+		return this.currency;
+	}
+
+	public void setCurrency(Currency currency) {
+		this.currency = currency;
+	} */
+
 	// вар 4 - раб
 	@ManyToOne
 	// @JoinColumn(name = "column_from_price", nullable = false)
@@ -107,9 +106,12 @@ public class Price
 	public Price() {
 	}
 
-	public Price(Item item, Currency currency) {
+	/* public Price(Item item, Currency currency) { // рабочая - при Currency currency
 		this.currency = currency;
 		this.item = item;
+	} */
+	public Price(Item item, String currency_Str) {
+		this.currency_Str = currency_Str;
+		this.item = item;
 	}
-	
 }

@@ -13,7 +13,7 @@ import javax.persistence.UniqueConstraint;
 @Table(uniqueConstraints = { @UniqueConstraint(name = "UniqueCode", columnNames = { "code"}) })
 public class Currency {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id; 
 
 	@Column(unique=true)

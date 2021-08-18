@@ -11,7 +11,7 @@ import javax.persistence.OneToMany;
 public class Item 
 {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id; 
 
 	private String sku, name, type, description;
@@ -20,14 +20,14 @@ public class Item
 
 	// ПЕРВЫЙ ВАР - раб
 	@OneToMany
-	// @JoinColumn  (name = "column_from_item")
+	// @JoinColumn (name = "column_from_item")
 	private Set<Price> prices;
 
 	public Set<Price> getPrice() {
 		return this.prices;
 	}
 
-	public void setPrice( Set<Price> prices) {
+	public void setPrice(Set<Price> prices) {
 		this.prices = prices;
 	}
 
