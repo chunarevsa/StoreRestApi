@@ -1,11 +1,13 @@
 package com.chunarevsa.Website.Entity;
 
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
 
 @Entity
 public class Item 
@@ -19,54 +21,17 @@ public class Item
 	private boolean active;
 
 	// ПЕРВЫЙ ВАР - раб
-	@OneToMany
+	@OneToMany (mappedBy = "item")
 	// @JoinColumn (name = "column_from_item")
-	private Set<Price> prices;
+	private Set<Price> prices = new HashSet<>();
 
-	public Set<Price> getPrice() {
+	public Set<Price> getPrices() {
 		return this.prices;
 	}
 
-	public void setPrice(Set<Price> prices) {
+	public void setPrices(Set<Price> prices) {
 		this.prices = prices;
 	}
-
-	// ВТОРОЙ ВАР - раб
-	/* @OneToMany (mappedBy = "item")
-	private Price price;
-
-	public Price getPrice() {
-		return this.price;
-	}
-
-	public void setPrice(Price price) {
-		this.price = price;
-	}  */
-
-
-	// 3 ВАР 
-	/* @OneToMany
-	private ArrayList<Price> price;
-
-	public ArrayList<Price> getPrice() {
-		return this.price;
-	}
-
-	public void setPrice( ArrayList<Price> price) {
-		this.price = price;
-	}  */
-
-	// 4 ВАР 
-	/* @OneToMany
-	private List<Price> price;
-
-	public List<Price> getPrice() {
-		return this.price;
-	}
-
-	public void setPrice( List<Price> price) {
-		this.price = price;
-	} */ 
 
 	// Getter and Setter
 	public Long getId() {

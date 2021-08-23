@@ -1,11 +1,15 @@
 package com.chunarevsa.Website.controllers;
 
+import java.util.Set;
+
 import com.chunarevsa.Website.Entity.Item;
+import com.chunarevsa.Website.Entity.Price;
 import com.chunarevsa.Website.Exception.AllException;
 import com.chunarevsa.Website.dto.IdByJson;
 import com.chunarevsa.Website.dto.Response;
 import com.chunarevsa.Website.dto.Item.ItemValidator;
 import com.chunarevsa.Website.repo.ItemRepository;
+import com.chunarevsa.Website.repo.PriceRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,6 +25,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,9 +37,14 @@ public class ItemController {
 	private ItemRepository itemRepository;	
 	@Autowired
 	private ItemValidator itemValidator;
-	public ItemController (ItemRepository itemRepository, ItemValidator itemValidator) {
+	@Autowired PriceRepository priceRepository;
+	public ItemController 
+	(ItemRepository itemRepository, 
+	 ItemValidator itemValidator, 
+	 PriceRepository priceRepository) {
 		this.itemRepository = itemRepository;
 		this.itemValidator = itemValidator;
+		this.priceRepository = priceRepository;
 	}
 
 	// Получение списка всех Items с ограничением страницы (10)
@@ -59,7 +69,10 @@ public class ItemController {
 	// Добавление 
 	@PostMapping(value = "/item", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus (value = HttpStatus.CREATED)	
-	public IdByJson createdItem (@RequestBody Item bodyItem) throws AllException {
+	public Item createdItem (@RequestBody Item bodyItem) throws AllException {
+
+		priceRepository.saveAll(bodyItem.getPrices());
+
 		// Проверка на незаполеннные данные
 		itemValidator.bodyIsNotEmpty(bodyItem);
 		// Проверка на формат числа
@@ -67,7 +80,9 @@ public class ItemController {
 		// Включение (active = true) 
 		bodyItem.setActive(true);
 		// Представление Id в JSON
-		return itemValidator.getIdByJson(bodyItem, itemRepository);
+		itemValidator.getIdByJson(bodyItem, itemRepository);
+		return itemRepository.save(bodyItem);
+		// return itemValidator.getIdByJson(bodyItem, itemRepository);
 	} 	
 				
 	 // Изменение

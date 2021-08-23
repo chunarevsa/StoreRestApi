@@ -65,6 +65,7 @@ public class ItemValidator implements ItemService {
 		item.setCost(bodyItem.getCost());
 		// Возможность вернуть удалённый (active = false) обратно (active = true)
 		item.setActive(bodyItem.getActive());
+		item.setPrices(bodyItem.getPrices());
 		return item;
 	}
 	

@@ -1,11 +1,12 @@
 package com.chunarevsa.Website.Entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 @Entity
 public class Price 
@@ -75,8 +76,8 @@ public class Price
 	} */
 
 	// вар 4 - раб
-	@ManyToOne
-	// @JoinColumn(name = "column_from_price", nullable = false)
+	@ManyToOne (cascade = CascadeType.ALL)
+	@JoinColumn (name = "item_id", referencedColumnName = "id")
 	private Item item;
 
 	public Item getItem() {
@@ -106,12 +107,12 @@ public class Price
 	public Price() {
 	}
 
-	/* public Price(Item item, Currency currency) { // рабочая - при Currency currency
-		this.currency = currency;
-		this.item = item;
-	} */
 	public Price(Item item, String currency_Str) {
 		this.currency_Str = currency_Str;
 		this.item = item;
+	}
+	
+	public Price(String currency_Str) {
+		this.currency_Str = currency_Str;
 	}
 }
