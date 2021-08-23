@@ -1,8 +1,8 @@
 package com.chunarevsa.Website.Entity;
 
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,8 +28,21 @@ public class Price
 		this.currency_Str = currency_Str;
 	}
 
-	@ManyToOne 
-	@JoinColumn (name = "item_id")
+	// Первый вар
+	/* @ManyToOne 
+	private Item item;
+
+	public Item getItem() {
+		return this.item;
+	}
+
+	public void setItem(Item item) {
+		this.item = item;
+	} */
+
+	// Второй вар
+	@ManyToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "item_id", referencedColumnName = "id", nullable = false)
 	private Item item;
 
 	public Item getItem() {
@@ -39,6 +52,9 @@ public class Price
 	public void setItem(Item item) {
 		this.item = item;
 	}
+
+
+
 
 	public String getAmount() {
 		return this.amount;
@@ -59,12 +75,9 @@ public class Price
 	public Price() {
 	}
 
-	public Price(Item item, String currency_Str) {
-		this.currency_Str = currency_Str;
-		this.item = item;
-	}
-
-	public Price(String currency_Str) {
-		this.currency_Str = currency_Str;
+	public Price(Price priceBody) {
+		this.amount = priceBody.amount;
+		this.currency_Str = priceBody.currency_Str;
+		this.item = priceBody.item;
 	}
 }

@@ -3,12 +3,15 @@ package com.chunarevsa.Website.Entity;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -23,8 +26,20 @@ public class Item
 	private boolean active;
 
 	// ПЕРВЫЙ ВАР - раб
-	@OneToMany (mappedBy = "item", cascade = CascadeType.ALL)
-	private Set<Price> prices = new HashSet<>();
+	/* @OneToMany 
+	private Set<Price> prices = new HashSet<Price>();
+
+	public Set<Price> getPrices() {
+		return this.prices;
+	}
+
+	public void setPrices(Set<Price> prices) {
+		this.prices = prices;
+	} */
+
+	// Второй вар 
+	@OneToMany (fetch = FetchType.LAZY, mappedBy = "item")
+	private Set<Price> prices;
 
 	public Set<Price> getPrices() {
 		return this.prices;
@@ -33,6 +48,8 @@ public class Item
 	public void setPrices(Set<Price> prices) {
 		this.prices = prices;
 	}
+	
+
 
 	// Getter and Setter
 	public Long getId() {
