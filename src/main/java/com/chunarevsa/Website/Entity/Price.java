@@ -1,5 +1,6 @@
 package com.chunarevsa.Website.Entity;
 
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,43 +12,6 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Price 
 {	
-	// Рабочий вар
-	// Второй вар - не раб	
-	/* @ManyToOne
-	@JoinColumn(name = "SetPrice")
-	
-	public Set<Price> price;
-
-	public Set<Price> getPrice() {
-		return this.price;
-	}
-
-	public void setPrice(Set<Price> price) {
-		this.price = price;
-	}  */ 
-
-	// 3 вар - не раб
-
-	/* @ManyToOne
-	@JoinColumn(name = "Price_price_set")
-	public Price price;
-
-	public Price getPrice() {
-		return this.price;
-	}
-	public void setPrice(Price price) {
-		this.price = price;
-	} 
-
-	public Set<Price> setprice;
-
-	public Set<Price> getsetPrice() {
-		return this.setprice;
-	}
-
-	public void setPrice(Set<Price> setprice) {
-		this.setprice = setprice;
-	} */
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,20 +28,8 @@ public class Price
 		this.currency_Str = currency_Str;
 	}
 
-	/* @OneToOne // рабочая - при Currency currency
-	private Currency currency; 
-
-	public Currency getCurrency() {
-		return this.currency;
-	}
-
-	public void setCurrency(Currency currency) {
-		this.currency = currency;
-	} */
-
-	// вар 4 - раб
-	@ManyToOne (cascade = CascadeType.ALL)
-	@JoinColumn (name = "item_id", referencedColumnName = "id")
+	@ManyToOne 
+	@JoinColumn (name = "item_id")
 	private Item item;
 
 	public Item getItem() {
@@ -111,7 +63,7 @@ public class Price
 		this.currency_Str = currency_Str;
 		this.item = item;
 	}
-	
+
 	public Price(String currency_Str) {
 		this.currency_Str = currency_Str;
 	}

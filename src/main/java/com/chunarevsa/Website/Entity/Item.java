@@ -2,6 +2,8 @@ package com.chunarevsa.Website.Entity;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,8 +23,7 @@ public class Item
 	private boolean active;
 
 	// ПЕРВЫЙ ВАР - раб
-	@OneToMany (mappedBy = "item")
-	// @JoinColumn (name = "column_from_item")
+	@OneToMany (mappedBy = "item", cascade = CascadeType.ALL)
 	private Set<Price> prices = new HashSet<>();
 
 	public Set<Price> getPrices() {
