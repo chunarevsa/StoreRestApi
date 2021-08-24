@@ -2,10 +2,13 @@ package com.chunarevsa.Website.Entity;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -18,9 +21,11 @@ public class Price
 	private Long id;
 	
 	private String amount;
-	private String currency_Str;
+	
+	@OneToOne 
+	@JoinColumn (name = "currency_id", referencedColumnName = "id")
+	private Currency currency;
 
-	// Первый вар
 	@JsonIgnore
 	@ManyToOne (cascade = CascadeType.ALL)
 	private Item item;
@@ -33,14 +38,6 @@ public class Price
 		this.item = item;
 	}
 
-	public String getAmount() {
-		return this.amount;
-	}
-
-	public void setAmount(String amount) {
-		this.amount = amount;
-	}
-
 	public Long getId() {
 		return this.id;
 	}
@@ -49,12 +46,12 @@ public class Price
 		this.id = id;
 	}
 
-	public String getCurrency_Str() {
-		return this.currency_Str;
+	public String getAmount() {
+		return this.amount;
 	}
 
-	public void setCurrency_Str(String currency_Str) {
-		this.currency_Str = currency_Str;
+	public void setAmount(String amount) {
+		this.amount = amount;
 	}
 
 	public Price() {
@@ -62,7 +59,8 @@ public class Price
 
 	public Price(Price priceBody) {
 		this.amount = priceBody.amount;
-		this.currency_Str = priceBody.currency_Str;
+		this.currency = priceBody.currency; //
 		this.item = priceBody.item;
 	}
+
 }

@@ -8,18 +8,18 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(name = "UniqueCode", columnNames = { "code"}) })
 public class Currency {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id; 
+	
+	private boolean active;
 
 	@Column(unique=true)
-	private String code;
-
-	private boolean active;
+	private String code;	
 
 	public Long getId() {
 		return this.id;
@@ -47,6 +47,7 @@ public class Currency {
 
 	public void setActive(boolean active) {
 		this.active = active;
+
 	}
 	
 	public Currency() {
@@ -57,4 +58,8 @@ public class Currency {
 		this.active = currencyBody.active;
 	}
 
+	public Currency(String code) {
+		this.code = code;
+	}
+	
 }
