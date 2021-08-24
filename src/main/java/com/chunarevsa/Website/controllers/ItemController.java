@@ -1,9 +1,7 @@
 package com.chunarevsa.Website.controllers;
 
-import java.util.Set;
-
 import com.chunarevsa.Website.Entity.Item;
-import com.chunarevsa.Website.Entity.Price;
+
 import com.chunarevsa.Website.Exception.AllException;
 import com.chunarevsa.Website.dto.Response;
 import com.chunarevsa.Website.dto.Item.ItemValidator;
@@ -70,24 +68,17 @@ public class ItemController {
 	public Item createdItem (@RequestBody Item bodyItem) throws AllException {
 
 		Item item = bodyItem;
-		Set<Price> pppp = bodyItem.getPrices();
-		for (Price s: pppp) {
-			s.setItem(item);
-		}
-
-		priceRepository.saveAll(pppp);
-
+		priceRepository.saveAll(item.getPrices());
 
 		// Проверка на незаполеннные данные
-		itemValidator.bodyIsNotEmpty(bodyItem);
+		itemValidator.bodyIsNotEmpty(item);
 		// Проверка на формат числа
-		itemValidator.costValidate(bodyItem);
+		itemValidator.costValidate(item);
 		// Включение (active = true) 
-		bodyItem.setActive(true);
+		item.setActive(true);
 		// Представление Id в JSON
 		// itemValidator.getIdByJson(bodyItem, itemRepository);
 		itemRepository.save(item);
-	
 		return item;
 		// return itemValidator.getIdByJson(bodyItem, itemRepository);
 	} 	

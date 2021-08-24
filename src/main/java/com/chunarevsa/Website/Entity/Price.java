@@ -2,12 +2,13 @@ package com.chunarevsa.Website.Entity;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Price 
@@ -20,38 +21,32 @@ public class Price
 	private String amount;
 	private String currency_Str;
 
-	public String getCurrency_Str() {
-		return this.currency_Str;
-	}
-
-	public void setCurrency_Str(String currency_Str) {
-		this.currency_Str = currency_Str;
-	}
-
 	// Первый вар
-	/* @ManyToOne 
+	@JsonIgnore
+	@ManyToOne (cascade = CascadeType.ALL)
+	@JoinColumn (name="item_id", referencedColumnName = "id"/*, nullable = false*/)
 	private Item item;
 
 	public Item getItem() {
-		return this.item;
+		return item;
 	}
 
 	public void setItem(Item item) {
 		this.item = item;
-	} */
+	}
 
 	// Второй вар
-	@ManyToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	/* @ManyToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "item_id", referencedColumnName = "id", nullable = false)
 	private Item item;
 
-	public Item getItem() {
-		return this.item;
+	public long getItem_id() {
+		return this.item.getId();
 	}
 
-	public void setItem(Item item) {
+	public void setItem_id(Item item) {
 		this.item = item;
-	}
+	} */
 
 
 
@@ -70,6 +65,14 @@ public class Price
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getCurrency_Str() {
+		return this.currency_Str;
+	}
+
+	public void setCurrency_Str(String currency_Str) {
+		this.currency_Str = currency_Str;
 	}
 
 	public Price() {

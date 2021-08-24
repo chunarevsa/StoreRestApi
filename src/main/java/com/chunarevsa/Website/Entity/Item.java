@@ -8,11 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 
 @Entity
 public class Item 
@@ -26,20 +22,9 @@ public class Item
 	private boolean active;
 
 	// ПЕРВЫЙ ВАР - раб
-	/* @OneToMany 
-	private Set<Price> prices = new HashSet<Price>();
-
-	public Set<Price> getPrices() {
-		return this.prices;
-	}
-
-	public void setPrices(Set<Price> prices) {
-		this.prices = prices;
-	} */
-
-	// Второй вар 
-	@OneToMany (fetch = FetchType.LAZY, mappedBy = "item")
-	private Set<Price> prices;
+	// @JsonIgnore
+	@OneToMany (fetch = FetchType.LAZY, mappedBy = "item", orphanRemoval = true)
+	private Set<Price> prices = new HashSet<>();
 
 	public Set<Price> getPrices() {
 		return this.prices;
@@ -124,14 +109,14 @@ public class Item
 		this.description = description;
 	}
 		// Для ItemsController
-	public Item (Item itemBody) {
-		this.sku = itemBody.sku;
-		this.cost = itemBody.cost;
-		this.type = itemBody.type;
-		this.name = itemBody.name;
-		this.description = itemBody.description;
-		this.active = itemBody.active;
-		this.prices = itemBody.prices;
+	public Item (Item bodyItem) {
+		this.sku = bodyItem.sku;
+		this.cost = bodyItem.cost;
+		this.type = bodyItem.type;
+		this.name = bodyItem.name;
+		this.description = bodyItem.description;
+		this.active = bodyItem.active;
+		this.prices = bodyItem.prices;
 	} 
 
 }
