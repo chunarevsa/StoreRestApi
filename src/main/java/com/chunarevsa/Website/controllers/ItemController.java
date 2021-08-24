@@ -67,19 +67,18 @@ public class ItemController {
 	@ResponseStatus (value = HttpStatus.CREATED)	
 	public Item createdItem (@RequestBody Item bodyItem) throws AllException {
 
-		Item item = bodyItem;
-		priceRepository.saveAll(item.getPrices());
+		// Item item = bodyItem;
+		priceRepository.saveAll(bodyItem.getPrices());
 
 		// Проверка на незаполеннные данные
-		itemValidator.bodyIsNotEmpty(item);
+		itemValidator.bodyIsNotEmpty(bodyItem);
 		// Проверка на формат числа
-		itemValidator.costValidate(item);
+		itemValidator.costValidate(bodyItem);
 		// Включение (active = true) 
-		item.setActive(true);
+		bodyItem.setActive(true);
 		// Представление Id в JSON
 		// itemValidator.getIdByJson(bodyItem, itemRepository);
-		itemRepository.save(item);
-		return item;
+		return itemRepository.save(bodyItem);
 		// return itemValidator.getIdByJson(bodyItem, itemRepository);
 	} 	
 				

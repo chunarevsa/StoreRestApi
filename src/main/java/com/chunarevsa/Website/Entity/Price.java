@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -24,7 +23,6 @@ public class Price
 	// Первый вар
 	@JsonIgnore
 	@ManyToOne (cascade = CascadeType.ALL)
-	@JoinColumn (name="item_id", referencedColumnName = "id"/*, nullable = false*/)
 	private Item item;
 
 	public Item getItem() {
@@ -34,22 +32,6 @@ public class Price
 	public void setItem(Item item) {
 		this.item = item;
 	}
-
-	// Второй вар
-	/* @ManyToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "item_id", referencedColumnName = "id", nullable = false)
-	private Item item;
-
-	public long getItem_id() {
-		return this.item.getId();
-	}
-
-	public void setItem_id(Item item) {
-		this.item = item;
-	} */
-
-
-
 
 	public String getAmount() {
 		return this.amount;

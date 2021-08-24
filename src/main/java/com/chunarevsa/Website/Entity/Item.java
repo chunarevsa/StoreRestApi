@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,9 +20,7 @@ public class Item
 	private String cost;
 	private boolean active;
 
-	// ПЕРВЫЙ ВАР - раб
-	// @JsonIgnore
-	@OneToMany (fetch = FetchType.LAZY, mappedBy = "item", orphanRemoval = true)
+	@OneToMany
 	private Set<Price> prices = new HashSet<>();
 
 	public Set<Price> getPrices() {
@@ -34,8 +31,6 @@ public class Item
 		this.prices = prices;
 	}
 	
-
-
 	// Getter and Setter
 	public Long getId() {
 		return this.id;
