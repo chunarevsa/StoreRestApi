@@ -17,7 +17,6 @@ public class Item
 	private Long id; 
 
 	private String sku, name, type, description;
-	private String cost;
 	private boolean active;
 
 	@OneToMany
@@ -72,14 +71,6 @@ public class Item
 		this.description = description;
 	}
 
-	public String getCost() {
-		return this.cost;
-	}
-
-	public void setCost(String cost) {
-		this.cost = cost;
-	} 
-
 	public boolean isActive() {
 		return this.active;
 	}
@@ -96,9 +87,8 @@ public class Item
 	public Item () {
 	}
 		// Для Controller GUI
-	public Item (String sku, String name,String type, String description, String cost) {
+	public Item (String sku, String name,String type, String description) {
 		this.sku = sku;
-		this.cost = cost;
 		this.type = type;
 		this.name = name;
 		this.description = description;
@@ -106,7 +96,6 @@ public class Item
 		// Для ItemsController
 	public Item (Item bodyItem) {
 		this.sku = bodyItem.sku;
-		this.cost = bodyItem.cost;
 		this.type = bodyItem.type;
 		this.name = bodyItem.name;
 		this.description = bodyItem.description;

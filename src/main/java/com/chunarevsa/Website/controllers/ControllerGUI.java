@@ -52,7 +52,7 @@ public class ControllerGUI {
 	 }
 	 @PostMapping ("/items/gui/add")
 	 public String itemsPostAdd (@RequestParam String sku, @RequestParam String name,@RequestParam String type, @RequestParam String description, @RequestParam String cost, Model model) {
-		 Item item = new Item(sku, name, type, description, cost);
+		 Item item = new Item(sku, name, type, description);
 		 itemsRepository.save(item);
 		 return "redirect:/";
 	 }
@@ -89,7 +89,6 @@ public class ControllerGUI {
 	  item.setSku(sku);
 	  item.setType(type);
      item.setDescription(description);
-	  item.setCost(cost);
 	  itemsRepository.save(item);
 	  return "redirect:/";
   }

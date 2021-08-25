@@ -25,3 +25,8 @@ public class WebsiteApplication {
 
 	} 
 }
+
+// Вынести бины в конфигурацию
+// Нужно ли у Price пункт actice?
+// Подключить изменение валют в Price Service b PriceValidator
+// Где должна проходить проверку на незаполенные данные и адекватный формат числа для price?

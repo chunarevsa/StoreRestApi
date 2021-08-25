@@ -2,7 +2,6 @@ package com.chunarevsa.Website.dto.Item;
 
 import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Exception.FormIsEmpty;
-import com.chunarevsa.Website.Exception.InvalidPriceFormat;
 import com.chunarevsa.Website.Exception.NotFound;
 import com.chunarevsa.Website.dto.IdByJson;
 import com.chunarevsa.Website.repo.ItemRepository;
@@ -27,21 +26,14 @@ public class ItemValidator implements ItemService {
 		}
 	}
 
-	// Проверка на формат числа
-	@Override
-	public void costValidate (Item bodyItem) throws InvalidPriceFormat {
-		int i = Integer.parseInt(bodyItem.getCost());
-		if (i < 0) {
-				throw new InvalidPriceFormat(HttpStatus.BAD_REQUEST);
-			}
-	}
-
 	// Проверка на незаполеннные данные
 	@Override
 	public void bodyIsNotEmpty (Item bodyItem) throws FormIsEmpty {
-		if (bodyItem.getName().isEmpty() == true || bodyItem.getSku().isEmpty() == true || 
-		bodyItem.getType().isEmpty() == true || bodyItem.getDescription().isEmpty() == true || 
-		bodyItem.getCost().isEmpty() == true) {
+		if (
+		bodyItem.getName().isEmpty() == true || 
+		bodyItem.getSku().isEmpty() == true || 
+		bodyItem.getType().isEmpty() == true || 
+		bodyItem.getDescription().isEmpty() == true) {
 			throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -62,7 +54,6 @@ public class ItemValidator implements ItemService {
 		item.setName(bodyItem.getName());
 		item.setType(bodyItem.getType());
 		item.setDescription(bodyItem.getDescription());
-		item.setCost(bodyItem.getCost());
 		// Возможность вернуть удалённый (active = false) обратно (active = true)
 		item.setActive(bodyItem.getActive());
 		item.setPrices(bodyItem.getPrices());

@@ -5,6 +5,7 @@ import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Exception.AllException;
 import com.chunarevsa.Website.dto.Response;
 import com.chunarevsa.Website.dto.Item.ItemValidator;
+import com.chunarevsa.Website.dto.Price.PriceValidator;
 import com.chunarevsa.Website.repo.ItemRepository;
 import com.chunarevsa.Website.repo.PriceRepository;
 
@@ -33,14 +34,20 @@ public class ItemController {
 	private ItemRepository itemRepository;	
 	@Autowired
 	private ItemValidator itemValidator;
-	@Autowired PriceRepository priceRepository;
-	public ItemController 
-	(ItemRepository itemRepository, 
-	 ItemValidator itemValidator, 
-	 PriceRepository priceRepository) {
-		this.itemRepository = itemRepository;
-		this.itemValidator = itemValidator;
-		this.priceRepository = priceRepository;
+	@Autowired 
+	private PriceRepository priceRepository;
+	@Autowired
+	private PriceValidator priceValidator;
+	
+	public ItemController (
+		ItemRepository itemRepository, 
+		ItemValidator itemValidator, 
+		PriceRepository priceRepository,
+		PriceValidator priceValidator) {
+			this.itemRepository = itemRepository;
+			this.itemValidator = itemValidator;
+			this.priceRepository = priceRepository;
+			this.priceValidator = priceValidator;
 	}
 
 	// Получение списка всех Items с ограничением страницы (10)
@@ -73,7 +80,12 @@ public class ItemController {
 		// Проверка на незаполеннные данные
 		itemValidator.bodyIsNotEmpty(bodyItem);
 		// Проверка на формат числа
-		itemValidator.costValidate(bodyItem);
+
+					/* 
+					itemValidator.costValidate(bodyItem);
+					priceValidator.amountValidate(bodyItem.getPrices());
+		 			*/
+
 		// Включение (active = true) 
 		bodyItem.setActive(true);
 		// Представление Id в JSON
@@ -90,7 +102,12 @@ public class ItemController {
 		// Проверка на незаполеннные данные
 		itemValidator.bodyIsNotEmpty(bodyItem);
 		// Проверка на формат числа
-		itemValidator.costValidate(bodyItem);
+		
+					/* Где должна проходить проверку на незаполенные данные и адекватный формат числа для price?
+					itemValidator.costValidate(bodyItem);
+					priceValidator.amountValidate(bodyItem.getPrices());
+		 			*/
+
 		// Запись параметров
 		Item item = itemValidator.overrideItem(id, bodyItem, itemRepository);
 		itemRepository.save(item);
