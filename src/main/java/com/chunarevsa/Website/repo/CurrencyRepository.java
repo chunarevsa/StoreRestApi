@@ -1,5 +1,7 @@
 package com.chunarevsa.Website.repo;
 
+import java.util.Set;
+
 import com.chunarevsa.Website.Entity.Currency;
 
 import org.springframework.data.domain.Page;
@@ -13,5 +15,7 @@ public interface CurrencyRepository extends CrudRepository <Currency, Long> {
 	Page <Currency> findAll (Pageable pageable);
 		// Только active = true
 	Page <Currency> findByActive (boolean active, Pageable pageable);
+	// 
+	Set <String> findByCode (String code);
 
 }

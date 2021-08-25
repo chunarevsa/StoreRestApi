@@ -12,8 +12,7 @@ import javax.persistence.OneToOne;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class Price 
-{	
+public class Price {	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,9 +20,27 @@ public class Price
 	
 	private String amount;
 	
-	@OneToOne 
-	@JoinColumn (name = "currency_id", referencedColumnName = "id")
+	/* @OneToOne (cascade = CascadeType.ALL) 
+	// Работает тольков при cacadeType.ALL
+	@JoinColumn (name = "currency_code", referencedColumnName = "code") 
 	private Currency currency;
+
+	// code из Запроса проходит здесь 
+	public Currency getCurrency() {
+		Currency currency = this.currency;
+		currency.setActive(true);
+		currency.setCode("code");   
+		// это я пытался понять где происходить созадние, 
+		// путём последовательного изм данных
+
+		return currency;
+
+	}  */
+
+	/* public void setCurrency(Currency currency) {
+		this.currency = currency;
+	} */
+
 
 	@JsonIgnore
 	@ManyToOne (cascade = CascadeType.ALL)
@@ -58,8 +75,10 @@ public class Price
 
 	public Price(Price priceBody) {
 		this.amount = priceBody.amount;
-		this.currency = priceBody.currency; 
+		// this.currency = priceBody.currency; 
 		this.item = priceBody.item;
 	}
+
+
 
 }

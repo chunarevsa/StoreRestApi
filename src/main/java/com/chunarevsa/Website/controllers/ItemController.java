@@ -1,11 +1,15 @@
 package com.chunarevsa.Website.controllers;
 
-import com.chunarevsa.Website.Entity.Item;
+import java.util.Set;
 
+import com.chunarevsa.Website.Entity.Item;
+import com.chunarevsa.Website.Entity.Price;
 import com.chunarevsa.Website.Exception.AllException;
+import com.chunarevsa.Website.Exception.NotFound;
 import com.chunarevsa.Website.dto.Response;
 import com.chunarevsa.Website.dto.Item.ItemValidator;
 import com.chunarevsa.Website.dto.Price.PriceValidator;
+import com.chunarevsa.Website.repo.CurrencyRepository;
 import com.chunarevsa.Website.repo.ItemRepository;
 import com.chunarevsa.Website.repo.PriceRepository;
 
@@ -36,18 +40,22 @@ public class ItemController {
 	private ItemValidator itemValidator;
 	@Autowired 
 	private PriceRepository priceRepository;
+	/* @Autowired
+	private PriceValidator priceValidator; 
 	@Autowired
-	private PriceValidator priceValidator;
+	private CurrencyRepository currencyRepository; */
 	
 	public ItemController (
 		ItemRepository itemRepository, 
 		ItemValidator itemValidator, 
-		PriceRepository priceRepository,
-		PriceValidator priceValidator) {
+		PriceRepository priceRepository/* ,
+		CurrencyRepository currencyRepository,
+		PriceValidator priceValidator */) {
 			this.itemRepository = itemRepository;
 			this.itemValidator = itemValidator;
 			this.priceRepository = priceRepository;
-			this.priceValidator = priceValidator;
+			/* this.currencyRepository = currencyRepository;
+			this.priceValidator = priceValidator; */
 	}
 
 	// Получение списка всех Items с ограничением страницы (10)
@@ -74,18 +82,23 @@ public class ItemController {
 	@ResponseStatus (value = HttpStatus.CREATED)	
 	public Item createdItem (@RequestBody Item bodyItem) throws AllException {
 
-		// Item item = bodyItem;
+		/* Set<Price> prices = bodyItem.getPrices();
+		for (Price priceBody : prices) {
+			// Проверка формат числа
+			priceValidator.amountValidate(priceBody);
+			// Проверка на наличие такой валюты
+			try {
+				currencyRepository.findByCode(priceBody.getCurrency().getCode());
+			} catch (Exception e) {
+				throw new NotFound(HttpStatus.NOT_FOUND);
+			}
+
+		} */
+
 		priceRepository.saveAll(bodyItem.getPrices());
 
 		// Проверка на незаполеннные данные
 		itemValidator.bodyIsNotEmpty(bodyItem);
-		// Проверка на формат числа
-
-					/* 
-					itemValidator.costValidate(bodyItem);
-					priceValidator.amountValidate(bodyItem.getPrices());
-		 			*/
-
 		// Включение (active = true) 
 		bodyItem.setActive(true);
 		// Представление Id в JSON

@@ -57,9 +57,11 @@ public class Currency {
 		this.code = currencyBody.code;
 		this.active = currencyBody.active;
 	}
-
+	// Вот здесь происходит создание 
 	public Currency(String code) {
+		
 		this.code = code;
-	}
+
+	} 
 	
 }

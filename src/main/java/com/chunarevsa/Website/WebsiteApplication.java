@@ -2,6 +2,7 @@ package com.chunarevsa.Website;
 
 import com.chunarevsa.Website.dto.Currency.CurrencyValidator;
 import com.chunarevsa.Website.dto.Item.ItemValidator;
+import com.chunarevsa.Website.dto.Price.PriceValidator;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,13 +21,29 @@ public class WebsiteApplication {
 		return new CurrencyValidator();
 	}
 
+	/* @Bean
+	public PriceValidator priceValidator() {
+		return new PriceValidator();
+	} */
+
 	public static void main(String[] args) throws Throwable {
 		SpringApplication.run(WebsiteApplication.class, args);
 
 	} 
 }
 
-// Вынести бины в конфигурацию
-// Нужно ли у Price пункт actice?
-// Подключить изменение валют в Price Service b PriceValidator
-// Где должна проходить проверку на незаполенные данные и адекватный формат числа для price?
+/* Общие вопросы задачи
+	- Вынести бины в конфигурацию
+*/
+/* TSA-2
+	-  Как должна происходить ковертация валют? 
+*/
+/* TSA-9
+	- Нужно ли у Price пункт actice?
+	- Подключить изменение валют в Price Service b PriceValidator
+	- Где должна проходить проверку на незаполенные данные 
+	и адекватный формат числа для price?
+ */
+
+
+
