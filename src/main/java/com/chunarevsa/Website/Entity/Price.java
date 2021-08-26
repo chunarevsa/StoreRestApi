@@ -8,11 +8,27 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
+import com.chunarevsa.Website.Exception.AllException;
+import com.chunarevsa.Website.Exception.NotFound;
+import com.chunarevsa.Website.repo.CurrencyRepository;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 
 @Entity
 public class Price {	
+	
+	@Transient
+	@JsonIgnore
+	@Autowired
+	private CurrencyRepository currencyRepository;
+	public Price (CurrencyRepository currencyRepository) {
+		this.currencyRepository = currencyRepository;
+	}
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,6 +56,22 @@ public class Price {
 	/* public void setCurrency(Currency currency) {
 		this.currency = currency;
 	} */
+
+	private String currencyCode;
+
+	public String getCurrencyCode() {
+		return this.currencyCode;
+	}
+
+	public void setCurrencyCode(String currencyCode) throws AllException {
+		Boolean trt = currencyRepository.findByCode(currencyCode).isEmpty();
+			if (trt == true) {
+				throw new NotFound(HttpStatus.NOT_FOUND);
+			}
+
+		this.currencyCode = currencyCode;
+
+	}
 
 
 	@JsonIgnore
@@ -73,9 +105,18 @@ public class Price {
 	public Price() {
 	}
 
-	public Price(Price priceBody) {
+	public Price(Price priceBody) throws AllException {
 		this.amount = priceBody.amount;
-		// this.currency = priceBody.currency; 
+		try {
+			Boolean trt = currencyRepository.findByCode(priceBody.currencyCode).isEmpty();
+			if (trt == true) {
+				throw new NotFound(HttpStatus.NOT_FOUND);
+			}
+		} catch (Exception e) {
+			throw new NotFound(HttpStatus.NOT_FOUND);
+		}
+
+		this.currencyCode = priceBody.currencyCode;
 		this.item = priceBody.item;
 	}
 
