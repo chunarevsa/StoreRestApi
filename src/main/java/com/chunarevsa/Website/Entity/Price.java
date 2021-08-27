@@ -21,9 +21,8 @@ import org.springframework.http.HttpStatus;
 @Entity
 public class Price {	
 	
-	@Transient
-	@JsonIgnore
 	@Autowired
+	@Transient
 	private CurrencyRepository currencyRepository;
 	public Price (CurrencyRepository currencyRepository) {
 		this.currencyRepository = currencyRepository;
@@ -64,11 +63,11 @@ public class Price {
 	}
 
 	public void setCurrencyCode(String currencyCode) throws AllException {
-		Boolean trt = currencyRepository.findByCode(currencyCode).isEmpty();
-			if (trt == true) {
+		/* Boolean trt = currencyRepository.findByCode(currencyCode).isEmpty();
+			if (trt == false) {
 				throw new NotFound(HttpStatus.NOT_FOUND);
-			}
-
+			} 
+ */
 		this.currencyCode = currencyCode;
 
 	}
@@ -115,11 +114,7 @@ public class Price {
 		} catch (Exception e) {
 			throw new NotFound(HttpStatus.NOT_FOUND);
 		}
-
 		this.currencyCode = priceBody.currencyCode;
 		this.item = priceBody.item;
 	}
-
-
-
 }
