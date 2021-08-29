@@ -1,5 +1,7 @@
 package com.chunarevsa.Website.controllers;
 
+import java.util.Set;
+
 import com.chunarevsa.Website.Entity.Currency;
 import com.chunarevsa.Website.Exception.AllException;
 import com.chunarevsa.Website.dto.IdByJson;
@@ -42,7 +44,16 @@ public class CurrencyController {
 	public Page<Currency> currencyFindAll (@PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) { 
 		// Сортировка по 10 элементов и только со значением active = true
 		Page<Currency> pageCurrency =  currencyRepository.findByActive(true, pageable);
+
 		return pageCurrency;
+	}
+
+	@RequestMapping (path = "/currencyCode/{code}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Currency currenciesFindByCodeSet (@PathVariable(value = "code") String code) { 
+		// Сортировка по 10 элементов и только со значением active = true
+		Currency setCurrency =  currencyRepository.findByCode(code);
+		
+		return setCurrency;
 	}
 
 	// Получение по id

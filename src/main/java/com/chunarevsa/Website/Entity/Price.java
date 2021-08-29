@@ -5,9 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 import com.chunarevsa.Website.Exception.AllException;
@@ -28,34 +26,11 @@ public class Price {
 		this.currencyRepository = currencyRepository;
 	}
 
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	private String amount;
-	
-	/* @OneToOne (cascade = CascadeType.ALL) 
-	// Работает тольков при cacadeType.ALL
-	@JoinColumn (name = "currency_code", referencedColumnName = "code") 
-	private Currency currency;
-
-	// code из Запроса проходит здесь 
-	public Currency getCurrency() {
-		Currency currency = this.currency;
-		currency.setActive(true);
-		currency.setCode("code");   
-		// это я пытался понять где происходить созадние, 
-		// путём последовательного изм данных
-
-		return currency;
-
-	}  */
-
-	/* public void setCurrency(Currency currency) {
-		this.currency = currency;
-	} */
-
 	private String currencyCode;
 
 	public String getCurrencyCode() {
@@ -63,12 +38,14 @@ public class Price {
 	}
 
 	public void setCurrencyCode(String currencyCode) throws AllException {
-		/* Boolean trt = currencyRepository.findByCode(currencyCode).isEmpty();
-			if (trt == false) {
-				throw new NotFound(HttpStatus.NOT_FOUND);
-			} 
- */
-		this.currencyCode = currencyCode;
+		
+		/* Currency cur = currencyRepository.findByCode(currencyCode);
+		if (cur.getCode().isEmpty() == true) {
+			this.currencyCode = "Ошибка";
+			throw new NotFound(HttpStatus.NOT_FOUND);
+		} */
+
+		this.currencyCode = currencyRepository.findByCode(currencyCode)
 
 	}
 
@@ -106,15 +83,21 @@ public class Price {
 
 	public Price(Price priceBody) throws AllException {
 		this.amount = priceBody.amount;
-		try {
-			Boolean trt = currencyRepository.findByCode(priceBody.currencyCode).isEmpty();
-			if (trt == true) {
-				throw new NotFound(HttpStatus.NOT_FOUND);
-			}
-		} catch (Exception e) {
+		
+		Currency cur = currencyRepository.findByCode(priceBody.currencyCode);
+		if (cur.getCode().isEmpty() == true) {
+			this.currencyCode = "Ошибка";
 			throw new NotFound(HttpStatus.NOT_FOUND);
 		}
-		this.currencyCode = priceBody.currencyCode;
+
+		
+
+		/* Boolean boo = currencyRepository.findByCodOptional(priceBody.currencyCode).isPresent();
+		if (boo == false) {
+			throw new NotFound(HttpStatus.NOT_FOUND);
+		} */
+
+		//this.currencyCode = priceBody.currencyCode;
 		this.item = priceBody.item;
 	}
 }

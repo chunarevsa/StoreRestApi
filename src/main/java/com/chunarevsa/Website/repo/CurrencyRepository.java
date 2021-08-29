@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.repo;
 
-import java.util.Set;
+import java.util.Optional;
 
 import com.chunarevsa.Website.Entity.Currency;
 
@@ -16,6 +16,8 @@ public interface CurrencyRepository extends CrudRepository <Currency, Long> {
 		// Только active = true
 	Page <Currency> findByActive (boolean active, Pageable pageable);
 	// 
-	Set <String> findByCode (String code);
+	Currency findByCode (String code);
+
+	//Optional<Currency> findByCodOptional (String code);
 
 }
