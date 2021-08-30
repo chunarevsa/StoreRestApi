@@ -38,14 +38,18 @@ public class Price {
 	}
 
 	public void setCurrencyCode(String currencyCode) throws AllException {
-		
+		 
+		// 1 вар - не подгружается репозиторий
 		/* Currency cur = currencyRepository.findByCode(currencyCode);
 		if (cur.getCode().isEmpty() == true) {
 			this.currencyCode = "Ошибка";
 			throw new NotFound(HttpStatus.NOT_FOUND);
 		} */
 
-		this.currencyCode = currencyRepository.findByCode(currencyCode)
+		//this.currencyCode = currencyRepository.findByCode(currencyCode)
+
+
+		this.currencyCode = currencyCode;
 
 	}
 
