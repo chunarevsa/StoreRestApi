@@ -11,7 +11,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /* Версия (рабочая) Item->Price (One to Many -> Many to One ). 
 Связь отображается в таблице price, в колонке item id
-без проверки по репе и без связи price-> currency*/
+Проверка по репе в ItemController и без связи price->currency
+Если норм, прикрутить проверку на данные и изменить на новую ошибку.
+Также изменить Exception в try_catch  на Null*/
 
 @Entity
 public class Price {	
@@ -20,8 +22,7 @@ public class Price {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private String amount;
-	private String currencyCode;
+	private String amount, currencyCode;
 
 	@JsonIgnore
 	@ManyToOne 

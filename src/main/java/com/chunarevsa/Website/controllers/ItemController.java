@@ -1,7 +1,12 @@
 package com.chunarevsa.Website.controllers;
 
+import java.util.Set;
+
+import com.chunarevsa.Website.Entity.Currency;
 import com.chunarevsa.Website.Entity.Item;
+import com.chunarevsa.Website.Entity.Price;
 import com.chunarevsa.Website.Exception.AllException;
+import com.chunarevsa.Website.Exception.NotFound;
 import com.chunarevsa.Website.dto.Response;
 import com.chunarevsa.Website.dto.Item.ItemValidator;
 import com.chunarevsa.Website.repo.CurrencyRepository;
@@ -73,7 +78,17 @@ public class ItemController {
 	@ResponseStatus (value = HttpStatus.CREATED)	
 	public Item createdItem (@RequestBody Item bodyItem) throws AllException {
 
-		
+		// Проверка на наличие валюты в репе
+		Set<Price> pricesSet = bodyItem.getPrices();
+		for (Price price : pricesSet) {
+			try {
+				Currency currency = currencyRepository.findByCode(price.getCurrencyCode());
+				currency.getCode();
+			} catch (Exception e) { // потом сделать NullPoint
+				throw new NotFound(HttpStatus.NOT_FOUND);
+			}
+		}	
+
 		priceRepository.saveAll(bodyItem.getPrices());
 
 		// Проверка на незаполеннные данные
