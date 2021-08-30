@@ -10,6 +10,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
+
+/* Версия (рабочая) Item->Price (One to Many -> Many to One ). 
+Связь отображается в таблице price, в колонке item id
+без проверки по репе и без связи price-> currency*/
+
 @Entity
 public class Item 
 {
@@ -31,6 +36,7 @@ public class Item
 	public void setPrices(Set<Price> prices) {
 		this.prices = prices;
 	}
+
 	
 	// Getter and Setter
 	public Long getId() {

@@ -8,9 +8,16 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+
+/* Версия (рабочая) Item->Price (One to Many -> Many to One ). 
+Связь отображается в таблице price, в колонке item id
+без проверки по репе и без связи price-> currency*/
+
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(name = "UniqueCode", columnNames = { "code"}) })
 public class Currency {
+
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")

@@ -4,6 +4,7 @@ import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Exception.AllException;
 import com.chunarevsa.Website.dto.Response;
 import com.chunarevsa.Website.dto.Item.ItemValidator;
+import com.chunarevsa.Website.repo.CurrencyRepository;
 import com.chunarevsa.Website.repo.ItemRepository;
 import com.chunarevsa.Website.repo.PriceRepository;
 
@@ -34,14 +35,18 @@ public class ItemController {
 	private ItemValidator itemValidator;
 	@Autowired 
 	private PriceRepository priceRepository;
+	@Autowired
+	private CurrencyRepository currencyRepository;
 	
 	public ItemController (
 		ItemRepository itemRepository, 
 		ItemValidator itemValidator, 
-		PriceRepository priceRepository) {
+		PriceRepository priceRepository,
+		CurrencyRepository currencyRepository) {
 			this.itemRepository = itemRepository;
 			this.itemValidator = itemValidator;
 			this.priceRepository = priceRepository;
+			this.currencyRepository = currencyRepository;
 	}
 
 	// Получение списка всех Items с ограничением страницы (10)
@@ -68,6 +73,7 @@ public class ItemController {
 	@ResponseStatus (value = HttpStatus.CREATED)	
 	public Item createdItem (@RequestBody Item bodyItem) throws AllException {
 
+		
 		priceRepository.saveAll(bodyItem.getPrices());
 
 		// Проверка на незаполеннные данные
