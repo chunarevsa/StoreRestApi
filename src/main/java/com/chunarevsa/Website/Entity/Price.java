@@ -1,10 +1,10 @@
 package com.chunarevsa.Website.Entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.chunarevsa.Website.Exception.AllException;
@@ -52,7 +52,12 @@ public class Price {
 
 
 	@JsonIgnore
-	@ManyToOne (cascade = CascadeType.ALL)
+	@ManyToOne 
+	@JoinColumn (
+		name = "item_id", 
+		insertable = false, 
+		updatable = false, 
+		nullable = false)
 	private Item item;
 
 	public Item getItem() {
