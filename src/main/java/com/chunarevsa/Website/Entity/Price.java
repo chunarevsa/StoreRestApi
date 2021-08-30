@@ -7,19 +7,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.chunarevsa.Website.Exception.AllException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
 public class Price {	
-	
-	/* @Autowired
-	@Transient
-	private CurrencyRepository currencyRepository;
-	public Price (CurrencyRepository currencyRepository) {
-		this.currencyRepository = currencyRepository;
-	} */
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,36 +20,12 @@ public class Price {
 	private String amount;
 	private String currencyCode;
 
-	public String getCurrencyCode() {
-		return this.currencyCode;
-	}
-
-	public void setCurrencyCode(String currencyCode) throws AllException {
-		
-		// 1 вар - не подгружается репозиторий 
-		/* try {
-			currencyRepository.findByCode(currencyCode);
-			this.currencyCode = currencyCode;
-		} catch (Exception e) {
-			this.currencyCode = "Ошибка";
-		}  */
-
-		/* if (currencyRepository.findByCode(currencyCode).getCode() != currencyCode) {
-			this.currencyCode = "Ошибка";
-		} */
-
-		this.currencyCode = "Заданный код из set";
-
-	}
-
-
 	@JsonIgnore
 	@ManyToOne 
 	@JoinColumn (
 		name = "item_id", 
 		insertable = false, 
-		updatable = false, 
-		nullable = false)
+		updatable = false)
 	private Item item;
 
 	public Item getItem() {
@@ -66,6 +34,14 @@ public class Price {
 
 	public void setItem(Item item) {
 		this.item = item;
+	}
+
+	public String getCurrencyCode() {
+		return this.currencyCode;
+	}
+
+	public void setCurrencyCode(String currencyCode) {
+		this.currencyCode = currencyCode;
 	}
 
 	public Long getId() {
@@ -87,11 +63,9 @@ public class Price {
 	public Price() {
 	}
 
-	public Price(Price priceBody) throws AllException {
-		
+	public Price(Price priceBody)  {
 		this.amount = priceBody.amount;
 		this.currencyCode = priceBody.currencyCode;
 		this.item = priceBody.item;
-
 	}
 }

@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -20,6 +21,7 @@ public class Item
 	private boolean active;
 
 	@OneToMany
+	@JoinColumn (name = "item_id")
 	private Set<Price> prices = new HashSet<>();
 
 	public Set<Price> getPrices() {
