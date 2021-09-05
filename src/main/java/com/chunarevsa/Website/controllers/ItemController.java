@@ -2,7 +2,7 @@ package com.chunarevsa.Website.controllers;
 
 import java.util.Set;
 
-import com.chunarevsa.Website.Entity.Currency;
+import com.chunarevsa.Website.Entity.Currency1;
 import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Entity.Price;
 import com.chunarevsa.Website.Exception.AllException;
@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 
 @RestController
 public class ItemController {
@@ -82,7 +81,7 @@ public class ItemController {
 		Set<Price> pricesSet = bodyItem.getPrices();
 		for (Price price : pricesSet) {
 			try {
-				Currency currency = currencyRepository.findByCode(price.getCurrencyCode());
+				Currency1 currency = currencyRepository.findByCode(price.getCurrencyCode());
 				currency.getCode();
 			} catch (Exception e) { // потом сделать NullPoint
 				throw new NotFound(HttpStatus.NOT_FOUND);

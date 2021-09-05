@@ -1,7 +1,7 @@
 package com.chunarevsa.Website.controllers;
 
 
-import com.chunarevsa.Website.Entity.Currency;
+import com.chunarevsa.Website.Entity.Currency1;
 import com.chunarevsa.Website.Exception.AllException;
 import com.chunarevsa.Website.dto.IdByJson;
 import com.chunarevsa.Website.dto.Response;
@@ -40,27 +40,27 @@ public class CurrencyController {
 
 	// Получение списка всех Currency с ограничением страницы (10)
 	@RequestMapping (path = "/currency", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<Currency> currencyFindAll (@PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) { 
+	public Page<Currency1> currencyFindAll (@PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) { 
 		// Сортировка по 10 элементов и только со значением active = true
-		Page<Currency> pageCurrency =  currencyRepository.findByActive(true, pageable);
+		Page<Currency1> pageCurrency =  currencyRepository.findByActive(true, pageable);
 
 		return pageCurrency;
 	}
 
 	@RequestMapping (path = "/currencyCode/{code}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Currency currenciesFindByCodeSet (@PathVariable(value = "code") String code) { 
+	public Currency1 currenciesFindByCodeSet (@PathVariable(value = "code") String code) { 
 		// Сортировка по 10 элементов и только со значением active = true
-		Currency setCurrency =  currencyRepository.findByCode(code);
+		Currency1 setCurrency =  currencyRepository.findByCode(code);
 		
 		return setCurrency;
 	}
 
 	// Получение по id
 	@RequestMapping (path = "/currency/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Currency currencyMethod (@PathVariable(value = "id") long id) throws AllException { 
+	public Currency1 currencyMethod (@PathVariable(value = "id") long id) throws AllException { 
 		// Проверка на наличие 
 		currencyValidator.currencyIsPresent(id, currencyRepository);
-		Currency currency = currencyRepository.findById(id).orElseThrow();
+		Currency1 currency = currencyRepository.findById(id).orElseThrow();
 		// Вывести только в случае active = true
 		currencyValidator.activeValidate(currency.getId(), currency);
 		return currency;
@@ -69,7 +69,7 @@ public class CurrencyController {
 	// Добавление 
 	@PostMapping(value = "/currency", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus (value = HttpStatus.CREATED)	
-	public IdByJson createdCurrency (@RequestBody Currency bodyCurrency) throws AllException {
+	public IdByJson createdCurrency (@RequestBody Currency1 bodyCurrency) throws AllException {
 		currencyValidator.bodyIsNotEmpty(bodyCurrency);
 		// Включение (active = true) 
 		bodyCurrency.setActive(true);
@@ -79,13 +79,13 @@ public class CurrencyController {
 				
 	 // Изменение
 	@PutMapping(value = "/currency/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Currency editCurrency (@PathVariable(value = "id") long id, @RequestBody Currency bodyCurrency) throws AllException {
+	public Currency1 editCurrency (@PathVariable(value = "id") long id, @RequestBody Currency1 bodyCurrency) throws AllException {
 		// Проверка на наличие 
 		currencyValidator.currencyIsPresent(id, currencyRepository);
 		// Проверка на запленные данные
 		currencyValidator.bodyIsNotEmpty(bodyCurrency);
 		// Запись параметров
-		Currency currency = currencyValidator.overrideItem(id, bodyCurrency, currencyRepository);
+		Currency1 currency = currencyValidator.overrideItem(id, bodyCurrency, currencyRepository);
 		return currency;
 	} 
 
@@ -94,7 +94,7 @@ public class CurrencyController {
 	public Response deleteCurrency (@PathVariable(value = "id") long id) throws AllException {
 		// Проверка на наличие
 		currencyValidator.currencyIsPresent(id, currencyRepository);
-		Currency currency = currencyRepository.findById(id).orElseThrow();
+		Currency1 currency = currencyRepository.findById(id).orElseThrow();
 		// Проверка не выключен ли active = true
 		currencyValidator.activeValidate(currency.getId(), currency);
 		// Выключение active = false

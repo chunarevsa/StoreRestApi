@@ -17,7 +17,7 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(name = "UniqueCode", columnNames = { "code"}) })
-public class Currency {
+public class Currency1 {
 
 	
 	@Id
@@ -59,10 +59,10 @@ public class Currency {
 
 	}
 	
-	public Currency() {
+	public Currency1() {
 	}
 	
-	public Currency(Currency currencyBody) {
+	public Currency1(Currency1 currencyBody) {
 		this.code = currencyBody.code;
 		this.active = currencyBody.active;
 	}
