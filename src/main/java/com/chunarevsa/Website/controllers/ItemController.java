@@ -2,7 +2,7 @@ package com.chunarevsa.Website.controllers;
 
 import java.util.Set;
 
-import com.chunarevsa.Website.Entity.Currency1;
+import com.chunarevsa.Website.Entity.Currency;
 import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Entity.Price;
 import com.chunarevsa.Website.Exception.AllException;
@@ -81,14 +81,14 @@ public class ItemController {
 		Set<Price> pricesSet = bodyItem.getPrices();
 		for (Price price : pricesSet) {
 			try {
-				Currency1 currency = currencyRepository.findByCode(price.getCurrencyCode());
+				Currency currency = currencyRepository.findByCode(price.getCurrencyCode());
 				currency.getCode();
 			} catch (Exception e) { // потом сделать NullPoint
 				throw new NotFound(HttpStatus.NOT_FOUND);
 			}
 		}	
 
-		priceRepository.saveAll(bodyItem.getPrices());
+		priceRepository.saveAll(bodyItem.getPrices()); // Перенести перед сохранением item 
 
 		// Проверка на незаполеннные данные
 		itemValidator.bodyIsNotEmpty(bodyItem);

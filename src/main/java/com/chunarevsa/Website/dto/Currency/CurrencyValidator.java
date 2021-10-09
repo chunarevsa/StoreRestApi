@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.dto.Currency;
 
-import com.chunarevsa.Website.Entity.Currency1;
+import com.chunarevsa.Website.Entity.Currency;
 import com.chunarevsa.Website.Exception.DublicateCurrency;
 import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.Exception.NotFound;
@@ -21,7 +21,7 @@ public class CurrencyValidator implements CurrencyService{
 
 	// Проверка не выключен ли active = true
 	@Override
-	public void activeValidate (long id, Currency1 currency) throws NotFound {
+	public void activeValidate (long id, Currency currency) throws NotFound {
 		if (currency.getActive() == false) {
 			throw new NotFound(HttpStatus.NOT_FOUND);
 		}
@@ -29,7 +29,7 @@ public class CurrencyValidator implements CurrencyService{
 
 	// Проверка на незаполеннные данные
 	@Override
-	public void bodyIsNotEmpty (Currency1 bodyCurrency) throws FormIsEmpty {
+	public void bodyIsNotEmpty (Currency bodyCurrency) throws FormIsEmpty {
 		if (bodyCurrency.getCode().isEmpty() == true) {
 			throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
 		}
@@ -37,7 +37,7 @@ public class CurrencyValidator implements CurrencyService{
 
 	// Представление Id в JSON
 	@Override
-	public IdByJson getIdByJson (Currency1 bodyCurrency, CurrencyRepository currencyRepository) throws DublicateCurrency {
+	public IdByJson getIdByJson (Currency bodyCurrency, CurrencyRepository currencyRepository) throws DublicateCurrency {
 		try {
 			currencyRepository.save(bodyCurrency);
 		} catch (Exception e) {
@@ -49,8 +49,8 @@ public class CurrencyValidator implements CurrencyService{
 
 	// Запись параметров
 	@Override
-	public Currency1 overrideItem (long id, Currency1 bodyCurrency, CurrencyRepository currencyRepository) throws DublicateCurrency {
-		Currency1 currency = currencyRepository.findById(id).orElseThrow();
+	public Currency overrideItem (long id, Currency bodyCurrency, CurrencyRepository currencyRepository) throws DublicateCurrency {
+		Currency currency = currencyRepository.findById(id).orElseThrow();
 		currency.setCode(bodyCurrency.getCode());
 		// Возможность вернуть удалённый (active = false) обратно (active = true)
 		currency.setActive(bodyCurrency.getActive());
