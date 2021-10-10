@@ -1,49 +1,35 @@
 package com.chunarevsa.Website.service;
 
+
 import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.Exception.NotFound;
 import com.chunarevsa.Website.dto.IdByJson;
+import com.chunarevsa.Website.dto.Response;
 import com.chunarevsa.Website.repo.ItemRepository;
-import com.chunarevsa.Website.service.inter.ItemServiceInterface;
+import com.chunarevsa.Website.service.valid.CurrencyValid;
+import com.chunarevsa.Website.service.valid.ItemValid;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ItemService implements ItemServiceInterface{
+public class ItemService {
 
-	// Проверка на наличие 
-	@Override
-	public void itemIsPresent (long id, ItemRepository itemRepository) throws NotFound{
-		Boolean item = itemRepository.findById(id).isPresent();
-		if (item == false) {
-			throw new NotFound(HttpStatus.NOT_FOUND);
-		}	 
-	}
+	private final ItemValid itemValid;
+	private final ItemRepository itemRepository;
+	private final PriceService priceService;
 
-	// Проверка не выключен ли active = true
-	@Override
-	public void activeValidate (long id, Item item) throws NotFound {
-		if (item.getActive() == false) {
-			throw new NotFound(HttpStatus.NOT_FOUND);
-		}
-	}
-
-	// Проверка на незаполеннные данные
-	@Override
-	public void bodyIsNotEmpty (Item bodyItem) throws FormIsEmpty {
-		if (
-		bodyItem.getName().isEmpty() == true || 
-		bodyItem.getSku().isEmpty() == true || 
-		bodyItem.getType().isEmpty() == true || 
-		bodyItem.getDescription().isEmpty() == true) {
-			throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
-		}
+	public ItemService(
+				ItemValid itemValid, 
+				ItemRepository itemRepository,
+				CurrencyValid currencyValid,
+				PriceService priceService) {
+		this.itemValid = itemValid;
+		this.itemRepository = itemRepository;
+		this.priceService = priceService;
 	}
 
 	// Представление Id в JSON
-	@Override
 	public IdByJson getIdByJson (Item bodyItem, ItemRepository itemRepository) {
 		itemRepository.save(bodyItem);
 		IdByJson idByJson = new IdByJson(bodyItem.getId());
@@ -51,8 +37,13 @@ public class ItemService implements ItemServiceInterface{
 	}
 
 	// Запись параметров
-	@Override
-	public Item overrideItem (long id, Item bodyItem, ItemRepository itemRepository) {
+	public Item overrideItem (long id, Item bodyItem) throws NotFound, FormIsEmpty {
+		// Проверка на наличие 
+		itemValid.itemIsPresent(id);
+		// Проверка на незаполеннные данные
+		itemValid.bodyIsNotEmpty(bodyItem);
+		// Проверка на формат числа
+		
 		Item item = itemRepository.findById(id).orElseThrow();
 		item.setSku(bodyItem.getSku());
 		item.setName(bodyItem.getName());
@@ -61,7 +52,40 @@ public class ItemService implements ItemServiceInterface{
 		// Возможность вернуть удалённый (active = false) обратно (active = true)
 		item.setActive(bodyItem.getActive());
 		item.setPrices(bodyItem.getPrices());
+		// Запись параметров
+		itemRepository.save(item);
 		return item;
+	}
+
+	public Item getItem (Long id) throws NotFound {
+		// Проверка на наличие 
+		itemValid.itemIsPresent(id);
+		// Выводим только в случае active = true 
+		itemValid.itemIsActive(id);
+		return itemRepository.findById(id).orElseThrow();
+	}
+
+
+	public Item addItem(Item bodyItem) throws NotFound, FormIsEmpty {
+		// Проверка на наличие валюты в репе
+		priceService.saveAllPrice(bodyItem);
+		// Проверка на незаполеннные данные
+		itemValid.bodyIsNotEmpty(bodyItem);
+		// Включение (active = true) 
+		bodyItem.setActive(true);
+		return itemRepository.save(bodyItem);
+	}
+
+	public Response deleteItem(long id) throws NotFound {
+		// Проверка на наличие 
+		itemValid.itemIsPresent(id);
+		// Проверка не выключен ли active = true
+		itemValid.itemIsActive(id);
+
+		Item item = itemRepository.findById(id).orElseThrow();
+		item.setActive(false);
+		itemRepository.save(item);
+		return new Response(item.getActive());
 	}
 	
 	

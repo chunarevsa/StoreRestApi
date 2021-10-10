@@ -1,18 +1,33 @@
 package com.chunarevsa.Website.service;
 
+import java.util.*;
+
+import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Entity.Price;
 import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.Exception.InvalidPriceFormat;
-import com.chunarevsa.Website.service.inter.PriceServiceInterface;
+import com.chunarevsa.Website.Exception.NotFound;
+import com.chunarevsa.Website.repo.PriceRepository;
+import com.chunarevsa.Website.service.valid.CurrencyValid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PriceService implements PriceServiceInterface {
+public class PriceService  {
+
+	private final PriceRepository priceRepository;
+	private final CurrencyValid currencyValid;
+
+	public PriceService(
+				CurrencyValid currencyValid,
+				PriceRepository priceRepository) {
+		this.currencyValid = currencyValid;
+		this.priceRepository = priceRepository;
+	}
+
 
 	// Проверка на формат числа
-	@Override
 	public void amountValidate (Price priceBody) throws InvalidPriceFormat {
 		int i = Integer.parseInt(priceBody.getAmount());
 		if (i < 0) {
@@ -21,12 +36,24 @@ public class PriceService implements PriceServiceInterface {
 	}
 
 	// Проверка на незаполеннные данные
-	@Override
+	
 	public void bodyIsNotEmpty (Price priceBody) throws FormIsEmpty {
 		if (
 		priceBody.getAmount().isEmpty() == true) {
 			throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
 		}
+	}
+
+	public void saveAllPrice(Item bodyItem) throws NotFound {
+		Set<Price> pricesSet = bodyItem.getPrices();
+		for (Price price : pricesSet) {
+			try {
+				currencyValid.currencyIsPresent(price.getCurrencyCode());
+			} catch (Exception e) { // потом сделать NullPoint
+				throw new NotFound(HttpStatus.NOT_FOUND);
+			}
+		}	
+		priceRepository.saveAll(bodyItem.getPrices());
 	}
 
 	/* @Override
