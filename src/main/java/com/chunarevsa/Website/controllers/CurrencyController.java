@@ -1,14 +1,12 @@
 package com.chunarevsa.Website.controllers;
 
-
 import com.chunarevsa.Website.Entity.Currency;
 import com.chunarevsa.Website.Exception.AllException;
 import com.chunarevsa.Website.dto.IdByJson;
 import com.chunarevsa.Website.dto.Response;
 import com.chunarevsa.Website.repo.CurrencyRepository;
-import com.chunarevsa.Website.valid.CurrencyValidator;
+import com.chunarevsa.Website.service.CurrencyService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -29,13 +27,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CurrencyController {
 	
-	@Autowired
+	/* @Autowired
 	private CurrencyRepository currencyRepository;
 	@Autowired
-	private CurrencyValidator currencyValidator;
-	public CurrencyController (CurrencyRepository currencyRepository, CurrencyValidator currencyValidator) {
+	private CurrencyValidator currencyValidator; */
+	private final CurrencyRepository currencyRepository;
+	private final CurrencyService currencyService;
+	public CurrencyController (CurrencyRepository currencyRepository, CurrencyService currencyService) {
 		this.currencyRepository = currencyRepository;
-		this.currencyValidator = currencyValidator;
+		this.currencyService = currencyService;
 	}
 
 	// Получение списка всех Currency с ограничением страницы (10)
@@ -59,10 +59,10 @@ public class CurrencyController {
 	@RequestMapping (path = "/currency/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Currency currencyMethod (@PathVariable(value = "id") long id) throws AllException { 
 		// Проверка на наличие 
-		currencyValidator.currencyIsPresent(id, currencyRepository);
+		currencyService.currencyIsPresent(id, currencyRepository);
 		Currency currency = currencyRepository.findById(id).orElseThrow();
 		// Вывести только в случае active = true
-		currencyValidator.activeValidate(currency.getId(), currency);
+		currencyService.activeValidate(currency.getId(), currency);
 		return currency;
 	} 
 
@@ -70,22 +70,22 @@ public class CurrencyController {
 	@PostMapping(value = "/currency", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus (value = HttpStatus.CREATED)	
 	public IdByJson createdCurrency (@RequestBody Currency bodyCurrency) throws AllException {
-		currencyValidator.bodyIsNotEmpty(bodyCurrency);
+		currencyService.bodyIsNotEmpty(bodyCurrency);
 		// Включение (active = true) 
 		bodyCurrency.setActive(true);
 		// Представление Id в JSON
-		return currencyValidator.getIdByJson(bodyCurrency, currencyRepository);
+		return currencyService.getIdByJson(bodyCurrency, currencyRepository);
 	} 	
 				
 	 // Изменение
 	@PutMapping(value = "/currency/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Currency editCurrency (@PathVariable(value = "id") long id, @RequestBody Currency bodyCurrency) throws AllException {
 		// Проверка на наличие 
-		currencyValidator.currencyIsPresent(id, currencyRepository);
+		currencyService.currencyIsPresent(id, currencyRepository);
 		// Проверка на запленные данные
-		currencyValidator.bodyIsNotEmpty(bodyCurrency);
+		currencyService.bodyIsNotEmpty(bodyCurrency);
 		// Запись параметров
-		Currency currency = currencyValidator.overrideItem(id, bodyCurrency, currencyRepository);
+		Currency currency = currencyService.overrideItem(id, bodyCurrency, currencyRepository);
 		return currency;
 	} 
 
@@ -93,10 +93,10 @@ public class CurrencyController {
 	@DeleteMapping(value = "/currency/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Response deleteCurrency (@PathVariable(value = "id") long id) throws AllException {
 		// Проверка на наличие
-		currencyValidator.currencyIsPresent(id, currencyRepository);
+		currencyService.currencyIsPresent(id, currencyRepository);
 		Currency currency = currencyRepository.findById(id).orElseThrow();
 		// Проверка не выключен ли active = true
-		currencyValidator.activeValidate(currency.getId(), currency);
+		currencyService.activeValidate(currency.getId(), currency);
 		// Выключение active = false
 		currency.setActive(false);
 		currencyRepository.save(currency);

@@ -8,20 +8,10 @@ public class AllException extends Throwable {
 	public HttpStatus httpStatus;
 	public AllException allException;
 
-	public HttpStatus getHttpStatus() {
-		return this.httpStatus;
-	}
+	public HttpStatus getHttpStatus() {return this.httpStatus;}
+	public void setHttpStatus(HttpStatus httpStatus) {this.httpStatus = httpStatus;}
 
-	public void setHttpStatus(HttpStatus httpStatus) {
-		this.httpStatus = httpStatus;
-	}
-
-	public String getClientMessage() {
-		return this.clientMessage;
-	}
-
-	public void setClientMessage(String clientMessage) {
-		this.clientMessage = clientMessage;
-	}
+	public String getClientMessage() {return this.clientMessage;}
+	public void setClientMessage(String clientMessage) {this.clientMessage = clientMessage;}
 	
 }

@@ -17,6 +17,4 @@ public interface CurrencyRepository extends CrudRepository <Currency, Long> {
 	// 
 	Currency findByCode (String code);
 
-	
-
 }

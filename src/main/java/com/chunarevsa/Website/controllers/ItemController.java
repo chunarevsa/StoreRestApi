@@ -11,9 +11,8 @@ import com.chunarevsa.Website.dto.Response;
 import com.chunarevsa.Website.repo.CurrencyRepository;
 import com.chunarevsa.Website.repo.ItemRepository;
 import com.chunarevsa.Website.repo.PriceRepository;
-import com.chunarevsa.Website.valid.ItemValidator;
+import com.chunarevsa.Website.service.ItemService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -33,22 +32,27 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ItemController {
 	
-	@Autowired
+	/* @Autowired
 	private ItemRepository itemRepository;	
 	@Autowired
 	private ItemValidator itemValidator;
 	@Autowired 
 	private PriceRepository priceRepository;
 	@Autowired
-	private CurrencyRepository currencyRepository;
+	private CurrencyRepository currencyRepository; */
+
+	private final ItemRepository itemRepository;	
+	private final ItemService itemService;
+	private final PriceRepository priceRepository;
+	private final CurrencyRepository currencyRepository;
 	
 	public ItemController (
 		ItemRepository itemRepository, 
-		ItemValidator itemValidator, 
+		ItemService itemService, 
 		PriceRepository priceRepository,
 		CurrencyRepository currencyRepository) {
 			this.itemRepository = itemRepository;
-			this.itemValidator = itemValidator;
+			this.itemService = itemService;
 			this.priceRepository = priceRepository;
 			this.currencyRepository = currencyRepository;
 	}
@@ -65,10 +69,10 @@ public class ItemController {
 	@RequestMapping (path = "/item/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Item itemsMethod (@PathVariable(value = "id") long id) throws AllException { 
 		// Проверка на наличие 
-		itemValidator.itemIsPresent(id, itemRepository);
+		itemService.itemIsPresent(id, itemRepository);
 		Item item = itemRepository.findById(id).orElseThrow();
 		// Выводим только в случае active = true 
-		itemValidator.activeValidate(item.getId(), item);
+		itemService.activeValidate(item.getId(), item);
 		return item;
 	} 
 
@@ -91,7 +95,7 @@ public class ItemController {
 		priceRepository.saveAll(bodyItem.getPrices()); // Перенести перед сохранением item 
 
 		// Проверка на незаполеннные данные
-		itemValidator.bodyIsNotEmpty(bodyItem);
+		itemService.bodyIsNotEmpty(bodyItem);
 		// Включение (active = true) 
 		bodyItem.setActive(true);
 		// Представление Id в JSON
@@ -104,13 +108,13 @@ public class ItemController {
 	@PutMapping(value = "/item/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Item editItem (@PathVariable(value = "id") long id, @RequestBody Item bodyItem) throws AllException {
 		// Проверка на наличие 
-		itemValidator.itemIsPresent(id, itemRepository);
+		itemService.itemIsPresent(id, itemRepository);
 		// Проверка на незаполеннные данные
-		itemValidator.bodyIsNotEmpty(bodyItem);
+		itemService.bodyIsNotEmpty(bodyItem);
 		// Проверка на формат числа
 
 		// Запись параметров
-		Item item = itemValidator.overrideItem(id, bodyItem, itemRepository);
+		Item item = itemService.overrideItem(id, bodyItem, itemRepository);
 		itemRepository.save(item);
 		return item;
 	} 
@@ -119,10 +123,10 @@ public class ItemController {
 	@DeleteMapping(value = "/item/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Response deleteItem (@PathVariable(value = "id") long id) throws AllException {
 		// Проверка на наличие 
-		itemValidator.itemIsPresent(id, itemRepository);
+		itemService.itemIsPresent(id, itemRepository);
 		Item item = itemRepository.findById(id).orElseThrow();
 		// Проверка не выключен ли active = true
-		itemValidator.activeValidate(item.getId(), item);
+		itemService.activeValidate(item.getId(), item);
 		// Выключение active = false
 		item.setActive(false);
 		itemRepository.save(item);
