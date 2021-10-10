@@ -1,10 +1,12 @@
-package com.chunarevsa.Website.dto.Item;
+package com.chunarevsa.Website.valid;
 
 import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.Exception.NotFound;
 import com.chunarevsa.Website.dto.IdByJson;
 import com.chunarevsa.Website.repo.ItemRepository;
+import com.chunarevsa.Website.service.ItemService;
+
 import org.springframework.http.HttpStatus;
 
 public class ItemValidator implements ItemService {

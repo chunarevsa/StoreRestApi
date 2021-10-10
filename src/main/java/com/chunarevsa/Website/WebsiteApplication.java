@@ -1,7 +1,7 @@
 package com.chunarevsa.Website;
 
-import com.chunarevsa.Website.dto.Currency.CurrencyValidator;
-import com.chunarevsa.Website.dto.Item.ItemValidator;
+import com.chunarevsa.Website.valid.CurrencyValidator;
+import com.chunarevsa.Website.valid.ItemValidator;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -8,10 +8,10 @@ import com.chunarevsa.Website.Entity.Price;
 import com.chunarevsa.Website.Exception.AllException;
 import com.chunarevsa.Website.Exception.NotFound;
 import com.chunarevsa.Website.dto.Response;
-import com.chunarevsa.Website.dto.Item.ItemValidator;
 import com.chunarevsa.Website.repo.CurrencyRepository;
 import com.chunarevsa.Website.repo.ItemRepository;
 import com.chunarevsa.Website.repo.PriceRepository;
+import com.chunarevsa.Website.valid.ItemValidator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

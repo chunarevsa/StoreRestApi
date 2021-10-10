@@ -1,4 +1,4 @@
-package com.chunarevsa.Website.dto.Price;
+package com.chunarevsa.Website.service;
 
 import com.chunarevsa.Website.Entity.Price;
 import com.chunarevsa.Website.Exception.FormIsEmpty;

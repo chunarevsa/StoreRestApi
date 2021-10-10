@@ -1,4 +1,4 @@
-package com.chunarevsa.Website.dto.Item;
+package com.chunarevsa.Website.service;
 
 import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Exception.FormIsEmpty;

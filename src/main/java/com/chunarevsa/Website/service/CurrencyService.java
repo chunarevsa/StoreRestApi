@@ -1,4 +1,4 @@
-package com.chunarevsa.Website.dto.Currency;
+package com.chunarevsa.Website.service;
 
 import com.chunarevsa.Website.Entity.Currency;
 import com.chunarevsa.Website.Exception.DublicateCurrency;
