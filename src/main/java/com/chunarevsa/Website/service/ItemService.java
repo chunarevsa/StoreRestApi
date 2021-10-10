@@ -5,7 +5,6 @@ import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.Exception.NotFound;
 import com.chunarevsa.Website.dto.IdByJson;
-import com.chunarevsa.Website.dto.Response;
 import com.chunarevsa.Website.repo.ItemRepository;
 import com.chunarevsa.Website.service.valid.CurrencyValid;
 import com.chunarevsa.Website.service.valid.ItemValid;
@@ -76,7 +75,7 @@ public class ItemService {
 		return itemRepository.save(bodyItem);
 	}
 
-	public Response deleteItem(long id) throws NotFound {
+	public Long deleteItem(long id) throws NotFound {
 		// Проверка на наличие 
 		itemValid.itemIsPresent(id);
 		// Проверка не выключен ли active = true
@@ -85,7 +84,7 @@ public class ItemService {
 		Item item = itemRepository.findById(id).orElseThrow();
 		item.setActive(false);
 		itemRepository.save(item);
-		return new Response(item.getActive());
+		return id;
 	}
 	
 	

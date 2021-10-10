@@ -1,19 +1,12 @@
-package com.chunarevsa.Website.Entity;
+package com.chunarevsa.Website.dto;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import com.chunarevsa.Website.Entity.Item;
+import com.chunarevsa.Website.Entity.Price;
 
-@Entity
-public class Item 
-{
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ItemModel {
 	private Long id; 
 
 	private String sku;
@@ -21,25 +14,25 @@ public class Item
 	private String type;
 	private String description;
 	private boolean active;
-
-	@OneToMany
-	@JoinColumn (name = "item_id")
 	private Set<Price> prices;
-	
-	// Конструкторы
-	public Item () {}
 
-	public Item (Item bodyItem) {
-		this.sku = bodyItem.sku;
-		this.type = bodyItem.type;
-		this.name = bodyItem.name;
-		this.description = bodyItem.description;
-		this.active = bodyItem.active;
-		this.prices = bodyItem.prices;
-	} 
+	public ItemModel() {}
 
-	// Getter and Setter
-	public Long getId() {return this.id; }
+	public static ItemModel toModel (Item item) {
+		ItemModel itemModel = new ItemModel();
+		itemModel.setId(item.getId());
+		itemModel.setSku(item.getSku());
+		itemModel.setName(item.getName());
+		itemModel.setType(item.getType());
+		itemModel.setDescription(item.getDescription());
+		itemModel.setActive(item.isActive());
+		itemModel.setPrices(item.getPrices());;
+		/* itemModel.setPrices(item.getPrices().stream()
+				.map(PriceModel::priceModel).collect(Collectors.toSet())); */
+		return itemModel;
+	}
+
+	public Long getId() {return this.id;}
 	public void setId(Long id) {this.id = id;}
 
 	public String getSku() {return this.sku;}
@@ -60,5 +53,7 @@ public class Item
 
 	public Set<Price> getPrices() {return this.prices;}
 	public void setPrices(Set<Price> prices) {this.prices = prices;}
+
+	
 
 }
