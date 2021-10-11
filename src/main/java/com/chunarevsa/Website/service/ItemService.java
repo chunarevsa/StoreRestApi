@@ -65,9 +65,8 @@ public class ItemService {
 		return itemRepository.findById(id).orElseThrow();
 	}
 	
-	public ItemModel getItemModel(Item item) {
-		
-		return null;
+	public ItemModel getItemModel(Long id) {
+		return ItemModel.toModel(itemRepository.findById(id).get());
 	}
 
 	public Item addItem(Item bodyItem) throws NotFound, FormIsEmpty {

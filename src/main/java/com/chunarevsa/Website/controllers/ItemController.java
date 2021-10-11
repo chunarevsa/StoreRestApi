@@ -2,6 +2,7 @@ package com.chunarevsa.Website.controllers;
 
 import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Exception.AllException;
+import com.chunarevsa.Website.dto.ItemModel;
 import com.chunarevsa.Website.repo.CurrencyRepository;
 import com.chunarevsa.Website.repo.ItemRepository;
 import com.chunarevsa.Website.repo.PriceRepository;
@@ -60,8 +61,7 @@ public class ItemController {
 	@RequestMapping (path = "/item/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ItemModel itemsMethod (@PathVariable(value = "id") Long id) throws AllException { 
 		itemService.getItem(id);
-		return itemService.getItemModel(itemService.getItem(id));
-
+		return itemService.getItemModel(id);
 	} 
 
 	// Добавление 
