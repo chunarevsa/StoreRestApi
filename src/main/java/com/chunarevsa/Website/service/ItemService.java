@@ -1,6 +1,5 @@
 package com.chunarevsa.Website.service;
 
-
 import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.Exception.NotFound;
@@ -10,6 +9,7 @@ import com.chunarevsa.Website.repo.ItemRepository;
 import com.chunarevsa.Website.service.valid.CurrencyValid;
 import com.chunarevsa.Website.service.valid.ItemValid;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,20 +29,25 @@ public class ItemService {
 		this.priceService = priceService;
 	}
 
-	// Представление Id в JSON
-	public IdByJson getIdByJson (Item bodyItem, ItemRepository itemRepository) {
+	// Вывод только Id в JSON
+	public IdByJson getIdByJson (Item bodyItem) {
 		itemRepository.save(bodyItem);
-		IdByJson idByJson = new IdByJson(bodyItem.getId());
-		return idByJson;
+		return new IdByJson(bodyItem.getId());
 	}
 
-	// Запись параметров
+	// Перезапись параметров
 	public Item overrideItem (long id, Item bodyItem) throws NotFound, FormIsEmpty {
 		// Проверка на наличие 
-		itemValid.itemIsPresent(id);
+		if (!itemValid.itemIsPresent(id)) {
+			throw new NotFound(HttpStatus.NOT_FOUND);
+		} 
 		// Проверка на незаполеннные данные
-		itemValid.bodyIsNotEmpty(bodyItem);
-		// Проверка на формат числа
+		 if (itemValid.bodyIsEmpty(bodyItem)) {
+			throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
+		}  
+		
+		// Проверка цен
+		 if (priceService)
 		
 		Item item = itemRepository.findById(id).orElseThrow();
 		item.setSku(bodyItem.getSku());
@@ -51,7 +56,7 @@ public class ItemService {
 		item.setDescription(bodyItem.getDescription());
 		// Возможность вернуть удалённый (active = false) обратно (active = true)
 		item.setActive(bodyItem.getActive());
-		item.setPrices(bodyItem.getPrices());
+		// item.setPrices(bodyItem.getPrices());
 		// Запись параметров
 		itemRepository.save(item);
 		return item;
@@ -59,9 +64,14 @@ public class ItemService {
 
 	public Item getItem (Long id) throws NotFound {
 		// Проверка на наличие 
-		itemValid.itemIsPresent(id);
-		// Выводим только в случае active = true 
-		itemValid.itemIsActive(id);
+		if (!itemValid.itemIsPresent(id)) {
+			throw new NotFound(HttpStatus.NOT_FOUND);
+		}
+		// Выводим только в случае active = true
+		if (!itemValid.itemIsActive(id)) {
+			throw new NotFound(HttpStatus.NOT_FOUND);
+		} 
+		
 		return itemRepository.findById(id).orElseThrow();
 	}
 	
@@ -73,7 +83,7 @@ public class ItemService {
 		// Проверка на наличие валюты в репе
 		priceService.saveAllPrice(bodyItem);
 		// Проверка на незаполеннные данные
-		itemValid.bodyIsNotEmpty(bodyItem);
+		itemValid.bodyIsEmpty(bodyItem);
 		// Включение (active = true) 
 		bodyItem.setActive(true);
 		return itemRepository.save(bodyItem);

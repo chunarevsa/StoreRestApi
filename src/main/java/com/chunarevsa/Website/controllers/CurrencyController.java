@@ -27,12 +27,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CurrencyController {
 	
-	/* @Autowired
-	private CurrencyRepository currencyRepository;
-	@Autowired
-	private CurrencyValidator currencyValidator; */
 	private final CurrencyRepository currencyRepository;
 	private final CurrencyService currencyService;
+
 	public CurrencyController (CurrencyRepository currencyRepository, CurrencyService currencyService) {
 		this.currencyRepository = currencyRepository;
 		this.currencyService = currencyService;

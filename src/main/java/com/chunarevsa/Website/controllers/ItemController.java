@@ -28,15 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ItemController {
 	
-	/* @Autowired
-	private ItemRepository itemRepository;	
-	@Autowired
-	private ItemValidator itemValidator;
-	@Autowired 
-	private PriceRepository priceRepository;
-	@Autowired
-	private CurrencyRepository currencyRepository; */
-
 	private final ItemRepository itemRepository;	
 	private final ItemService itemService;
 	

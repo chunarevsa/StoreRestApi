@@ -4,19 +4,13 @@ public class IdByJson {
 	
 	private long idByJson;
 
-	public long getIdByJson() {
-		return this.idByJson;
-	}
+	public IdByJson() {}
 
-	public void setId(long idByJson) {
-		this.idByJson = idByJson;
-	}
+	public IdByJson(long idByJson) {this.idByJson = idByJson;}
 
-	public IdByJson() {
-	}
+	public long getIdByJson() {return this.idByJson;}
+	public void setId(long idByJson) {this.idByJson = idByJson;}
 
-	public IdByJson(long idByJson) {
-		this.idByJson = idByJson;
-	}
+	
 
 }

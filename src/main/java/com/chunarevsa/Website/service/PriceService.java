@@ -9,6 +9,7 @@ import com.chunarevsa.Website.Exception.InvalidPriceFormat;
 import com.chunarevsa.Website.Exception.NotFound;
 import com.chunarevsa.Website.repo.PriceRepository;
 import com.chunarevsa.Website.service.valid.CurrencyValid;
+import com.chunarevsa.Website.service.valid.PriceValid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,13 +18,16 @@ import org.springframework.stereotype.Service;
 public class PriceService  {
 
 	private final PriceRepository priceRepository;
+	private final PriceValid priceValid;
 	private final CurrencyValid currencyValid;
 
 	public PriceService(
-				CurrencyValid currencyValid,
-				PriceRepository priceRepository) {
-		this.currencyValid = currencyValid;
+				PriceRepository priceRepository,
+				PriceValid priceValid, 
+				CurrencyValid currencyValid) {
 		this.priceRepository = priceRepository;
+		this.priceValid = priceValid;
+		this.currencyValid = currencyValid;
 	}
 
 
