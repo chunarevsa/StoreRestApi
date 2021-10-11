@@ -6,7 +6,9 @@ import com.chunarevsa.Website.Exception.NotFound;
 import com.chunarevsa.Website.repo.ItemRepository;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ItemValid {
 	
 	private final ItemRepository itemRepository;
@@ -14,6 +16,7 @@ public class ItemValid {
 	public ItemValid(ItemRepository itemRepository) {
 		this.itemRepository = itemRepository;
 	}
+
 
 	// Проверка на наличие 
 	public void itemIsPresent (long id) throws NotFound{

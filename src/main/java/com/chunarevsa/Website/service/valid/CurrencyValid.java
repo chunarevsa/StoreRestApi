@@ -3,6 +3,9 @@ package com.chunarevsa.Website.service.valid;
 import com.chunarevsa.Website.Entity.Currency;
 import com.chunarevsa.Website.repo.CurrencyRepository;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class CurrencyValid {
 
 	private final CurrencyRepository currencyRepository;

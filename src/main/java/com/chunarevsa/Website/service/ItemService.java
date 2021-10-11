@@ -4,6 +4,7 @@ package com.chunarevsa.Website.service;
 import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.Exception.NotFound;
+import com.chunarevsa.Website.dto.ItemModel;
 import com.chunarevsa.Website.dto.IdByJson;
 import com.chunarevsa.Website.repo.ItemRepository;
 import com.chunarevsa.Website.service.valid.CurrencyValid;
@@ -63,7 +64,11 @@ public class ItemService {
 		itemValid.itemIsActive(id);
 		return itemRepository.findById(id).orElseThrow();
 	}
-
+	
+	public ItemModel getItemModel(Item item) {
+		
+		return null;
+	}
 
 	public Item addItem(Item bodyItem) throws NotFound, FormIsEmpty {
 		// Проверка на наличие валюты в репе
@@ -85,7 +90,6 @@ public class ItemService {
 		item.setActive(false);
 		itemRepository.save(item);
 		return id;
-	}
-	
+	}	
 	
 }

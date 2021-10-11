@@ -58,8 +58,10 @@ public class ItemController {
 
 	// Получение по id
 	@RequestMapping (path = "/item/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Item itemsMethod (@PathVariable(value = "id") Long id) throws AllException { 
-		return itemService.getItem(id);
+	public ItemModel itemsMethod (@PathVariable(value = "id") Long id) throws AllException { 
+		itemService.getItem(id);
+		return itemService.getItemModel(itemService.getItem(id));
+
 	} 
 
 	// Добавление 
