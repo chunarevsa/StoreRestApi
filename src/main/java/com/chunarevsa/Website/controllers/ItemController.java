@@ -42,15 +42,15 @@ public class ItemController {
 
 	// Получение списка всех Items с ограничением страницы (10)
 	@RequestMapping (path = "/item", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<Item> itemsFindAll (@PageableDefault(sort = { "active"}, direction = Sort.Direction.DESC) Pageable pageable) { 
+	public Page<Item> findAllItem (@PageableDefault(sort = { "active"}, direction = Sort.Direction.DESC) Pageable pageable) { 
 		// Сортировка по 10 элементов и только со значением active = true
-		Page<Item> pageGames = itemRepository.findByActive(true, pageable);
-		return pageGames;
+		Page<Item> pageItems = itemRepository.findByActive(true, pageable);
+		return pageItems;
 	}
 
 	// Получение по id
 	@RequestMapping (path = "/item/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ItemModel itemsMethod (@PathVariable(value = "id") Long id) throws AllException { 
+	public ItemModel getOneItem (@PathVariable(value = "id") Long id) throws AllException { 
 		itemService.getItem(id);
 		return itemService.getItemModel(id);
 	} 
@@ -65,7 +65,7 @@ public class ItemController {
 	 // Изменение
 	@PutMapping(value = "/item/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Item editItem (@PathVariable(value = "id") long id, @RequestBody Item bodyItem) throws AllException {
-		return itemService.overrideItem(id, bodyItem);
+		return itemService.overridItem(id, bodyItem);
 	} 
 
    // Выключение

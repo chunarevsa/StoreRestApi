@@ -7,7 +7,6 @@ import com.chunarevsa.Website.Exception.NotFound;
 import com.chunarevsa.Website.dto.ItemModel;
 import com.chunarevsa.Website.dto.IdByJson;
 import com.chunarevsa.Website.repo.ItemRepository;
-import com.chunarevsa.Website.service.valid.CurrencyValid;
 import com.chunarevsa.Website.service.valid.ItemValid;
 
 import org.springframework.http.HttpStatus;
@@ -16,14 +15,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class ItemService {
 
-	private final ItemValid itemValid;
 	private final ItemRepository itemRepository;
+	private final ItemValid itemValid;
 	private final PriceService priceService;
 
 	public ItemService(
-				ItemValid itemValid, 
 				ItemRepository itemRepository,
-				CurrencyValid currencyValid,
+				ItemValid itemValid,
 				PriceService priceService) {
 		this.itemValid = itemValid;
 		this.itemRepository = itemRepository;
@@ -32,6 +30,7 @@ public class ItemService {
 
 	// Создание 
 	public Item addItem(Item bodyItem) throws NotFound, FormIsEmpty, InvalidPriceFormat {
+
 		// Проверка на наличие валюты в репе
 		priceService.saveAllPrice(bodyItem);
 		// Проверка на незаполеннные данные
@@ -39,6 +38,7 @@ public class ItemService {
 		// Включение (active = true) 
 		bodyItem.setActive(true);
 		return itemRepository.save(bodyItem);
+
 	}
 
 	// Получение однго итема
@@ -60,7 +60,7 @@ public class ItemService {
 	}
 
 	// Перезапись параметров
-	public Item overrideItem (long id, Item bodyItem) throws NotFound, FormIsEmpty, InvalidPriceFormat {
+	public Item overridItem (long id, Item bodyItem) throws NotFound, FormIsEmpty, InvalidPriceFormat {
 		// Проверка на наличие 
 		if (!itemValid.itemIsPresent(id)) {
 			throw new NotFound(HttpStatus.NOT_FOUND);

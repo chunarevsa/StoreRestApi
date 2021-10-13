@@ -15,7 +15,7 @@ public class User {
 	private String password;
 	private String avatar;
 	private boolean active;
-	private String created_at;
+	private String created;
 
 	// Конструкторы
 	public User(User bodyUser) {
@@ -23,7 +23,7 @@ public class User {
 		this.password = bodyUser.password;
 		this.avatar = bodyUser.avatar;
 		this.active = bodyUser.active;
-		this.created_at = bodyUser.created_at;
+		this.created = bodyUser.created;
 	}
 
 	public User() {}
@@ -45,7 +45,7 @@ public class User {
 	public boolean getActive() {return this.active;}
 	public void setActive(boolean active) {this.active = active;}
 
-	public String getCreated_at() {return this.created_at;}
-	public void setCreated_at(String created_at) {this.created_at = created_at;}
+	public String getCreated() {return this.created;}
+	public void setCreated(String created) {this.created = created;}
 
 }
