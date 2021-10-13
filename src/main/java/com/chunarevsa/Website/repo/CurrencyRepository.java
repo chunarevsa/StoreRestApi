@@ -14,7 +14,7 @@ public interface CurrencyRepository extends CrudRepository <Currency, Long> {
 	Page <Currency> findAll (Pageable pageable);
 		// Только active = true
 	Page <Currency> findByActive (boolean active, Pageable pageable);
-	// 
+		// Поиск по code
 	Currency findByCode (String code);
 
 }
