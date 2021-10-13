@@ -29,7 +29,6 @@ public class UserController {
 	private final UserRepository userRepository;
 	private final UserService userService;
 
-
 	public UserController(
 				UserRepository userRepository,
 				UserService userService) {
