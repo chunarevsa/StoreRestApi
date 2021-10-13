@@ -10,8 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Item 
-{
+public class Item {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id; 
@@ -27,8 +26,6 @@ public class Item
 	private Set<Price> prices;
 	
 	// Конструкторы
-	public Item () {}
-
 	public Item (Item bodyItem) {
 		this.sku = bodyItem.sku;
 		this.type = bodyItem.type;
@@ -37,6 +34,8 @@ public class Item
 		this.active = bodyItem.active;
 		this.prices = bodyItem.prices;
 	} 
+
+	public Item () {}
 
 	// Getter and Setter
 	public Long getId() {return this.id; }
