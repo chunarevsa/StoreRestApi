@@ -14,6 +14,7 @@ import com.chunarevsa.Website.service.valid.PriceValid;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+
 @Service
 public class PriceService  {
 
@@ -30,27 +31,15 @@ public class PriceService  {
 		this.currencyValid = currencyValid;
 	}
 
-
-	// Проверка на формат числа
-	public void amountValidate (Price priceBody) throws InvalidPriceFormat {
-		int i = Integer.parseInt(priceBody.getAmount());
-		if (i < 0) {
-			throw new InvalidPriceFormat(HttpStatus.BAD_REQUEST);
-		}
-	}
-
-	// Проверка на незаполеннные данные
-	
-	public void bodyIsNotEmpty (Price priceBody) throws FormIsEmpty {
-		if (
-		priceBody.getAmount().isEmpty() == true) {
-			throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
-		}
-	}
-
-	public void saveAllPrice(Item bodyItem) throws NotFound {
+	public void saveAllPrice(Item bodyItem) throws NotFound, InvalidPriceFormat, FormIsEmpty {
 		Set<Price> pricesSet = bodyItem.getPrices();
 		for (Price price : pricesSet) {
+			if (!priceValid.amountIsCorrect(price)) {
+				throw new InvalidPriceFormat(HttpStatus.BAD_REQUEST);
+			}
+			if (priceValid.bodyIsEmpty(price)) {
+				throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
+			}
 			try {
 				currencyValid.currencyIsPresent(price.getCurrencyCode());
 			} catch (Exception e) { // потом сделать NullPoint
@@ -59,15 +48,5 @@ public class PriceService  {
 		}	
 		priceRepository.saveAll(bodyItem.getPrices());
 	}
-
-	/* @Override
-	public Price overrideItem (long id, Price priceBody, PriceRepository priceRepository) {
-		Price price = priceRepository.findById(id).orElseThrow();
-		price.setAmount(priceBody.getAmount());
-		// Возможность вернуть удалённый (active = false) обратно (active = true)
-		price.setActive(priceBody.getActive());
-		return price;
-	} */
-
 	
 }
