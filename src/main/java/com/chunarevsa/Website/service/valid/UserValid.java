@@ -22,7 +22,7 @@ public class UserValid {
 
 	// Проверка не выключен ли active = true
 	public boolean userIsActive (Long id) {
-		return userRepository.findById(id).orElseThrow().getActive();
+		return userRepository.findById(id).orElseThrow().isActive();
 	}
 
 	// Проверка на незаполеннные данные
@@ -30,8 +30,7 @@ public class UserValid {
 		if (
 			userBody.getUsername().isEmpty()  ||
 			userBody.getPassword().isEmpty() || 
-			userBody.getAvatar().isEmpty() ||  
-			userBody.getCreated().isEmpty()) {
+			userBody.getAvatar().isEmpty()) {
 				return true;
 		}
 		return false;

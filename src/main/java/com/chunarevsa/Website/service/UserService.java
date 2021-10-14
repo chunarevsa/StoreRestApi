@@ -70,7 +70,7 @@ public class UserService {
 		user.setAvatar(userBody.getAvatar());
 		user.setCreated(userBody.getCreated());
 		// Возможность вернуть удалённый (active = false) обратно (active = true)
-		user.setActive(userBody.getActive());
+		user.setActive(userBody.isActive());
 		// Запись параметров
 		userRepository.save(user);
 		return user;

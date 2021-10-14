@@ -1,5 +1,7 @@
 package com.chunarevsa.Website.dto;
 
+import java.util.Date;
+
 import com.chunarevsa.Website.Entity.User;
 
 public class UserModel {
@@ -8,7 +10,7 @@ public class UserModel {
 
 	private String username;
 	private String avatar;
-	private String created;
+	private Date created;
 
 	public UserModel() {}
 
@@ -31,7 +33,7 @@ public class UserModel {
 	public String getAvatar() {return this.avatar;}
 	public void setAvatar(String avatar) {this.avatar = avatar;}
 
-	public String getCreated() {return this.created;}
-	public void setCreated(String created) {this.created = created;}
+	public Date getCreated() {return this.created;}
+	public void setCreated(Date created) {this.created = created;}
 
 }

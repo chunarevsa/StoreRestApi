@@ -1,36 +1,48 @@
 package com.chunarevsa.Website.Entity;
 
+import java.util.List;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+
+import lombok.Data;
+
 
 @Entity
-public class User {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+@Data 
+public class User extends Base {
 
 	private String username;
 	private String password;
 	private String avatar;
 	private boolean active;
-	private String created;
+	private UserStatus status;
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "user_roles", // связь через промежуточную таблицу через колонки:
+		//колонка 1 называется user_id и ссылается на id из user
+		joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")}, 
+		//колонка 2 называется role_id и ссылается на id из role
+		inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
+	private List<UserRole> roles;
+	
 
 	// Конструкторы
-	public User(User bodyUser) {
+	/* public User(User bodyUser) {
 		this.username  = bodyUser.username;
 		this.password = bodyUser.password;
 		this.avatar = bodyUser.avatar;
 		this.active = bodyUser.active;
-		this.created = bodyUser.created;
+		
+		super.this.created = bodyUser.created;
+		this.updated = bodyUser.updated;
+		this.status =  bodyUser.status;
 	}
 
 	public User() {}
 
 	// Getter and Setter
-	public Long getId() {return this.id;}
-	public void setId(Long id) {this.id = id;}
 
 	public String getUsername() {return this.username;}
 	public void setUsername(String username) {this.username = username;}
@@ -45,7 +57,13 @@ public class User {
 	public boolean getActive() {return this.active;}
 	public void setActive(boolean active) {this.active = active;}
 
-	public String getCreated() {return this.created;}
-	public void setCreated(String created) {this.created = created;}
+	public Date getCreated() {return this.created;}
+	public void setCreated(Date created) {this.created = created;}
 
+	public Date getUpdated() {return this.updated;}
+	public void setUpdated(Date updated) {this.updated = updated;}
+
+	public UserStatus getActiveRole() {return this.status;}
+	public void setActiveRole(UserStatus activeRole) {this.status = activeRole;}
+	 */
 }
