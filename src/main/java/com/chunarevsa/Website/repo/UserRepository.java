@@ -4,8 +4,8 @@ import java.util.*;
 
 import com.chunarevsa.Website.Entity.User;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+//import org.springframework.data.domain.Page;
+//import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 
 public interface UserRepository extends CrudRepository <User, Long> {
