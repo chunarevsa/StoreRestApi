@@ -1,5 +1,5 @@
 package com.chunarevsa.Website.controllers;
-
+/*
 import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.Exception.AllException;
 import com.chunarevsa.Website.service.RegistrationService;
@@ -29,4 +29,4 @@ public class RegistrationController {
 	public User registratedUser (@RequestBody User userBody) throws AllException {
 		return userService.addItem(userBody);
 	} 
-}
+} */

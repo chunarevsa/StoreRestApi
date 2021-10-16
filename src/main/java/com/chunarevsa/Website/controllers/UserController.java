@@ -1,5 +1,5 @@
 package com.chunarevsa.Website.controllers;
-
+/*
 import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.Exception.AllException;
 import com.chunarevsa.Website.dto.UserModel;
@@ -69,4 +69,4 @@ public class UserController {
 	public ResponseEntity deleteItem(@PathVariable(value = "id") long id) throws AllException {
 		return ResponseEntity.ok().body(userService.deleteUser(id));
 	}
-}
+} */

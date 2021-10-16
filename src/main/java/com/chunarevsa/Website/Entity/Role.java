@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.Entity;
 
-import java.util.List;
+import java.util.*;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,9 +10,9 @@ import javax.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "role")
+@Table(name = "roles")
 @Data
-public class UserRole extends Base {
+public class Role extends Base {
 
 	private String role;
 
