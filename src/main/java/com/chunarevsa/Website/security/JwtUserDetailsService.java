@@ -2,6 +2,8 @@ package com.chunarevsa.Website.security;
 
 
 import com.chunarevsa.Website.Entity.User;
+import com.chunarevsa.Website.security.jwt.JwtUser;
+import com.chunarevsa.Website.security.jwt.jwtUserFactory;
 import com.chunarevsa.Website.service.UserService;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,8 +30,9 @@ public class JwtUserDetailsService implements UserDetailsService{
 			throw new UsernameNotFoundException("User with username: " + username + " not found");
 		}
 
-		
-		return null;
+		JwtUser jwtUser = jwtUserFactory.create(user);
+		log.info("IN loadUserByUsername - user username: {} seccessfully loaded", user);
+		return jwtUser;
 	}
 	
 }
