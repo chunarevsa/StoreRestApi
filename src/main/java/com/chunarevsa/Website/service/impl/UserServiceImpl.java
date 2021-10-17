@@ -9,6 +9,7 @@ import com.chunarevsa.Website.repo.RoleRepository;
 import com.chunarevsa.Website.repo.UserRepository;
 import com.chunarevsa.Website.service.UserService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ public class UserServiceImpl implements UserService{
 	private final RoleRepository roleRepository;
 	private final BCryptPasswordEncoder passwordEncoder;
 
+	@Autowired
 	public UserServiceImpl(
 				UserRepository userRepository, 
 				RoleRepository roleRepository,
@@ -62,14 +64,21 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public User findById(Long id) {
-		User user = userRepository.findById(id).orElseThrow();
+
+		User user = userRepository.findById(id).orElse(null);
+		if (user == null) {
+			log.warn("IN findById - no user found by id: {}", id);
+			return null;
+	  }
+
+	  log.info("IN findById - user: {} found by id: {}", user);
 		return user;
 	}
 
 	@Override
 	public void delete(long id) {
 		userRepository.deleteById(id);
-		
+		log.info("IN delete - user with id: {} successfully deleted");
 	}
 	
 }

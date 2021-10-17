@@ -31,43 +31,5 @@ public class User extends Base {
 		inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
 	private List<Role> roles;
 	
-
-	// Конструкторы
-	/* public User(User bodyUser) {
-		this.username  = bodyUser.username;
-		this.password = bodyUser.password;
-		this.avatar = bodyUser.avatar;
-		this.active = bodyUser.active;
-		
-		super.this.created = bodyUser.created;
-		this.updated = bodyUser.updated;
-		this.status =  bodyUser.status;
-	}
-
-	public User() {}
-
-	// Getter and Setter
-
-	public String getUsername() {return this.username;}
-	public void setUsername(String username) {this.username = username;}
-
-	public String getPassword() {return this.password;}
-	public void setPassword(String password) {this.password = password;}
-
-	public String getAvatar() {return this.avatar;}
-	public void setAvatar(String avatar) {this.avatar = avatar;}
-
-	public boolean isActive() {return this.active;}
-	public boolean getActive() {return this.active;}
-	public void setActive(boolean active) {this.active = active;}
-
-	public Date getCreated() {return this.created;}
-	public void setCreated(Date created) {this.created = created;}
-
-	public Date getUpdated() {return this.updated;}
-	public void setUpdated(Date updated) {this.updated = updated;}
-
-	public UserStatus getActiveRole() {return this.status;}
-	public void setActiveRole(UserStatus activeRole) {this.status = activeRole;}
-	 */
+	
 }

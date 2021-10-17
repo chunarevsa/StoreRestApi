@@ -6,6 +6,7 @@ import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.security.jwt.jwtUserFactory;
 import com.chunarevsa.Website.service.UserService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,6 +20,7 @@ public class JwtUserDetailsService implements UserDetailsService{
 
 	private final UserService userService;
 
+	@Autowired
 	public JwtUserDetailsService(UserService userService) {
 		this.userService = userService;
 	}
@@ -31,7 +33,7 @@ public class JwtUserDetailsService implements UserDetailsService{
 		}
 
 		JwtUser jwtUser = jwtUserFactory.create(user);
-		log.info("IN loadUserByUsername - user username: {} seccessfully loaded", user);
+		log.info("IN loadUserByUsername - user with username: {} successfully loaded", username);
 		return jwtUser;
 	}
 	

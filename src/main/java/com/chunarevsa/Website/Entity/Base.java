@@ -29,16 +29,5 @@ public class Base {
 	@Enumerated(EnumType.STRING)
 	private UserStatus status;
 
-	/* public Long getId() {return this.id;}
-	public void setId(Long id) {this.id = id;}
-
-	public Date getCreated() {return this.created;}
-	public void setCreated(Date created) {this.created = created;}
-
-	public Date getUpdated() {return this.updated;}
-	public void setUpdated(Date updated) {this.updated = updated;}
-
-	public UserStatus getStatus() {return this.status;}
-	public void setStatus(UserStatus status) {this.status = status;} */
 
 }

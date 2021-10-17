@@ -39,9 +39,9 @@ public class AuthControllerV1 {
 
 	@PostMapping("login")
 	public ResponseEntity login (@RequestBody AuthRequestDto authRequestDto) {
-		try { 
+		 try {  
 			String username = authRequestDto.getUsername();
-			authManager.authenticate(new UsernamePasswordAuthenticationToken(username, authRequestDto));
+			authManager.authenticate(new UsernamePasswordAuthenticationToken(username, authRequestDto.getPassword()));
 			User user = userService.findByUsername(username);
 			if (user == null) {
 				throw new UsernameNotFoundException("User with username: " + username + " not found");
@@ -54,9 +54,9 @@ public class AuthControllerV1 {
 
 			return ResponseEntity.ok(response);
 		
-		 } catch (AuthenticationException e) {
+		  } catch (AuthenticationException e) {
 				throw new BadCredentialsException("Invalid username or password");
-		} 
+		}  
 		
 	}
 

@@ -13,10 +13,5 @@ public interface UserRepository extends CrudRepository <User, Long> {
 	User findByUsername (String username);
 
 	List<User> findAll ();
-
-	/*
-	Page <User> findAll (Pageable pageable);
-
-	Page <User> findByActive (boolean active, Pageable pageable); */
 	
 } 
