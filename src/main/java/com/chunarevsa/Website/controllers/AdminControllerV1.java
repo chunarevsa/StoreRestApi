@@ -2,7 +2,6 @@ package com.chunarevsa.Website.controllers;
 
 import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.dto.AdminUserDto;
-import com.chunarevsa.Website.dto.UserDto;
 import com.chunarevsa.Website.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
