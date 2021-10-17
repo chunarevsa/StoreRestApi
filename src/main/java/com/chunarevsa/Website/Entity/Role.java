@@ -19,4 +19,5 @@ public class Role extends Base {
 	@ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
 	private List<User> users;
 
+	
 }
