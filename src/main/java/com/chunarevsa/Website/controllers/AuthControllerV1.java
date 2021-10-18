@@ -48,6 +48,8 @@ public class AuthControllerV1 {
 			}
 			String token = jwtTokenProvider.createToken(username, user.getRoles());
 
+			// Не обязательная часть
+			// Выводит в консоль токен username и т
 			Map<Object, Object> response = new HashMap<>();
 			response.put("username", username);
 			response.put("token", token);
