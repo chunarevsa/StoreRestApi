@@ -1,12 +1,12 @@
 package com.chunarevsa.Website.dto;
 
-public class IdByJson {
+public class IdDto {
 	
 	private long idByJson;
 
-	public IdByJson() {}
+	public IdDto() {}
 
-	public IdByJson(long idByJson) {this.idByJson = idByJson;}
+	public IdDto(long idByJson) {this.idByJson = idByJson;}
 
 	public long getIdByJson() {return this.idByJson;}
 	public void setId(long idByJson) {this.idByJson = idByJson;}

@@ -14,7 +14,7 @@ public class CurrencyValid {
 		this.currencyRepository = currencyRepository;
 	}
 
-	public void currencyIsPresent(String currencyCode) throws NullPointerException {
+	public boolean currencyIsPresent (String currencyCode) throws NullPointerException {
 		Currency currency = currencyRepository.findByCode(currencyCode);
 		currency.getCode();
 	}

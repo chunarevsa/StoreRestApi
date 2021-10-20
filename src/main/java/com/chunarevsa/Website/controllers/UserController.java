@@ -2,7 +2,7 @@ package com.chunarevsa.Website.controllers;
 
 import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.dto.UserDto;
-import com.chunarevsa.Website.service.UserService;
+import com.chunarevsa.Website.service.impl.UserServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,19 +14,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping (value = "/api/v1/users/")
-public class UserControllerV1 {
-	private final UserService userService;
+@RequestMapping (value = "/users/")
+public class UserController {
+
+	private final UserServiceImpl userServiceImpl; 
+	// изначально стояло просто UserService. т. е ссылка на интерфейс
 
 	@Autowired
-	public UserControllerV1(UserService userService) {
-		this.userService = userService;
+	public UserController(UserServiceImpl userServiceImpl) {
+		this.userServiceImpl = userServiceImpl;
 	}
 
 	@GetMapping(value = "{id}")
 	public ResponseEntity<UserDto> getUserById(@PathVariable (name = "id") Long id) {
 		
-		User user = userService.findById(id);
+		User user = userServiceImpl.findById(id);
 		if (user == null) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}

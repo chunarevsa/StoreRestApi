@@ -4,7 +4,7 @@ import java.util.*;
 
 import com.chunarevsa.Website.Entity.Role;
 import com.chunarevsa.Website.Entity.User;
-import com.chunarevsa.Website.Entity.UserStatus;
+import com.chunarevsa.Website.Entity.Status;
 import com.chunarevsa.Website.repo.RoleRepository;
 import com.chunarevsa.Website.repo.UserRepository;
 import com.chunarevsa.Website.service.UserService;
@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
 	private final UserRepository userRepository;
 	private final RoleRepository roleRepository;
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService{
 
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setRoles(userRoles);
-		user.setStatus(UserStatus.ACTIVE);
+		user.setStatus(Status.ACTIVE);
 		User registeredUser = userRepository.save(user);
 		
 		log.info("IN register - user: {} seccesfully registred", registeredUser);

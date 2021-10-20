@@ -4,7 +4,7 @@ import com.chunarevsa.Website.Entity.Currency;
 import com.chunarevsa.Website.Exception.DublicateCurrency;
 import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.Exception.NotFound;
-import com.chunarevsa.Website.dto.IdByJson;
+import com.chunarevsa.Website.dto.IdDto;
 import com.chunarevsa.Website.repo.CurrencyRepository;
 import com.chunarevsa.Website.service.inter.CurrencyServiceInterface;
 
@@ -41,13 +41,13 @@ public class CurrencyService implements CurrencyServiceInterface {
 
 	// Представление Id в JSON
 	@Override
-	public IdByJson getIdByJson (Currency bodyCurrency, CurrencyRepository currencyRepository) throws DublicateCurrency {
+	public IdDto getIdByJson (Currency bodyCurrency, CurrencyRepository currencyRepository) throws DublicateCurrency {
 		try {
 			currencyRepository.save(bodyCurrency);
 		} catch (Exception e) {
 			throw new DublicateCurrency();
 		}
-		IdByJson idByJson = new IdByJson(bodyCurrency.getId());
+		IdDto idByJson = new IdDto(bodyCurrency.getId());
 		return idByJson;
 	}
 

@@ -1,6 +1,7 @@
 package com.chunarevsa.Website.service.valid;
 
 import com.chunarevsa.Website.Entity.Item;
+import com.chunarevsa.Website.Entity.Status;
 import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.repo.ItemRepository;
 
@@ -23,7 +24,12 @@ public class ItemValid {
 
 	// Проверка не выключен ли active = true
 	public boolean itemIsActive (Long id) {
-		return itemRepository.findById(id).orElseThrow().getActive();
+		Status status = itemRepository.findById(id).orElseThrow().getStatus();
+		// возмодно нужно добавить itemIsPresent
+		if (status != Status.ACTIVE) {
+			return false;
+		}
+		return true;
 	}
 
 	// Проверка на незаполеннные данные

@@ -1,19 +1,21 @@
 package com.chunarevsa.Website.service;
 
 import com.chunarevsa.Website.Entity.Item;
+import com.chunarevsa.Website.Entity.Status;
 import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.Exception.InvalidPriceFormat;
 import com.chunarevsa.Website.Exception.NotFound;
-import com.chunarevsa.Website.dto.ItemModel;
-import com.chunarevsa.Website.dto.IdByJson;
+import com.chunarevsa.Website.dto.ItemDto;
+import com.chunarevsa.Website.dto.IdDto;
 import com.chunarevsa.Website.repo.ItemRepository;
+import com.chunarevsa.Website.service.inter.ItemServiceInterface;
 import com.chunarevsa.Website.service.valid.ItemValid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ItemService {
+public class ItemService implements ItemServiceInterface {
 
 	private final ItemRepository itemRepository;
 	private final ItemValid itemValid;
@@ -28,7 +30,8 @@ public class ItemService {
 		this.priceService = priceService;
 	}
 
-	// Создание 
+	// Создание
+	@Override
 	public Item addItem(Item bodyItem) throws NotFound, FormIsEmpty, InvalidPriceFormat {
 
 		// Проверка на наличие валюты в репе
@@ -36,12 +39,13 @@ public class ItemService {
 		// Проверка на незаполеннные данные
 		itemValid.bodyIsEmpty(bodyItem);
 		// Включение (active = true) 
-		bodyItem.setActive(true);
+		bodyItem.setStatus(Status.ACTIVE);
 		return itemRepository.save(bodyItem);
 
 	}
 
 	// Получение однго итема
+	@Override
 	public Item getItem (Long id) throws NotFound {
 		// Проверка на наличие 
 		if (!itemValid.itemIsPresent(id)) {
@@ -55,11 +59,13 @@ public class ItemService {
 	}
 
 	// Получение модели
-	public ItemModel getItemModel(Long id) {
-		return ItemModel.toModel(itemRepository.findById(id).get());
+	@Override
+	public ItemDto getItemModel(Long id) {
+		return ItemDto.toModel(itemRepository.findById(id).get());
 	}
 
 	// Перезапись параметров
+	@Override
 	public Item overridItem (long id, Item bodyItem) throws NotFound, FormIsEmpty, InvalidPriceFormat {
 		// Проверка на наличие 
 		if (!itemValid.itemIsPresent(id)) {
@@ -77,7 +83,7 @@ public class ItemService {
 		item.setType(bodyItem.getType());
 		item.setDescription(bodyItem.getDescription());
 		// Возможность вернуть удалённый (active = false) обратно (active = true)
-		item.setActive(bodyItem.getActive());
+		item.setStatus(bodyItem.getStatus());
 		// item.setPrices(bodyItem.getPrices());
 		// Запись параметров
 		itemRepository.save(item);
@@ -85,21 +91,30 @@ public class ItemService {
 	}
 
 	// Удаление
-	public Long deleteItem(long id) throws NotFound {
+	@Override
+	public Item deleteItem(long id) throws NotFound {
+		
 		// Проверка на наличие 
-		itemValid.itemIsPresent(id);
+		if (itemValid.itemIsPresent(id)) {
+			throw new NotFound(HttpStatus.NO_CONTENT);
+		}
+		
 		// Проверка не выключен ли active = true
 		itemValid.itemIsActive(id);
+		if (!itemValid.itemIsActive(id)) {
+			throw new NotFound(HttpStatus.NO_CONTENT);
+		}
+
 		Item item = itemRepository.findById(id).orElseThrow();
-		item.setActive(false);
-		itemRepository.save(item);
-		return id;
+		item.setStatus(Status.DELETED);
+		return itemRepository.save(item);
 	}	
 
 	// Вывод Id в JSON
-	public IdByJson getIdByJson (Item bodyItem) {
+	@Override
+	public IdDto getIdByJson (Item bodyItem) {
 		itemRepository.save(bodyItem);
-		return new IdByJson(bodyItem.getId());
+		return new IdDto(bodyItem.getId());
 	}
 	
 }

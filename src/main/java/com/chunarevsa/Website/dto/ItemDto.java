@@ -5,7 +5,7 @@ import java.util.*;
 import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Entity.Price;
 
-public class ItemModel {
+public class ItemDto {
 	
 	private Long id; 
 
@@ -16,10 +16,10 @@ public class ItemModel {
 	// private boolean active;
 	private Set<Price> prices;
 
-	public ItemModel() {}
+	public ItemDto() {}
 
-	public static ItemModel toModel (Item item) {
-		ItemModel itemModel = new ItemModel();
+	public static ItemDto toModel (Item item) {
+		ItemDto itemModel = new ItemDto();
 		itemModel.setId(item.getId());
 		itemModel.setSku(item.getSku());
 		itemModel.setName(item.getName());

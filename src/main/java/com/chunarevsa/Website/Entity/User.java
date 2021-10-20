@@ -20,8 +20,7 @@ public class User extends Base {
 	private String password;
 	private String email;
 	private String avatar;
-	private UserStatus status;
-	// private boolean active; // ЗАМЕНАЬ НА СТАТУС
+	private Status status;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_roles", // связь через промежуточную таблицу через колонки:

@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import com.chunarevsa.Website.Entity.Role;
 import com.chunarevsa.Website.Entity.User;
-import com.chunarevsa.Website.Entity.UserStatus;
+import com.chunarevsa.Website.Entity.Status;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,7 +24,7 @@ public final class jwtUserFactory {
 				user.getEmail(), 
 				user.getAvatar(), 
 				mapToGrantedAuth(new ArrayList<>( user.getRoles() )), // authorities
-				user.getStatus().equals(UserStatus.ACTIVE), 
+				user.getStatus().equals(Status.ACTIVE), 
 				user.getUpdated());
 	}
 

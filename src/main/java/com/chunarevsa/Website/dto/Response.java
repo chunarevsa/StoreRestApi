@@ -27,6 +27,7 @@ public class Response {
 		this.message = httpStatus2.getReasonPhrase();
 		this.clientMessage = clientMessage;
 	}
+	
 	// Ответ при удалении      УДАЛИТЬ ПОТОМ
 	public Response (boolean active) {
 		HttpStatus httpStatus2 = HttpStatus.OK;
