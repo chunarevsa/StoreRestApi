@@ -26,4 +26,5 @@ public class PriceValid {
 		}
 		return false;
 	}
+	
 }

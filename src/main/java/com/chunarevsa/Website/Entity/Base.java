@@ -27,7 +27,7 @@ public class Base {
 	@LastModifiedDate
 	private Date updated;
 	@Enumerated(EnumType.STRING)
-	private UserStatus status;
+	private Status status;
 
 
 }

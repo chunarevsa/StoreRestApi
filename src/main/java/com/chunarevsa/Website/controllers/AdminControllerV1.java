@@ -2,7 +2,7 @@ package com.chunarevsa.Website.controllers;
 
 import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.dto.AdminUserDto;
-import com.chunarevsa.Website.service.UserService;
+import com.chunarevsa.Website.service.inter.UserServiceInterface;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/v1/admin/")
 public class AdminControllerV1 {
 
-	private final UserService userService;
+	private final UserServiceInterface userService;
 
 	@Autowired
-	public AdminControllerV1(UserService userService) {
+	public AdminControllerV1(UserServiceInterface userService) {
 		this.userService = userService;
 	}
 

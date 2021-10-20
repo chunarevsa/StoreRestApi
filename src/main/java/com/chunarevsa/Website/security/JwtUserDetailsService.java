@@ -4,7 +4,7 @@ package com.chunarevsa.Website.security;
 import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.security.jwt.jwtUserFactory;
-import com.chunarevsa.Website.service.UserService;
+import com.chunarevsa.Website.service.inter.UserServiceInterface;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,10 +18,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JwtUserDetailsService implements UserDetailsService{
 
-	private final UserService userService;
+	private final UserServiceInterface userService;
 
 	@Autowired
-	public JwtUserDetailsService(UserService userService) {
+	public JwtUserDetailsService(UserServiceInterface userService) {
 		this.userService = userService;
 	}
 

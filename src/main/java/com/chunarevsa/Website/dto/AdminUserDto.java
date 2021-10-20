@@ -1,7 +1,7 @@
 package com.chunarevsa.Website.dto;
 
 import com.chunarevsa.Website.Entity.User;
-import com.chunarevsa.Website.Entity.UserStatus;
+import com.chunarevsa.Website.Entity.Status;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
@@ -21,7 +21,7 @@ public class AdminUserDto {
 		user.setUsername(username);
 		user.setAvatar(avatar);
 		user.setEmail(email);
-		user.setStatus(UserStatus.valueOf(status));
+		user.setStatus(Status.valueOf(status));
 		return user;
 	}
 

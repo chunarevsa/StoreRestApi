@@ -71,7 +71,7 @@ public class ItemController {
    // Выключение
 	@DeleteMapping(value = "/item/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity deleteItem(@PathVariable(value = "id") long id) throws AllException {
-		return ResponseEntity.ok().body(itemService.deleteItem(id));
+		return ResponseEntity.ok().body(id);
 	}
 
 }
