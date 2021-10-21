@@ -18,8 +18,9 @@ public interface CurrencyServiceInterface {
 	public Currency getCurrencyByCode (String code) throws NotFound;
 
 	// Запись параметров
-	public Currency overrideItem (long id, Currency bodyCurrency) throws DublicateCurrency, NotFound, FormIsEmpty;
+	public Currency overrideCurrency (long id, Currency bodyCurrency) throws DublicateCurrency, NotFound, FormIsEmpty;
 
+	// Удаление
 	public void deleteCurrency(long id) throws NotFound;
 
 	// Id в JSON

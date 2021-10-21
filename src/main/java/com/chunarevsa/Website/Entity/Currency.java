@@ -19,8 +19,6 @@ public class Currency extends Base {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id; 
-	
-	private Status status;
 
 	@Column(unique=true)
 	private String code;	

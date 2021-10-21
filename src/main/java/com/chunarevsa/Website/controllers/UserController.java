@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping (value = "/api/v1/users/")
 public class UserController {
+
 	private final UserService userService;
 
 	@Autowired
@@ -34,6 +35,8 @@ public class UserController {
 		UserDto userDto = UserDto.fromUser(user);
 		return new ResponseEntity<>(userDto , HttpStatus.OK);
 	}
+
+	
 }
 /*
 import com.chunarevsa.Website.Entity.User;

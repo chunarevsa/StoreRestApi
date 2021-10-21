@@ -1,6 +1,7 @@
 package com.chunarevsa.Website.repo;
 
 import com.chunarevsa.Website.Entity.Item;
+import com.chunarevsa.Website.Entity.Status;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +13,6 @@ public interface ItemRepository extends CrudRepository <Item, Long> {
 		// Общий список
 	Page <Item> findAll (Pageable pageable);
 		// Только active = true
-	Page <Item> findByActive (boolean active, Pageable pageable);
+	Page <Item> findByStatus (Status status, Pageable pageable);
 	
 }

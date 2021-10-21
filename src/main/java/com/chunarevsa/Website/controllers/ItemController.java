@@ -1,6 +1,7 @@
 package com.chunarevsa.Website.controllers;
 
 import com.chunarevsa.Website.Entity.Item;
+import com.chunarevsa.Website.Entity.Status;
 import com.chunarevsa.Website.Exception.AllException;
 import com.chunarevsa.Website.dto.ItemDto;
 import com.chunarevsa.Website.repo.CurrencyRepository;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -42,10 +44,10 @@ public class ItemController {
 	}
 
 	// Получение списка всех Items с ограничением страницы (10)
-	@RequestMapping (method = RequestMethod.GET)
+	@GetMapping
 	public Page<Item> findAllItem (@PageableDefault(sort = { "active"}, direction = Sort.Direction.DESC) Pageable pageable) { 
 		// Сортировка по 10 элементов и только со значением active = true
-		Page<Item> pageItems = itemRepository.findByActive(true, pageable);
+		Page<Item> pageItems = itemRepository.findByStatus(Status.ACTIVE, pageable);
 		return pageItems;
 	}
 
@@ -57,7 +59,7 @@ public class ItemController {
 	} 
 
 	// Добавление 
-	@PostMapping (produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping 
 	@ResponseStatus (value = HttpStatus.CREATED)	
 	public Item createdItem (@RequestBody Item bodyItem) throws AllException {
 		return itemService.addItem(bodyItem);
@@ -70,9 +72,9 @@ public class ItemController {
 		return itemService.overridItem(id, bodyItem);
 	} 
 
-   // Выключение
+   // Удаление (Выключение)
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity deleteItem(@PathVariable(value = "id") long id) throws AllException {
+	public ResponseEntity deleteItem (@PathVariable(value = "id") long id) throws AllException {
 		return ResponseEntity.ok().body(id);
 	}
 

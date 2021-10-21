@@ -36,7 +36,7 @@ public class PriceService implements PriceServiceInterface {
 		this.currencyValid = currencyValid;
 	}
 
-	// Сохранение 
+	// Сохранение всех цен
 	@Override
 	public void saveAllPrice(Item bodyItem) throws NotFound, InvalidPriceFormat, FormIsEmpty {
 		
@@ -45,6 +45,7 @@ public class PriceService implements PriceServiceInterface {
 		for (Price price : pricesSet) {
 
 			if (!priceValid.amountIsCorrect(price)) {
+				log.info("IN saveAllPrice - price i: {} amount is NOT correct ", i);
 				throw new InvalidPriceFormat(HttpStatus.BAD_REQUEST);
 			}
 			if (priceValid.bodyIsEmpty(price)) {
@@ -53,6 +54,7 @@ public class PriceService implements PriceServiceInterface {
 
 			boolean priceIsPresent = currencyValid.currencyIsPresent(price.getId());
 			if (!priceIsPresent) {
+				log.info("IN saveAllPrice - price i: {} currency is NOT correct", i);
 				throw new NotFound(HttpStatus.NOT_FOUND);
 			}
 			
@@ -62,6 +64,8 @@ public class PriceService implements PriceServiceInterface {
 		priceRepository.saveAll(bodyItem.getPrices());
 	}
 
+	// Удаление цены
+	// Пока не используется 
 	@Override
 	public void deletePrice (Long id) throws NotFound {
 		// Проверка на наличие 
@@ -79,5 +83,11 @@ public class PriceService implements PriceServiceInterface {
 		log.info("IN delete - item with id: {} successfully deleted", id, price);
 		 
 	}
+
+	// Сохранение конкретной цены 
+
+	// Удаление цены
+
+	// Получение модели цены
 	
 }

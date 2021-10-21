@@ -6,7 +6,7 @@ import com.chunarevsa.Website.Entity.User;
 
 public interface UserServiceInterface {
 	
-	User register(User user);
+	User register(User user); // Добавить обработку ошибок
 	List<User> getAll();
 	User findByUsername(String username);
 	User findById(Long id);
