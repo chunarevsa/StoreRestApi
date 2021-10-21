@@ -2,6 +2,7 @@ package com.chunarevsa.Website.controllers;
 
 import com.chunarevsa.Website.Entity.Currency;
 import com.chunarevsa.Website.Exception.AllException;
+import com.chunarevsa.Website.Exception.NotFound;
 import com.chunarevsa.Website.dto.IdDto;
 import com.chunarevsa.Website.repo.CurrencyRepository;
 import com.chunarevsa.Website.service.CurrencyService;
@@ -12,7 +13,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -36,7 +39,7 @@ public class CurrencyController {
 	}
 
 	// Получение списка всех Currency с ограничением страницы (10)
-	@RequestMapping (method = RequestMethod.GET)
+	@GetMapping
 	public Page<Currency> currencyFindAll (@PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) { 
 		// Сортировка по 10 элементов и только со значением active = true
 		Page<Currency> pageCurrency =  currencyRepository.findByActive(true, pageable);
@@ -44,60 +47,33 @@ public class CurrencyController {
 		return pageCurrency;
 	}
 
-	@RequestMapping (path = "/{code}", method = RequestMethod.GET)
-	public Currency currenciesFindByCodeSet (@PathVariable(value = "code") String code) { 
-		// Сортировка по 10 элементов и только со значением active = true
-		Currency setCurrency =  currencyRepository.findByCode(code);
-		
-		return setCurrency;
+	@GetMapping (path = "/{code}")
+	public Currency currenciesFindByCode (@PathVariable(value = "code") String code) throws NotFound { 
+		return currencyService.getCurrencyByCode(code);
 	}
 
 	// Получение по id
-	@RequestMapping (path = "/{id}", method = RequestMethod.GET)
+	@GetMapping (path = "/{id}")
 	public Currency currencyMethod (@PathVariable(value = "id") long id) throws AllException { 
-		// Проверка на наличие 
-		currencyService.currencyIsPresent(id, currencyRepository);
-		Currency currency = currencyRepository.findById(id).orElseThrow();
-		// Вывести только в случае active = true
-		currencyService.activeValidate(currency.getId(), currency);
-		return currency;
+		return currencyService.getCurrency(id);
 	} 
 
 	// Добавление 
 	@PostMapping
 	@ResponseStatus (value = HttpStatus.CREATED)	
-	public IdDto createdCurrency (@RequestBody Currency bodyCurrency) throws AllException {
-		currencyService.bodyIsNotEmpty(bodyCurrency);
-		// Включение (active = true) 
-		bodyCurrency.setActive(true);
-		// Представление Id в JSON
-		return currencyService.getIdByJson(bodyCurrency, currencyRepository);
+	public Currency createdCurrency (@RequestBody Currency bodyCurrency) throws AllException {
+		return currencyService.addCurrency(bodyCurrency);
 	} 	
 				
 	 // Изменение
 	@PutMapping(value = "/{id}")
 	public Currency editCurrency (@PathVariable(value = "id") long id, @RequestBody Currency bodyCurrency) throws AllException {
-		// Проверка на наличие 
-		currencyService.currencyIsPresent(id, currencyRepository);
-		// Проверка на запленные данные
-		currencyService.bodyIsNotEmpty(bodyCurrency);
-		// Запись параметров
-		Currency currency = currencyService.overrideItem(id, bodyCurrency, currencyRepository);
-		return currency;
+		return currencyService.overrideCurrency(id, bodyCurrency);
 	} 
 
    // Удаление
 	@DeleteMapping(value = "/{id}")
-	public Long deleteCurrency (@PathVariable(value = "id") long id) throws AllException {
-		// Проверка на наличие
-		currencyService.currencyIsPresent(id, currencyRepository);
-		Currency currency = currencyRepository.findById(id).orElseThrow();
-		// Проверка не выключен ли active = true
-		currencyService.activeValidate(currency.getId(), currency);
-		// Выключение active = false
-		currency.setActive(false);
-		currencyRepository.save(currency);
-		// Вывод об успешном удалении
-		return id;
-	}
+	public ResponseEntity deleteCurrency (@PathVariable(value = "id") long id) throws AllException {
+		return ResponseEntity.ok().body(id);
+	}	
 }

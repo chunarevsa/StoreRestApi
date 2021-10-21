@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Entity.Price;
+import com.chunarevsa.Website.Entity.Status;
 import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.Exception.InvalidPriceFormat;
 import com.chunarevsa.Website.Exception.NotFound;
@@ -49,12 +50,9 @@ public class PriceService implements PriceServiceInterface {
 			if (priceValid.bodyIsEmpty(price)) {
 				throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
 			}
-			try {
-				boolean priceIsPresent = currencyValid.currencyIsPresent(price.getCurrencyCode());
-				if (!priceIsPresent) {
-					throw new NotFound(HttpStatus.NOT_FOUND);
-				}
-			} catch (Exception e) { // потом сделать NullPoint
+
+			boolean priceIsPresent = currencyValid.currencyIsPresent(price.getId());
+			if (!priceIsPresent) {
 				throw new NotFound(HttpStatus.NOT_FOUND);
 			}
 			
@@ -65,8 +63,21 @@ public class PriceService implements PriceServiceInterface {
 	}
 
 	@Override
-	public void deletedPrice () {
-		// Дописать 
+	public void deletePrice (Long id) throws NotFound {
+		// Проверка на наличие 
+		if (!priceValid.priceIsPresent(id)) {
+			throw new NotFound(HttpStatus.NOT_FOUND);
+		}
+		// Удаляем только в случае active 
+		if (!priceValid.priceIsActive(id)) {
+			throw new NotFound(HttpStatus.NOT_FOUND);
+		}
+
+		Price price = priceRepository.findById(id).orElseThrow();
+		price.setStatus(Status.DELETED);
+		priceRepository.save(price);
+		log.info("IN delete - item with id: {} successfully deleted", id, price);
+		 
 	}
 	
 }

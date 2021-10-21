@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping (path = "/item")
+@RequestMapping (path = "/item", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ItemController {
 	
 	private final ItemRepository itemRepository;	
@@ -42,7 +42,7 @@ public class ItemController {
 	}
 
 	// Получение списка всех Items с ограничением страницы (10)
-	@RequestMapping (method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping (method = RequestMethod.GET)
 	public Page<Item> findAllItem (@PageableDefault(sort = { "active"}, direction = Sort.Direction.DESC) Pageable pageable) { 
 		// Сортировка по 10 элементов и только со значением active = true
 		Page<Item> pageItems = itemRepository.findByActive(true, pageable);
@@ -50,7 +50,7 @@ public class ItemController {
 	}
 
 	// Получение по id
-	@RequestMapping (path = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping (path = "/{id}", method = RequestMethod.GET)
 	public ItemDto getOneItem (@PathVariable(value = "id") Long id) throws AllException { 
 		itemService.getItem(id);
 		return itemService.getItemModel(id);
@@ -65,15 +65,19 @@ public class ItemController {
 	} 	
 				
 	 // Изменение
-	@PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(value = "/{id}")
 	public Item editItem (@PathVariable(value = "id") long id, @RequestBody Item bodyItem) throws AllException {
 		return itemService.overridItem(id, bodyItem);
 	} 
 
    // Выключение
-	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@DeleteMapping(value = "/{id}")
 	public ResponseEntity deleteItem(@PathVariable(value = "id") long id) throws AllException {
 		return ResponseEntity.ok().body(id);
 	}
+
+	// Добавление цены
+
+	// Удаление цены
 
 }

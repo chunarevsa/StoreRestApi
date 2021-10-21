@@ -25,5 +25,5 @@ public interface ItemServiceInterface {
 	public void deleteItem(long id) throws NotFound;
 	
 	// Вывод Id в JSON
-	public IdDto getIdByJson (Item bodyItem);
+	public IdDto getIdByJson (Item bodyItem) throws NotFound;
 } 

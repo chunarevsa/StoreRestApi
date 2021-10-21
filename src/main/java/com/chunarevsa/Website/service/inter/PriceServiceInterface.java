@@ -9,5 +9,6 @@ public interface PriceServiceInterface {
 
 	public void saveAllPrice(Item bodyItem) throws NotFound, InvalidPriceFormat, FormIsEmpty;
 
-	public void deletedPrice ();
+	public void deletePrice (Long id) throws NotFound;
+	
 }

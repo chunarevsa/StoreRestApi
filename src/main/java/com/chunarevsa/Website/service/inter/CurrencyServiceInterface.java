@@ -5,13 +5,24 @@ import com.chunarevsa.Website.Exception.DublicateCurrency;
 import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.Exception.NotFound;
 import com.chunarevsa.Website.dto.IdDto;
-import com.chunarevsa.Website.repo.CurrencyRepository;
 
 
 public interface CurrencyServiceInterface {
-	void currencyIsPresent(long id, CurrencyRepository currencyRepository) throws NotFound;
-	void activeValidate (long id, Currency currency) throws NotFound;
-	void bodyIsNotEmpty (Currency bodyCurrency) throws FormIsEmpty;
-	IdDto getIdByJson (Currency bodyCurrency, CurrencyRepository currencyRepository) throws DublicateCurrency;
-	Currency overrideItem (long id, Currency bodyCurrency, CurrencyRepository currencyRepository) throws DublicateCurrency;
-} 
+	// Создание
+	public Currency addCurrency(Currency bodyCurrency) throws FormIsEmpty, DublicateCurrency;
+
+	// Получение по id
+	public Currency getCurrency (Long id) throws NotFound;
+
+	// Получение по code
+	public Currency getCurrencyByCode (String code) throws NotFound;
+
+	// Запись параметров
+	public Currency overrideItem (long id, Currency bodyCurrency) throws DublicateCurrency, NotFound, FormIsEmpty;
+
+	public void deleteCurrency(long id) throws NotFound;
+
+	// Id в JSON
+	public IdDto getIdByJson (Currency bodyCurrency) throws NotFound;
+
+}

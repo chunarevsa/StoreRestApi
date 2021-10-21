@@ -20,7 +20,7 @@ public class Currency extends Base {
 	@Column(name = "id")
 	private Long id; 
 	
-	private boolean active;
+	private Status status;
 
 	@Column(unique=true)
 	private String code;	

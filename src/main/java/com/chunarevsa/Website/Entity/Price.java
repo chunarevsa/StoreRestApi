@@ -13,7 +13,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Price {	
+public class Price extends Base {	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

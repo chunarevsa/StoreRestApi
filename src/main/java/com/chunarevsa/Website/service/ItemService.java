@@ -116,7 +116,7 @@ public class ItemService implements ItemServiceInterface {
 		if (!itemValid.itemIsPresent(id)) {
 			throw new NotFound(HttpStatus.NOT_FOUND);
 		}
-		// Выводим только в случае active = true
+		// Удаляем только в случае active 
 		if (!itemValid.itemIsActive(id)) {
 			throw new NotFound(HttpStatus.NOT_FOUND);
 		}
@@ -128,10 +128,15 @@ public class ItemService implements ItemServiceInterface {
 
 	}	
 
-	// Вывод Id в JSON
+	//  Id в JSON
 	@Override
-	public IdDto getIdByJson (Item bodyItem) {
+	public IdDto getIdByJson (Item bodyItem) throws NotFound {
+		// Проверка на наличие 
+		if (!itemValid.itemIsPresent(bodyItem.getId())) {
+			throw new NotFound(HttpStatus.NOT_FOUND);
+		}
 		itemRepository.save(bodyItem);
+		
 		return new IdDto(bodyItem.getId());
 	}
 	

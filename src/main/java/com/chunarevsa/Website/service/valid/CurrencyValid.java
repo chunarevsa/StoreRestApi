@@ -1,6 +1,7 @@
 package com.chunarevsa.Website.service.valid;
 
 import com.chunarevsa.Website.Entity.Currency;
+import com.chunarevsa.Website.Entity.Status;
 import com.chunarevsa.Website.repo.CurrencyRepository;
 
 import org.springframework.stereotype.Service;
@@ -14,9 +15,39 @@ public class CurrencyValid {
 		this.currencyRepository = currencyRepository;
 	}
 
-	public boolean currencyIsPresent(String currencyCode) throws NullPointerException {
-		Currency currency = currencyRepository.findByCode(currencyCode);
-		currency.getCode();
+	// Проверка на наличие по ид
+	public boolean currencyIsPresent(long id) {
+
+		Currency currency = currencyRepository.findById(id).orElse(null);
+		if (currency == null) {
+			return false;
+		}
+		return true;  
+	}
+
+	// Проверка на наличие валюты с таким code
+	public boolean codeIsPresent (String code) {
+		Currency currencyByCode = currencyRepository.findByCode(code);
+		if (currencyByCode == null) {
+			return false;
+		}	 
+		return true;
+	}
+
+	// Проверка status
+	public boolean currencyIsActive (long id) {
+		Status currencyStatus = currencyRepository.findById(id).orElseThrow().getStatus();
+		if (currencyStatus == Status.ACTIVE) {
+			return true;
+		}
+		return false;
+	}
+
+	// Проверка на незаполеннные данные
+	public boolean bodyIsEmpty (Currency bodyCurrency) {
+		if (bodyCurrency.getCode().isEmpty()) {
+			return true;
+		}
 		return false;
 	}
 	
