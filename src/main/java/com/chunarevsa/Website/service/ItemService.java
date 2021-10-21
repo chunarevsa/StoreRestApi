@@ -14,7 +14,11 @@ import com.chunarevsa.Website.service.valid.ItemValid;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
+
+
 @Service
+@Slf4j
 public class ItemService implements ItemServiceInterface {
 
 	private final ItemRepository itemRepository;
@@ -30,17 +34,24 @@ public class ItemService implements ItemServiceInterface {
 		this.priceService = priceService;
 	}
 
-	// Создание
+	// Создание 
 	@Override
 	public Item addItem(Item bodyItem) throws NotFound, FormIsEmpty, InvalidPriceFormat {
 
 		// Проверка на наличие валюты в репе
 		priceService.saveAllPrice(bodyItem);
 		// Проверка на незаполеннные данные
-		itemValid.bodyIsEmpty(bodyItem);
+		if (!itemValid.bodyIsEmpty(bodyItem)) {
+			throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
+		}
+		
 		// Включение (active = true) 
 		bodyItem.setStatus(Status.ACTIVE);
-		return itemRepository.save(bodyItem);
+
+		Item item = itemRepository.save(bodyItem);
+		log.info("IN addItem - item: {} seccesfully add", item);
+
+		return item;
 
 	}
 
@@ -54,13 +65,18 @@ public class ItemService implements ItemServiceInterface {
 		// Выводим только в случае active = true
 		if (!itemValid.itemIsActive(id)) {
 			throw new NotFound(HttpStatus.NOT_FOUND);
-		} 
+		}
+
+		log.info("IN getItem - {} item is found", itemRepository.findById(id).orElseThrow());
 		return itemRepository.findById(id).orElseThrow();
 	}
 
 	// Получение модели
 	@Override
-	public ItemDto getItemModel(Long id) {
+	public ItemDto getItemModel(Long id) throws NotFound {
+		if (!itemValid.itemIsPresent(id)) {
+			throw new NotFound(HttpStatus.NOT_FOUND);
+		}
 		return ItemDto.toModel(itemRepository.findById(id).get());
 	}
 
@@ -77,6 +93,7 @@ public class ItemService implements ItemServiceInterface {
 		}  
 		// Проверка цен
 		priceService.saveAllPrice(bodyItem);
+
 		Item item = itemRepository.findById(id).orElseThrow();
 		item.setSku(bodyItem.getSku());
 		item.setName(bodyItem.getName());
@@ -84,30 +101,31 @@ public class ItemService implements ItemServiceInterface {
 		item.setDescription(bodyItem.getDescription());
 		// Возможность вернуть удалённый (active = false) обратно (active = true)
 		item.setStatus(bodyItem.getStatus());
-		// item.setPrices(bodyItem.getPrices());
+		item.setPrices(bodyItem.getPrices());
+
 		// Запись параметров
 		itemRepository.save(item);
+		log.info("IN overridItem - {} item is found", item);
 		return item;
 	}
 
 	// Удаление
 	@Override
-	public Item deleteItem(long id) throws NotFound {
-		
+	public void deleteItem(long id) throws NotFound {
 		// Проверка на наличие 
-		if (itemValid.itemIsPresent(id)) {
-			throw new NotFound(HttpStatus.NO_CONTENT);
+		if (!itemValid.itemIsPresent(id)) {
+			throw new NotFound(HttpStatus.NOT_FOUND);
 		}
-		
-		// Проверка не выключен ли active = true
-		itemValid.itemIsActive(id);
+		// Выводим только в случае active = true
 		if (!itemValid.itemIsActive(id)) {
-			throw new NotFound(HttpStatus.NO_CONTENT);
+			throw new NotFound(HttpStatus.NOT_FOUND);
 		}
 
 		Item item = itemRepository.findById(id).orElseThrow();
 		item.setStatus(Status.DELETED);
-		return itemRepository.save(item);
+		itemRepository.save(item);
+		log.info("IN delete - item with id: {} successfully deleted");
+
 	}	
 
 	// Вывод Id в JSON

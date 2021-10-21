@@ -8,15 +8,19 @@ import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.Exception.InvalidPriceFormat;
 import com.chunarevsa.Website.Exception.NotFound;
 import com.chunarevsa.Website.repo.PriceRepository;
+import com.chunarevsa.Website.service.inter.PriceServiceInterface;
 import com.chunarevsa.Website.service.valid.CurrencyValid;
 import com.chunarevsa.Website.service.valid.PriceValid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
+
 
 @Service
-public class PriceService  {
+@Slf4j
+public class PriceService implements PriceServiceInterface {
 
 	private final PriceRepository priceRepository;
 	private final PriceValid priceValid;
@@ -31,9 +35,14 @@ public class PriceService  {
 		this.currencyValid = currencyValid;
 	}
 
+	// Сохранение 
+	@Override
 	public void saveAllPrice(Item bodyItem) throws NotFound, InvalidPriceFormat, FormIsEmpty {
+		
 		Set<Price> pricesSet = bodyItem.getPrices();
+		int i = 1;
 		for (Price price : pricesSet) {
+
 			if (!priceValid.amountIsCorrect(price)) {
 				throw new InvalidPriceFormat(HttpStatus.BAD_REQUEST);
 			}
@@ -41,12 +50,23 @@ public class PriceService  {
 				throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
 			}
 			try {
-				currencyValid.currencyIsPresent(price.getCurrencyCode());
+				boolean priceIsPresent = currencyValid.currencyIsPresent(price.getCurrencyCode());
+				if (!priceIsPresent) {
+					throw new NotFound(HttpStatus.NOT_FOUND);
+				}
 			} catch (Exception e) { // потом сделать NullPoint
 				throw new NotFound(HttpStatus.NOT_FOUND);
 			}
+			
+			log.info("IN saveAllPrice - price i: {} is correct", i);
+			i++;
 		}	
 		priceRepository.saveAll(bodyItem.getPrices());
+	}
+
+	@Override
+	public void deletedPrice () {
+		// Дописать 
 	}
 	
 }

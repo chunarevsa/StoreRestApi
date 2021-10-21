@@ -5,7 +5,7 @@ import java.util.*;
 import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.dto.AuthRequestDto;
 import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
-import com.chunarevsa.Website.service.UserService;
+import com.chunarevsa.Website.service.inter.UserServiceInterface;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,13 +25,13 @@ public class AuthControllerV1 {
 
 	private final AuthenticationManager authManager;
 	private final JwtTokenProvider jwtTokenProvider;
-	private final UserService userService;
+	private final UserServiceInterface userService;
 
 	@Autowired
 	public AuthControllerV1(
 					AuthenticationManager authManager, 
 					JwtTokenProvider jwtTokenProvider, 
-					UserService userService) {
+					UserServiceInterface userService) {
 		this.authManager = authManager;
 		this.jwtTokenProvider = jwtTokenProvider;
 		this.userService = userService;
@@ -48,6 +48,8 @@ public class AuthControllerV1 {
 			}
 			String token = jwtTokenProvider.createToken(username, user.getRoles());
 
+			// Не обязательная часть
+			// Выводит в консоль токен username и т
 			Map<Object, Object> response = new HashMap<>();
 			response.put("username", username);
 			response.put("token", token);

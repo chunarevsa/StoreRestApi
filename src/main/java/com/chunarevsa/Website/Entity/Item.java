@@ -13,9 +13,9 @@ import javax.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "items")
+@Table (name = "items")
 @Data
-public class Item {
+public class Item extends Base {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id; 

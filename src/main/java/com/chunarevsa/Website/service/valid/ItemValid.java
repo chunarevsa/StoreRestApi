@@ -19,17 +19,20 @@ public class ItemValid {
 
 	// Проверка на наличие 
 	public boolean itemIsPresent (long id) {
-		return itemRepository.findById(id).isPresent(); 
+		Item item = itemRepository.findById(id).orElse(null);
+		if (item == null) {
+			return true;
+		}
+		return false; 
 	}
 
 	// Проверка не выключен ли active = true
 	public boolean itemIsActive (Long id) {
-		Status status = itemRepository.findById(id).orElseThrow().getStatus();
-		// возмодно нужно добавить itemIsPresent
-		if (status != Status.ACTIVE) {
-			return false;
-		}
-		return true;
+		Status status =itemRepository.findById(id).orElseThrow().getStatus();
+		if (status == Status.ACTIVE) {
+			return true;
+	}
+		return false;
 	}
 
 	// Проверка на незаполеннные данные
