@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.Exception;
 
-import org.springframework.security.core.AuthenticationException;
+/* import org.springframework.security.core.AuthenticationException;
 
 public class JwtAuthenticationException extends AuthenticationException{
 
@@ -14,4 +14,4 @@ public class JwtAuthenticationException extends AuthenticationException{
 		//TODO Auto-generated constructor stub
 	}
 	
-}
+} */

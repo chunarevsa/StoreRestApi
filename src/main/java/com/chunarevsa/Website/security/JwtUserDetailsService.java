@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.security;
 
-
+/* 
 import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.security.jwt.jwtUserFactory;
@@ -37,4 +37,4 @@ public class JwtUserDetailsService implements UserDetailsService{
 		return jwtUser;
 	}
 	
-}
+} */

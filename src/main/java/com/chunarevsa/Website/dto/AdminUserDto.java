@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.dto;
 
-import com.chunarevsa.Website.Entity.User;
+/* import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.Entity.Status;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -34,4 +34,4 @@ public class AdminUserDto {
 		adminUserDto.setStatus(user.getStatus().name());
 		return adminUserDto;
 	}
-}
+} */

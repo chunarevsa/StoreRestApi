@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.service.inter;
 
-import java.util.*;
+/* import java.util.*;
 
 import com.chunarevsa.Website.Entity.User;
 
@@ -11,4 +11,4 @@ public interface UserServiceInterface {
 	User findByUsername(String username);
 	User findById(Long id);
 	void delete(Long id);
-}
+} */

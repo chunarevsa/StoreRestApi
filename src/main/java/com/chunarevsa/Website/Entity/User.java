@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.Entity;
 
-import java.util.List;
+/* import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -31,4 +31,4 @@ public class User extends Base {
 	private List<Role> roles;
 	
 	
-}
+} */

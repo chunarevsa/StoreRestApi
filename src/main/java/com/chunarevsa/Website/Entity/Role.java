@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.Entity;
 
-import java.util.*;
+/* import java.util.*;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,4 +20,4 @@ public class Role extends Base {
 	private List<User> users;
 
 	
-}
+} */

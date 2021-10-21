@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.security.jwt;
 
-import java.util.ArrayList;
+/* import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,4 +33,4 @@ public final class jwtUserFactory {
 			.map(role -> new SimpleGrantedAuthority( role.getRole()))
 			.collect(Collectors.toList());
 	}
-}
+} */

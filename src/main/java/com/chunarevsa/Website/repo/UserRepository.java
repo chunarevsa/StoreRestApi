@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.repo;
 
-import java.util.*;
+/* import java.util.*;
 
 import com.chunarevsa.Website.Entity.User;
 
@@ -15,3 +15,4 @@ public interface UserRepository extends CrudRepository <User, Long> {
 	List<User> findAll ();
 	
 } 
+ */

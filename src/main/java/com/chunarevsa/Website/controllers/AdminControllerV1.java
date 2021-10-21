@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.controllers;
 
-import com.chunarevsa.Website.Entity.User;
+/* import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.dto.AdminUserDto;
 import com.chunarevsa.Website.service.inter.UserServiceInterface;
 
@@ -35,4 +35,4 @@ public class AdminControllerV1 {
 		return new ResponseEntity<>(adminUserDto , HttpStatus.OK);
 	}
 	
-}
+} */

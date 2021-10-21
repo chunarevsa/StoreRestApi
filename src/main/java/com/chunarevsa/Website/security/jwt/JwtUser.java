@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.security.jwt;
 
-import java.util.Collection;
+/* import java.util.Collection;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -75,4 +75,4 @@ public class JwtUser implements UserDetails{
 	@Override
 	public boolean isEnabled() {return enabled;}
 	
-}
+} */

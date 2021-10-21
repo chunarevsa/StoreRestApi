@@ -2,7 +2,7 @@ package com.chunarevsa.Website.controllers;
 
 import java.util.*;
 
-import com.chunarevsa.Website.Entity.User;
+/* import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.dto.AuthRequestDto;
 import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
 import com.chunarevsa.Website.service.inter.UserServiceInterface;
@@ -62,4 +62,4 @@ public class AuthControllerV1 {
 		
 	}
 
-}
+} */
