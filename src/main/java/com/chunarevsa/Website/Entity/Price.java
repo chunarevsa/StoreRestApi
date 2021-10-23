@@ -14,10 +14,6 @@ import lombok.Data;
 @Entity
 @Data
 public class Price extends Base {	
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
 	
 	private String amount;
 	private String currencyCode;

@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -26,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping (path = "/currency", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CurrencyController {
 	
 	private final CurrencyRepository currencyRepository;
@@ -40,7 +38,7 @@ public class CurrencyController {
 	}
 
 	// Получение списка всех Currency с ограничением страницы (10)
-	@GetMapping
+	@RequestMapping (path = "/currency", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Page<Currency> currencyFindAll (@PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) { 
 		// Сортировка по 10 элементов и только со значением active = true
 		Page<Currency> pageCurrency =  currencyRepository.findByStatus(Status.ACTIVE, pageable);
@@ -49,32 +47,32 @@ public class CurrencyController {
 	}
 
 	// Получение по id
-	@GetMapping (path = "/{id}")
+	@RequestMapping (path = "/currency/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Currency currencyMethod (@PathVariable(value = "id") long id) throws AllException { 
 		return currencyService.getCurrency(id);
 	} 
 
 	// Получить по code
-	@GetMapping (path = "/{code}")
+	@RequestMapping (path = "/currency/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Currency currenciesFindByCode (@PathVariable(value = "code") String code) throws NotFound { 
 		return currencyService.getCurrencyByCode(code);
 	}
 
 	// Добавление 
-	@PostMapping
+	@PostMapping (value = "/currency", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus (value = HttpStatus.CREATED)	
 	public Currency createdCurrency (@RequestBody Currency bodyCurrency) throws AllException {
 		return currencyService.addCurrency(bodyCurrency);
 	} 	
 				
 	 // Изменение
-	@PutMapping(value = "/{id}")
+	@PutMapping(value = "/currency/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Currency editCurrency (@PathVariable(value = "id") long id, @RequestBody Currency bodyCurrency) throws AllException {
 		return currencyService.overrideCurrency(id, bodyCurrency);
 	} 
 
    // Удаление
-	@DeleteMapping(value = "/{id}")
+	@DeleteMapping(value = "/currency/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity deleteCurrency (@PathVariable(value = "id") long id) throws AllException {
 		return ResponseEntity.ok().body(id);
 	}	
