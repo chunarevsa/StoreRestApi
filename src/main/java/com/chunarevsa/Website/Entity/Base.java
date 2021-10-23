@@ -29,5 +29,4 @@ public class Base {
 	@Enumerated(EnumType.STRING)
 	private Status status;
 
-
 }
