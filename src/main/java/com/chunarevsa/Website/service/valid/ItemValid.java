@@ -16,7 +16,6 @@ public class ItemValid {
 		this.itemRepository = itemRepository;
 	}
 
-
 	// Проверка на наличие 
 	public boolean itemIsPresent (long id) {
 		Item item = itemRepository.findById(id).orElse(null);

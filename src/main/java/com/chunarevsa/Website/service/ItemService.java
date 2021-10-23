@@ -38,17 +38,24 @@ public class ItemService implements ItemServiceInterface {
 	@Override
 	public Item addItem(Item bodyItem) throws NotFound, FormIsEmpty, InvalidPriceFormat {
 
-		// Проверка на наличие валюты в репе
-		priceService.saveAllPrice(bodyItem);
 		// Проверка на незаполеннные данные
-		if (!itemValid.bodyIsEmpty(bodyItem)) {
+		log.info("ПРОВЕРКА В ИТЕМ НА ПУСТОЕ ТЕЛО");
+		if (itemValid.bodyIsEmpty(bodyItem)) {
 			throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
 		}
 		
-		// Включение (active = true) 
+		// Включение (active = true)
+		log.info("ВКЛЮЧЕНИЕ ACTIVE у Итем"); 
 		bodyItem.setStatus(Status.ACTIVE);
+		 
 
+		// Сохранение цен
+		log.info("СОХРАНЕНИЕ ЦЕН");
+		priceService.saveAllPrice(bodyItem);
+		
+		log.info("СОХРАНЕНИЕ ИТЕМ");
 		Item item = itemRepository.save(bodyItem);
+		 
 		log.info("IN addItem - item: {} seccesfully add", item);
 
 		return item;

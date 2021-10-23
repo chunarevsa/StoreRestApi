@@ -68,13 +68,13 @@ public class ItemController {
 				
 	 // Изменение
 	@PutMapping(value = "/{id}")
-	public Item editItem (@PathVariable(value = "id") long id, @RequestBody Item bodyItem) throws AllException {
+	public Item editItem (@PathVariable(value = "id") Long id, @RequestBody Item bodyItem) throws AllException {
 		return itemService.overridItem(id, bodyItem);
 	} 
 
    // Удаление (Выключение)
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity deleteItem (@PathVariable(value = "id") long id) throws AllException {
+	public ResponseEntity deleteItem (@PathVariable(value = "id") Long id) throws AllException {
 		return ResponseEntity.ok().body(id);
 	}
 

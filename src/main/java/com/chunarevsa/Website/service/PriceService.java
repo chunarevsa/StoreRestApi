@@ -44,13 +44,13 @@ public class PriceService implements PriceServiceInterface {
 		int i = 1;
 		for (Price price : pricesSet) {
 
-			if (!priceValid.amountIsCorrect(price)) {
+			 if (!priceValid.amountIsCorrect(price)) {
 				log.info("IN saveAllPrice - price i: {} amount is NOT correct ", i);
 				throw new InvalidPriceFormat(HttpStatus.BAD_REQUEST);
-			}
+			} 
 			if (priceValid.bodyIsEmpty(price)) {
 				throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
-			}
+			} 
 
 			boolean priceIsPresent = currencyValid.currencyIsPresent(price.getId());
 			if (!priceIsPresent) {
