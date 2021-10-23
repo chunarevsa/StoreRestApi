@@ -48,15 +48,15 @@ public class CurrencyController {
 
 	// Получение по id
 	@RequestMapping (path = "/currency/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Currency currencyMethod (@PathVariable(value = "id") long id) throws AllException { 
+	public Currency currencyMethod (@PathVariable(value = "id") Long id) throws AllException { 
 		return currencyService.getCurrency(id);
 	} 
 
 	// Получить по code
-	@RequestMapping (path = "/currency/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping (path = "/currency/code/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Currency currenciesFindByCode (@PathVariable(value = "code") String code) throws NotFound { 
 		return currencyService.getCurrencyByCode(code);
-	}
+	} 
 
 	// Добавление 
 	@PostMapping (value = "/currency", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -67,13 +67,13 @@ public class CurrencyController {
 				
 	 // Изменение
 	@PutMapping(value = "/currency/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Currency editCurrency (@PathVariable(value = "id") long id, @RequestBody Currency bodyCurrency) throws AllException {
+	public Currency editCurrency (@PathVariable(value = "id") Long id, @RequestBody Currency bodyCurrency) throws AllException {
 		return currencyService.overrideCurrency(id, bodyCurrency);
 	} 
 
    // Удаление
 	@DeleteMapping(value = "/currency/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity deleteCurrency (@PathVariable(value = "id") long id) throws AllException {
+	public ResponseEntity deleteCurrency (@PathVariable(value = "id") Long id) throws AllException {
 		return ResponseEntity.ok().body(id);
 	}	
 }

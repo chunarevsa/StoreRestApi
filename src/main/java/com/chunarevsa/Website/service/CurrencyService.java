@@ -105,6 +105,9 @@ public class CurrencyService implements CurrencyServiceInterface {
 			throw new DublicateCurrency(HttpStatus.BAD_REQUEST);
 		}
 
+		// Объединить проверки, потому что валюта может не поменяться, а поменяться только статус
+		// Так выдаст ошибку, что такая валюта уже сущ.
+
 		Currency currency = currencyRepository.findById(id).orElseThrow();
 		currency.setCode(bodyCurrency.getCode());
 		// Возможность вернуть удалённый (active = false) обратно (active = true)
