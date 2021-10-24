@@ -1,6 +1,7 @@
 package com.chunarevsa.Website.dto;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Entity.Price;
@@ -13,8 +14,7 @@ public class ItemDto {
 	private String name;
 	private String type;
 	private String description;
-	// private boolean active;
-	private Set<Price> prices;
+	// private Set<Price> prices;
 
 	public ItemDto() {}
 
@@ -25,10 +25,9 @@ public class ItemDto {
 		itemModel.setName(item.getName());
 		itemModel.setType(item.getType());
 		itemModel.setDescription(item.getDescription());
-		// itemModel.setActive(item.isActive());
-		itemModel.setPrices(item.getPrices());;
+		//itemModel.setPrices(item.getPrices());
 		/* itemModel.setPrices(item.getPrices().stream()
-				.map(PriceModel::priceModel).collect(Collectors.toSet())); */
+				.map(priceModel::priceModel).collect(Collectors.toSet()));  */
 		return itemModel;
 	}
 
@@ -47,12 +46,8 @@ public class ItemDto {
 	public String getDescription() {return this.description;}
 	public void setDescription(String description) {this.description = description;}
 
-	/* public boolean isActive() {return this.active;}
-	public boolean getActive() {return this.active;}
-	public void setActive(boolean active) {this.active = active;} */
-
-	public Set<Price> getPrices() {return this.prices;}
-	public void setPrices(Set<Price> prices) {this.prices = prices;}
+	//public Set<Price> getPrices() {return this.prices;}
+	//public void setPrices(Set<Price> prices) {this.prices = prices;}
 
 	
 

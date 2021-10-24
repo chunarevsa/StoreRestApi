@@ -39,15 +39,13 @@ public class ItemService implements ItemServiceInterface {
 	public Item addItem(Item bodyItem) throws NotFound, FormIsEmpty, InvalidPriceFormat {
 
 		// Проверка на незаполеннные данные
-		log.info("ПРОВЕРКА В ИТЕМ НА ПУСТОЕ ТЕЛО");
+		
 		if (itemValid.bodyIsEmpty(bodyItem)) {
 			throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
 		}
 		
 		// Включение (active = true)
-		log.info("ВКЛЮЧЕНИЕ ACTIVE у Итем"); 
 		bodyItem.setStatus(Status.ACTIVE);
-		 
 
 		// Сохранение цен
 		log.info("СОХРАНЕНИЕ ЦЕН");
@@ -66,15 +64,18 @@ public class ItemService implements ItemServiceInterface {
 	@Override
 	public Item getItem (Long id) throws NotFound {
 		// Проверка на наличие 
+		log.info("Проверка на наличеие такого итема");
+		
 		if (!itemValid.itemIsPresent(id)) {
 			throw new NotFound(HttpStatus.NOT_FOUND);
 		}
+
+		log.info("Проверка у итема ACTIVE");
 		// Выводим только в случае active = true
 		if (!itemValid.itemIsActive(id)) {
 			throw new NotFound(HttpStatus.NOT_FOUND);
 		}
-
-		log.info("IN getItem - {} item is found", itemRepository.findById(id).orElseThrow());
+		log.info("IN getItem - {} item is found");
 		return itemRepository.findById(id).orElseThrow();
 	}
 
@@ -84,7 +85,8 @@ public class ItemService implements ItemServiceInterface {
 		if (!itemValid.itemIsPresent(id)) {
 			throw new NotFound(HttpStatus.NOT_FOUND);
 		}
-		return ItemDto.toModel(itemRepository.findById(id).get());
+		System.out.println("Здесь");
+		return ItemDto.toModel(itemRepository.findById(id).orElse(null));
 	}
 
 	// Перезапись параметров

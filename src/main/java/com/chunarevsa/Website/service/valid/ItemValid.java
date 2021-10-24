@@ -20,14 +20,16 @@ public class ItemValid {
 	public boolean itemIsPresent (long id) {
 		Item item = itemRepository.findById(id).orElse(null);
 		if (item == null) {
-			return true;
+			return false;
 		}
-		return false; 
+		return true; 
 	}
 
 	// Проверка не выключен ли active = true
 	public boolean itemIsActive (Long id) {
-		Status status =itemRepository.findById(id).orElseThrow().getStatus();
+		
+		Status status = itemRepository.findById(id).orElse(null).getStatus();
+		System.out.println(status);
 		if (status == Status.ACTIVE) {
 			return true;
 	}

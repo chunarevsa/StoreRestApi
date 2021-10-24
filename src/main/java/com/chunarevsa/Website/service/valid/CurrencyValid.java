@@ -31,6 +31,7 @@ public class CurrencyValid {
 		if (currencyByCode == null) {
 			return false;
 		}	 
+		System.out.println(currencyByCode.getCode());
 		return true;
 	}
 

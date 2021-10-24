@@ -19,7 +19,6 @@ public class Item extends Base {
 	private String name;
 	private String type;
 	private String description;
-	private Status status;
 
 	@OneToMany
 	@JoinColumn (name = "item_id")

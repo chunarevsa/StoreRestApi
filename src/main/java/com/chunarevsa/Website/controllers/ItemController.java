@@ -55,6 +55,7 @@ public class ItemController {
 	@RequestMapping (path = "/{id}", method = RequestMethod.GET)
 	public ItemDto getOneItem (@PathVariable(value = "id") Long id) throws AllException { 
 		itemService.getItem(id);
+		System.out.println("Здесь");
 		return itemService.getItemModel(id);
 	} 
 

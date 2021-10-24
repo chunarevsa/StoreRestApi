@@ -42,26 +42,35 @@ public class PriceService implements PriceServiceInterface {
 		
 		Set<Price> pricesSet = bodyItem.getPrices();
 		int i = 1;
+		try {
 		for (Price price : pricesSet) {
-
 			 if (!priceValid.amountIsCorrect(price)) {
-				log.info("IN saveAllPrice - price i: {} amount is NOT correct ", i);
+				log.info("IN saveAllPrice.amountIsCorrect - price {} amount is NOT correct ", i);
 				throw new InvalidPriceFormat(HttpStatus.BAD_REQUEST);
-			} 
-			if (priceValid.bodyIsEmpty(price)) {
-				throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
-			} 
-
-			boolean priceIsPresent = currencyValid.currencyIsPresent(price.getId());
-			if (!priceIsPresent) {
-				log.info("IN saveAllPrice - price i: {} currency is NOT correct", i);
-				throw new NotFound(HttpStatus.NOT_FOUND);
-			}
+			} log.info("IN saveAllPrice.amountIsCorrect - price {} amount is correct ", i);
 			
-			log.info("IN saveAllPrice - price i: {} is correct", i);
+			if (priceValid.bodyIsEmpty(price)) {
+				log.info("IN saveAllPrice.bodyIsEmpty - price {} amount is NOT correct ", i);
+				throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
+			} log.info("IN saveAllPrice.bodyIsEmpty - price {} form is correct ", i);
+
+			boolean codeIsPresent = currencyValid.codeIsPresent(price.getCurrencyCode());
+			System.out.println(codeIsPresent);
+			if (!codeIsPresent) {
+				log.info("IN saveAllPrice.codeIsPresent - price {} currency is NOT correct", i);
+				throw new NotFound(HttpStatus.NOT_FOUND);
+			} log.info("IN saveAllPrice.codeIsPresent - price {} currency is correct", i);
+
+			price.setStatus(Status.ACTIVE);
+			
+			log.info("IN saveAllPrice - price {} is correct", i);
 			i++;
 		}	
+		} catch (NumberFormatException e) {
+			throw new InvalidPriceFormat(HttpStatus.BAD_REQUEST);
+		}
 		priceRepository.saveAll(bodyItem.getPrices());
+		log.info("IN All Price is correct");
 	}
 
 	// Удаление цены
