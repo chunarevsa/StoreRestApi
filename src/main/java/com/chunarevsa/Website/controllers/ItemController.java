@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping (path = "/item", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ItemController {
 	
 	private final ItemRepository itemRepository;	
@@ -44,7 +43,7 @@ public class ItemController {
 	}
 
 	// Получение списка всех Items с ограничением страницы (10)
-	@GetMapping
+	@RequestMapping (path = "/item", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Page<Item> findAllItem (@PageableDefault(sort = { "active"}, direction = Sort.Direction.DESC) Pageable pageable) { 
 		// Сортировка по 10 элементов и только со значением active = true
 		Page<Item> pageItems = itemRepository.findByStatus(Status.ACTIVE, pageable);
@@ -52,15 +51,17 @@ public class ItemController {
 	}
 
 	// Получение по id
-	@RequestMapping (path = "/{id}", method = RequestMethod.GET)
+	@RequestMapping (path = "/item/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ItemDto getOneItem (@PathVariable(value = "id") Long id) throws AllException { 
 		itemService.getItem(id);
-		System.out.println("Здесь");
+		System.out.println(itemService.getItem(id));
+
+		System.out.println(itemService.getItemModel(id)); ;
 		return itemService.getItemModel(id);
 	} 
 
 	// Добавление 
-	@PostMapping 
+	@PostMapping (path = "/item", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus (value = HttpStatus.CREATED)	
 	public Item createdItem (@RequestBody Item bodyItem) throws AllException {
 		return itemService.addItem(bodyItem);
@@ -68,13 +69,13 @@ public class ItemController {
 	} 	
 				
 	 // Изменение
-	@PutMapping(value = "/{id}")
+	@PutMapping(value = "/item/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Item editItem (@PathVariable(value = "id") Long id, @RequestBody Item bodyItem) throws AllException {
 		return itemService.overridItem(id, bodyItem);
 	} 
 
    // Удаление (Выключение)
-	@DeleteMapping(value = "/{id}")
+	@DeleteMapping(value = "/item/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity deleteItem (@PathVariable(value = "id") Long id) throws AllException {
 		return ResponseEntity.ok().body(id);
 	}

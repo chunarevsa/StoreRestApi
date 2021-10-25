@@ -1,54 +1,46 @@
 package com.chunarevsa.Website.dto;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Entity.Price;
+import java.util.stream.Collectors;
 
+import lombok.Data;
+
+@Data
 public class ItemDto {
-	
+
 	private Long id; 
 
 	private String sku;
 	private String name;
 	private String type;
 	private String description;
-	// private Set<Price> prices;
+	// private Set<PriceDto> prices;
+	private Set<Price> prices;
 
 	public ItemDto() {}
 
 	public static ItemDto toModel (Item item) {
-		ItemDto itemModel = new ItemDto();
-		itemModel.setId(item.getId());
-		itemModel.setSku(item.getSku());
-		itemModel.setName(item.getName());
-		itemModel.setType(item.getType());
-		itemModel.setDescription(item.getDescription());
-		//itemModel.setPrices(item.getPrices());
+		
+		ItemDto itemDto = new ItemDto();
+		itemDto.setId(item.getId());
+		itemDto.setSku(item.getSku());
+		itemDto.setName(item.getName());
+		itemDto.setType(item.getType());
+		itemDto.setDescription(item.getDescription());
+
+		System.out.println("----------------------Здесь 2-----------------------------------------------");
+		itemDto.setPrices(item.getPrices());
 		/* itemModel.setPrices(item.getPrices().stream()
-				.map(priceModel::priceModel).collect(Collectors.toSet()));  */
-		return itemModel;
+				.map(PriceDto :: priceDto).collect(Collectors.toSet()));  */
+		/* itemDto.setPrices(item.getPrices().stream()
+				.map(PriceDto :: toModel).collect(Collectors.toSet())); */
+		System.out.println("----------------------Здесь 3-----------------------------------------------");
+		
+		
+		return itemDto;
 	}
-
-	public Long getId() {return this.id;}
-	public void setId(Long id) {this.id = id;}
-
-	public String getSku() {return this.sku;}
-	public void setSku(String sku) {this.sku = sku;}
-
-	public String getName() {return this.name;}
-	public void setName(String name) {this.name = name;}
-
-	public String getType() {return this.type;}
-	public void setType(String type) {this.type = type;}
-
-	public String getDescription() {return this.description;}
-	public void setDescription(String description) {this.description = description;}
-
-	//public Set<Price> getPrices() {return this.prices;}
-	//public void setPrices(Set<Price> prices) {this.prices = prices;}
-
-	
 
 }

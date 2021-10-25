@@ -85,8 +85,8 @@ public class ItemService implements ItemServiceInterface {
 		if (!itemValid.itemIsPresent(id)) {
 			throw new NotFound(HttpStatus.NOT_FOUND);
 		}
-		System.out.println("Здесь");
-		return ItemDto.toModel(itemRepository.findById(id).orElse(null));
+		System.out.println("----------------------Здесь 1-----------------------------------------------");
+		return ItemDto.toModel(itemRepository.findById(id).orElseThrow());
 	}
 
 	// Перезапись параметров

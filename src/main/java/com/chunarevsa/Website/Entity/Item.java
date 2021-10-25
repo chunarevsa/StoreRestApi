@@ -14,7 +14,6 @@ import lombok.Data;
 @Data
 public class Item extends Base {
 
-
 	private String sku;
 	private String name;
 	private String type;
