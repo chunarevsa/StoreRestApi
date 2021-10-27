@@ -5,6 +5,7 @@ import com.chunarevsa.Website.Entity.Status;
 import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.Exception.InvalidPriceFormat;
 import com.chunarevsa.Website.Exception.NotFound;
+import com.chunarevsa.Website.Exception.NotFoundCurrency;
 import com.chunarevsa.Website.dto.ItemDto;
 import com.chunarevsa.Website.dto.IdDto;
 import com.chunarevsa.Website.repo.ItemRepository;
@@ -36,7 +37,7 @@ public class ItemService implements ItemServiceInterface {
 
 	// Создание 
 	@Override
-	public Item addItem(Item bodyItem) throws NotFound, FormIsEmpty, InvalidPriceFormat {
+	public Item addItem(Item bodyItem) throws FormIsEmpty, InvalidPriceFormat, NotFoundCurrency {
 
 		// Проверка на незаполеннные данные
 		
@@ -85,13 +86,12 @@ public class ItemService implements ItemServiceInterface {
 		if (!itemValid.itemIsPresent(id)) {
 			throw new NotFound(HttpStatus.NOT_FOUND);
 		}
-		System.out.println("----------------------Здесь 1-----------------------------------------------");
 		return ItemDto.toModel(itemRepository.findById(id).orElseThrow());
 	}
 
 	// Перезапись параметров
 	@Override
-	public Item overridItem (long id, Item bodyItem) throws NotFound, FormIsEmpty, InvalidPriceFormat {
+	public Item overridItem (long id, Item bodyItem) throws NotFound, FormIsEmpty, InvalidPriceFormat, NotFoundCurrency {
 		// Проверка на наличие 
 		if (!itemValid.itemIsPresent(id)) {
 			throw new NotFound(HttpStatus.NOT_FOUND);
@@ -108,7 +108,7 @@ public class ItemService implements ItemServiceInterface {
 		item.setName(bodyItem.getName());
 		item.setType(bodyItem.getType());
 		item.setDescription(bodyItem.getDescription());
-		// Возможность вернуть удалённый (active = false) обратно (active = true)
+		// Возможность вернуть удалённый 
 		item.setStatus(bodyItem.getStatus());
 		item.setPrices(bodyItem.getPrices());
 

@@ -8,6 +8,7 @@ import com.chunarevsa.Website.Entity.Status;
 import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.Exception.InvalidPriceFormat;
 import com.chunarevsa.Website.Exception.NotFound;
+import com.chunarevsa.Website.Exception.NotFoundCurrency;
 import com.chunarevsa.Website.repo.PriceRepository;
 import com.chunarevsa.Website.service.inter.PriceServiceInterface;
 import com.chunarevsa.Website.service.valid.CurrencyValid;
@@ -38,7 +39,7 @@ public class PriceService implements PriceServiceInterface {
 
 	// Сохранение всех цен
 	@Override
-	public void saveAllPrice(Item bodyItem) throws NotFound, InvalidPriceFormat, FormIsEmpty {
+	public void saveAllPrice(Item bodyItem) throws InvalidPriceFormat, FormIsEmpty, NotFoundCurrency {
 		
 		Set<Price> pricesSet = bodyItem.getPrices();
 		int i = 1;
@@ -47,19 +48,19 @@ public class PriceService implements PriceServiceInterface {
 			 if (!priceValid.amountIsCorrect(price)) {
 				log.info("IN saveAllPrice.amountIsCorrect - price {} amount is NOT correct ", i);
 				throw new InvalidPriceFormat(HttpStatus.BAD_REQUEST);
-			} log.info("IN saveAllPrice.amountIsCorrect - price {} amount is correct ", i);
+			} 
 			
 			if (priceValid.bodyIsEmpty(price)) {
 				log.info("IN saveAllPrice.bodyIsEmpty - price {} amount is NOT correct ", i);
 				throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
-			} log.info("IN saveAllPrice.bodyIsEmpty - price {} form is correct ", i);
+			} 
 
 			boolean codeIsPresent = currencyValid.codeIsPresent(price.getCurrencyCode());
 			System.out.println(codeIsPresent);
 			if (!codeIsPresent) {
 				log.info("IN saveAllPrice.codeIsPresent - price {} currency is NOT correct", i);
-				throw new NotFound(HttpStatus.NOT_FOUND);
-			} log.info("IN saveAllPrice.codeIsPresent - price {} currency is correct", i);
+				throw new NotFoundCurrency(HttpStatus.NOT_FOUND);
+			} 
 
 			price.setStatus(Status.ACTIVE);
 			

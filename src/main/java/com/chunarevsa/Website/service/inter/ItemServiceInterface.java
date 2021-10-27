@@ -4,13 +4,14 @@ import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.Exception.InvalidPriceFormat;
 import com.chunarevsa.Website.Exception.NotFound;
+import com.chunarevsa.Website.Exception.NotFoundCurrency;
 import com.chunarevsa.Website.dto.IdDto;
 import com.chunarevsa.Website.dto.ItemDto;
 
 public interface ItemServiceInterface {
 	
 	// Создание 
-	public Item addItem(Item bodyItem) throws NotFound, FormIsEmpty, InvalidPriceFormat;
+	public Item addItem(Item bodyItem) throws NotFound, FormIsEmpty, InvalidPriceFormat, NotFoundCurrency;
 
 	// Получение однго итема
 	public Item getItem (Long id) throws NotFound;
@@ -19,7 +20,7 @@ public interface ItemServiceInterface {
 	public ItemDto getItemModel(Long id) throws NotFound;
 
 	// Перезапись параметров
-	public Item overridItem (long id, Item bodyItem) throws NotFound, FormIsEmpty, InvalidPriceFormat;
+	public Item overridItem (long id, Item bodyItem) throws NotFound, FormIsEmpty, InvalidPriceFormat, NotFoundCurrency;
 
 	// Удаление
 	public void deleteItem(long id) throws NotFound;

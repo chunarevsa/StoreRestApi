@@ -17,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -44,7 +43,7 @@ public class ItemController {
 
 	// Получение списка всех Items с ограничением страницы (10)
 	@RequestMapping (path = "/item", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<Item> findAllItem (@PageableDefault(sort = { "active"}, direction = Sort.Direction.DESC) Pageable pageable) { 
+	public Page<Item> findAllItem (@PageableDefault/* (sort = { "active"}, direction = Sort.Direction.DESC) */ Pageable pageable) { 
 		// Сортировка по 10 элементов и только со значением active = true
 		Page<Item> pageItems = itemRepository.findByStatus(Status.ACTIVE, pageable);
 		return pageItems;
@@ -52,12 +51,12 @@ public class ItemController {
 
 	// Получение по id
 	@RequestMapping (path = "/item/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ItemDto getOneItem (@PathVariable(value = "id") Long id) throws AllException { 
+	public ResponseEntity getOneItem (@PathVariable(value = "id") Long id) throws AllException { 
 		itemService.getItem(id);
-		System.out.println(itemService.getItem(id));
+		//System.out.println(itemService.getItem(id));
 
-		System.out.println(itemService.getItemModel(id)); ;
-		return itemService.getItemModel(id);
+		//System.out.println(itemService.getItemModel(id));
+		return ResponseEntity.ok().body(itemService.getItemModel(id));
 	} 
 
 	// Добавление 

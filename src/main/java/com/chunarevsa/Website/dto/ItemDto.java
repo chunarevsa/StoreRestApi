@@ -3,7 +3,6 @@ package com.chunarevsa.Website.dto;
 import java.util.*;
 
 import com.chunarevsa.Website.Entity.Item;
-import com.chunarevsa.Website.Entity.Price;
 import java.util.stream.Collectors;
 
 import lombok.Data;
@@ -17,8 +16,7 @@ public class ItemDto {
 	private String name;
 	private String type;
 	private String description;
-	// private Set<PriceDto> prices;
-	private Set<Price> prices;
+	private Set<PriceDto> prices;
 
 	public ItemDto() {}
 
@@ -31,14 +29,8 @@ public class ItemDto {
 		itemDto.setType(item.getType());
 		itemDto.setDescription(item.getDescription());
 
-		System.out.println("----------------------Здесь 2-----------------------------------------------");
-		itemDto.setPrices(item.getPrices());
-		/* itemModel.setPrices(item.getPrices().stream()
-				.map(PriceDto :: priceDto).collect(Collectors.toSet()));  */
-		/* itemDto.setPrices(item.getPrices().stream()
-				.map(PriceDto :: toModel).collect(Collectors.toSet())); */
-		System.out.println("----------------------Здесь 3-----------------------------------------------");
-		
+		itemDto.setPrices(item.getPrices().stream()
+				.map(PriceDto :: toModel).collect(Collectors.toSet()));
 		
 		return itemDto;
 	}
