@@ -12,7 +12,11 @@ import javax.persistence.MappedSuperclass;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import lombok.Data;
+
+
 @MappedSuperclass
+@Data
 public class Base {
 	
 	@Id
@@ -23,6 +27,7 @@ public class Base {
 	private Date created;
 	@LastModifiedDate
 	private Date updated;
+	
 	@Enumerated(EnumType.STRING)
 	private Status status;
 
@@ -38,7 +43,10 @@ public class Base {
 	public void setId(Long id) {this.id = id;}
 
 	public Date getCreated() {return this.created;}
-	public void setCreated(Date created) {this.created = created;}
+	public void setCreated(Date created) {
+		this.created = created;
+	}
+	
 
 	public Date getUpdated() {return this.updated;}
 	public void setUpdated(Date updated) {this.updated = updated;}

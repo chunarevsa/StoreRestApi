@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.config;
 
-/* import com.chunarevsa.Website.security.jwt.JwtConfigurer;
+/*import com.chunarevsa.Website.security.jwt.JwtConfigurer;
 import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
 
 import org.springframework.beans.factory.annotation.Autowired;

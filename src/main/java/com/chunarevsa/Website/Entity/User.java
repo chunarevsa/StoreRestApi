@@ -1,56 +1,114 @@
 package com.chunarevsa.Website.Entity;
 
-import java.util.Collection;
+import java.util.*;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
+@Table (name = "users")
 public class User extends Base implements UserDetails {
+
+	@Id
+	@GeneratedValue (strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@Column (nullable = false)
+	private String username;
+	@Column (nullable = false)
+	private String password;
+	@Transient
+	private String password2;
+
+	private Status status;
+
+	@Column (nullable = false)
+	private String email;
+	private String activationCode;
+
+	// Создание доп. таблицы для хранение для списка роллей, которая соединяется с User через "user_id"
+	@ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+	@CollectionTable (name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+	@Enumerated(EnumType.STRING) // Enam храним в ввиде строки 
+	private Set<Role> roles;
+
+	public boolean isAdmin () {
+		return roles.contains(Role.ADMIN);
+	}
+
+	public User() {}
+
+	public User(User user) {
+		this.id = user.id;
+		this.username = user.username;
+		this.password = user.password;
+		this.password2 = user.password2;
+		this.status = user.status;
+		this.email = user.email;
+		this.activationCode = user.activationCode;
+		this.roles = user.roles;
+	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
+		return getRoles();
 	}
 
 	@Override
-	public String getPassword() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public boolean isAccountNonExpired() {return true;}
 
 	@Override
-	public String getUsername() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public boolean isAccountNonLocked() {return true;}
 
 	@Override
-	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	public boolean isCredentialsNonExpired() {return true;}
 
 	@Override
 	public boolean isEnabled() {
-		// TODO Auto-generated method stub
+		System.out.println("ПРОВЕРКА на getStatus в User");
+		if (getStatus() == Status.ACTIVE) {
+			return true;
+		}
 		return false;
 	}
+
+	public Long getId() {return this.id;}
+	public void setId(Long id) {this.id = id;}
+
+	public String getUsername() {return this.username;}
+	public void setUsername(String username) {this.username = username;}
+
+	public String getPassword() {return this.password;}
+	public void setPassword(String password) {this.password = password;}
+
+	public String getPassword2() {return this.password2;}
+	public void setPassword2(String password2) {this.password2 = password2;}
+
+	public Status getStatus() {return this.status;}
+	public void setStatus(Status status) {this.status = status;}
+
+	public String getEmail() {return this.email;}
+	public void setEmail(String email) {this.email = email;}
+
+	public String getActivationCode() {return this.activationCode;}
+	public void setActivationCode(String activationCode) {this.activationCode = activationCode;}
+
+	public Set<Role> getRoles() {return this.roles;}
+	public void setRoles(Set<Role> roles) {this.roles = roles;}
 	
 }
 
