@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.security.jwt;
 
-/* import java.util.Collection;
+import java.util.Collection;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -8,18 +8,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+// 2
+// Из User в UserDetails, По сути User для SpringSecurity
 public class JwtUser implements UserDetails{
 
 	private final Long id;
 	private final String username;
 	private final String password;
 	private final String email;
-	private final String avatar;
-	private final Collection<? extends GrantedAuthority> authorities;
-
+	private final String avatar;  // Переделать в фаил - доделать
 	private final boolean enabled;
 	private final Date lastPasswordResetDate;
 
+	// Роли 
+	private final Collection<? extends GrantedAuthority> authorities;
 
 	public JwtUser(
 				Long id, 
@@ -42,7 +44,7 @@ public class JwtUser implements UserDetails{
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return authorities;
+		return authorities; // Роли
 	}
 
 	@JsonIgnore
@@ -72,7 +74,8 @@ public class JwtUser implements UserDetails{
 	@Override
 	public boolean isCredentialsNonExpired() {return true;}
 
+	// возможно Status.Active
 	@Override
 	public boolean isEnabled() {return enabled;}
 	
-} */
+} 

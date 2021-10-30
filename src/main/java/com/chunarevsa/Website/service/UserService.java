@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.service;
 
-/* import java.util.*;
+import java.util.*;
 
 import com.chunarevsa.Website.Entity.Role;
 import com.chunarevsa.Website.Entity.User;
@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 
+
+// Добавить обработку исключений (доделать)
 @Service
 @Slf4j
 public class UserService implements UserServiceInterface{
@@ -35,12 +37,16 @@ public class UserService implements UserServiceInterface{
 
 	@Override
 	public User register(User user) {
-		Role roleUser = roleRepository.findByRole("ROLE USER");
+		// Получаю роль (поумолчанию USER)
+		Role roleUser = roleRepository.findByRole("ROLE_USER");
+		// Создаю списко ролей, добавляю в него стандартное значю
 		List<Role> userRoles = new ArrayList<>();
 		userRoles.add(roleUser);
-
+		// Кодирование пароля для хранения в БД
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setRoles(userRoles);
+
+		// Активация пользователя - добавить (доделать)
 		user.setStatus(Status.ACTIVE);
 		User registeredUser = userRepository.save(user);
 		
@@ -75,10 +81,11 @@ public class UserService implements UserServiceInterface{
 		return user;
 	}
 
+	// Переделать на выключение (доделать)
 	@Override
 	public void delete(Long id) {
 		userRepository.deleteById(id);
 		log.info("IN delete - user with id: {} successfully deleted");
 	}
 	
-} */
+} 

@@ -46,19 +46,19 @@ public class PriceService implements PriceServiceInterface {
 		try {
 		for (Price price : pricesSet) {
 			 if (!priceValid.amountIsCorrect(price)) {
-				log.info("IN saveAllPrice.amountIsCorrect - price {} amount is NOT correct ", i);
+				log.warn("IN saveAllPrice.amountIsCorrect - price {} amount is NOT correct ", i);
 				throw new InvalidPriceFormat(HttpStatus.BAD_REQUEST);
 			} 
 			
 			if (priceValid.bodyIsEmpty(price)) {
-				log.info("IN saveAllPrice.bodyIsEmpty - price {} amount is NOT correct ", i);
+				log.warn("IN saveAllPrice.bodyIsEmpty - price {} amount is NOT correct ", i);
 				throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
 			} 
 
 			boolean codeIsPresent = currencyValid.codeIsPresent(price.getCurrencyCode());
 			System.out.println(codeIsPresent);
 			if (!codeIsPresent) {
-				log.info("IN saveAllPrice.codeIsPresent - price {} currency is NOT correct", i);
+				log.warn("IN saveAllPrice.codeIsPresent - price {} currency is NOT correct", i);
 				throw new NotFoundCurrency(HttpStatus.NOT_FOUND);
 			} 
 
@@ -94,10 +94,10 @@ public class PriceService implements PriceServiceInterface {
 		 
 	}
 
-	// Сохранение конкретной цены 
+	// Сохранение конкретной цены - доделать
 
-	// Удаление цены
+	// Удаление цены - доделать
 
-	// Получение модели цены
+	// Получение модели цены - доделать
 	
 }

@@ -49,10 +49,8 @@ public class ItemService implements ItemServiceInterface {
 		bodyItem.setStatus(Status.ACTIVE);
 
 		// Сохранение цен
-		log.info("СОХРАНЕНИЕ ЦЕН");
 		priceService.saveAllPrice(bodyItem);
 		
-		log.info("СОХРАНЕНИЕ ИТЕМ");
 		Item item = itemRepository.save(bodyItem);
 		 
 		log.info("IN addItem - item: {} seccesfully add", item);
@@ -65,17 +63,15 @@ public class ItemService implements ItemServiceInterface {
 	@Override
 	public Item getItem (Long id) throws NotFound {
 		// Проверка на наличие 
-		log.info("Проверка на наличеие такого итема");
-		
 		if (!itemValid.itemIsPresent(id)) {
 			throw new NotFound(HttpStatus.NOT_FOUND);
 		}
 
-		log.info("Проверка у итема ACTIVE");
 		// Выводим только в случае active = true
 		if (!itemValid.itemIsActive(id)) {
 			throw new NotFound(HttpStatus.NOT_FOUND);
 		}
+		
 		log.info("IN getItem - {} item is found");
 		return itemRepository.findById(id).orElseThrow();
 	}

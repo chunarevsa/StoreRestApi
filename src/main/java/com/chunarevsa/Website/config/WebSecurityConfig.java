@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.config;
 
-/*import com.chunarevsa.Website.security.jwt.JwtConfigurer;
+import com.chunarevsa.Website.security.jwt.JwtConfigurer;
 import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,16 +11,21 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 
+// 7
+
 @Configuration
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	private final JwtTokenProvider jwtTokenProvider;
 
-	private static final String ADMIN_ENDPOINT = "/api/v1/admin/**";
-   private static final String LOGIN_ENDPOINT = "/api/v1/auth/login";
+	private static final String LOGIN_ENDPOINT = "/**"; // /auth
+	
+	//private static final String ADMIN_ENDPOINT = "/**";
+   
+
 
 	@Autowired
-	public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
+	public WebSecurityConfig(JwtTokenProvider jwtTokenProvider) {
 		this.jwtTokenProvider = jwtTokenProvider;
 	}
 
@@ -32,16 +37,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure (HttpSecurity httpSecurity) throws Exception {
-		httpSecurity.httpBasic().disable()
-						.csrf().disable()
+		
+		httpSecurity.
+						httpBasic().disable() // ? доделать
+						.csrf().disable() // защита от взлома
+						// сессии пока отключены - доделать
 						.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 					.and()
-						.authorizeRequests()
+						.authorizeRequests() // все запросы должны быть авторизованы
+						//Url доступные для залогиненых ()
 						.antMatchers(LOGIN_ENDPOINT).permitAll()
-						.antMatchers(ADMIN_ENDPOINT).hasRole("ADMIN")
+						.antMatchers("/**").permitAll()
+						//Url доступные для ADMIN
+						//.antMatchers(ADMIN_ENDPOINT).hasRole("ADMIN")
+						//остальные запросы должны быть authenticated
 						.anyRequest().authenticated()
 					.and()
 						.apply(new JwtConfigurer(jwtTokenProvider));
 
 	}
-} */
+} 

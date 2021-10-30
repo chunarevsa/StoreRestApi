@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 
+// Проверить логирование - доделать
+
 @Service
 @Slf4j
 public class CurrencyService implements CurrencyServiceInterface {

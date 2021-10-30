@@ -1,6 +1,43 @@
 package com.chunarevsa.Website.Entity;
 
-import java.util.*;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+
+import lombok.Data;
+
+@Entity
+@Table(name = "users")
+@Data 
+public class User extends Base {
+
+	@Column (nullable = false)
+	private String username;
+	@Column (nullable = false)
+	private String password;
+	@Column (nullable = false)
+	private String email;
+
+	// Переделать в фаил - доделать
+	private String avatar;
+
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "user_roles", // связь через промежуточную таблицу через колонки:
+		//колонка 1 называется user_id и ссылается на id из user
+		joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")}, 
+		//колонка 2 называется role_id и ссылается на id из role
+		inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
+	private List<Role> roles;
+	
+} 
+
+/* import java.util.*;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -29,8 +66,10 @@ public class User extends Base implements UserDetails {
 
 	@Column (nullable = false)
 	private String username;
+
 	@Column (nullable = false)
 	private String password;
+
 	@Transient
 	private String password2;
 
@@ -38,6 +77,7 @@ public class User extends Base implements UserDetails {
 
 	@Column (nullable = false)
 	private String email;
+
 	private String activationCode;
 
 	// Создание доп. таблицы для хранение для списка роллей, которая соединяется с User через "user_id"
@@ -53,7 +93,6 @@ public class User extends Base implements UserDetails {
 	public User() {}
 
 	public User(User user) {
-		this.id = user.id;
 		this.username = user.username;
 		this.password = user.password;
 		this.password2 = user.password2;
@@ -86,9 +125,6 @@ public class User extends Base implements UserDetails {
 		return false;
 	}
 
-	public Long getId() {return this.id;}
-	public void setId(Long id) {this.id = id;}
-
 	public String getUsername() {return this.username;}
 	public void setUsername(String username) {this.username = username;}
 
@@ -110,37 +146,6 @@ public class User extends Base implements UserDetails {
 	public Set<Role> getRoles() {return this.roles;}
 	public void setRoles(Set<Role> roles) {this.roles = roles;}
 	
-}
-
-/* import java.util.List;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-
-import lombok.Data;
-
-
-@Entity
-@Table(name = "users")
-@Data 
-public class User extends Base {
-
-	private String username;
-	private String password;
-	private String email;
-	private String avatar;
-	private Status status;
-
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "user_roles", // связь через промежуточную таблицу через колонки:
-		//колонка 1 называется user_id и ссылается на id из user
-		joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")}, 
-		//колонка 2 называется role_id и ссылается на id из role
-		inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
-	private List<Role> roles;
-	
-	
 } */
+
+

@@ -23,8 +23,10 @@ public class Base {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	// Пока проставляется null, доделать 
 	@CreatedDate
 	private Date created;
+	// Пока проставляется null, доделать 
 	@LastModifiedDate
 	private Date updated;
 	
@@ -42,12 +44,10 @@ public class Base {
 	public Long getId() {return this.id;}
 	public void setId(Long id) {this.id = id;}
 
+	// Date now = new Date();
 	public Date getCreated() {return this.created;}
-	public void setCreated(Date created) {
-		this.created = created;
-	}
+	public void setCreated(Date created) {this.created = created;}
 	
-
 	public Date getUpdated() {return this.updated;}
 	public void setUpdated(Date updated) {this.updated = updated;}
 

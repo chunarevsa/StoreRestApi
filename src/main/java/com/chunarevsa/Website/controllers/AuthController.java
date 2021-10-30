@@ -1,8 +1,8 @@
 package com.chunarevsa.Website.controllers;
 
-/* import java.util.*;
+import java.util.*;
 
- import com.chunarevsa.Website.Entity.User;
+import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.dto.AuthRequestDto;
 import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
 import com.chunarevsa.Website.service.inter.UserServiceInterface;
@@ -19,16 +19,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+// 8
 @RestController
-@RequestMapping(value = "/api/v1/auth/")
-public class AuthControllerV1 {
+@RequestMapping(value = "/auth/")
+public class AuthController {
 
 	private final AuthenticationManager authManager;
 	private final JwtTokenProvider jwtTokenProvider;
 	private final UserServiceInterface userService;
 
 	@Autowired
-	public AuthControllerV1(
+	public AuthController(
 					AuthenticationManager authManager, 
 					JwtTokenProvider jwtTokenProvider, 
 					UserServiceInterface userService) {
@@ -37,15 +38,22 @@ public class AuthControllerV1 {
 		this.userService = userService;
 	}
 
+	// Авторизация
 	@PostMapping("login")
 	public ResponseEntity login (@RequestBody AuthRequestDto authRequestDto) {
-		 try {  
+		 try { 
 			String username = authRequestDto.getUsername();
+
+			// Запрос аутентификации по username и password
 			authManager.authenticate(new UsernamePasswordAuthenticationToken(username, authRequestDto.getPassword()));
+
+			// Получение пользователя
 			User user = userService.findByUsername(username);
 			if (user == null) {
 				throw new UsernameNotFoundException("User with username: " + username + " not found");
 			}
+
+			// Создание для пользователя токена
 			String token = jwtTokenProvider.createToken(username, user.getRoles());
 
 			// Не обязательная часть
@@ -54,12 +62,14 @@ public class AuthControllerV1 {
 			response.put("username", username);
 			response.put("token", token);
 
-			return ResponseEntity.ok(response);
+			// Сделать возврат об успешной авторизации без токена
+			return ResponseEntity.ok(response); 
 		
 		  } catch (AuthenticationException e) {
+			  	System.err.println("НЕВЕРНЫЙ ПАРОЛИ ИЛИ ИМЯ ПОЛЬЗОВАТЕЛЯ");
 				throw new BadCredentialsException("Invalid username or password");
 		}  
 		
 	}
 
-} */
+} 
