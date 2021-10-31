@@ -1,5 +1,5 @@
 package com.chunarevsa.Website.controllers;
-/*
+
 import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.dto.UserDto;
 import com.chunarevsa.Website.service.UserService;
@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
+// Настроить контроллеры (доступ пользователя и доступ админа)- доделать
+// Контроллер для пользователя
 @RestController
-@RequestMapping (value = "/api/v1/users/")
+@RequestMapping (value = "/users/")
 public class UserController {
 
 	private final UserService userService;
@@ -38,7 +40,7 @@ public class UserController {
 
 	
 }
-
+/*
 import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.Exception.AllException;
 import com.chunarevsa.Website.dto.UserModel;

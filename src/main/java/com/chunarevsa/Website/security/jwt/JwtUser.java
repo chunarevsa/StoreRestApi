@@ -74,7 +74,6 @@ public class JwtUser implements UserDetails{
 	@Override
 	public boolean isCredentialsNonExpired() {return true;}
 
-	// возможно Status.Active
 	@Override
 	public boolean isEnabled() {return enabled;}
 	

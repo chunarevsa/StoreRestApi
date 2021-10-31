@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.dto;
 
-/* import com.chunarevsa.Website.Entity.User;
+import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.Entity.Status;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -9,6 +9,7 @@ import lombok.Data;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AdminUserDto {
+	// Поля доступные админу
 	private Long id;
 	private String username;
 	private String avatar;
@@ -34,4 +35,4 @@ public class AdminUserDto {
 		adminUserDto.setStatus(user.getStatus().name());
 		return adminUserDto;
 	}
-} */
+} 

@@ -14,10 +14,7 @@ public class Currency extends Base {
 	private String code;	
 
 	public Currency() {}
-
-	public Currency(String code) {
-		this.code = code;
-	}
+	public Currency(String code) {this.code = code;}
 
 	public String getCode() {return this.code;}
 	public void setCode(String code) {this.code = code;}

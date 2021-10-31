@@ -37,7 +37,7 @@ public class User extends Base {
 	
 } 
 
-/* import java.util.*;
+/* import java.util.*; - доделать (убрать)
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;

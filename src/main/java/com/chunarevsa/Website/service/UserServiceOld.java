@@ -1,5 +1,5 @@
 package com.chunarevsa.Website.service;
-/*
+/* - доделть уюрать или оставить 
 import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.Exception.NotFound;
@@ -24,8 +24,8 @@ public class UserServiceOld {
 		this.userValid = userValid;
 	}
 
-	// Создание 
-	public User addItem(User userBody) throws NotFound, FormIsEmpty {
+	// Создание  - РЕГИСТРАЦИЯ
+	public User addUser(User userBody) throws NotFound, FormIsEmpty {
 
 		// Проверка на незаполеннные данные
 		userValid.bodyIsEmpty(userBody);

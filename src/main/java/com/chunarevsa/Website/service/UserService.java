@@ -35,7 +35,7 @@ public class UserService implements UserServiceInterface{
 		this.passwordEncoder = passwordEncoder;
 	}
 
-	@Override
+	@Override // добавить активацию 
 	public User register(User user) {
 		// Получаю роль (поумолчанию USER)
 		Role roleUser = roleRepository.findByRole("ROLE_USER");
@@ -64,7 +64,7 @@ public class UserService implements UserServiceInterface{
 	@Override
 	public User findByUsername(String username) {
 		User user = userRepository.findByUsername(username);
-		log.info("IN findByUsername - user: {} found by username: {}", user, username);
+		log.info("IN findByUsername - user: {} found by username: {}", username);
 		return user;
 	}
 
@@ -77,7 +77,7 @@ public class UserService implements UserServiceInterface{
 			return null;
 	  }
 
-	  log.info("IN findById - user: {} found by id: {}", user);
+	  log.info("IN findById - found user by id: {}", id);
 		return user;
 	}
 

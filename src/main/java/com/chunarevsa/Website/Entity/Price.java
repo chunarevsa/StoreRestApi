@@ -21,7 +21,6 @@ public class Price extends Base {
 	private Item item;
 
 	public Price() {}
-
 	public Price(
 				String amount, 
 				String currencyCode,

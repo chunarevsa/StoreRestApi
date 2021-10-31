@@ -31,7 +31,7 @@ public class JwtTokenFilter extends GenericFilterBean{
 		// Получение токена из запроса (req)
 		String token = jwtTokenProvider.resolveToken( (HttpServletRequest) req);
 		
-		// Если не null и валидный
+		// Валидация токена
 		if (token != null && jwtTokenProvider.validateToken(token)) {
 				// Передача аутентификация
 				Authentication auth = jwtTokenProvider.getAuthentication(token);

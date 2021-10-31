@@ -12,7 +12,7 @@ public interface ItemRepository extends CrudRepository <Item, Long> {
 	// Для сортировки и подачи по частям 
 		// Общий список
 	Page <Item> findAll (Pageable pageable);
-		// Только active = true
+		// Только Status.ACTIVE
 	Page <Item> findByStatus (Status status, Pageable pageable);
 	
 }

@@ -28,7 +28,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 // 5
-// Генерация токена
+// Генерация токена на основании username, roles и тек. времени
 @Component
 public class JwtTokenProvider {
 

@@ -21,9 +21,7 @@ public class Item extends Base {
 	@JoinColumn (name = "item_id")
 	private Set<Price> prices;
 
-	public Item() {
-	}
-
+	public Item() {}
 	public Item(
 				String sku, 
 				String name, 
