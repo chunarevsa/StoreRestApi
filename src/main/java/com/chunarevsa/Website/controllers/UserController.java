@@ -25,7 +25,7 @@ public class UserController {
 	public UserController(UserService userService) {
 		this.userService = userService;
 	}
-
+	// @PreAuthorize("hasAuthority('ADMIN')") или ROLE_ADMIN
 	@GetMapping(value = "{id}")
 	public ResponseEntity<UserDto> getUserById(@PathVariable (name = "id") Long id) {
 		
