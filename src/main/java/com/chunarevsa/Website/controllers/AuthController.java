@@ -1,10 +1,13 @@
 package com.chunarevsa.Website.controllers;
 
 import java.util.*;
+import javax.validation.Valid;
 
 import com.chunarevsa.Website.Entity.User;
+import com.chunarevsa.Website.Entity.payload.RegistrationRequest;
 import com.chunarevsa.Website.dto.AuthRequestDto;
 import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
+import com.chunarevsa.Website.service.UserService;
 import com.chunarevsa.Website.service.inter.UserServiceInterface;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,16 +29,24 @@ public class AuthController {
 
 	private final AuthenticationManager authManager;
 	private final JwtTokenProvider jwtTokenProvider;
-	private final UserServiceInterface userService;
+	private final UserService userService;
 
 	@Autowired
 	public AuthController(
 					AuthenticationManager authManager, 
 					JwtTokenProvider jwtTokenProvider, 
-					UserServiceInterface userService) {
+					UserService userService) {
 		this.authManager = authManager;
 		this.jwtTokenProvider = jwtTokenProvider;
 		this.userService = userService;
+	}
+
+	// Регистрация
+	@PostMapping ("/register")
+	public ResponseEntity registration (@Valid @RequestBody RegistrationRequest registrationRequest ) {
+		
+
+		return null;
 	}
 
 	// Авторизация

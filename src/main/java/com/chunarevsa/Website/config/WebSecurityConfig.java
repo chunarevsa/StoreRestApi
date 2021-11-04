@@ -16,8 +16,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 // 7
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity (debug = true)
 @EnableGlobalMethodSecurity (prePostEnabled = true)
+// @EnableJpaRepositories (basePackages = "com.chunarevsa.Website.repo") - доделать
+// @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	private final JwtTokenProvider jwtTokenProvider;
