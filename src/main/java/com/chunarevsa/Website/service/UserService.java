@@ -5,11 +5,8 @@ import java.util.*;
 import com.chunarevsa.Website.Entity.Role;
 import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.Entity.payload.RegistrationRequest;
-import com.chunarevsa.Website.Entity.Status;
-import com.chunarevsa.Website.repo.RoleRepository;
 import com.chunarevsa.Website.repo.UserRepository;
 import com.chunarevsa.Website.service.inter.UserServiceInterface;
-import com.chunarevsa.Website.service.valid.UserValid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,53 +20,45 @@ import lombok.extern.slf4j.Slf4j;
 public class UserService implements UserServiceInterface{
 
 	private final UserRepository userRepository;
-	private final UserValid userValid;
+	//private final UserValid userValid;
 	private final RoleService roleService;
 	private final BCryptPasswordEncoder passwordEncoder;
 
 	@Autowired
 	public UserService(
 				UserRepository userRepository,
-				UserValid userValid,
+				//UserValid userValid,
 				RoleService roleService,
 				BCryptPasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
-		this.userValid = userValid;
+		//this.userValid = userValid;
 		this.roleService = roleService;
 		this.passwordEncoder = passwordEncoder;
 	}
 
 	@Override 
-	public User registrationUser (RegistrationRequest registerRequest) {
+	public User addNewUser (RegistrationRequest registerRequest) {
 
 		User newUser = new User();
 		Boolean isAdmin = registerRequest.getRegisterAsAdmin();
 		newUser.setEmail(registerRequest.getEmail());
+		// Кодирование пароля для хранения в БД
 		newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
 		newUser.setUsername(registerRequest.getUsername());
 		newUser.addRoles(getRoles(isAdmin));
-		newUser.setStatus(Status.ACTIVE);
-		newUser.setEmailVerified(false);
-
-		// Получаю роль (поумолчанию USER)
-		Role roleUser = roleRepository.findByRole("ROLE_USER");
-		// Создаю списко ролей, добавляю в него стандартное значю
-		List<Role> userRoles = new ArrayList<>();
-		userRoles.add(roleUser);
-		// Кодирование пароля для хранения в БД
-		newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-		newUser.setRoles(userRoles);
-
-		// Активация пользователя - добавить (доделать)
-		newUser.setStatus(Status.ACTIVE);
-		User registeredUser = userRepository.save(newUser);
-		
-		log.info("IN register - user: {} seccesfully registred", registeredUser);
-		return registeredUser;
+		newUser.setActive(true);
+		newUser.setIsEmailVerified(false);
+		log.info("IN register - user: {} seccesfully registred", newUser);
+		return newUser;
 	}
+
+	public User save(User user) {
+		return userRepository.save(user);
+  	}
 
 	private Set<Role> getRoles(Boolean isAdmin) {
 		Set<Role> roles = new HashSet<>(roleService.findAll());
+		// Проврка может ли быть новый пользователь админом 
 		if (!isAdmin) {
 			roles.removeIf(Role::isAdminRole);
 	  }

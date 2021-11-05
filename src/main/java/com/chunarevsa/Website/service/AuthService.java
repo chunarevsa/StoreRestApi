@@ -29,10 +29,9 @@ public class AuthService { // добавить логи - доделать
 			// logger.error("Email already exists: " + newRegistrationRequestEmail);
 			throw new AlredyUseException("Email");
 	  }
-
-	  User newUser = userService.register(registrationRequest);
-
-		return ;
+	  User newUser = userService.addNewUser(registrationRequest);
+	  User savedNewUser = userService.save(newUser);
+	  return Optional.ofNullable(savedNewUser);
 	}
 
 	// Закинуть в валидацию - доделать

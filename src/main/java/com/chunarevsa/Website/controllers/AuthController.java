@@ -7,6 +7,7 @@ import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.Entity.payload.RegistrationRequest;
 import com.chunarevsa.Website.dto.AuthRequestDto;
 import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
+import com.chunarevsa.Website.service.AuthService;
 import com.chunarevsa.Website.service.UserService;
 import com.chunarevsa.Website.service.inter.UserServiceInterface;
 
@@ -27,15 +28,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/auth/")
 public class AuthController {
 
+	private final AuthService authService;
 	private final AuthenticationManager authManager;
 	private final JwtTokenProvider jwtTokenProvider;
 	private final UserService userService;
 
 	@Autowired
 	public AuthController(
+					AuthService authService,
 					AuthenticationManager authManager, 
 					JwtTokenProvider jwtTokenProvider, 
 					UserService userService) {
+		this.authService = authService;
 		this.authManager = authManager;
 		this.jwtTokenProvider = jwtTokenProvider;
 		this.userService = userService;
@@ -45,8 +49,8 @@ public class AuthController {
 	@PostMapping ("/register")
 	public ResponseEntity registration (@Valid @RequestBody RegistrationRequest registrationRequest ) {
 		
-
-		return null;
+		return authService.registrationUser(registrationRequest)
+					.map(user)
 	}
 
 	// Авторизация
