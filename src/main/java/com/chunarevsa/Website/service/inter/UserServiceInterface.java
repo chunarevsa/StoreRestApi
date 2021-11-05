@@ -8,7 +8,7 @@ import com.chunarevsa.Website.Entity.payload.RegistrationRequest;
 public interface UserServiceInterface {
 	
 	// Добавить обработку ошибок - доделать
-	User register(RegistrationRequest newUser); 
+	User registrationUser (RegistrationRequest newUser); 
 	List<User> getAll();
 	User findByUsername(String username);
 	User findById(Long id);

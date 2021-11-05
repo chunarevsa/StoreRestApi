@@ -39,8 +39,8 @@ public class UserService implements UserServiceInterface{
 		this.passwordEncoder = passwordEncoder;
 	}
 
-	@Override // добавить активацию 
-	public User register (RegistrationRequest registerRequest) {
+	@Override 
+	public User registrationUser (RegistrationRequest registerRequest) {
 
 		User newUser = new User();
 		Boolean isAdmin = registerRequest.getRegisterAsAdmin();

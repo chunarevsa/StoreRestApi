@@ -32,7 +32,7 @@ public class AuthService { // добавить логи - доделать
 
 	  User newUser = userService.register(registrationRequest);
 
-		return null;
+		return ;
 	}
 
 	// Закинуть в валидацию - доделать
