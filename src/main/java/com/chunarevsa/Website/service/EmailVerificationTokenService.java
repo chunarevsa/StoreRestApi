@@ -1,5 +1,6 @@
 package com.chunarevsa.Website.service;
 
+import java.time.Instant;
 import java.util.Optional;
 
 import com.chunarevsa.Website.Entity.token.EmailVerificationToken;
@@ -23,6 +24,21 @@ public class EmailVerificationTokenService {
 
 	public Optional<EmailVerificationToken> findByToken(String token) {
 		return emailVerificationTokenRepository.findByToken(token);
+	}
+
+	public void verifyExpiration(EmailVerificationToken verificationToken) {
+		System.out.println("verifyExpiration");
+		if (verificationToken.getExpiryDate().compareTo(Instant.now()) < 0) {
+			/* throw new InvalidTokenRequestException("Email Verification Token", token.getToken(),
+					"Expired token. Please issue a new request"); */
+			System.out.println("Expired token. Please issue a new request");
+		}
+		System.out.println("verifyExpiration");
+	}
+
+	public EmailVerificationToken save (EmailVerificationToken verificationToken) {
+		System.out.println("save");
+		return emailVerificationTokenRepository.save(verificationToken);
 	}
 
 

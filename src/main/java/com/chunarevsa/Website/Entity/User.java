@@ -75,10 +75,11 @@ public class User extends Base {
 
 	public void addRoles(Set<Role> roles) {
 		roles.forEach(this::addRole);
-  	 }
-
-
+  	}
 	
+	public void verificationConfirmed() {
+		setIsEmailVerified(true);
+	}
 
 	public Long getId() {return this.id;}
 	public void setId(Long id) {this.id = id;}
@@ -120,5 +121,6 @@ public class User extends Base {
 			", isEmailVerified='" + isIsEmailVerified() + "'" +
 			"}";
 	}
+
 
 }

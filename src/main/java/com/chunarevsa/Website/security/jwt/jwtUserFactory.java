@@ -1,7 +1,8 @@
 package com.chunarevsa.Website.security.jwt;
 
-import java.util.ArrayList;
+/* import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.chunarevsa.Website.Entity.Role;
@@ -25,16 +26,16 @@ public final class JwtUserFactory {
 				user.getPassword(), 
 				user.getEmail(), 
 				user.getAvatar(), 
-				mapToGrantedAuth(new ArrayList<>( user.getRoles() )), // authorities (роли)
-				user.getStatus().equals(Status.ACTIVE), 
+				mapToGrantedAuth(new ArrayList<>( user.getRoles())), // authorities (роли)
+				user.getActive().equals(true), 
 				user.getUpdated());
 	}
 
 	// конвертация Ролей в GrantedAuthority (для SpringSecurity)
-	private static List<GrantedAuthority> mapToGrantedAuth (List<Role> userRoles) {
+	private static List<GrantedAuthority> mapToGrantedAuth (Set<Role> userRoles) {
 		// проходим по списку UserRole и преобразуем в список GrantedAuthority
 		return userRoles.stream()
-			.map(role -> new SimpleGrantedAuthority( role.getRole()))
+			.map(role -> new SimpleGrantedAuthority( role.getRole().toString()))
 			.collect(Collectors.toList());
 	}
-} 
+}  */

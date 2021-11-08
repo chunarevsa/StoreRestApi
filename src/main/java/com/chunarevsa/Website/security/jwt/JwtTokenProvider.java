@@ -1,9 +1,6 @@
 package com.chunarevsa.Website.security.jwt;
 
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -114,7 +111,8 @@ public class JwtTokenProvider {
 	private List<String> getRoleNames (List<Role> userRoles) {
 		List<String> result = new ArrayList<>(); 
 		userRoles.forEach(role -> { //вместо stream
-			result.add(role.getRole());
+			System.out.println("ADD role --- ERORR");
+			//result.add(role.getRole());
 		});
 		return result;
 

@@ -72,6 +72,7 @@ public class AuthController {
 	public ResponseEntity confirmRegistration (@RequestParam("token") String token) {
 
 		return authService.confirmEmailRegistration(token)
+					.map(user -> ResponseEntity.ok().body("Ok")).orElseThrow();
 	}
 
 	// Авторизация

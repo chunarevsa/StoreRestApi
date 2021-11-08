@@ -45,7 +45,7 @@ public class JwtUser implements UserDetails{
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return authorities; // Роли
-	}
+	} 
 
 	@JsonIgnore
 	public Long getId() {return id;}
