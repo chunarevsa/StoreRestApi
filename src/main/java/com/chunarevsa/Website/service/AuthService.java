@@ -4,22 +4,27 @@ import java.util.*;
 
 import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.Entity.payload.RegistrationRequest;
+import com.chunarevsa.Website.Entity.token.EmailVerificationToken;
 import com.chunarevsa.Website.Exception.AlredyUseException;
 import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 
 public class AuthService { // добавить логи - доделать
 
 	private final UserService userService;
 	private final JwtTokenProvider jwtTokenProvider;
+	private final EmailVerificationTokenService emailVerificationTokenService;
 
 	@Autowired
 	public AuthService(
 					UserService userService, 
-					JwtTokenProvider jwtTokenProvider) {
+					JwtTokenProvider jwtTokenProvider,
+					EmailVerificationTokenService emailVerificationTokenService) {
 		this.userService = userService;
 		this.jwtTokenProvider = jwtTokenProvider;
+		this.emailVerificationTokenService = emailVerificationTokenService;
 	}
 
 	public Optional<User> registrationUser (RegistrationRequest registrationRequest) {
@@ -37,6 +42,13 @@ public class AuthService { // добавить логи - доделать
 	// Закинуть в валидацию - доделать
 	private boolean emailAlreadyExists(String userEmail) {
 		return userService.existsByEmail(userEmail);
+	}
+
+	public Optional<User> confirmEmailRegistration(String token) { // доделать - обработка исключений
+		EmailVerificationToken verificationToken = emailVerificationTokenService.findByToken(token).orElseThrow();
+
+		User
+		return ;
 	}
 
 }
