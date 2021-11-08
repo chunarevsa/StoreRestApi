@@ -29,14 +29,19 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Component
 public class JwtTokenProvider {
 
-	@Value("${jwt.token.secret}")
-	private String secret;
+	private static final String AUTHORITIES_CLAIM = "authorities";
+	private final String secret;
+	private final Long jwtExpiraton;
 
-	@Value("${jwt.token.expired}")
-	private long validityInMillisec; // можно взять int
 
-	@Autowired
-	private UserDetailsService userDetailsService;
+	public JwtTokenProvider(
+					@Value("${jwt.token.secret}") String secret, 
+					@Value("${jwt.token.expired}") Long jwtExpiraton, 
+					UserDetailsService userDetailsService) {
+		this.secret = secret;
+		this.jwtExpiraton = jwtExpiraton;
+	}
+	
 
 	// Нужен будет в UserService (кодировка пароля пользователя)
 	@Bean

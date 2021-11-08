@@ -6,6 +6,7 @@ import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,10 +18,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 
 @Configuration
 @EnableWebSecurity (debug = true)
-@EnableGlobalMethodSecurity (prePostEnabled = true)
-// @EnableJpaRepositories (basePackages = "com.chunarevsa.Website.repo") - доделать
-// @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
+@EnableJpaRepositories (basePackages = "com.chunarevsa.Website.repo") - доделать
+@EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+	
 	
 	private final JwtTokenProvider jwtTokenProvider;
 
@@ -32,11 +33,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		this.jwtTokenProvider = jwtTokenProvider;
 	}
 
-	@Bean
 	@Override
-	public AuthenticationManager authenticationManagerBean() throws Exception {
+	@Bean
+	public AuthenticationManager authenticationManager() throws Exception {
 		return super.authenticationManagerBean();
 	}
+
+	public 
 	
 	@Override
 	protected void configure (HttpSecurity httpSecurity) throws Exception {
