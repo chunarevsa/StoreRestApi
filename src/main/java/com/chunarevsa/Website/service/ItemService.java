@@ -1,7 +1,6 @@
 package com.chunarevsa.Website.service;
 
 import com.chunarevsa.Website.Entity.Item;
-import com.chunarevsa.Website.Entity.Status;
 import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.Exception.InvalidPriceFormat;
 import com.chunarevsa.Website.Exception.NotFound;
@@ -46,7 +45,7 @@ public class ItemService implements ItemServiceInterface {
 		}
 		
 		// Включение (active = true)
-		bodyItem.setStatus(Status.ACTIVE);
+		bodyItem.setActive(true);
 
 		// Сохранение цен
 		priceService.saveAllPrice(bodyItem);
@@ -105,7 +104,7 @@ public class ItemService implements ItemServiceInterface {
 		item.setType(bodyItem.getType());
 		item.setDescription(bodyItem.getDescription());
 		// Возможность вернуть удалённый 
-		item.setStatus(bodyItem.getStatus());
+		item.setActive(bodyItem.isActive());
 		item.setPrices(bodyItem.getPrices());
 
 		// Запись параметров
@@ -127,7 +126,7 @@ public class ItemService implements ItemServiceInterface {
 		}
 
 		Item item = itemRepository.findById(id).orElseThrow();
-		item.setStatus(Status.DELETED);
+		item.setActive(false);
 		itemRepository.save(item);
 		log.info("IN delete - item with id: {} successfully deleted");
 

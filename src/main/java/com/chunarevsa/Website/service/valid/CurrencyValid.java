@@ -1,7 +1,6 @@
 package com.chunarevsa.Website.service.valid;
 
 import com.chunarevsa.Website.Entity.Currency;
-import com.chunarevsa.Website.Entity.Status;
 import com.chunarevsa.Website.repo.CurrencyRepository;
 
 import org.springframework.stereotype.Service;
@@ -37,8 +36,8 @@ public class CurrencyValid {
 
 	// Проверка status
 	public boolean currencyIsActive (long id) {
-		Status currencyStatus = currencyRepository.findById(id).orElseThrow().getStatus();
-		if (currencyStatus == Status.ACTIVE) {
+		Boolean isActive = currencyRepository.findById(id).orElseThrow().getActive();
+		if (isActive) {
 			return true;
 		}
 		return false;

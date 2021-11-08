@@ -21,9 +21,6 @@ public abstract class Base implements Serializable {
 	@LastModifiedDate
 	@JoinColumn (nullable = false, updatable = true)
 	private Instant updated;
-	
-	/* @Enumerated(EnumType.STRING)
-	private Status status; */
 
 	public Base() {}
 
