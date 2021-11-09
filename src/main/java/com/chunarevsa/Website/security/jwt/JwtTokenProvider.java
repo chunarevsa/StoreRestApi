@@ -1,5 +1,6 @@
 package com.chunarevsa.Website.security.jwt;
 
+import java.time.Instant;
 import java.util.*;
 
 import javax.annotation.PostConstruct;
@@ -49,6 +50,30 @@ public class JwtTokenProvider {
       BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
       return bCryptPasswordEncoder;
    }
+
+	// Создание токена
+	public String createToken (JwtUser jwtUser) {
+
+		Instant now = Instant.now();
+		Instant expiryDate = now.plusMillis(jwtExpiraton);
+
+		
+		
+
+		Claims claims = Jwts.claims().setSubject(username);
+		claims.put("roles", getRoleNames(roles));
+		// Время создания токена
+		Date now = new Date();
+		// До скольки годен
+		Date validity = new Date(now.getTime() + validityInMillisec);
+
+		return Jwts.builder()
+					.setClaims(claims) // ?
+					.setIssuedAt(now) // Время создания токена
+					.setExpiration(validity) // До скольки годен
+					.signWith(SignatureAlgorithm.HS256, secret) // метод кодирования
+					.compact();
+	}
 
 	@PostConstruct
 	public void init () {
