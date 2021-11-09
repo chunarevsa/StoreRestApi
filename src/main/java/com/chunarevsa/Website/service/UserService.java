@@ -102,5 +102,14 @@ public class UserService implements UserServiceInterface{
 	public boolean existsByEmail(String email) {
 		return userRepository.existsByEmail(email);
 	}
+
+	@Override
+	public Optional<User> findByEmail(String email) {
+		return userRepository.findByEmail(email);
+	}
+
+	public Optional<User> findByid(Long id) {
+		return userRepository.findById(id);
+	}
 	
 } 

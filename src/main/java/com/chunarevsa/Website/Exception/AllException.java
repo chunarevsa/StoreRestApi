@@ -8,6 +8,13 @@ public class AllException extends Throwable {
 	public HttpStatus httpStatus;
 	public AllException allException;
 
+	// новая обработка - доделать
+	public AllException(String format) {
+	}
+
+	public AllException() {
+	}
+
 	public HttpStatus getHttpStatus() {return this.httpStatus;}
 	public void setHttpStatus(HttpStatus httpStatus) {this.httpStatus = httpStatus;}
 

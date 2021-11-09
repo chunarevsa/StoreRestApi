@@ -2,6 +2,7 @@ package com.chunarevsa.Website.security.jwt;
 
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -34,71 +37,70 @@ public class JwtTokenProvider {
 	private final String secret;
 	private final Long jwtExpiraton;
 
-
 	public JwtTokenProvider(
 					@Value("${jwt.token.secret}") String secret, 
 					@Value("${jwt.token.expired}") Long jwtExpiraton, 
 					UserDetailsService userDetailsService) {
 		this.secret = secret;
 		this.jwtExpiraton = jwtExpiraton;
-	}
-	
+	}	
 
-	// Нужен будет в UserService (кодировка пароля пользователя)
-	@Bean
+	// Создание токена
+	public String createToken (JwtUser jwtUser) {
+		System.out.println("createToken");
+		Instant now = Instant.now();
+		Instant expiryDate = now.plusMillis(jwtExpiraton);
+
+		String authorities = getUserAuthotities(jwtUser);
+		System.out.println("createToken - ok");
+		return Jwts.builder()
+					.setSubject(Long.toString( jwtUser.getId() ))
+					.setIssuedAt(Date.from(now)) // Время создания токена
+					.setExpiration(Date.from(expiryDate)) // До скольки годен
+					.signWith(SignatureAlgorithm.HS256, secret) // метод кодирования
+					.claim(AUTHORITIES_CLAIM, authorities)
+					.compact();
+	}
+
+	private String getUserAuthotities(JwtUser jwtUser) {
+		System.out.println("getUserAuthotities");
+		return jwtUser.getAuthorities().stream()
+						.map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
+	}
+
+	public Long getUserIdFromJWT(String token) {
+		System.out.println("getUserIdFromJWT");
+		Claims claims = Jwts.parser()
+								.setSigningKey(secret)
+								.parseClaimsJws(token)
+								.getBody();
+
+		System.out.println("getUserIdFromJWT - ok");
+		return Long.parseLong(claims.getSubject());
+	}
+
+	public List<GrantedAuthority> getAuthoritiesFromJWT(String token) {
+		Claims claims = Jwts.parser()
+                .setSigningKey(secret)
+                .parseClaimsJws(token)
+                .getBody();
+		return Arrays.stream(claims.get(AUTHORITIES_CLAIM).toString().split(","))
+					.map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+	}
+
+
+	/* @Bean
    public BCryptPasswordEncoder passwordEncoder() {
       BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
       return bCryptPasswordEncoder;
    }
-
-	// Создание токена
-	public String createToken (JwtUser jwtUser) {
-
-		Instant now = Instant.now();
-		Instant expiryDate = now.plusMillis(jwtExpiraton);
-
-		
-		
-
-		Claims claims = Jwts.claims().setSubject(username);
-		claims.put("roles", getRoleNames(roles));
-		// Время создания токена
-		Date now = new Date();
-		// До скольки годен
-		Date validity = new Date(now.getTime() + validityInMillisec);
-
-		return Jwts.builder()
-					.setClaims(claims) // ?
-					.setIssuedAt(now) // Время создания токена
-					.setExpiration(validity) // До скольки годен
-					.signWith(SignatureAlgorithm.HS256, secret) // метод кодирования
-					.compact();
-	}
-
+	
 	@PostConstruct
 	public void init () {
 		secret = Base64.getEncoder().encodeToString(secret.getBytes());
-	}
-	
-	// Создание токена
-	public String createToken (String username, List<Role> roles) {
+	} */
 
-		Claims claims = Jwts.claims().setSubject(username);
-		claims.put("roles", getRoleNames(roles));
-		// Время создания токена
-		Date now = new Date();
-		// До скольки годен
-		Date validity = new Date(now.getTime() + validityInMillisec);
-
-		return Jwts.builder()
-					.setClaims(claims) // ?
-					.setIssuedAt(now) // Время создания токена
-					.setExpiration(validity) // До скольки годен
-					.signWith(SignatureAlgorithm.HS256, secret) // метод кодирования
-					.compact();
-	}
-
-	// Получение данных на основе токена
+	/* // Получение данных на основе токена
 	public Authentication getAuthentication(String token) {
 		UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
 		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
@@ -146,5 +148,5 @@ public class JwtTokenProvider {
 		});
 		return result;
 
-	}
+	} */
 } 
