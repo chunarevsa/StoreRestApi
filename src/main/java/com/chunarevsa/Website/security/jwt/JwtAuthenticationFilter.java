@@ -60,9 +60,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			System.err.println("ОШИБКА В doFilterInternal");
 
 		}
-
 		filterChain.doFilter(request, response);
-		
 	}
 
 	// Получение токена из запроса

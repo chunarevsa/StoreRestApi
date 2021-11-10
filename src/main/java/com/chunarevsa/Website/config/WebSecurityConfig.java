@@ -1,13 +1,18 @@
 package com.chunarevsa.Website.config;
 
+import com.chunarevsa.Website.security.JwtUserDetailsService;
+import com.chunarevsa.Website.security.jwt.JwtAuthenricationEntryPoint;
+import com.chunarevsa.Website.security.jwt.JwtAuthenticationFilter;
 import com.chunarevsa.Website.security.jwt.JwtConfigurer;
 import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
+import com.chunarevsa.Website.security.jwt.JwtUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -22,15 +27,14 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	
-	private final JwtTokenProvider jwtTokenProvider;
+	private final JwtUserDetailsService jwtUserDetailsService;
 
-	//private static final String LOGIN_ENDPOINT = "/auth/login"; 
-	//private static final String ADMIN_ENDPOINT = "/admin/**";
-   
+	private final JwtAuthenricationEntryPoint jwtAuthenricationEntryPoint;
+
 	@Autowired
-	public WebSecurityConfig(JwtTokenProvider jwtTokenProvider) {
-		this.jwtTokenProvider = jwtTokenProvider;
+	public WebSecurityConfig(JwtUser jwtUser, JwtAuthenricationEntryPoint jwtAuthenricationEntryPoint) {
+		this.jwtUser = jwtUser;
+		this.jwtAuthenricationEntryPoint = jwtAuthenricationEntryPoint;
 	}
 
 	@Override
@@ -39,7 +43,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return super.authenticationManagerBean();
 	}
 
-	public 
+	public JwtAuthenticationFilter JwtAuthenticationFilter() {
+		return new JwtAuthenticationFilter();
+	}
+
+	@Override
+	protected void configure (AuthenticationManagerBuilder auth) {
+		auth.userDetailsService(jwtUserDetailsService).
+	}
 	
 	@Override
 	protected void configure (HttpSecurity httpSecurity) throws Exception {
