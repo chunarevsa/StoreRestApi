@@ -10,6 +10,7 @@ import com.chunarevsa.Website.service.inter.UserServiceInterface;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
@@ -20,16 +21,17 @@ import lombok.extern.slf4j.Slf4j;
 public class UserService implements UserServiceInterface{
 
 	private final UserRepository userRepository;
-	//private final UserValid userValid;
+	private final PasswordEncoder passwordEncoder;
+	// private final UserDeviceService userDeviceService - доделать
+	// private final UserValid userValid;
 	private final RoleService roleService;
-	private final BCryptPasswordEncoder passwordEncoder;
 
 	@Autowired
 	public UserService(
 				UserRepository userRepository,
 				//UserValid userValid,
 				RoleService roleService,
-				BCryptPasswordEncoder passwordEncoder) {
+				PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
 		//this.userValid = userValid;
 		this.roleService = roleService;

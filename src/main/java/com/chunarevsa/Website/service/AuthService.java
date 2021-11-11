@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.service;
 
-import java.util.*;
+import java.util.Optional;
 
 import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.Entity.payload.RegistrationRequest;
@@ -9,8 +9,9 @@ import com.chunarevsa.Website.Exception.AlredyUseException;
 import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AuthService { // добавить логи - доделать
 
 	private final UserService userService;

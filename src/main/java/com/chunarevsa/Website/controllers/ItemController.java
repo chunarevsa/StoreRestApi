@@ -40,12 +40,12 @@ public class ItemController {
 	}
 
 	// Получение списка всех Items с ограничением страницы (10)
-	@RequestMapping (path = "/item", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<Item> findAllItem (@PageableDefault/* (sort = { "active"}, direction = Sort.Direction.DESC) */ Pageable pageable) { 
+	/* @RequestMapping (path = "/item", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Page<Item> findAllItem (@PageableDefault (sort = { "active"}, direction = Sort.Direction.DESC)  Pageable pageable) { 
 		// Сортировка по 10 элементов и только со значением active = true
 		Page<Item> pageItems = itemRepository.findByStatus(Status.ACTIVE, pageable);
 		return pageItems;
-	}
+	} */ 
 
 	// Получение по id
 	@RequestMapping (path = "/item/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

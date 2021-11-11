@@ -1,12 +1,10 @@
 package com.chunarevsa.Website.security.jwt;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.chunarevsa.Website.Entity.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

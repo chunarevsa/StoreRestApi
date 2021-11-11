@@ -1,26 +1,18 @@
 package com.chunarevsa.Website.controllers;
 
-import java.util.*;
 import javax.validation.Valid;
 
-import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.Entity.payload.RegistrationRequest;
 import com.chunarevsa.Website.Exception.UserRegistrationException;
-import com.chunarevsa.Website.dto.AuthRequestDto;
 import com.chunarevsa.Website.event.UserRegistrationComplete;
 import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
 import com.chunarevsa.Website.service.AuthService;
 import com.chunarevsa.Website.service.UserService;
-import com.chunarevsa.Website.service.inter.UserServiceInterface;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

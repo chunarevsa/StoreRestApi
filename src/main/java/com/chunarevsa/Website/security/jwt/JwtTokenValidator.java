@@ -2,7 +2,9 @@ package com.chunarevsa.Website.security.jwt;
 
 import com.chunarevsa.Website.Exception.InvalidTokenRequestException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -10,11 +12,12 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 
+@Component
 public class JwtTokenValidator {
 	
 	private final String secret;
 
-
+	@Autowired
 	public JwtTokenValidator(@Value("${jwt.token.secret}") String secret) {
 		this.secret = secret;
 	}
