@@ -96,7 +96,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	// Доступ ко всем url
 	@Override
 	protected void configure (HttpSecurity httpSecurity) throws Exception {
-		
+		System.out.println("configure(httpSecurity) in WebSecurityConfig");
 		httpSecurity.cors()
 					.and()
 						.httpBasic().disable() // ? доделать
@@ -109,6 +109,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						.authorizeRequests()
 						.antMatchers( // Доступны без авторизации
 									"/item/**",
+									"/**/auth/**",
 									"/registration/**",
 									"/activate/*",
 									"/auth/login",
@@ -118,6 +119,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						.anyRequest().authenticated(); 
 		
 		httpSecurity.addFilterBefore(JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+		System.out.println("configure(httpSecurity) in WebSecurityConfig - ok");
 	}
 
 

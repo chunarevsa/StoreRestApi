@@ -33,10 +33,9 @@ public class AuthService { // добавить логи - доделать
 		String email = registrationRequest.getEmail();
 		if (emailAlreadyExists(email)) {
 			throw new AlredyUseException("Email");
-	  }
-	  System.out.println("addNewUser");
+	  }  
 	  User newUser = userService.addNewUser(registrationRequest);
-	  System.out.println("saveNewUser");
+	  
 	  User savedNewUser = userService.save(newUser);
 	  System.out.println("registrationUser - ok");
 	  return Optional.ofNullable(savedNewUser);

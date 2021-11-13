@@ -40,21 +40,26 @@ public class UserService implements UserServiceInterface{
 
 	@Override 
 	public User addNewUser (RegistrationRequest registerRequest) {
-
+		System.out.println("addNewUser");
 		User newUser = new User();
 		Boolean isAdmin = registerRequest.getRegisterAsAdmin();
 		newUser.setEmail(registerRequest.getEmail());
 		// Кодирование пароля для хранения в БД
-		newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+		System.out.println("newUser.getPassword() : " + registerRequest.getPassword());
+		System.out.println("newUser.getPassword() : " + newUser.getPassword());
+		newUser.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+		System.out.println(newUser.getPassword());
 		newUser.setUsername(registerRequest.getUsername());
 		newUser.addRoles(getRoles(isAdmin));
 		newUser.setActive(true);
 		newUser.setIsEmailVerified(false);
 		log.info("IN register - user: {} seccesfully registred", newUser);
+		System.out.println("addNewUser - ok");
 		return newUser;
 	}
 
 	public User save(User user) {
+		System.out.println("saveNewUser");
 		return userRepository.save(user);
   	}
 
