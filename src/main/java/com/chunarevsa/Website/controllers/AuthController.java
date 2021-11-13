@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,17 +53,18 @@ public class AuthController {
 		
 		return authService.registrationUser(registrationRequest)
 					.map(user -> {
-						UriComponentsBuilder urlBuilder = ServletUriComponentsBuilder.fromCurrentContextPath().path("/auth/registrationConfirmation");
+						UriComponentsBuilder urlBuilder = ServletUriComponentsBuilder.fromCurrentContextPath().path("/registrationConfirmation");
 						UserRegistrationComplete userRegistrationComplete = new UserRegistrationComplete(user, urlBuilder);
 						applicationEventPublisher.publishEvent(userRegistrationComplete);
 						return ResponseEntity.ok("Пользователь зарегистрирован, проверь почту");
 						// return ResponseEntity.ok(new ApiResponse(true, "User registered successfully. Check your email for verification"));
 						// доделать
-					}).orElseThrow(() -> new UserRegistrationException(registrationRequest.getEmail(), "Нет такого пользователя в базу"));
+					}).orElseThrow(() -> new UserRegistrationException(registrationRequest.getEmail(), "Нет такого пользователя в базе"));
 	}
 
+	@GetMapping("/registrationConfirmation")
 	public ResponseEntity confirmRegistration (@RequestParam("token") String token) {
-
+		System.out.println("confirmRegistration");
 		return authService.confirmEmailRegistration(token)
 					.map(user -> ResponseEntity.ok().body("Ok")).orElseThrow();
 	}

@@ -45,10 +45,8 @@ public class UserService implements UserServiceInterface{
 		Boolean isAdmin = registerRequest.getRegisterAsAdmin();
 		newUser.setEmail(registerRequest.getEmail());
 		// Кодирование пароля для хранения в БД
-		System.out.println("newUser.getPassword() : " + registerRequest.getPassword());
-		System.out.println("newUser.getPassword() : " + newUser.getPassword());
+		
 		newUser.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-		System.out.println(newUser.getPassword());
 		newUser.setUsername(registerRequest.getUsername());
 		newUser.addRoles(getRoles(isAdmin));
 		newUser.setActive(true);
