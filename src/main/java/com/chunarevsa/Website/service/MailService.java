@@ -29,26 +29,15 @@ public class MailService {
 		this.mailSender = mailSender;
 	}
 	
-	
 	public void sendMessageVerification (String emailTo, String emailConfirmationUrl) throws MessagingException {
 		System.out.println("sendMessageVerification");
 		//SimpleMailMessage mailMessage = new SimpleMailMessage();
 		Mail mailMessage = new Mail();
 
 		mailMessage.setFrom(username);
-		System.out.println(username);
-
 		mailMessage.setTo(emailTo);
-		System.out.println(emailTo);
-
 		mailMessage.setSubject("Email Verification ");
-		System.out.println("subject is - Email Verification ");
-
-		mailMessage.setMessage("Какой-то текст ");
-		System.out.println("Какой-то текст ");
-
-		//mailSender.send(mailMessage);
-
+		mailMessage.setMessage("Добро пожаловать в наш магазин! \n Чтобы завершить регистрацию перейдите по ссылке \n " + emailConfirmationUrl);
 		send(mailMessage);
 		System.out.println("sendMessageVerification - ok");
 	}
@@ -56,13 +45,20 @@ public class MailService {
 	private void send(Mail mailMessage) throws MessagingException {
 		System.out.println("send");
 		MimeMessage message = mailSender.createMimeMessage();
+		System.out.println("1");
 		MimeMessageHelper mimeMessageHelper =
 				 new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
 				 StandardCharsets.UTF_8.name());
+				 System.out.println("2");		 
 		
 		mimeMessageHelper.setTo(mailMessage.getTo());
+		//System.out.println(mailMessage.getTo());
+		System.out.println("3");
 		mimeMessageHelper.setText(mailMessage.getMessage(), true);
+		System.out.println("4");
 		mimeMessageHelper.setSubject(mailMessage.getSubject());
+		mimeMessageHelper.setFrom(mailMessage.getFrom());
+		System.out.println("5");
 		mailSender.send(message);
 		System.out.println("send - ok ");
 
