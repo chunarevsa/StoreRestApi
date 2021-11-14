@@ -2,8 +2,11 @@ package com.chunarevsa.Website.service;
 
 import java.time.Instant;
 import java.util.Optional;
+import java.util.UUID;
 
+import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.Entity.token.EmailVerificationToken;
+import com.chunarevsa.Website.Entity.token.TokenStatus;
 import com.chunarevsa.Website.repo.EmailVerificationTokenRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +43,28 @@ public class EmailVerificationTokenService {
 		System.out.println("save");
 		return emailVerificationTokenRepository.save(verificationToken);
 	}
+
+	public String createNewToken() {
+		System.out.println("createNewToken");
+		return UUID.randomUUID().toString();
+	}
+
+	public void createVirficationToken(User user, String token) {
+		
+		System.out.println("createVirficationToken");
+		EmailVerificationToken emailVerificationToken = new EmailVerificationToken();
+		emailVerificationToken.setToken(token);
+		emailVerificationToken.setTokenStatus(TokenStatus.STATUS_PENDING);
+		emailVerificationToken.setUser(user);
+		emailVerificationToken.setExpiryDate(Instant.now().plusMillis(tokenExpired));
+
+		emailVerificationTokenRepository.save(emailVerificationToken);
+
+		System.out.println("createVirficationToken - ok");
+
+	}
+
+
 
 
 
