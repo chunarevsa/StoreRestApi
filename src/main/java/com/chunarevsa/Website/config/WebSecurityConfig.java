@@ -110,6 +110,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						.antMatchers( // Доступны без авторизации
 									"/item/**",
 									"/**/auth/**",
+									"/auth/**",
 									"/registration/**",
 									"/activate/*",
 									"/auth/login",

@@ -53,7 +53,7 @@ public class AuthController {
 		
 		return authService.registrationUser(registrationRequest)
 					.map(user -> {
-						UriComponentsBuilder urlBuilder = ServletUriComponentsBuilder.fromCurrentContextPath().path("/registrationConfirmation");
+						UriComponentsBuilder urlBuilder = ServletUriComponentsBuilder.fromCurrentContextPath().path("/auth/registrationConfirmation");
 						UserRegistrationComplete userRegistrationComplete = new UserRegistrationComplete(user, urlBuilder);
 						applicationEventPublisher.publishEvent(userRegistrationComplete);
 						return ResponseEntity.ok("Пользователь зарегистрирован, проверь почту");
