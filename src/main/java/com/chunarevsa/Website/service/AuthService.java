@@ -2,13 +2,19 @@ package com.chunarevsa.Website.service;
 
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.Entity.payload.RegistrationRequest;
 import com.chunarevsa.Website.Entity.token.EmailVerificationToken;
 import com.chunarevsa.Website.Exception.AlredyUseException;
+import com.chunarevsa.Website.dto.AuthRequestDto;
 import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,15 +23,18 @@ public class AuthService { // добавить логи - доделать
 	private final UserService userService;
 	private final JwtTokenProvider jwtTokenProvider;
 	private final EmailVerificationTokenService emailVerificationTokenService;
+	private final AuthenticationManager authenticationManager;
 
 	@Autowired
 	public AuthService(
 					UserService userService, 
 					JwtTokenProvider jwtTokenProvider,
-					EmailVerificationTokenService emailVerificationTokenService) {
+					EmailVerificationTokenService emailVerificationTokenService,
+					AuthenticationManager authenticationManager) {
 		this.userService = userService;
 		this.jwtTokenProvider = jwtTokenProvider;
 		this.emailVerificationTokenService = emailVerificationTokenService;
+		this.authenticationManager = authenticationManager;
 	}
 
 	public Optional<User> registrationUser (RegistrationRequest registrationRequest) {
@@ -68,6 +77,12 @@ public class AuthService { // добавить логи - доделать
 
 		System.out.println("confirmEmailRegistration - ok");
 		return Optional.of(registeredUser);
+	}
+
+	public Optional<Authentication> authenticateUser(AuthRequestDto authRequestDto) {
+		return Optional.ofNullable(authenticationManager.authenticate(
+			new UsernamePasswordAuthenticationToken(authRequestDto.getEmail(), authRequestDto.getPassword())));
+
 	}
 
 }

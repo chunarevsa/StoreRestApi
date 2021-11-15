@@ -3,9 +3,14 @@ package com.chunarevsa.Website.controllers;
 import javax.validation.Valid;
 
 import com.chunarevsa.Website.Entity.payload.RegistrationRequest;
+import com.chunarevsa.Website.Exception.ResourceNotFoundException;
+import com.chunarevsa.Website.Exception.UserLoginException;
 import com.chunarevsa.Website.Exception.UserRegistrationException;
+import com.chunarevsa.Website.dto.AuthRequestDto;
 import com.chunarevsa.Website.event.UserRegistrationComplete;
+import com.chunarevsa.Website.security.JwtUserDetailsService;
 import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
+import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.service.AuthService;
 import com.chunarevsa.Website.service.UserService;
 
@@ -13,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -68,6 +75,18 @@ public class AuthController {
 		return authService.confirmEmailRegistration(token)
 					.map(user -> ResponseEntity.ok().body("Ok")).orElseThrow();
 	}
+
+	@PostMapping("/login")
+	public ResponseEntity login (@Valid @RequestBody AuthRequestDto authRequestDto) {
+		 
+		Authentication authentication = authService.authenticateUser(authRequestDto)
+			.orElseThrow(() -> new UserLoginException("Не удалось войти в систему - " + authRequestDto));
+		
+		JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
+		SecurityContextHolder.getContext().setAuthentication(authentication);  
+		
+		return ResponseEntity.ok().body("Успешная авторизиция");
+	} 
 
 	// Авторизация
 	/* @PostMapping("login")
