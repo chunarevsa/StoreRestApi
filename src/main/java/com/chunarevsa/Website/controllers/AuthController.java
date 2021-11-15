@@ -3,21 +3,16 @@ package com.chunarevsa.Website.controllers;
 import javax.validation.Valid;
 
 import com.chunarevsa.Website.Entity.payload.RegistrationRequest;
-import com.chunarevsa.Website.Exception.ResourceNotFoundException;
 import com.chunarevsa.Website.Exception.UserLoginException;
 import com.chunarevsa.Website.Exception.UserRegistrationException;
 import com.chunarevsa.Website.dto.AuthRequestDto;
 import com.chunarevsa.Website.event.UserRegistrationComplete;
-import com.chunarevsa.Website.security.JwtUserDetailsService;
-import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.service.AuthService;
-import com.chunarevsa.Website.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,22 +31,13 @@ public class AuthController {
 
 	private final AuthService authService;
 	private final ApplicationEventPublisher applicationEventPublisher;
-	private final AuthenticationManager authManager;
-	private final JwtTokenProvider jwtTokenProvider;
-	private final UserService userService;
 
 	@Autowired
 	public AuthController(
 					AuthService authService,
-					ApplicationEventPublisher applicationEventPublisher,
-					AuthenticationManager authManager, 
-					JwtTokenProvider jwtTokenProvider, 
-					UserService userService) {
+					ApplicationEventPublisher applicationEventPublisher) {
 		this.authService = authService;
 		this.applicationEventPublisher = applicationEventPublisher;
-		this.authManager = authManager;
-		this.jwtTokenProvider = jwtTokenProvider;
-		this.userService = userService;
 	}
 
 	// Регистрация
@@ -63,17 +49,15 @@ public class AuthController {
 						UriComponentsBuilder urlBuilder = ServletUriComponentsBuilder.fromCurrentContextPath().path("/auth/registrationConfirmation");
 						UserRegistrationComplete userRegistrationComplete = new UserRegistrationComplete(user, urlBuilder);
 						applicationEventPublisher.publishEvent(userRegistrationComplete);
-						return ResponseEntity.ok("Пользователь зарегистрирован, проверь почту");
-						// return ResponseEntity.ok(new ApiResponse(true, "User registered successfully. Check your email for verification"));
-						// доделать
+						return ResponseEntity.ok("Для завершения регистрации перейдите по ссылке в письме");
 					}).orElseThrow(() -> new UserRegistrationException(registrationRequest.getEmail(), "Нет такого пользователя в базе"));
 	}
 
 	@GetMapping("/registrationConfirmation")
 	public ResponseEntity confirmRegistration (@RequestParam("token") String token) {
-		System.out.println("confirmRegistration");
+
 		return authService.confirmEmailRegistration(token)
-					.map(user -> ResponseEntity.ok().body("Ok")).orElseThrow();
+					.map(user -> ResponseEntity.ok().body("Учётная запись подтверждена")).orElseThrow();
 	}
 
 	@PostMapping("/login")
@@ -86,40 +70,8 @@ public class AuthController {
 		SecurityContextHolder.getContext().setAuthentication(authentication);  
 		
 		return ResponseEntity.ok().body("Успешная авторизиция");
+
 	} 
 
-	// Авторизация
-	/* @PostMapping("login")
-	public ResponseEntity login (@RequestBody AuthRequestDto authRequestDto) {
-		 try { 
-			String username = authRequestDto.getUsername();
-
-			// Запрос аутентификации по username и password
-			authManager.authenticate(new UsernamePasswordAuthenticationToken(username, authRequestDto.getPassword()));
-
-			// Получение пользователя
-			User user = userService.findByUsername(username);
-			if (user == null) {
-				throw new UsernameNotFoundException("User with username: " + username + " not found");
-			}
-
-			// Создание для пользователя токена
-			String token = jwtTokenProvider.createToken(username, user.getRoles());
-
-			// Не обязательная часть
-			// Выводит в консоль токен username и т
-			Map<Object, Object> response = new HashMap<>();
-			response.put("username", username);
-			response.put("token", token);
-
-			// Сделать возврат об успешной авторизации без токена
-			return ResponseEntity.ok(response); 
-		
-		  } catch (AuthenticationException e) {
-			  	System.err.println("НЕВЕРНЫЙ ПАРОЛИ ИЛИ ИМЯ ПОЛЬЗОВАТЕЛЯ");
-				throw new BadCredentialsException("Invalid username or password");
-		}  
-		
-	} */
 
 } 
