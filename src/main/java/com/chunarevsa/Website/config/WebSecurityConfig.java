@@ -109,13 +109,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						.authorizeRequests()
 						.antMatchers( // Доступны без авторизации
 									"/item/**",
-									"/**/auth/**",
 									"/auth/**",
 									"/registration/**",
 									"/activate/*",
 									"/auth/login",
 									"/currency/**",
-									"/admin/**"
+									"/admin/**",
+									"/user/",
+									"/user/**"
 									).permitAll()
 						.anyRequest().authenticated(); 
 		

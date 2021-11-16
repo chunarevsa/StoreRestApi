@@ -45,15 +45,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 							FilterChain filterChain) throws ServletException, IOException {
 		System.out.println("doFilterInternal");
 		try {
+
 			String jwt = getJwtFromRequest(request);
+			System.out.println("if");
 			
 			if (StringUtils.hasText(jwt) && jwtTokenValidator.validateToken(jwt)) {
+				
 				Long userId = jwtTokenProvider.getUserIdFromJWT(jwt);
 				UserDetails userDetails = jwtUserDetailsService.loadUserById(userId);
 				List<GrantedAuthority> authorities = jwtTokenProvider.getAuthoritiesFromJWT(jwt);
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, jwt, authorities);
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				SecurityContextHolder.getContext().setAuthentication(authentication);
+				System.out.println("if - ok");
+
 		  }
 		} catch (Exception | InvalidTokenRequestException e) {
 			// доделать обработка ошибки 
