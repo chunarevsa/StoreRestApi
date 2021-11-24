@@ -113,6 +113,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 									"/registration/**",
 									"/activate/*",
 									"/auth/login",
+									"/auth/**",
 									"/currency/**",
 									"/admin/**",
 									"/user/",
