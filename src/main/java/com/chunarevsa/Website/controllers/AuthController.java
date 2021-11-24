@@ -2,11 +2,14 @@ package com.chunarevsa.Website.controllers;
 
 import javax.validation.Valid;
 
+import com.chunarevsa.Website.Entity.payload.JwtAuthenticationResponse;
 import com.chunarevsa.Website.Entity.payload.RegistrationRequest;
+import com.chunarevsa.Website.Entity.token.RefreshToken;
 import com.chunarevsa.Website.Exception.UserLoginException;
 import com.chunarevsa.Website.Exception.UserRegistrationException;
 import com.chunarevsa.Website.dto.AuthRequestDto;
 import com.chunarevsa.Website.event.UserRegistrationComplete;
+import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.service.AuthService;
 
@@ -31,13 +34,16 @@ public class AuthController {
 
 	private final AuthService authService;
 	private final ApplicationEventPublisher applicationEventPublisher;
+	private final JwtTokenProvider jwtTokenProvider;
 
 	@Autowired
 	public AuthController(
 					AuthService authService,
-					ApplicationEventPublisher applicationEventPublisher) {
+					ApplicationEventPublisher applicationEventPublisher,
+					JwtTokenProvider jwtTokenProvider) {
 		this.authService = authService;
 		this.applicationEventPublisher = applicationEventPublisher;
+		this.jwtTokenProvider = jwtTokenProvider;
 	}
 
 	// Регистрация
@@ -69,7 +75,12 @@ public class AuthController {
 		JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
 		SecurityContextHolder.getContext().setAuthentication(authentication);  
 		
-		return ResponseEntity.ok().body("Успешная авторизиция");
+		return authService.createAndPersistRefreshTokenForDevice(authentication, authRequestDto)
+					.map(RefreshToken::getToken)
+					.map(refreshToken -> {
+						String jwtToken = authService.generateToken(jwtUser);
+						return ResponseEntity.ok(new JwtAuthenticationResponse(jwtToken, refreshToken, jwtTokenProvider.getExpiryDuration()));
+					}).orElseThrow(() -> new UserLoginException("Couldn't create refresh token for: [" + authRequestDto + "]"));
 
 	} 
 

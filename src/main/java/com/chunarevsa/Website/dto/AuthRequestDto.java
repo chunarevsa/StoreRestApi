@@ -1,5 +1,6 @@
 package com.chunarevsa.Website.dto;
 
+import com.chunarevsa.Website.Entity.payload.DeviceInfo;
 
 // Запрос при аутентификации 
 
@@ -8,6 +9,7 @@ public class AuthRequestDto {
 	private String username;
 	private String email;
 	private String password;
+	private DeviceInfo deviceInfo;
 
 	public AuthRequestDto() {}
 
@@ -40,6 +42,16 @@ public class AuthRequestDto {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+
+	public DeviceInfo getDeviceInfo() {
+		return this.deviceInfo;
+	}
+
+	public void setDeviceInfo(DeviceInfo deviceInfo) {
+		this.deviceInfo = deviceInfo;
+	}
+
 
 
 	

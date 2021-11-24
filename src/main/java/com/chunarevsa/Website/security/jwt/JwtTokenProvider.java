@@ -23,21 +23,21 @@ public class JwtTokenProvider {
 
 	private static final String AUTHORITIES_CLAIM = "authorities";
 	private final String secret;
-	private final Long jwtExpiraton;
+	private final Long jwtExpiration;
 
 	public JwtTokenProvider(
 					@Value("${jwt.token.secret}") String secret, 
-					@Value("${jwt.token.expired}") Long jwtExpiraton, 
+					@Value("${jwt.token.expired}") Long jwtExpiration, 
 					UserDetailsService userDetailsService) {
 		this.secret = secret;
-		this.jwtExpiraton = jwtExpiraton;
+		this.jwtExpiration = jwtExpiration;
 	}	
 
 	// Создание токена
 	public String createToken (JwtUser jwtUser) {
 		System.out.println("createToken");
 		Instant now = Instant.now();
-		Instant expiryDate = now.plusMillis(jwtExpiraton);
+		Instant expiryDate = now.plusMillis(jwtExpiration);
 
 		String authorities = getUserAuthotities(jwtUser);
 		System.out.println("createToken - ok");
@@ -76,4 +76,19 @@ public class JwtTokenProvider {
 					.map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 	}
 
+	public String generateToken(JwtUser jwtUser) {
+		Instant expiryDate = Instant.now().plusMillis(jwtExpiration);
+		String authorities = getUserAuthotities(jwtUser);
+		return Jwts.builder()
+						.setSubject(Long.toString(jwtUser.getId()))
+						.setIssuedAt(Date.from(Instant.now()))
+						.setExpiration(Date.from(expiryDate))
+						.signWith(SignatureAlgorithm.HS512, secret)
+						.claim(AUTHORITIES_CLAIM, authorities)
+						.compact();
+	}
+	
+	public long getExpiryDuration() {
+		return jwtExpiration;
+  }
 } 

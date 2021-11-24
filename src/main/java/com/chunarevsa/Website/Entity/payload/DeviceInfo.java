@@ -18,7 +18,6 @@ public class DeviceInfo {
 		this.notificationToken = notificationToken;
 	}
 
-
 	public String getDeviceId() {
 		return this.deviceId;
 	}
