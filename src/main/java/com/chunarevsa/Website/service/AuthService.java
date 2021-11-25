@@ -93,8 +93,11 @@ public class AuthService { // добавить логи - доделать
 
 	public Optional<Authentication> authenticateUser(LoginRequestDto loginRequestDto) {
 		System.out.println("authenticateUser");
-		return Optional.ofNullable(authenticationManager.authenticate(
-			new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword())));
+
+		UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword());
+
+		return Optional.ofNullable(authenticationManager.authenticate(user));
+			
 
 	}
 

@@ -7,16 +7,14 @@ import com.chunarevsa.Website.Entity.payload.DeviceInfo;
 public class LoginRequestDto {
 	
 
-    private String username;
+   private String username;
 
-    private String email;
+   private String email;
 
+   private String password;
 
-    private String password;
-
-    @Valid
-    private DeviceInfo deviceInfo;
-
+   @Valid
+   private DeviceInfo deviceInfo;
 
 	public LoginRequestDto() {
 	}
@@ -58,6 +56,16 @@ public class LoginRequestDto {
 
 	public void setDeviceInfo(DeviceInfo deviceInfo) {
 		this.deviceInfo = deviceInfo;
+	}
+
+	@Override
+	public String toString() {
+		return "{" +
+			" username='" + getUsername() + "'" +
+			", email='" + getEmail() + "'" +
+			", password='" + getPassword() + "'" +
+			", deviceInfo='" + getDeviceInfo() + "'" +
+			"}";
 	}
 
 

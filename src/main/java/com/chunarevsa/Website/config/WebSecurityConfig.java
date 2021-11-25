@@ -38,10 +38,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		this.jwtAuthenricationEntryPoint = jwtAuthenricationEntryPoint;
 	}
 
-	@Override
+	/* @Override
 	@Bean
 	public AuthenticationManager authenticationManager() throws Exception {
 		return super.authenticationManagerBean();
+	} */
+
+	@Override
+	@Bean
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+   	return super.authenticationManagerBean();
 	}
 
 	@Bean
