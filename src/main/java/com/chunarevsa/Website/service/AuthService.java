@@ -11,6 +11,7 @@ import com.chunarevsa.Website.Entity.token.EmailVerificationToken;
 import com.chunarevsa.Website.Entity.token.RefreshToken;
 import com.chunarevsa.Website.Exception.AlredyUseException;
 import com.chunarevsa.Website.dto.AuthRequestDto;
+import com.chunarevsa.Website.dto.LoginRequestDto;
 import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 
@@ -90,15 +91,15 @@ public class AuthService { // добавить логи - доделать
 		return Optional.of(registeredUser);
 	}
 
-	public Optional<Authentication> authenticateUser(AuthRequestDto authRequestDto) {
+	public Optional<Authentication> authenticateUser(LoginRequestDto loginRequestDto) {
 		System.out.println("authenticateUser");
 		return Optional.ofNullable(authenticationManager.authenticate(
-			new UsernamePasswordAuthenticationToken(authRequestDto.getEmail(), authRequestDto.getPassword())));
+			new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword())));
 
 	}
 
 	public Optional<RefreshToken> createAndPersistRefreshTokenForDevice(Authentication authentication,
-			@Valid AuthRequestDto authRequestDto) {
+			@Valid LoginRequestDto loginRequestDto) {
 		System.out.println("createAndPersistRefreshTokenForDevice");
 		User jwtUser = (User) authentication.getPrincipal();
 
@@ -106,7 +107,7 @@ public class AuthService { // добавить логи - доделать
 			jwtUser.getId()).map(UserDevice::getRefreshToken)
 								 .map(RefreshToken::getId).ifPresent(refreshTokenService::deleteById);
 		
-		UserDevice userDevice = userDeviceService.createUserDevice(authRequestDto.getDeviceInfo());
+		UserDevice userDevice = userDeviceService.createUserDevice(loginRequestDto.getDeviceInfo());
 		RefreshToken refreshToken = refreshTokenService.createRefrechToken();
 
 		userDevice.setUser(jwtUser);

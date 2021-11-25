@@ -31,7 +31,7 @@ public class EmailVerificationTokenService {
 
 	public void verifyExpiration(EmailVerificationToken verificationToken) {
 		System.out.println("verifyExpiration");
-		System.out.println("verificationToken is :" + verificationToken);
+		System.out.println("verificationToken is :" + verificationToken.toString());
 		if (verificationToken.getExpiryDate().compareTo(Instant.now()) < 0) {
 			/* throw new InvalidTokenRequestException("Email Verification Token", token.getToken(),
 					"Expired token. Please issue a new request"); */

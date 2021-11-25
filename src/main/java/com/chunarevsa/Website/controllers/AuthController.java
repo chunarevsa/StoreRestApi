@@ -8,6 +8,7 @@ import com.chunarevsa.Website.Entity.token.RefreshToken;
 import com.chunarevsa.Website.Exception.UserLoginException;
 import com.chunarevsa.Website.Exception.UserRegistrationException;
 import com.chunarevsa.Website.dto.AuthRequestDto;
+import com.chunarevsa.Website.dto.LoginRequestDto;
 import com.chunarevsa.Website.event.UserRegistrationComplete;
 import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
 import com.chunarevsa.Website.security.jwt.JwtUser;
@@ -67,23 +68,23 @@ public class AuthController {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity login (@Valid @RequestBody AuthRequestDto authRequestDto) {
+	public ResponseEntity login (@Valid @RequestBody LoginRequestDto loginRequestDto) {
 		 
 		System.out.println("get authentication");
-		Authentication authentication = authService.authenticateUser(authRequestDto)
-			.orElseThrow(() -> new UserLoginException("Не удалось войти в систему - " + authRequestDto));
+		Authentication authentication = authService.authenticateUser(loginRequestDto)
+			.orElseThrow(() -> new UserLoginException("Не удалось войти в систему - " + loginRequestDto));
 		
 		System.out.println("get jwtUser");
 		JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
 		System.out.println("SecurityContextHolder.getContext().setAuthentication(authentication)");
 		SecurityContextHolder.getContext().setAuthentication(authentication);  
 		
-		return authService.createAndPersistRefreshTokenForDevice(authentication, authRequestDto)
+		return authService.createAndPersistRefreshTokenForDevice(authentication, loginRequestDto)
 					.map(RefreshToken::getToken)
 					.map(refreshToken -> {
 						String jwtToken = authService.createToken(jwtUser);
 						return ResponseEntity.ok(new JwtAuthenticationResponse(jwtToken, refreshToken, jwtTokenProvider.getExpiryDuration()));
-					}).orElseThrow(() -> new UserLoginException("Couldn't create refresh token for: [" + authRequestDto + "]"));
+					}).orElseThrow(() -> new UserLoginException("Couldn't create refresh token for: [" + loginRequestDto + "]"));
 
 	} 
 
