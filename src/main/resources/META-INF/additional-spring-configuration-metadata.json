@@ -8,5 +8,60 @@
     "name": "jwt.token.expired",
     "type": "java.lang.String",
     "description": "A description for 'jwt.token.expired'"
+  },
+  {
+    "name": "jwt.header.prefix",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.header.prefix'"
+  },
+  {
+    "name": "jwt.header",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.header'"
+  },
+  {
+    "name": "jwt.token.password.reset.duration",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.token.password.reset.duration'"
+  },
+  {
+    "name": "jwt.cache.logoutToken.maxSize",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.cache.logoutToken.maxSize'"
+  },
+  {
+    "name": "jwt.token.secret",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.token.secret'"
+  },
+  {
+    "name": "jwt.token.expired",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.token.expired'"
+  },
+  {
+    "name": "jwt.header",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.header'"
+  },
+  {
+    "name": "jwt.header.prefix",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.header.prefix'"
+  },
+  {
+    "name": "jwt.token.password.reset.duration",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.token.password.reset.duration'"
+  },
+  {
+    "name": "jwt.cache.logoutToken.maxSize",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.cache.logoutToken.maxSize'"
+  },
+  {
+    "name": "jwt.refresh.duration",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.refresh.duration'"
   }
 ]}

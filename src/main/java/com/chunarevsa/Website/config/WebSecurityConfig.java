@@ -1,77 +1,130 @@
 package com.chunarevsa.Website.config;
 
-import com.chunarevsa.Website.security.jwt.JwtConfigurer;
-import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
+import com.chunarevsa.Website.security.JwtUserDetailsService;
+import com.chunarevsa.Website.security.jwt.JwtAuthenricationEntryPoint;
+import com.chunarevsa.Website.security.jwt.JwtAuthenticationFilter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 // 7
 
 @Configuration
-@EnableWebSecurity
-@EnableGlobalMethodSecurity (prePostEnabled = true)
+@EnableWebSecurity (debug = true)
+@EnableJpaRepositories (basePackages = "com.chunarevsa.Website.repo") // - доделать
+@EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	private final JwtTokenProvider jwtTokenProvider;
+	private final JwtUserDetailsService jwtUserDetailsService;
 
-	//private static final String LOGIN_ENDPOINT = "/auth/login"; 
-	//private static final String ADMIN_ENDPOINT = "/admin/**";
-   
+	private final JwtAuthenricationEntryPoint jwtAuthenricationEntryPoint;
+
 	@Autowired
-	public WebSecurityConfig(JwtTokenProvider jwtTokenProvider) {
-		this.jwtTokenProvider = jwtTokenProvider;
+	public WebSecurityConfig(JwtUserDetailsService jwtUserDetailsService, JwtAuthenricationEntryPoint jwtAuthenricationEntryPoint) {
+		this.jwtUserDetailsService = jwtUserDetailsService;
+		this.jwtAuthenricationEntryPoint = jwtAuthenricationEntryPoint;
+	}
+
+	@Override
+	@Bean
+	public AuthenticationManager authenticationManager() throws Exception {
+		return super.authenticationManagerBean();
 	}
 
 	@Bean
-	@Override
-	public AuthenticationManager authenticationManagerBean() throws Exception {
-		return super.authenticationManagerBean();
+	public JwtAuthenticationFilter JwtAuthenticationFilter() {
+		return new JwtAuthenticationFilter();
+	}
+
+	@Override // ? - доделать
+	protected void configure (AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
 	}
 	
-	@Override
+	@Bean 
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+	@Override // ? - доделать
+	public void configure (WebSecurity webSecurity) {
+		webSecurity.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/**",
+		"/swagger-ui.html", "/webjars/**");
+	}
+
+	/* @Override
 	protected void configure (HttpSecurity httpSecurity) throws Exception {
 		
-		httpSecurity.
-						httpBasic().disable() // ? доделать
+		httpSecurity.cors()
+					.and()
+						.httpBasic().disable() // ? доделать
 						.csrf().disable() // защита от взлома
+						.exceptionHandling().authenticationEntryPoint(jwtAuthenricationEntryPoint)
+					.and()	
 						// сессии пока отключены - доделать
 						.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 					.and()
 						.authorizeRequests()
-							.antMatchers( // Доступны без авторизации
-										"/item/**",
-										"/registration/**",
-										"/activate/*",
-										"/auth/login"
-										).permitAll()
-							.antMatchers( // Доступны для админов
+						.antMatchers( // Доступны без авторизации
+									"/item/**",
+									"/registration/**",
+									"/activate/*",
+									"/auth/login"
+									).permitAll()
+						.antMatchers( // Доступны для админов
 										"/currency/**",
 										"/admin/**"
-										).hasRole("ADMIN")
-							.anyRequest().authenticated() // остально только для авторизованых	
-					.and()
-						.apply(new JwtConfigurer(jwtTokenProvider)); 
+									).hasRole("ROLE_ADMIN")
+						.anyRequest().authenticated(); // остально только для авторизованых	
 		
-		// Вкл общий доступ
-		/*  httpSecurity.
-						httpBasic().disable() // ? доделать
+		httpSecurity.addFilterBefore(JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+	} */
+
+	// Доступ ко всем url
+	@Override
+	protected void configure (HttpSecurity httpSecurity) throws Exception {
+		System.out.println("configure(httpSecurity) in WebSecurityConfig");
+		httpSecurity.cors()
+					.and()
+						.httpBasic().disable() // ? доделать
 						.csrf().disable() // защита от взлома
+						.exceptionHandling().authenticationEntryPoint(jwtAuthenricationEntryPoint)
+					.and()	
 						// сессии пока отключены - доделать
 						.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 					.and()
-						.authorizeRequests() // Доступны без авторизации
-							.antMatchers( "/**").permitAll()
-							.anyRequest().authenticated() // остально только для авторизованых	
-					.and()
-						.apply(new JwtConfigurer(jwtTokenProvider)); */
-
+						.authorizeRequests()
+						.antMatchers( // Доступны без авторизации
+									"/item/**",
+									"/auth/**",
+									"/registration/**",
+									"/activate/*",
+									"/auth/login",
+									"/auth/**",
+									"/currency/**",
+									"/admin/**",
+									"/user/",
+									"/user/**"
+									).permitAll()
+						.anyRequest().authenticated(); 
+		
+		httpSecurity.addFilterBefore(JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+		System.out.println("configure(httpSecurity) in WebSecurityConfig - ok");
 	}
+
+
+
 } 

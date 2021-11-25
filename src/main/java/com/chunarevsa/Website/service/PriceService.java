@@ -4,7 +4,6 @@ import java.util.*;
 
 import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Entity.Price;
-import com.chunarevsa.Website.Entity.Status;
 import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.Exception.InvalidPriceFormat;
 import com.chunarevsa.Website.Exception.NotFound;
@@ -62,7 +61,7 @@ public class PriceService implements PriceServiceInterface {
 				throw new NotFoundCurrency(HttpStatus.NOT_FOUND);
 			} 
 
-			price.setStatus(Status.ACTIVE);
+			price.setActive(true);
 			
 			log.info("IN saveAllPrice - price {} is correct", i);
 			i++;
@@ -88,7 +87,7 @@ public class PriceService implements PriceServiceInterface {
 		}
 
 		Price price = priceRepository.findById(id).orElseThrow();
-		price.setStatus(Status.DELETED);
+		price.setActive(false);
 		priceRepository.save(price);
 		log.info("IN delete - item with id: {} successfully deleted", id, price);
 		 

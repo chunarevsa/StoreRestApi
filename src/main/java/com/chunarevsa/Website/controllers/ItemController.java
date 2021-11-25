@@ -1,16 +1,12 @@
 package com.chunarevsa.Website.controllers;
 
 import com.chunarevsa.Website.Entity.Item;
-import com.chunarevsa.Website.Entity.Status;
 import com.chunarevsa.Website.Exception.AllException;
 import com.chunarevsa.Website.repo.CurrencyRepository;
 import com.chunarevsa.Website.repo.ItemRepository;
 import com.chunarevsa.Website.repo.PriceRepository;
 import com.chunarevsa.Website.service.ItemService;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -40,12 +36,12 @@ public class ItemController {
 	}
 
 	// Получение списка всех Items с ограничением страницы (10)
-	@RequestMapping (path = "/item", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<Item> findAllItem (@PageableDefault/* (sort = { "active"}, direction = Sort.Direction.DESC) */ Pageable pageable) { 
+	/* @RequestMapping (path = "/item", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Page<Item> findAllItem (@PageableDefault (sort = { "active"}, direction = Sort.Direction.DESC)  Pageable pageable) { 
 		// Сортировка по 10 элементов и только со значением active = true
 		Page<Item> pageItems = itemRepository.findByStatus(Status.ACTIVE, pageable);
 		return pageItems;
-	}
+	} */ 
 
 	// Получение по id
 	@RequestMapping (path = "/item/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

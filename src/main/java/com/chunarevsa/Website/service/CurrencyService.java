@@ -1,7 +1,6 @@
 package com.chunarevsa.Website.service;
 
 import com.chunarevsa.Website.Entity.Currency;
-import com.chunarevsa.Website.Entity.Status;
 import com.chunarevsa.Website.Exception.DublicateCurrency;
 import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.Exception.NotFound;
@@ -47,7 +46,7 @@ public class CurrencyService implements CurrencyServiceInterface {
 		}
 
 		// Включение (active = true) 
-		bodyCurrency.setStatus(Status.ACTIVE);
+		bodyCurrency.setActive(true);
 
 		Currency currency = currencyRepository.save(bodyCurrency);
 		log.info("IN addItem - currency: {} seccesfully add", currency);
@@ -80,7 +79,7 @@ public class CurrencyService implements CurrencyServiceInterface {
 			throw new NotFound(HttpStatus.NOT_FOUND);
 		}
 		Currency currency = currencyRepository.findByCode(code);
-		if (currency.getStatus() != Status.ACTIVE) {
+		if (currency.isActive()) {
 			throw new NotFound(HttpStatus.NOT_FOUND);
 		}
 
@@ -113,7 +112,7 @@ public class CurrencyService implements CurrencyServiceInterface {
 		Currency currency = currencyRepository.findById(id).orElseThrow();
 		currency.setCode(bodyCurrency.getCode());
 		// Возможность вернуть удалённый (active = false) обратно (active = true)
-		currency.setStatus(bodyCurrency.getStatus());
+		currency.setActive(bodyCurrency.isActive());
 
 		return currencyRepository.save(currency);
 	}
@@ -130,7 +129,7 @@ public class CurrencyService implements CurrencyServiceInterface {
 		}
 
 		Currency currency = currencyRepository.findById(id).orElseThrow();
-		currency.setStatus(Status.DELETED);
+		currency.setActive(false);
 		currencyRepository.save(currency);
 		log.info("IN delete - currency with id: {} successfully deleted", id, currency);
 

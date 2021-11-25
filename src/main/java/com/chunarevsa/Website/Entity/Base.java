@@ -1,59 +1,47 @@
 package com.chunarevsa.Website.Entity;
 
-import java.util.Date;
+import java.io.Serializable;
+import java.time.Instant;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.EntityListeners;
+import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-
-import lombok.Data;
-
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @MappedSuperclass
-@Data
-public class Base {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+@EntityListeners(AuditingEntityListener.class) // TODO: ?
+@JsonIgnoreProperties (value = {"create", "update"}, allowGetters = true)
+public abstract class Base implements Serializable {
 
-	// Пока проставляется null, доделать 
 	@CreatedDate
-	private Date created;
-	// Пока проставляется null, доделать 
+	@JoinColumn (nullable = false, updatable = false)
+	private Instant created;
+
 	@LastModifiedDate
-	private Date updated;
-	
-	@Enumerated(EnumType.STRING)
-	private Status status;
+	@JoinColumn (nullable = false, updatable = true)
+	private Instant updated;
 
-	public Base() {}
 
-	public Base( Date created, Date updated, Status status) {
-		this.created = created;
-		this.updated = updated;
-		this.status = status;
+	public Instant getCreated() {
+		return this.created;
 	}
 
-	public Long getId() {return this.id;}
-	public void setId(Long id) {this.id = id;}
+	public void setCreated(Instant created) {
+		this.created = created;
+	}
 
-	// Date now = new Date();
-	public Date getCreated() {return this.created;}
-	public void setCreated(Date created) {this.created = created;}
-	
-	public Date getUpdated() {return this.updated;}
-	public void setUpdated(Date updated) {this.updated = updated;}
+	public Instant getUpdated() {
+		return this.updated;
+	}
 
-	public Status getStatus() {return this.status;}
-	public void setStatus(Status status) {this.status = status;}
-
+	public void setUpdated(Instant updated) {
+		this.updated = updated;
+	}
 
 
 }

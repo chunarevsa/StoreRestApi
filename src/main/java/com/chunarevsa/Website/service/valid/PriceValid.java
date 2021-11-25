@@ -1,7 +1,6 @@
 package com.chunarevsa.Website.service.valid;
 
 import com.chunarevsa.Website.Entity.Price;
-import com.chunarevsa.Website.Entity.Status;
 import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.Exception.InvalidPriceFormat;
 import com.chunarevsa.Website.repo.PriceRepository;
@@ -28,8 +27,8 @@ public class PriceValid {
 
 	// Проверка не выключен ли active = true
 	public boolean priceIsActive (Long id) {
-		Status status = priceRepository.findById(id).orElseThrow().getStatus();
-		if (status == Status.ACTIVE) {
+		Boolean isActive = priceRepository.findById(id).orElseThrow().isActive();
+		if (isActive) {
 			return true;
 	}
 		return false;

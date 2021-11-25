@@ -38,13 +38,13 @@ public class CurrencyController {
 	}
 
 	// Получение списка всех Currency с ограничением страницы (10)
-	@RequestMapping (path = "/currency", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<Currency> currencyFindAll (@PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) { 
+	/* @RequestMapping (path = "/currency", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Page<Currency> currencyFindAll (@PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC)  Pageable pageable) { 
 		// Сортировка по 10 элементов и только со значением active = true
 		Page<Currency> pageCurrency =  currencyRepository.findByStatus(Status.ACTIVE, pageable);
 
 		return pageCurrency;
-	}
+	} */
 
 	// Получение по id
 	@RequestMapping (path = "/currency/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

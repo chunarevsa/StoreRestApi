@@ -1,151 +1,126 @@
 package com.chunarevsa.Website.Entity;
 
-import java.util.List;
+import java.util.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-
-import lombok.Data;
-
-@Entity
-@Table(name = "users")
-@Data 
-public class User extends Base {
-
-	@Column (nullable = false)
-	private String username;
-	@Column (nullable = false)
-	private String password;
-	@Column (nullable = false)
-	private String email;
-
-	// Переделать в фаил - доделать
-	private String avatar;
-
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "user_roles", // связь через промежуточную таблицу через колонки:
-		//колонка 1 называется user_id и ссылается на id из user
-		joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")}, 
-		//колонка 2 называется role_id и ссылается на id из role
-		inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
-	private List<Role> roles;
-	
-} 
-
-/* import java.util.*; - доделать (убрать)
-
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
-@Table (name = "users")
-public class User extends Base implements UserDetails {
+@Table(name = "USER")
+public class User extends Base { 
 
 	@Id
-	@GeneratedValue (strategy = GenerationType.IDENTITY)
+	@Column(name = "USER_ID")
+	@GeneratedValue(strategy =  GenerationType.IDENTITY) //mb SEQUENCE
 	private Long id;
 
-	@Column (nullable = false)
+	@Column(name = "USERNAME", unique = true, nullable = false)
 	private String username;
 
-	@Column (nullable = false)
-	private String password;
-
-	@Transient
-	private String password2;
-
-	private Status status;
-
-	@Column (nullable = false)
+	@Column(name = "EMAIL", unique = true)
+	@NotBlank (message = "Еmail cannot be null")
 	private String email;
 
-	private String activationCode;
+	@Column(name = "PASSWORD")
+	@NotNull (message = "Password cannot be null")
+	private String password;
 
-	// Создание доп. таблицы для хранение для списка роллей, которая соединяется с User через "user_id"
-	@ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-	@CollectionTable (name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
-	@Enumerated(EnumType.STRING) // Enam храним в ввиде строки 
-	private Set<Role> roles;
+	@Column(name = "IS_ACTIVE", nullable = false)
+	private Boolean active;
 
-	public boolean isAdmin () {
-		return roles.contains(Role.ADMIN);
+	// Переделать в фаил - доделать
+	private String avatar;
+
+	@ManyToMany(fetch = FetchType.EAGER) // Каскады - доделать
+	@JoinTable(name = "USER_AUTHORITY", // связь через промежуточную таблицу 
+			// колонка 1 называется USER_ID и ссылается на USER_ID из user
+			joinColumns = { @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID") },
+			// колонка 2 называется ROLE_ID и ссылается на ROLE_ID
+			inverseJoinColumns = { @JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID") })
+	private Set<Role> roles = new HashSet<>();
+
+	@Column(name = "IS_EMAIL_VERIFIED", nullable = false)
+	private Boolean isEmailVerified;
+	
+	public User() {
+		super(); // ? - доделать
 	}
-
-	public User() {}
 
 	public User(User user) {
+		this.id = user.id;
 		this.username = user.username;
-		this.password = user.password;
-		this.password2 = user.password2;
-		this.status = user.status;
 		this.email = user.email;
-		this.activationCode = user.activationCode;
+		this.password = user.password;
+		this.active = user.active;
+		this.avatar = user.avatar;
 		this.roles = user.roles;
+		this.isEmailVerified = user.isEmailVerified;
 	}
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return getRoles();
+	public void addRole(Role role) {
+		roles.add(role);
+		role.getUsers().add(this);
+   }
+
+	public void addRoles(Set<Role> roles) {
+		roles.forEach(this::addRole);
+  	}
+	
+	public void verificationConfirmed() {
+		setIsEmailVerified(true);
 	}
 
-	@Override
-	public boolean isAccountNonExpired() {return true;}
-
-	@Override
-	public boolean isAccountNonLocked() {return true;}
-
-	@Override
-	public boolean isCredentialsNonExpired() {return true;}
-
-	@Override
-	public boolean isEnabled() {
-		System.out.println("ПРОВЕРКА на getStatus в User");
-		if (getStatus() == Status.ACTIVE) {
-			return true;
-		}
-		return false;
-	}
+	public Long getId() {return this.id;}
+	public void setId(Long id) {this.id = id;}
 
 	public String getUsername() {return this.username;}
 	public void setUsername(String username) {this.username = username;}
 
-	public String getPassword() {return this.password;}
-	public void setPassword(String password) {this.password = password;}
-
-	public String getPassword2() {return this.password2;}
-	public void setPassword2(String password2) {this.password2 = password2;}
-
-	public Status getStatus() {return this.status;}
-	public void setStatus(Status status) {this.status = status;}
-
 	public String getEmail() {return this.email;}
 	public void setEmail(String email) {this.email = email;}
 
-	public String getActivationCode() {return this.activationCode;}
-	public void setActivationCode(String activationCode) {this.activationCode = activationCode;}
+	public String getPassword() {return this.password;}
+	public void setPassword(String password) {this.password = password;}
+
+	public Boolean isActive() {return this.active;}
+	public Boolean getActive() {return this.active;}
+	public void setActive(Boolean active) {this.active = active;}
+
+	public String getAvatar() {return this.avatar;}
+	public void setAvatar(String avatar) {this.avatar = avatar;}
 
 	public Set<Role> getRoles() {return this.roles;}
 	public void setRoles(Set<Role> roles) {this.roles = roles;}
+
+	public Boolean isIsEmailVerified() {return this.isEmailVerified;}
+	public Boolean getIsEmailVerified() {return this.isEmailVerified;}
+	public void setIsEmailVerified(Boolean isEmailVerified) {this.isEmailVerified = isEmailVerified;}
 	
-} */
+
+	@Override
+	public String toString() {
+		return "{" +
+			" id='" + getId() + "'" +
+			", username='" + getUsername() + "'" +
+			", email='" + getEmail() + "'" +
+			", password='" + getPassword() + "'" +
+			", active='" + isActive() + "'" +
+			", avatar='" + getAvatar() + "'" +
+			", roles='" + getRoles() + "'" +
+			", isEmailVerified='" + isIsEmailVerified() + "'" +
+			"}";
+	}
 
 
+}

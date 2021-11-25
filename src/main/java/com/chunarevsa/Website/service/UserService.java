@@ -4,17 +4,16 @@ import java.util.*;
 
 import com.chunarevsa.Website.Entity.Role;
 import com.chunarevsa.Website.Entity.User;
-import com.chunarevsa.Website.Entity.Status;
-import com.chunarevsa.Website.repo.RoleRepository;
+import com.chunarevsa.Website.Entity.payload.RegistrationRequest;
 import com.chunarevsa.Website.repo.UserRepository;
 import com.chunarevsa.Website.service.inter.UserServiceInterface;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
-
 
 // Добавить обработку исключений (доделать)
 @Service
@@ -22,36 +21,53 @@ import lombok.extern.slf4j.Slf4j;
 public class UserService implements UserServiceInterface{
 
 	private final UserRepository userRepository;
-	private final RoleRepository roleRepository;
-	private final BCryptPasswordEncoder passwordEncoder;
+	private final PasswordEncoder passwordEncoder;
+	// private final UserDeviceService userDeviceService - доделать
+	// private final UserValid userValid;
+	private final RoleService roleService;
 
 	@Autowired
 	public UserService(
-				UserRepository userRepository, 
-				RoleRepository roleRepository,
-				BCryptPasswordEncoder passwordEncoder) {
+				UserRepository userRepository,
+				//UserValid userValid,
+				RoleService roleService,
+				PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
-		this.roleRepository = roleRepository;
+		//this.userValid = userValid;
+		this.roleService = roleService;
 		this.passwordEncoder = passwordEncoder;
 	}
 
-	@Override // добавить активацию 
-	public User register(User user) {
-		// Получаю роль (поумолчанию USER)
-		Role roleUser = roleRepository.findByRole("ROLE_USER");
-		// Создаю списко ролей, добавляю в него стандартное значю
-		List<Role> userRoles = new ArrayList<>();
-		userRoles.add(roleUser);
+	@Override 
+	public User addNewUser (RegistrationRequest registerRequest) {
+		System.out.println("addNewUser");
+		User newUser = new User();
+		Boolean isAdmin = registerRequest.getRegisterAsAdmin();
+		newUser.setEmail(registerRequest.getEmail());
 		// Кодирование пароля для хранения в БД
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		user.setRoles(userRoles);
-
-		// Активация пользователя - добавить (доделать)
-		user.setStatus(Status.ACTIVE);
-		User registeredUser = userRepository.save(user);
 		
-		log.info("IN register - user: {} seccesfully registred", registeredUser);
-		return registeredUser;
+		newUser.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+		newUser.setUsername(registerRequest.getUsername());
+		newUser.addRoles(getRoles(isAdmin));
+		newUser.setActive(true);
+		newUser.setIsEmailVerified(false);
+		log.info("IN register - user: {} seccesfully registred", newUser);
+		System.out.println("addNewUser - ok");
+		return newUser;
+	}
+
+	public User save(User user) {
+		System.out.println("saveNewUser");
+		return userRepository.save(user);
+  	}
+
+	private Set<Role> getRoles(Boolean isAdmin) {
+		Set<Role> roles = new HashSet<>(roleService.findAll());
+		// Проврка может ли быть новый пользователь админом 
+		if (!isAdmin) {
+			roles.removeIf(Role::isAdminRole);
+	  }
+		return roles;
 	}
 
 	@Override
@@ -86,6 +102,19 @@ public class UserService implements UserServiceInterface{
 	public void delete(Long id) {
 		userRepository.deleteById(id);
 		log.info("IN delete - user with id: {} successfully deleted");
+	}
+
+	public boolean existsByEmail(String email) {
+		return userRepository.existsByEmail(email);
+	}
+
+	@Override
+	public Optional<User> findByEmail(String email) {
+		return userRepository.findByEmail(email);
+	}
+
+	public Optional<User> findByid(Long id) {
+		return userRepository.findById(id);
 	}
 	
 } 
