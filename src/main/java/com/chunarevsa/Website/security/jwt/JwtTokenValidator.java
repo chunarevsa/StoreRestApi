@@ -30,10 +30,13 @@ public class JwtTokenValidator {
 	public boolean validateToken(String token) throws InvalidTokenRequestException {
 		System.out.println("validateToken");
 		try {
-			System.out.println(secret);
+			System.out.println("secret :" + secret);
 			System.out.println(token);
+			
 			Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+
 			System.out.println("jwts");
+
 		} catch (SignatureException ex) {
 			// logger.error("Invalid JWT signature");
 			 throw new InvalidTokenRequestException("JWT", token, "Incorrect signature");

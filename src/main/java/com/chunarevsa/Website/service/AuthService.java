@@ -74,21 +74,24 @@ public class AuthService { // добавить логи - доделать
 		}
 
 		System.out.println("verification token");
+
 		emailVerificationTokenService.verifyExpiration(verificationToken);
 		verificationToken.setConfirmedStatus();
 		emailVerificationTokenService.save(verificationToken);
-		System.out.println("verification ok");
 
+		System.out.println("verification ok");
 		System.out.println("User registered ");
+
 		registeredUser.verificationConfirmed();
 		userService.save(registeredUser);
-		System.out.println("User registered - ok");
 
+		System.out.println("User registered - ok");
 		System.out.println("confirmEmailRegistration - ok");
 		return Optional.of(registeredUser);
 	}
 
 	public Optional<Authentication> authenticateUser(AuthRequestDto authRequestDto) {
+		System.out.println("authenticateUser");
 		return Optional.ofNullable(authenticationManager.authenticate(
 			new UsernamePasswordAuthenticationToken(authRequestDto.getEmail(), authRequestDto.getPassword())));
 
@@ -96,7 +99,9 @@ public class AuthService { // добавить логи - доделать
 
 	public Optional<RefreshToken> createAndPersistRefreshTokenForDevice(Authentication authentication,
 			@Valid AuthRequestDto authRequestDto) {
+		System.out.println("createAndPersistRefreshTokenForDevice");
 		User jwtUser = (User) authentication.getPrincipal();
+
 		userDeviceService.findByUserId(
 			jwtUser.getId()).map(UserDevice::getRefreshToken)
 								 .map(RefreshToken::getId).ifPresent(refreshTokenService::deleteById);
@@ -113,8 +118,8 @@ public class AuthService { // добавить логи - доделать
 		return Optional.ofNullable(refreshToken);
 	}
 
-	public String generateToken (JwtUser jwtUser) {
-		return jwtTokenProvider.generateToken(jwtUser);
+	public String createToken (JwtUser jwtUser) {
+		return jwtTokenProvider.createToken(jwtUser);
 	}	
 
 }

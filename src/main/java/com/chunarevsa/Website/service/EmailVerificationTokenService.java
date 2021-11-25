@@ -31,12 +31,13 @@ public class EmailVerificationTokenService {
 
 	public void verifyExpiration(EmailVerificationToken verificationToken) {
 		System.out.println("verifyExpiration");
+		System.out.println("verificationToken is :" + verificationToken);
 		if (verificationToken.getExpiryDate().compareTo(Instant.now()) < 0) {
 			/* throw new InvalidTokenRequestException("Email Verification Token", token.getToken(),
 					"Expired token. Please issue a new request"); */
 			System.out.println("Expired token. Please issue a new request");
 		}
-		System.out.println("verifyExpiration");
+		System.out.println("verifyExpiration - ok");
 	}
 
 	public EmailVerificationToken save (EmailVerificationToken verificationToken) {

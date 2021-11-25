@@ -29,6 +29,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	@Value("${jwt.header.prefix}")
 	private String tokenRequestHeaderPrefix;
 
+	// jwt.header=Authorization
+	// jwt.header.prefix=Bearer 
+
 	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
 
@@ -47,9 +50,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		try {
 
 			String jwt = getJwtFromRequest(request);
+			System.out.println("JwtFromRequest is " + jwt);
 			System.out.println("if");
+			System.out.println("StringUtils.hasText(jwt) is " + StringUtils.hasText(jwt));
+			System.out.println("wtTokenValidator.validateToken(jwt) is:"+ jwtTokenValidator.validateToken(jwt));
 			
-			if (/*StringUtils.hasText(jwt) &&*/ jwtTokenValidator.validateToken(jwt)) {
+			if (StringUtils.hasText(jwt) && jwtTokenValidator.validateToken(jwt)) {
 				
 				Long userId = jwtTokenProvider.getUserIdFromJWT(jwt);
 				UserDetails userDetails = jwtUserDetailsService.loadUserById(userId);
@@ -71,10 +77,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	// Получение токена из запроса
 	private String getJwtFromRequest(HttpServletRequest request) {
 		System.out.println("getJwtFromRequest");
-		String token = request.getHeader(tokenRequestHeader);
-		if (StringUtils.hasText(token) && token.startsWith(tokenRequestHeaderPrefix)) {
+		System.out.println("request is " + request.toString());
+
+		String token = request.getHeader(tokenRequestHeader); // jwt.header=Authorization
+
+		System.out.println("Token is " + token);
+		System.out.println("StringUtils.hasText(token) is " + StringUtils.hasText(token));
+		System.out.println("token.startsWith(tokenRequestHeaderPrefix) is " + token.startsWith(tokenRequestHeaderPrefix));
+		System.out.println("1");
+		
+		if (StringUtils.hasText(token) && token.startsWith(tokenRequestHeaderPrefix)) { // jwt.header.prefix=Bearer 
 			System.out.println("getJwtFromRequest - ok");
-			return token.replace(tokenRequestHeaderPrefix, "");
+			return token.replace(tokenRequestHeaderPrefix, ""); // jwt.header.prefix=Bearer 
 		}
 		
 		return null;

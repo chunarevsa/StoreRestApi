@@ -69,16 +69,19 @@ public class AuthController {
 	@PostMapping("/login")
 	public ResponseEntity login (@Valid @RequestBody AuthRequestDto authRequestDto) {
 		 
+		System.out.println("get authentication");
 		Authentication authentication = authService.authenticateUser(authRequestDto)
 			.orElseThrow(() -> new UserLoginException("Не удалось войти в систему - " + authRequestDto));
 		
+		System.out.println("get jwtUser");
 		JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
+		System.out.println("SecurityContextHolder.getContext().setAuthentication(authentication)");
 		SecurityContextHolder.getContext().setAuthentication(authentication);  
 		
 		return authService.createAndPersistRefreshTokenForDevice(authentication, authRequestDto)
 					.map(RefreshToken::getToken)
 					.map(refreshToken -> {
-						String jwtToken = authService.generateToken(jwtUser);
+						String jwtToken = authService.createToken(jwtUser);
 						return ResponseEntity.ok(new JwtAuthenticationResponse(jwtToken, refreshToken, jwtTokenProvider.getExpiryDuration()));
 					}).orElseThrow(() -> new UserLoginException("Couldn't create refresh token for: [" + authRequestDto + "]"));
 

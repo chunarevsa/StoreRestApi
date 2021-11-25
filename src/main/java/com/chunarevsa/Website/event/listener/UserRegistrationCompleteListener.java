@@ -36,6 +36,7 @@ public class UserRegistrationCompleteListener implements ApplicationListener<Use
 
 	private void sendEmailVerification(UserRegistrationComplete userRegistrationComplete) {
 		System.out.println("sendEmailVerification");
+		
 		User user = userRegistrationComplete.getUser();
 		String token = emailVerificationTokenService.createNewToken();
 		emailVerificationTokenService.createVirficationToken(user, token);
