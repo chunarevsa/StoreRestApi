@@ -6,11 +6,8 @@ import com.chunarevsa.Website.Entity.payload.DeviceInfo;
 
 public class LoginRequestDto {
 	
-
    private String username;
-
    private String email;
-
    private String password;
 
    @Valid

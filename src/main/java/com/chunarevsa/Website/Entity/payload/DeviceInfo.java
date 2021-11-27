@@ -5,9 +5,7 @@ import com.chunarevsa.Website.Entity.DeviceType;
 public class DeviceInfo {
 
 	private String deviceId;
-
 	private DeviceType deviceType;
-
 	private String notificationToken;
 
 	public DeviceInfo() {}
@@ -41,7 +39,6 @@ public class DeviceInfo {
 	public void setNotificationToken(String notificationToken) {
 		this.notificationToken = notificationToken;
 	}
-
 
 	@Override
 	public String toString() {

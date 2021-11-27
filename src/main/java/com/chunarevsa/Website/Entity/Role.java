@@ -70,9 +70,14 @@ public class Role  {
 		this.users = users;
 	}
 
+	@Override
+	public String toString() {
+		return "{" +
+			" id='" + getId() + "'" +
+			", role='" + getRole() + "'" +
+			", users='" + getUsers() + "'" +
+			"}";
+	}
 
-
-
-	
 } 
 

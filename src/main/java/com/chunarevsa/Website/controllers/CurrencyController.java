@@ -1,16 +1,11 @@
 package com.chunarevsa.Website.controllers;
 
 import com.chunarevsa.Website.Entity.Currency;
-import com.chunarevsa.Website.Entity.Status;
 import com.chunarevsa.Website.Exception.AllException;
 import com.chunarevsa.Website.Exception.NotFound;
 import com.chunarevsa.Website.repo.CurrencyRepository;
 import com.chunarevsa.Website.service.CurrencyService;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,13 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CurrencyController {
 	
-	private final CurrencyRepository currencyRepository;
 	private final CurrencyService currencyService;
 
-	public CurrencyController (
-				CurrencyRepository currencyRepository, 
-				CurrencyService currencyService) {
-		this.currencyRepository = currencyRepository;
+	public CurrencyController (CurrencyService currencyService) {
 		this.currencyService = currencyService;
 	}
 

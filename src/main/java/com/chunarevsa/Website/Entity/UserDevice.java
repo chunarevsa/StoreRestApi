@@ -122,5 +122,17 @@ public class UserDevice extends Base {
 		this.isRefreshActive = isRefreshActive;
 	}
 
+	@Override
+	public String toString() {
+		return "{" +
+			" id='" + getId() + "'" +
+			", user='" + getUser() + "'" +
+			", deviceType='" + getDeviceType() + "'" +
+			", notificationToken='" + getNotificationToken() + "'" +
+			", deviceId='" + getDeviceId() + "'" +
+			", refreshToken='" + getRefreshToken() + "'" +
+			", isRefreshActive='" + isIsRefreshActive() + "'" +
+			"}";
+	}
 
 }

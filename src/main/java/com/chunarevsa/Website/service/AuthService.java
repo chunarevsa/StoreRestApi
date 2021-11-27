@@ -20,6 +20,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import jdk.internal.org.jline.utils.Log;
+
 @Service
 public class AuthService { // добавить логи - доделать
 
@@ -47,15 +49,14 @@ public class AuthService { // добавить логи - доделать
 	}
 
 	public Optional<User> registrationUser (RegistrationRequest registrationRequest) {
-		System.out.println("registrationUser");
+
 		String email = registrationRequest.getEmail();
 		if (emailAlreadyExists(email)) {
-			throw new AlredyUseException("Email");
+			throw new AlredyUseException("Email"); // TODO:
 	  }  
 	  User newUser = userService.addNewUser(registrationRequest);
 	  
 	  User savedNewUser = userService.save(newUser);
-	  System.out.println("registrationUser - ok");
 	  return Optional.ofNullable(savedNewUser);
 	}
 
@@ -65,36 +66,24 @@ public class AuthService { // добавить логи - доделать
 	}
 
 	public Optional<User> confirmEmailRegistration(String token) { // доделать - обработка исключений
-		System.out.println("confirmEmailRegistration");
 		EmailVerificationToken verificationToken = emailVerificationTokenService.findByToken(token).orElseThrow();
-
 		User registeredUser = verificationToken.getUser();
 		if  (registeredUser.getIsEmailVerified()) {
 				return Optional.of(registeredUser);
 		}
 
-		System.out.println("verification token");
-
 		emailVerificationTokenService.verifyExpiration(verificationToken);
 		verificationToken.setConfirmedStatus();
+
 		emailVerificationTokenService.save(verificationToken);
-
-		System.out.println("verification ok");
-		System.out.println("User registered ");
-
 		registeredUser.verificationConfirmed();
-		userService.save(registeredUser);
 
-		System.out.println("User registered - ok");
-		System.out.println("confirmEmailRegistration - ok");
+		userService.save(registeredUser);
 		return Optional.of(registeredUser);
 	}
 
 	public Optional<Authentication> authenticateUser(LoginRequestDto loginRequestDto) {
-		System.out.println("authenticateUser");
-
 		UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword());
-
 		return Optional.ofNullable(authenticationManager.authenticate(user));
 			
 
@@ -102,7 +91,6 @@ public class AuthService { // добавить логи - доделать
 
 	public Optional<RefreshToken> createAndPersistRefreshTokenForDevice(Authentication authentication,
 			@Valid LoginRequestDto loginRequestDto) {
-		System.out.println("createAndPersistRefreshTokenForDevice");
 		User jwtUser = (User) authentication.getPrincipal();
 
 		userDeviceService.findByUserId(

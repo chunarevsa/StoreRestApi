@@ -30,12 +30,7 @@ public class JwtTokenValidator {
 	public boolean validateToken(String token) throws InvalidTokenRequestException {
 		System.out.println("validateToken");
 		try {
-			System.out.println("secret :" + secret);
-			System.out.println(token);
-			
 			Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
-
-			System.out.println("jwts");
 
 		} catch (SignatureException ex) {
 			// logger.error("Invalid JWT signature");
@@ -57,7 +52,7 @@ public class JwtTokenValidator {
 			 //logger.error("JWT claims string is empty.");
 			 throw new InvalidTokenRequestException("JWT", token, "Illegal argument token");
 		}
-
+		// TODO: валидация девайса
 		System.out.println("validateToken - ok");
 
 		return true;

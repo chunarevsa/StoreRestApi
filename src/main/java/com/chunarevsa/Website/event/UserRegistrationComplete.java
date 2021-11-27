@@ -5,12 +5,10 @@ import com.chunarevsa.Website.Entity.User;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.web.util.UriComponentsBuilder;
 
-// ? - доделать 
 public class UserRegistrationComplete extends ApplicationEvent {
 	
 	private transient UriComponentsBuilder redirectUrl;
 	private User user;
-
 
 	public UserRegistrationComplete(User user, UriComponentsBuilder redirectUrl) {
 		super(user);

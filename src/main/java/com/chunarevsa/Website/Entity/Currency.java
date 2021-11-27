@@ -8,7 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-
 @Entity 
 @Table(name = "CURRENCY",
 	uniqueConstraints = { 
@@ -37,14 +36,42 @@ public class Currency extends Base {
 		this.active = active;
 	}
 
-	public Long getId() {return this.id;}
-	public void setId(Long id) {this.id = id;}
+	public Long getId() {
+		return this.id;
+	}
 
-	public String getCode() {return this.code;}
-	public void setCode(String code) {this.code = code;}
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-	public Boolean isActive() {return this.active;}
-	public Boolean getActive() {return this.active;}
-	public void setActive(Boolean active) {this.active = active;}
+	public String getCode() {
+		return this.code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public Boolean isActive() {
+		return this.active;
+	}
+
+	public Boolean getActive() {
+		return this.active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+
+	@Override
+	public String toString() {
+		return "{" +
+			" id='" + getId() + "'" +
+			", code='" + getCode() + "'" +
+			", active='" + isActive() + "'" +
+			"}";
+	}
+
 
 }

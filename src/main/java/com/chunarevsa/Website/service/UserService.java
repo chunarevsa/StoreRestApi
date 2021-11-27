@@ -3,17 +3,20 @@ package com.chunarevsa.Website.service;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import com.chunarevsa.Website.Entity.Role;
 import com.chunarevsa.Website.Entity.User;
+import com.chunarevsa.Website.Entity.UserDevice;
 import com.chunarevsa.Website.Entity.payload.RegistrationRequest;
+import com.chunarevsa.Website.Exception.UserLogoutException;
+import com.chunarevsa.Website.dto.LogOutRequestDto;
 import com.chunarevsa.Website.dto.UserDto;
 import com.chunarevsa.Website.repo.UserRepository;
+import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.service.inter.UserServiceInterface;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,45 +29,43 @@ public class UserService implements UserServiceInterface{
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
-	// private final UserDeviceService userDeviceService - доделать
-	// private final UserValid userValid;
 	private final RoleService roleService;
+	private final UserDeviceService userDeviceService;
+	private final RefreshTokenService refreshTokenService;
 
 	@Autowired
 	public UserService(
 				UserRepository userRepository,
-				//UserValid userValid,
 				RoleService roleService,
-				PasswordEncoder passwordEncoder) {
+				PasswordEncoder passwordEncoder,
+				UserDeviceService userDeviceService,
+				RefreshTokenService refreshTokenService) {
 		this.userRepository = userRepository;
-		//this.userValid = userValid;
 		this.roleService = roleService;
 		this.passwordEncoder = passwordEncoder;
+		this.userDeviceService = userDeviceService;
+		this.refreshTokenService = refreshTokenService;
 	}
 
 	@Override 
 	public User addNewUser (RegistrationRequest registerRequest) {
-		System.out.println("addNewUser");
 		User newUser = new User();
 		Boolean isAdmin = registerRequest.getRegisterAsAdmin();
-		newUser.setEmail(registerRequest.getEmail());
-		// Кодирование пароля для хранения в БД
-		
+		newUser.setEmail(registerRequest.getEmail());		
 		newUser.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
 		newUser.setUsername(registerRequest.getUsername());
 		newUser.addRoles(getRoles(isAdmin));
 		newUser.setActive(true);
 		newUser.setIsEmailVerified(false);
-		log.info("IN register - user: {} seccesfully registred", newUser);
-		System.out.println("addNewUser - ok");
+
 		return newUser;
 	}
-
+	
+	@Override
 	public User save(User user) {
-		System.out.println("saveNewUser");
 		return userRepository.save(user);
   	}
-
+	
 	private Set<Role> getRoles(Boolean isAdmin) {
 		Set<Role> roles = new HashSet<>(roleService.findAll());
 		// Проврка может ли быть новый пользователь админом 
@@ -77,13 +78,13 @@ public class UserService implements UserServiceInterface{
 	@Override
 	public List<User> getAll() {
 		List<User> result = userRepository.findAll();
-		log.info("IN getAll - {} users found", result.size());
+
 		return result;
 	}
 
 	@Override
 	public Optional<User> findByUsername(String username) {
-		log.info("IN findByUsername - user: {} found by username: {}", username);
+
 		return userRepository.findByUsername(username);
 	}
 
@@ -97,11 +98,9 @@ public class UserService implements UserServiceInterface{
 
 		User user = userRepository.findById(id).orElse(null);
 		if (user == null) {
-			log.warn("IN findById - no user found by id: {}", id);
+
 			return null;
 	  }
-
-	  log.info("IN findById - found user by id: {}", id);
 		return user;
 	}
 
@@ -109,7 +108,7 @@ public class UserService implements UserServiceInterface{
 	@Override
 	public void delete(Long id) {
 		userRepository.deleteById(id);
-		log.info("IN delete - user with id: {} successfully deleted");
+
 	}
 
 	public boolean existsByEmail(String email) {
@@ -131,6 +130,18 @@ public class UserService implements UserServiceInterface{
 
 		return listUsers.stream()
 		.map(user -> UserDto.fromUser(user) ).collect(Collectors.toList());
+
+	}
+
+	public void logout(JwtUser jwtUser, 
+					@Valid LogOutRequestDto logOutRequestDto) {
+		String deviceId = logOutRequestDto.getDeviceInfo().getDeviceId();
+		UserDevice userDevice = userDeviceService.findByUserId(jwtUser.getId())
+						.filter(device -> device.getDeviceId().equals(deviceId))
+						.orElseThrow(() -> new UserLogoutException(
+							logOutRequestDto.getDeviceInfo().getDeviceId(), "Invalid device Id"));
+		
+		refreshTokenService.deleteById(userDevice.getRefreshToken().getId());
 
 	}
 

@@ -41,7 +41,7 @@ public class JwtAuthenricationEntryPoint implements AuthenticationEntryPoint {
 		if (!httpServletResponse.isCommitted()) {
 			httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, ex.getMessage());
 		}
-		System.out.println("commence - ok");
+		System.out.println("commence - end");
 		
 	}
 	

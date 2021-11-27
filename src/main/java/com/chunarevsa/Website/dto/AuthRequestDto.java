@@ -52,6 +52,15 @@ public class AuthRequestDto {
 		this.deviceInfo = deviceInfo;
 	}
 
+	@Override
+	public String toString() {
+		return "{" +
+			" username='" + getUsername() + "'" +
+			", email='" + getEmail() + "'" +
+			", password='" + getPassword() + "'" +
+			", deviceInfo='" + getDeviceInfo() + "'" +
+			"}";
+	}
 
 
 	

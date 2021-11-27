@@ -96,8 +96,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	// Доступ ко всем url
 	@Override
 	protected void configure (HttpSecurity httpSecurity) throws Exception {
-		System.out.println("configure (HttpSecurity) ");
-		System.out.println("configure (HttpSecurity) cors - ok");
 		httpSecurity.cors()
 					.and()
 						.httpBasic().disable() // ? доделать
@@ -121,9 +119,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 									"/user/**"
 									).permitAll()
 						.anyRequest().authenticated(); 
-		System.out.println("configure (HttpSecurity) cors - ok");
 		httpSecurity.addFilterBefore(JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-		System.out.println("configure (HttpSecurity) - ok");
+
 	}
 
 

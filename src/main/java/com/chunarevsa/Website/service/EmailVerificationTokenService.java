@@ -30,29 +30,24 @@ public class EmailVerificationTokenService {
 	}
 
 	public void verifyExpiration(EmailVerificationToken verificationToken) {
-		System.out.println("verifyExpiration");
-		System.out.println("verificationToken is :" + verificationToken.toString());
+
 		if (verificationToken.getExpiryDate().compareTo(Instant.now()) < 0) {
 			/* throw new InvalidTokenRequestException("Email Verification Token", token.getToken(),
 					"Expired token. Please issue a new request"); */
-			System.out.println("Expired token. Please issue a new request");
+			System.out.println("Expired token. Please issue a new request"); // TODO:
 		}
-		System.out.println("verifyExpiration - ok");
+
 	}
 
 	public EmailVerificationToken save (EmailVerificationToken verificationToken) {
-		System.out.println("save");
 		return emailVerificationTokenRepository.save(verificationToken);
 	}
 
 	public String createNewToken() {
-		System.out.println("createNewToken");
 		return UUID.randomUUID().toString();
 	}
 
 	public void createVirficationToken(User user, String token) {
-		
-		System.out.println("createVirficationToken");
 		EmailVerificationToken emailVerificationToken = new EmailVerificationToken();
 		emailVerificationToken.setToken(token);
 		emailVerificationToken.setTokenStatus(TokenStatus.STATUS_PENDING);
@@ -60,9 +55,6 @@ public class EmailVerificationTokenService {
 		emailVerificationToken.setExpiryDate(Instant.now().plusMillis(tokenExpired));
 
 		emailVerificationTokenRepository.save(emailVerificationToken);
-
-		System.out.println("createVirficationToken - ok");
-
 	}
 
 

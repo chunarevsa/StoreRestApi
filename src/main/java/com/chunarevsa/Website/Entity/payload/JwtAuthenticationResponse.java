@@ -7,14 +7,12 @@ public class JwtAuthenticationResponse {
    private String tokenType;
    private Long expiryDuration;
 
-
 	public JwtAuthenticationResponse(String accessToken, String refreshToken, Long expiryDuration) {
 		this.accessToken = accessToken;
 		this.refreshToken = refreshToken;
 		this.tokenType = "Bearer ";
 		this.expiryDuration = expiryDuration;
 	}
-
 
 	public String getAccessToken() {
 		return this.accessToken;
@@ -46,6 +44,16 @@ public class JwtAuthenticationResponse {
 
 	public void setExpiryDuration(Long expiryDuration) {
 		this.expiryDuration = expiryDuration;
+	}
+
+	@Override
+	public String toString() {
+		return "{" +
+			" accessToken='" + getAccessToken() + "'" +
+			", refreshToken='" + getRefreshToken() + "'" +
+			", tokenType='" + getTokenType() + "'" +
+			", expiryDuration='" + getExpiryDuration() + "'" +
+			"}";
 	}
 
 

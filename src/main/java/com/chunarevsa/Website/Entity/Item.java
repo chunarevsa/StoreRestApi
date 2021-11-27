@@ -50,26 +50,78 @@ public class Item extends Base {
 		this.prices = prices;
 	}
 
-	public Long getId() {return this.id;}
-	public void setId(Long id) {this.id = id;}
+	public Long getId() {
+		return this.id;
+	}
 
-	public String getSku() {return this.sku;}
-	public void setSku(String sku) {this.sku = sku;}
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-	public String getName() {return this.name;}
-	public void setName(String name) {this.name = name;}
+	public String getSku() {
+		return this.sku;
+	}
 
-	public String getType() {return this.type;}
-	public void setType(String type) {this.type = type;}
+	public void setSku(String sku) {
+		this.sku = sku;
+	}
 
-	public String getDescription() {return this.description;}
-	public void setDescription(String description) {this.description = description;}
+	public String getName() {
+		return this.name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getType() {
+		return this.type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getDescription() {
+		return this.description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Boolean isActive() {
+		return this.active;
+	}
+
+	public Boolean getActive() {
+		return this.active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+
+	public Set<Price> getPrices() {
+		return this.prices;
+	}
+
+	public void setPrices(Set<Price> prices) {
+		this.prices = prices;
+	}
 	
-	public Boolean isActive() {return this.active;}
-	public Boolean getActive() {return this.active;}
-	public void setActive(Boolean active) {this.active = active;}
+	@Override
+	public String toString() {
+		return "{" +
+			" id='" + getId() + "'" +
+			", sku='" + getSku() + "'" +
+			", name='" + getName() + "'" +
+			", type='" + getType() + "'" +
+			", description='" + getDescription() + "'" +
+			", active='" + isActive() + "'" +
+			", prices='" + getPrices() + "'" +
+			"}";
+	}
 
-	public Set<Price> getPrices() {return this.prices;}
-	public void setPrices(Set<Price> prices) {this.prices = prices;}
 
 }

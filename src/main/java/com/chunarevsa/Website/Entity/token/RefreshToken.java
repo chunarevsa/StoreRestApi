@@ -43,7 +43,6 @@ public class RefreshToken extends Base {
 	public RefreshToken() {
 	}
 
-
 	public RefreshToken(Long id, 
 							  String token, 
 							  UserDevice userDevice, 
@@ -59,7 +58,6 @@ public class RefreshToken extends Base {
 	public void incrementRefreshCount() { // TODO: ?
 		refreshCount = refreshCount + 1;
   }
-
 
 	public Long getId() {
 		return this.id;

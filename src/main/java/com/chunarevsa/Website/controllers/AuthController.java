@@ -37,18 +37,15 @@ public class AuthController {
 	private final AuthService authService;
 	private final ApplicationEventPublisher applicationEventPublisher;
 	private final JwtTokenProvider jwtTokenProvider;
-	private final AuthenticationManager authManager;
 
 	@Autowired
 	public AuthController(
 					AuthService authService,
 					ApplicationEventPublisher applicationEventPublisher,
-					JwtTokenProvider jwtTokenProvider,
-					AuthenticationManager authManager) {
+					JwtTokenProvider jwtTokenProvider) {
 		this.authService = authService;
 		this.applicationEventPublisher = applicationEventPublisher;
 		this.jwtTokenProvider = jwtTokenProvider;
-		this.authManager = authManager;
 	}
 
 	// Регистрация

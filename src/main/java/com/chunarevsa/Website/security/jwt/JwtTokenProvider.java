@@ -35,12 +35,10 @@ public class JwtTokenProvider {
 
 	// Создание токена
 	public String createToken (JwtUser jwtUser) {
+		
 		System.out.println("createToken");
-
 		Instant expiryDate = Instant.now().plusMillis(jwtExpiration);
 		String authorities = getUserAuthotities(jwtUser);
-
-		System.out.println("createToken - ok");
 		return Jwts.builder()
 					.setSubject(Long.toString( jwtUser.getId() ))
 					.setIssuedAt(Date.from(Instant.now())) // Время создания токена
@@ -51,19 +49,15 @@ public class JwtTokenProvider {
 	}
 
 	private String getUserAuthotities(JwtUser jwtUser) {
-		System.out.println("getUserAuthotities");
 		return jwtUser.getAuthorities().stream()
 						.map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
 	}
 
 	public Long getUserIdFromJWT(String token) {
-		System.out.println("getUserIdFromJWT");
 		Claims claims = Jwts.parser()
 								.setSigningKey(secret)
 								.parseClaimsJws(token)
 								.getBody();
-
-		System.out.println("getUserIdFromJWT - ok");
 		return Long.parseLong(claims.getSubject());
 	}
 
@@ -73,11 +67,6 @@ public class JwtTokenProvider {
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody();
-		System.out.println("secret is " + secret);
-		System.out.println("claims is " + claims);
-		System.out.println("Claims - ok");
-		System.out.println("to String :" + claims.get(AUTHORITIES_CLAIM).toString());
-
 		return Arrays.stream(claims.get(AUTHORITIES_CLAIM).toString().split(","))
 					.map(SimpleGrantedAuthority::new)
 					.collect(Collectors.toList());
@@ -86,4 +75,13 @@ public class JwtTokenProvider {
 	public long getExpiryDuration() {
 		return jwtExpiration;
   }
+
+	public Date getTokenExpiryFromJwt(String token) {
+		Claims claims = Jwts.parser()
+				.setSigningKey(secret)
+				.parseClaimsJws(token)
+				.getBody();
+
+		return claims.getExpiration();
+	}
 } 

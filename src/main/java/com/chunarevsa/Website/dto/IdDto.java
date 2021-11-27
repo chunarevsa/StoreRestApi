@@ -11,6 +11,12 @@ public class IdDto {
 	public long getIdByJson() {return this.idByJson;}
 	public void setId(long idByJson) {this.idByJson = idByJson;}
 
+	@Override
+	public String toString() {
+		return "{" +
+			" idByJson='" + getIdByJson() + "'" +
+			"}";
+	}
 	
 
 }

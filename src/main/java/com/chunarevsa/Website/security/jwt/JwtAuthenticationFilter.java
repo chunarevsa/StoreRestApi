@@ -49,52 +49,30 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		System.out.println("doFilterInternal");
 		try {
 
-			String jwt = getJwtFromRequest(request);
-			System.out.println("JwtFromRequest is " + jwt);
-			System.out.println("if");
-			System.out.println("StringUtils.hasText(jwt) is " + StringUtils.hasText(jwt));
-			
+			String jwt = getJwtFromRequest(request);			
 			if (StringUtils.hasText(jwt) && jwtTokenValidator.validateToken(jwt)) {
 				
 				Long userId = jwtTokenProvider.getUserIdFromJWT(jwt);
-
 				UserDetails userDetails = jwtUserDetailsService.loadUserById(userId);
-				System.out.println("loadUserById - ok");
 				List<GrantedAuthority> authorities = jwtTokenProvider.getAuthoritiesFromJWT(jwt);
-				System.out.println("getAuthoritiesFromJWT - ok");
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, jwt, authorities);
-				System.out.println( "get authentication - ok");
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-				System.out.println("setDetails - ok");
 				SecurityContextHolder.getContext().setAuthentication(authentication);
-				System.out.println("if - ok");
 
 		  }
 		} catch (Exception | InvalidTokenRequestException e) {
 			// доделать обработка ошибки 
-			System.err.println("ОШИБКА В doFilterInternal");
-
+			System.err.println("Пользователь не авторизован");
 		}
 		filterChain.doFilter(request, response);
 	}
 
 	// Получение токена из запроса
 	private String getJwtFromRequest(HttpServletRequest request) {
-		System.out.println("getJwtFromRequest");
-		System.out.println("request is " + request.toString());
-
-		String token = request.getHeader(tokenRequestHeader); // jwt.header=Authorization
-
-		System.out.println("Token is " + token);
-		System.out.println("StringUtils.hasText(token) is " + StringUtils.hasText(token));
-		System.out.println("token.startsWith(tokenRequestHeaderPrefix) is " + token.startsWith(tokenRequestHeaderPrefix));
-		System.out.println("1");
-		
+		String token = request.getHeader(tokenRequestHeader); // jwt.header=Authorization		
 		if (StringUtils.hasText(token) && token.startsWith(tokenRequestHeaderPrefix)) { // jwt.header.prefix=Bearer 
-			System.out.println("getJwtFromRequest - ok");
 			return token.replace(tokenRequestHeaderPrefix, ""); // jwt.header.prefix=Bearer 
 		}
-		
 		return null;
 	}
 

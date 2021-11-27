@@ -17,7 +17,6 @@ public class Mail {
 		this.message = message;
 	}
 	 
-
 	public String getFrom() {
 		return this.from;
 	}
@@ -49,5 +48,17 @@ public class Mail {
 	public void setMessage(String message) {
 		this.message = message;
 	}
+
+
+	@Override
+	public String toString() {
+		return "{" +
+			" from='" + getFrom() + "'" +
+			", to='" + getTo() + "'" +
+			", subject='" + getSubject() + "'" +
+			", message='" + getMessage() + "'" +
+			"}";
+	}
+
 
 }

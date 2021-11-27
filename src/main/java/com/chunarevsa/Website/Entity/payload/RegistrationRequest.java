@@ -56,6 +56,16 @@ public class RegistrationRequest {
 		this.registerAsAdmin = registerAsAdmin;
 	}
 
+	@Override
+	public String toString() {
+		return "{" +
+			" username='" + getUsername() + "'" +
+			", password='" + getPassword() + "'" +
+			", email='" + getEmail() + "'" +
+			", registerAsAdmin='" + isRegisterAsAdmin() + "'" +
+			"}";
+	}
+
 
 
 }

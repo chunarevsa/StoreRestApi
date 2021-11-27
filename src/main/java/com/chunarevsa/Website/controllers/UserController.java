@@ -2,15 +2,23 @@ package com.chunarevsa.Website.controllers;
 
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
+import com.chunarevsa.Website.dto.LogOutRequestDto;
+import com.chunarevsa.Website.event.UserLogoutSuccess;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,10 +30,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
 	private final UserService userService;
+	private final ApplicationEventPublisher applicationEventPublisher;
 
 	@Autowired
-	public UserController(UserService userService) {
+	public UserController(UserService userService,
+			ApplicationEventPublisher applicationEventPublisher) {
 		this.userService = userService;
+		this.applicationEventPublisher = applicationEventPublisher;
 	}
 
 	@GetMapping("/{username}") // - доделать 
@@ -56,6 +67,20 @@ public class UserController {
 		
 		return ResponseEntity.ok(userService.findAllUsersDto());
 	}
+
+	@PostMapping("/logout")
+	public ResponseEntity logout(@AuthenticationPrincipal JwtUser jwtUser, 
+			@Valid @RequestBody LogOutRequestDto logOutRequestDto) {
+		userService.logout(jwtUser, logOutRequestDto);
+		Object credentials = SecurityContextHolder.getContext().getAuthentication().getCredentials();
+
+		UserLogoutSuccess logoutSuccess = new UserLogoutSuccess(
+			jwtUser.getEmail(), credentials.toString(), logOutRequestDto);
+		
+		applicationEventPublisher.publishEvent(logoutSuccess);
+		return ResponseEntity.ok("Log out successful");
+	}
+
 
 }
 

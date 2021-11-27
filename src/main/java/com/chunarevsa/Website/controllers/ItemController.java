@@ -2,8 +2,6 @@ package com.chunarevsa.Website.controllers;
 
 import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Exception.AllException;
-import com.chunarevsa.Website.repo.CurrencyRepository;
-import com.chunarevsa.Website.repo.ItemRepository;
 import com.chunarevsa.Website.repo.PriceRepository;
 import com.chunarevsa.Website.service.ItemService;
 
@@ -23,15 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ItemController {
 	
-	private final ItemRepository itemRepository;	
 	private final ItemService itemService;
 	
 	public ItemController (
-				ItemRepository itemRepository, 
 				ItemService itemService, 
-				PriceRepository priceRepository,
-				CurrencyRepository currencyRepository) {
-			this.itemRepository = itemRepository;
+				PriceRepository priceRepository) {
 			this.itemService = itemService;
 	}
 

@@ -52,19 +52,45 @@ public class EmailVerificationToken {
 		setTokenStatus(TokenStatus.STATUS_CONFIRMED);
 	}
 
-	public Long getId() {return this.id;}
-	public void setId(Long id) {this.id = id;}
+	public Long getId() {
+		return this.id;
+	}
 
-	public String getToken() {return this.token;}
-	public void setToken(String token) {this.token = token;}
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-	public User getUser() {return this.user;}
-	public void setUser(User user) {this.user = user;}
+	public String getToken() {
+		return this.token;
+	}
 
-	public TokenStatus getTokenStatus() {return this.tokenStatus;}
-	public void setTokenStatus(TokenStatus tokenStatus) {this.tokenStatus = tokenStatus;}
+	public void setToken(String token) {
+		this.token = token;
+	}
 
-	public Instant getExpiryDate() {return this.expiryDate;}
-	public void setExpiryDate(Instant expiryDate) {this.expiryDate = expiryDate;}
+	public User getUser() {
+		return this.user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public TokenStatus getTokenStatus() {
+		return this.tokenStatus;
+	}
+
+	public void setTokenStatus(TokenStatus tokenStatus) {
+		this.tokenStatus = tokenStatus;
+	}
+
+	public Instant getExpiryDate() {
+		return this.expiryDate;
+	}
+
+	public void setExpiryDate(Instant expiryDate) {
+		this.expiryDate = expiryDate;
+	}
+
 
 }
