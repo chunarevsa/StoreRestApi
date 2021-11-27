@@ -10,7 +10,7 @@ public interface UserServiceInterface {
 	// Добавить обработку ошибок - доделать
 	User addNewUser (RegistrationRequest newUser); 
 	List<User> getAll();
-	User findByUsername(String username);
+	Optional<User> findByUsername(String username);
 	User findById(Long id);
 	void delete(Long id);
 	Optional<User> findByEmail(String email);

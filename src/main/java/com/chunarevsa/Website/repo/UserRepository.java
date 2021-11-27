@@ -1,19 +1,21 @@
 package com.chunarevsa.Website.repo;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.chunarevsa.Website.Entity.User;
 
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository <User, Long> {
-	
-	User findByUsername (String username);
 
 	Boolean existsByEmail(String email);
 
 	Optional<User> findByEmail(String email);
+	
+	Optional<User> findByUsername (String username);
 
-	//User findByActivationCode(String code);
+	List<User> findByActive (Boolean acttive);
 
 } 

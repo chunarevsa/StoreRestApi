@@ -1,15 +1,19 @@
 package com.chunarevsa.Website.service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.chunarevsa.Website.Entity.Role;
 import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.Entity.payload.RegistrationRequest;
+import com.chunarevsa.Website.dto.UserDto;
 import com.chunarevsa.Website.repo.UserRepository;
 import com.chunarevsa.Website.service.inter.UserServiceInterface;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -78,10 +82,14 @@ public class UserService implements UserServiceInterface{
 	}
 
 	@Override
-	public User findByUsername(String username) {
-		User user = userRepository.findByUsername(username);
+	public Optional<User> findByUsername(String username) {
 		log.info("IN findByUsername - user: {} found by username: {}", username);
-		return user;
+		return userRepository.findByUsername(username);
+	}
+
+	public UserDto getUserDto (String username) {
+		User user = findByUsername(username).get();
+		return UserDto.fromUser(user);
 	}
 
 	@Override
@@ -116,5 +124,15 @@ public class UserService implements UserServiceInterface{
 	public Optional<User> findByid(Long id) {
 		return userRepository.findById(id);
 	}
+
+	public List<UserDto> findAllUsersDto() {
+		
+		List<User> listUsers = userRepository.findByActive(true);
+
+		return listUsers.stream()
+		.map(user -> UserDto.fromUser(user) ).collect(Collectors.toList());
+
+	}
+
 	
 } 

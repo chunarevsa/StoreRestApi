@@ -8,6 +8,9 @@ import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,19 +34,13 @@ public class UserController {
 		this.userService = userService;
 	}
 
-	@GetMapping("/{id}") // - доделать 
-	@PreAuthorize("hasAuthority('USER')")
+	@GetMapping("/{username}") // - доделать 
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity getUserProfile (
 							@AuthenticationPrincipal JwtUser jwtUser,
-							@PathVariable(value = "id") Long id) {
-		
-		User user = userService.findById(id); // 
-		if (user == null) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		}
+							@PathVariable(value = "username") String username) {
 
-		UserDto userDto = UserDto.fromUser(user);
-		return new ResponseEntity<>(userDto , HttpStatus.OK);
+		return ResponseEntity.ok(userService.getUserDto(username));
 		
 	}
 
@@ -58,34 +55,13 @@ public class UserController {
 			"My avatar :" + jwtUser.getAvatar() +  "\n" +
 			"It's all");
 	}
-	/*
 
-	@AuthenticationPrincipal User user,
-            @RequestParam String password,
-            @RequestParam String email
-
-	/me (USER) - Получение информаци по своим данным
-
-	/{id} (USER) - Получение информации о пользоавтеле (переход на его профиль) 
-
-	/allUsers (ADMIN) - Получение списка всех подтверждённых пользователей
-
-
-	// old
-	@GetMapping("/{id}")
-	@PreAuthorize("hasAuthority('USER')")
-	public ResponseEntity<UserDto> getUserById(@PathVariable (name = "id") Long id) {
+	@GetMapping("/all")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity getAllUsers (@AuthenticationPrincipal JwtUser jwtUser) {
 		
-		User user = userService.findById(id);
-		if (user == null) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		}
-
-		UserDto userDto = UserDto.fromUser(user);
-		return new ResponseEntity<>(userDto , HttpStatus.OK);
+		return ResponseEntity.ok(userService.findAllUsersDto());
 	}
 
-	*/
-	
 }
 
