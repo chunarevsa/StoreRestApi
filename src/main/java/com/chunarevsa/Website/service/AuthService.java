@@ -10,7 +10,6 @@ import com.chunarevsa.Website.Entity.payload.RegistrationRequest;
 import com.chunarevsa.Website.Entity.token.EmailVerificationToken;
 import com.chunarevsa.Website.Entity.token.RefreshToken;
 import com.chunarevsa.Website.Exception.AlredyUseException;
-import com.chunarevsa.Website.dto.AuthRequestDto;
 import com.chunarevsa.Website.dto.LoginRequestDto;
 import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
 import com.chunarevsa.Website.security.jwt.JwtUser;
