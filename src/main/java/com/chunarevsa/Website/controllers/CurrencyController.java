@@ -3,23 +3,23 @@ package com.chunarevsa.Website.controllers;
 import com.chunarevsa.Website.Entity.Currency;
 import com.chunarevsa.Website.Exception.AllException;
 import com.chunarevsa.Website.Exception.NotFound;
-import com.chunarevsa.Website.repo.CurrencyRepository;
 import com.chunarevsa.Website.service.CurrencyService;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
+
 import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
+@RequestMapping("/currency")
 public class CurrencyController {
 	
 	private final CurrencyService currencyService;
@@ -38,33 +38,39 @@ public class CurrencyController {
 	} */
 
 	// Получение по id
-	@RequestMapping (path = "/currency/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Currency currencyMethod (@PathVariable(value = "id") Long id) throws AllException { 
-		return currencyService.getCurrency(id);
+	@GetMapping ("/{id}")
+	@PreAuthorize("hasRole('USER')")
+	public ResponseEntity currencyMethod (@PathVariable(value = "id") Long id) throws AllException { 
+		return ResponseEntity.ok(currencyService.getCurrency(id));
 	} 
 
 	// Получить по code
-	@RequestMapping (path = "/currency/code/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Currency currenciesFindByCode (@PathVariable(value = "code") String code) throws NotFound { 
-		return currencyService.getCurrencyByCode(code);
+	@GetMapping("/code/{code}")
+	@PreAuthorize("hasRole('USER')")
+	public ResponseEntity currenciesFindByCode (@PathVariable(value = "code") String code) throws NotFound { 
+		return ResponseEntity.ok(currencyService.getCurrencyByCode(code));
 	} 
 
 	// Добавление 
-	@PostMapping (value = "/currency", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus (value = HttpStatus.CREATED)	
-	public Currency createdCurrency (@RequestBody Currency bodyCurrency) throws AllException {
-		return currencyService.addCurrency(bodyCurrency);
+	@PostMapping
+	@PreAuthorize("hasRole('ADMIN')")
+	//@ResponseStatus (value = HttpStatus.CREATED)	
+	public ResponseEntity createdCurrency (@RequestBody Currency bodyCurrency) throws AllException {
+		return ResponseEntity.ok(currencyService.addCurrency(bodyCurrency));
 	} 	
 				
 	 // Изменение
-	@PutMapping(value = "/currency/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Currency editCurrency (@PathVariable(value = "id") Long id, @RequestBody Currency bodyCurrency) throws AllException {
-		return currencyService.overrideCurrency(id, bodyCurrency);
+	@PutMapping("/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity editCurrency (@PathVariable(value = "id") Long id, @RequestBody Currency bodyCurrency) throws AllException {
+		return ResponseEntity.ok(currencyService.overrideCurrency(id, bodyCurrency));
 	} 
 
    // Удаление
-	@DeleteMapping(value = "/currency/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@DeleteMapping("/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity deleteCurrency (@PathVariable(value = "id") Long id) throws AllException {
-		return ResponseEntity.ok().body(id);
+		currencyService.deleteCurrency(id);
+		return ResponseEntity.ok("Валюта " + id + " была удалена");
 	}	
 }

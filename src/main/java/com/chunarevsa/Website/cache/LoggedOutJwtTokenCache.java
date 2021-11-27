@@ -50,6 +50,10 @@ public class LoggedOutJwtTokenCache {
 		return Math.max(0, secondAtExpity - secondAtLogout);
 	}
 
+	public UserLogoutSuccess getLogoutEventForToken(String token) {
+		return tokenEventMap.get(token);
+	}
+
 	
 
 	

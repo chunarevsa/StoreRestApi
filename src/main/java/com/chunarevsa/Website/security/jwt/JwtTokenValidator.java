@@ -1,7 +1,10 @@
 package com.chunarevsa.Website.security.jwt;
 
+import java.util.Date;
+
 import com.chunarevsa.Website.Exception.InvalidTokenRequestException;
 import com.chunarevsa.Website.cache.LoggedOutJwtTokenCache;
+import com.chunarevsa.Website.event.UserLogoutSuccess;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,10 +55,22 @@ public class JwtTokenValidator {
 			 //logger.error("JWT claims string is empty.");
 			 throw new InvalidTokenRequestException("JWT", token, "Illegal argument token");
 		}
-		// TODO: валидация девайса
+		valifateTokenIsNotForALoggedOutDevice(token);
 		System.out.println("validateToken - ok");
-
 		return true;
+	}
+
+	private void valifateTokenIsNotForALoggedOutDevice(String token) throws InvalidTokenRequestException {
+		System.out.println("valifateTokenIsNotForALoggedOutDevice");
+		UserLogoutSuccess previouslyLoggedOutEvent = loggedOutJwtTokenCache.getLogoutEventForToken(token);
+		if (previouslyLoggedOutEvent != null) {
+			String userEmail = previouslyLoggedOutEvent.getUserEmail();
+			Date logoutEventDate = previouslyLoggedOutEvent.getEventTime();
+			String errorMessage = String.format(
+					"Token corresponds to an already logged out user [%s] at [%s]. Please login again", userEmail,
+					logoutEventDate);
+			throw new InvalidTokenRequestException("tokenType", token, errorMessage);
+		}
 	}
 
 
