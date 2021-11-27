@@ -68,12 +68,19 @@ public class JwtTokenProvider {
 	}
 
 	public List<GrantedAuthority> getAuthoritiesFromJWT(String token) {
+		
 		Claims claims = Jwts.parser()
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody();
+		System.out.println("secret is " + secret);
+		System.out.println("claims is " + claims);
+		System.out.println("Claims - ok");
+		System.out.println("to String :" + claims.get(AUTHORITIES_CLAIM).toString());
+
 		return Arrays.stream(claims.get(AUTHORITIES_CLAIM).toString().split(","))
-					.map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+					.map(SimpleGrantedAuthority::new)
+					.collect(Collectors.toList());
 	}
 
 	public long getExpiryDuration() {

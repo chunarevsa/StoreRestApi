@@ -50,7 +50,6 @@ public class JwtUserDetailsService implements UserDetailsService{
 		System.out.println("loadUserById");
 		Optional<User> user = userRepository.findById(id);
 		System.out.println(user);
-		
 		return user.map(JwtUser::new)
 				  .orElseThrow(() -> new UsernameNotFoundException("Couldn't find a matching user id in the database for " + id));
   }

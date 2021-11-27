@@ -1,5 +1,7 @@
 package com.chunarevsa.Website.controllers;
 
+import java.util.stream.Collectors;
+
 import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.dto.UserDto;
 import com.chunarevsa.Website.security.jwt.JwtUser;
@@ -46,15 +48,15 @@ public class UserController {
 	}
 
 	@GetMapping("/me")
-	@PreAuthorize("hasAuthority('USER')")
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity getMyProfile (@AuthenticationPrincipal JwtUser jwtUser) {
-		System.out.println("My avatar : " + jwtUser.getAvatar());
-		System.out.println("My username is " + jwtUser.getUsername());
-		System.out.println("My roles : " + jwtUser.getRoles());
-		System.out.println("My email is " + jwtUser.getEmail());
-
-		
-		return ResponseEntity.ok("It's all");
+		return ResponseEntity.ok(
+			"My username :" + jwtUser.getUsername() + "\n" +
+			"My email :" + jwtUser.getEmail() + "\n" +
+			"My roles :" +  
+			jwtUser.getRoles().stream().map(role -> role.getRole().name()).collect(Collectors.toSet()) + "\n" +
+			"My avatar :" + jwtUser.getAvatar() +  "\n" +
+			"It's all");
 	}
 	/*
 

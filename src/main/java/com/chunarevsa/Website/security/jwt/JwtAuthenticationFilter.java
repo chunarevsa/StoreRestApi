@@ -53,15 +53,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			System.out.println("JwtFromRequest is " + jwt);
 			System.out.println("if");
 			System.out.println("StringUtils.hasText(jwt) is " + StringUtils.hasText(jwt));
-			System.out.println("wtTokenValidator.validateToken(jwt) is:"+ jwtTokenValidator.validateToken(jwt));
 			
 			if (StringUtils.hasText(jwt) && jwtTokenValidator.validateToken(jwt)) {
 				
 				Long userId = jwtTokenProvider.getUserIdFromJWT(jwt);
+
 				UserDetails userDetails = jwtUserDetailsService.loadUserById(userId);
+				System.out.println("loadUserById - ok");
 				List<GrantedAuthority> authorities = jwtTokenProvider.getAuthoritiesFromJWT(jwt);
+				System.out.println("getAuthoritiesFromJWT - ok");
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, jwt, authorities);
+				System.out.println( "get authentication - ok");
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+				System.out.println("setDetails - ok");
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 				System.out.println("if - ok");
 

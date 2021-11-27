@@ -30,8 +30,10 @@ public class JwtAuthenricationEntryPoint implements AuthenticationEntryPoint {
 						HttpServletResponse httpServletResponse, 
 						AuthenticationException ex)
 			throws IOException, ServletException {
-		
+				
 		System.out.println("commence");
+		System.err.println("User is unauthorised. Routing from the entry point");
+		
 		if (request.getAttribute("javax.servlet.error.exception") != null) {
 			Throwable throwable = (Throwable) request.getAttribute("javax.servlet.error.exception");
 			resolver.resolveException(request, httpServletResponse, null, (Exception) throwable);
