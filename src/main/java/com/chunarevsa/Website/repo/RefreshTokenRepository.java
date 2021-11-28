@@ -6,7 +6,7 @@ import com.chunarevsa.Website.Entity.token.RefreshToken;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RefreshTokenRepository extends JpaRepository <RefreshToken, Long> {
+public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
 	
 	@Override
    Optional<RefreshToken> findById(Long id);

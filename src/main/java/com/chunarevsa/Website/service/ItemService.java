@@ -14,11 +14,7 @@ import com.chunarevsa.Website.service.valid.ItemValid;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import lombok.extern.slf4j.Slf4j;
-
-
 @Service
-@Slf4j
 public class ItemService implements ItemServiceInterface {
 
 	private final ItemRepository itemRepository;
@@ -48,12 +44,8 @@ public class ItemService implements ItemServiceInterface {
 		bodyItem.setActive(true);
 
 		// Сохранение цен
-		priceService.saveAllPrice(bodyItem);
-		
+		priceService.saveAllPrice(bodyItem);		
 		Item item = itemRepository.save(bodyItem);
-		 
-		log.info("IN addItem - item: {} seccesfully add", item);
-
 		return item;
 
 	}
@@ -70,8 +62,7 @@ public class ItemService implements ItemServiceInterface {
 		if (!itemValid.itemIsActive(id)) {
 			throw new NotFound(HttpStatus.NOT_FOUND);
 		}
-		
-		log.info("IN getItem - {} item is found");
+
 		return itemRepository.findById(id).orElseThrow();
 	}
 
@@ -109,7 +100,6 @@ public class ItemService implements ItemServiceInterface {
 
 		// Запись параметров
 		itemRepository.save(item);
-		log.info("IN overridItem - {} item is found", item);
 		return item;
 	}
 
@@ -128,8 +118,6 @@ public class ItemService implements ItemServiceInterface {
 		Item item = itemRepository.findById(id).orElseThrow();
 		item.setActive(false);
 		itemRepository.save(item);
-		log.info("IN delete - item with id: {} successfully deleted");
-
 	}	
 
 	//  Id в JSON

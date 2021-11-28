@@ -16,7 +16,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
-// 5
 // Генерация токена на основании username, roles и тек. времени
 @Component
 public class JwtTokenProvider {
@@ -35,8 +34,8 @@ public class JwtTokenProvider {
 
 	// Создание токена
 	public String createToken (JwtUser jwtUser) {
-		
 		System.out.println("createToken");
+
 		Instant expiryDate = Instant.now().plusMillis(jwtExpiration);
 		String authorities = getUserAuthotities(jwtUser);
 		return Jwts.builder()
@@ -62,7 +61,6 @@ public class JwtTokenProvider {
 	}
 
 	public List<GrantedAuthority> getAuthoritiesFromJWT(String token) {
-		
 		Claims claims = Jwts.parser()
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
@@ -81,7 +79,6 @@ public class JwtTokenProvider {
 				.setSigningKey(secret)
 				.parseClaimsJws(token)
 				.getBody();
-
 		return claims.getExpiration();
 	}
 } 

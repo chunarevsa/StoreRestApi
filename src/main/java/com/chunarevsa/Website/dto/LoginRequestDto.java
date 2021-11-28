@@ -21,7 +21,7 @@ public class LoginRequestDto {
 		this.email = email;
 		this.password = password;
 		this.deviceInfo = deviceInfo;
-	}
+	} 
 
 	public String getUsername() {
 		return this.username;
@@ -63,7 +63,7 @@ public class LoginRequestDto {
 			", password='" + getPassword() + "'" +
 			", deviceInfo='" + getDeviceInfo() + "'" +
 			"}";
-	}
+	} 
 
 
 }

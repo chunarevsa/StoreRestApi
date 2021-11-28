@@ -24,10 +24,7 @@ public class Price extends Base {
 
 	@JsonIgnore
 	@ManyToOne 
-	@JoinColumn (
-		name = "ITEM_ID", 
-		insertable = false, 
-		updatable = false)
+	@JoinColumn (name = "ITEM_ID", insertable = false, updatable = false)
 	private Item item;
 
 	public Price() {

@@ -20,10 +20,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import jdk.internal.org.jline.utils.Log;
-
+// TODO: log
 @Service
-public class AuthService { // добавить логи - доделать
+public class AuthService {
 
 	private final UserService userService;
 	private final JwtTokenProvider jwtTokenProvider;
@@ -49,6 +48,7 @@ public class AuthService { // добавить логи - доделать
 	}
 
 	public Optional<User> registrationUser (RegistrationRequest registrationRequest) {
+		System.out.println("registrationUser");
 
 		String email = registrationRequest.getEmail();
 		if (emailAlreadyExists(email)) {
@@ -65,7 +65,7 @@ public class AuthService { // добавить логи - доделать
 		return userService.existsByEmail(userEmail);
 	}
 
-	public Optional<User> confirmEmailRegistration(String token) { // доделать - обработка исключений
+	public Optional<User> confirmEmailRegistration(String token) { // TODO: обработка исключений
 		EmailVerificationToken verificationToken = emailVerificationTokenService.findByToken(token).orElseThrow();
 		User registeredUser = verificationToken.getUser();
 		if  (registeredUser.getIsEmailVerified()) {

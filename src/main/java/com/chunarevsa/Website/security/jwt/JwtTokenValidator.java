@@ -32,6 +32,7 @@ public class JwtTokenValidator {
 
 	public boolean validateToken(String token) throws InvalidTokenRequestException {
 		System.out.println("validateToken");
+
 		try {
 			Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
 
@@ -56,7 +57,6 @@ public class JwtTokenValidator {
 			 throw new InvalidTokenRequestException("JWT", token, "Illegal argument token");
 		}
 		valifateTokenIsNotForALoggedOutDevice(token);
-		System.out.println("validateToken - ok");
 		return true;
 	}
 

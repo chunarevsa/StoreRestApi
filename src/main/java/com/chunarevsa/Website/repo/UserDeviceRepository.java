@@ -7,7 +7,7 @@ import com.chunarevsa.Website.Entity.token.RefreshToken;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserDeviceRepository extends JpaRepository <UserDevice, Long> {
+public interface UserDeviceRepository extends JpaRepository<UserDevice, Long> {
 	
 	@Override
    Optional<UserDevice> findById(Long id);

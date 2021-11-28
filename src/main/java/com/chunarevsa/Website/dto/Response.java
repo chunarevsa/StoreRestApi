@@ -2,20 +2,12 @@ package com.chunarevsa.Website.dto;
 
 import org.springframework.http.HttpStatus;
 
+// TODO:
 public class Response {
 	
 	private String message;
 	private String code;
 	private String clientMessage;
-
-	public String getMessage() {return this.message;}
-	public void setMessage(String message) {this.message = message;}
-
-	public String getCode() {return this.code;}
-	public void setCode(String code) {this.code = code;}
-
-	public String getClientMessage() {return this.clientMessage;}
-	public void setClientMessage(String clientMessage) {this.clientMessage = clientMessage;}
 
 	public Response() {}
 	
@@ -35,6 +27,30 @@ public class Response {
 		this.code = httpMessage[0];
 		this.message = httpStatus2.getReasonPhrase();
 		this.clientMessage = "Успешное удаленние";
+	}
+
+	public String getMessage() {
+		return this.message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public String getCode() {
+		return this.code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getClientMessage() {
+		return this.clientMessage;
+	}
+
+	public void setClientMessage(String clientMessage) {
+		this.clientMessage = clientMessage;
 	}
 
 }

@@ -12,12 +12,8 @@ import com.chunarevsa.Website.service.valid.CurrencyValid;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import lombok.extern.slf4j.Slf4j;
-
-// Проверить логирование - доделать
-
+// TODO: Проверить логирование
 @Service
-@Slf4j
 public class CurrencyService implements CurrencyServiceInterface {
 
 	private final CurrencyRepository currencyRepository;
@@ -47,10 +43,7 @@ public class CurrencyService implements CurrencyServiceInterface {
 
 		// Включение (active = true) 
 		bodyCurrency.setActive(true);
-
 		Currency currency = currencyRepository.save(bodyCurrency);
-		log.info("IN addItem - currency: {} seccesfully add", currency);
-
 		return currency;
 
 	}
@@ -67,7 +60,6 @@ public class CurrencyService implements CurrencyServiceInterface {
 			throw new NotFound(HttpStatus.NO_CONTENT);
 		}
 
-		log.info("IN getItem - {} item is found", currencyRepository.findById(id));
 		return currencyRepository.findById(id).orElseThrow();
 	}
 
@@ -83,7 +75,6 @@ public class CurrencyService implements CurrencyServiceInterface {
 			throw new NotFound(HttpStatus.NOT_FOUND);
 		}
 
-		log.info("IN getCurrencyByCode - {} currency is found", currency);
 		return currency;
 	}
 
@@ -131,7 +122,6 @@ public class CurrencyService implements CurrencyServiceInterface {
 		Currency currency = currencyRepository.findById(id).orElseThrow();
 		currency.setActive(false);
 		currencyRepository.save(currency);
-		log.info("IN delete - currency with id: {} successfully deleted", id, currency);
 
 	}
 

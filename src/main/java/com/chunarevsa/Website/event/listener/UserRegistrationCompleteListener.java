@@ -30,8 +30,6 @@ public class UserRegistrationCompleteListener implements ApplicationListener<Use
 	public void onApplicationEvent(UserRegistrationComplete userRegistrationComplete) {
 		System.out.println("onApplicationEvent");
 		sendEmailVerification(userRegistrationComplete);
-		System.out.println("onApplicationEvent - ok");
-		
 	}
 
 	private void sendEmailVerification(UserRegistrationComplete userRegistrationComplete) {
@@ -46,7 +44,6 @@ public class UserRegistrationCompleteListener implements ApplicationListener<Use
 					userRegistrationComplete.getRedirectUrl().queryParam("token", token).toUriString();
 
 		try {
-			System.out.println("emailConfirmationUrl is - " + emailConfirmationUrl);
 			mailService.sendMessageVerification(userEmail, emailConfirmationUrl);
 		} catch (Exception e) {
 			System.err.println("sendEmailVerificatione - ERROR");

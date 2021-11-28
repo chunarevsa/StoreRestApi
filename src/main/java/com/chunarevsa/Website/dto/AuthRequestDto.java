@@ -4,7 +4,7 @@ import com.chunarevsa.Website.Entity.payload.DeviceInfo;
 
 // Запрос при аутентификации 
 
-public class AuthRequestDto {
+/* public class AuthRequestDto {
 	
 	private String username;
 	private String email;
@@ -17,7 +17,7 @@ public class AuthRequestDto {
 		this.username = username;
 		this.email = email;
 		this.password = password;
-	}
+	} 
 
 	public String getUsername() {
 		return this.username;
@@ -60,8 +60,8 @@ public class AuthRequestDto {
 			", password='" + getPassword() + "'" +
 			", deviceInfo='" + getDeviceInfo() + "'" +
 			"}";
-	}
+	} 
 
 
 	
-} 
+}  */

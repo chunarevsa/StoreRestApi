@@ -29,7 +29,7 @@ public class ItemDto {
 				.map(PriceDto :: toModel).collect(Collectors.toSet()));
 		
 		return itemDto;
-	}
+	} 
 
 	public Long getId() {
 		return this.id;
