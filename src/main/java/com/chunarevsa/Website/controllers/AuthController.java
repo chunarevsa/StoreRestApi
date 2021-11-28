@@ -27,9 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
-// 8
 @RestController
-@RequestMapping(value = "/auth/")
+@RequestMapping("/auth/")
 public class AuthController {
 
 	private final AuthService authService;
