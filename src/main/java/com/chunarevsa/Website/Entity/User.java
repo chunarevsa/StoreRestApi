@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -22,7 +23,8 @@ public class User extends Base {
 
 	@Id
 	@Column(name = "USER_ID")
-	@GeneratedValue(strategy =  GenerationType.IDENTITY) //mb SEQUENCE
+	@GeneratedValue(strategy =  GenerationType.SEQUENCE, generator = "user_seq")
+	@SequenceGenerator(name = "user_seq", allocationSize = 1)
 	private Long id;
 
 	@Column(name = "USERNAME", unique = true, nullable = false)
@@ -39,7 +41,7 @@ public class User extends Base {
 	@Column(name = "IS_ACTIVE", nullable = false)
 	private Boolean active;
 
-	// TODO: 
+	@Column(name = "AVATAR") //TODO:
 	private String avatar;
 
 	@ManyToMany(fetch = FetchType.EAGER) // Каскады - доделать
@@ -69,12 +71,15 @@ public class User extends Base {
 	}
 
 	public void addRole(Role role) {
+
 		roles.add(role);
 		role.getUsers().add(this);
    }
 
 	public void addRoles(Set<Role> roles) {
+
 		roles.forEach(this::addRole);
+		
   	}
 	
 	public void verificationConfirmed() {

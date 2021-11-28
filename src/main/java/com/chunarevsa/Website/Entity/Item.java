@@ -1,53 +1,87 @@
 package com.chunarevsa.Website.Entity;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 @Entity
-@Table (name = "ITEM")
+@Table(name = "ITEM")
 public class Item extends Base {
 
 	@Id
 	@Column (name = "ITEM_ID")
-	@GeneratedValue (strategy =  GenerationType.IDENTITY)
+	@GeneratedValue(strategy =  GenerationType.SEQUENCE, generator = "item_seq")
+	@SequenceGenerator(name = "item_seq", allocationSize = 1)
 	private Long id;
 	
-	private String sku;
+	@Column(name = "NAME", nullable = false)
 	private String name;
+
+	@Column(name = "TYPE", nullable = false)
 	private String type;
+
+	@Column(name = "DESCRIPTION")
 	private String description;
+
+	@Column(name = "IS_ACTIVE", nullable = false)
 	private Boolean active;
 
-	@OneToMany // вынести в отдельную таблицу - доделать 
-	@JoinColumn (name = "ITEM_ID")
-	private Set<Price> prices;
+	/* @OneToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "ITEM_PRICES", // связь через промежуточную таблицу 
+			joinColumns = { @JoinColumn(name = "ITEM_ID", referencedColumnName = "ITEM_ID")},
+			inverseJoinColumns = { @JoinColumn(name = "PRICE_ID", referencedColumnName = "PRICE_ID")})
+	private Set<Price> prices = new HashSet<>(); */
+
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "PRICE_ID")
+	@JsonIgnoreProperties("price")
+	private Set<Price> prices = new HashSet<>(); 
 
 	public Item() {
 		super();
 	}
-	public Item(
-				Long id,
-				String sku, 
-				String name, 
-				String type, 
-				String description,
-				Boolean active, 
-				Set<Price> prices) {
-		this.sku = sku;
+
+	public Item(Long id, 
+					String name, 
+					String type, 
+					String description, 
+					Boolean active, 
+					Set<Price> prices) {
+		this.id = id;
 		this.name = name;
 		this.type = type;
 		this.description = description;
 		this.active = active;
 		this.prices = prices;
+	}
+
+	public void addPrice(Price price) {
+		System.out.println("IN addPrice");
+		System.out.println("price is :" + price);
+		System.out.println("this :" + this);
+		System.out.println(prices);
+		prices.add(price);
+		price.setItem(this);
+	}
+
+	public void addPricies (Set<Price> prices) {
+		System.out.println("IN addPricies");
+		prices.forEach(this::addPrice);
 	}
 
 	public Long getId() {
@@ -56,14 +90,6 @@ public class Item extends Base {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getSku() {
-		return this.sku;
-	}
-
-	public void setSku(String sku) {
-		this.sku = sku;
 	}
 
 	public String getName() {
@@ -109,12 +135,11 @@ public class Item extends Base {
 	public void setPrices(Set<Price> prices) {
 		this.prices = prices;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "{" +
 			" id='" + getId() + "'" +
-			", sku='" + getSku() + "'" +
 			", name='" + getName() + "'" +
 			", type='" + getType() + "'" +
 			", description='" + getDescription() + "'" +
@@ -122,6 +147,5 @@ public class Item extends Base {
 			", prices='" + getPrices() + "'" +
 			"}";
 	}
-
 
 }

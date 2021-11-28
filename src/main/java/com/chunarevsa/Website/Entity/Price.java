@@ -1,47 +1,57 @@
 package com.chunarevsa.Website.Entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
+@Table(name = "PRICE")
 public class Price extends Base {	
 
 	@Id
-	@Column (name = "PRICE_ID")
-	@GeneratedValue (strategy =  GenerationType.IDENTITY)
+	@Column(name = "PRICE_ID")
+	@GeneratedValue(strategy =  GenerationType.SEQUENCE, generator = "price_seq")
+	@SequenceGenerator(name = "price_seq", allocationSize = 1)
 	private Long id;
 	
-	private String amount;
-	private String currencyTitle;
+	@Column(name = "COST")
+	private String cost;
+
+	@OneToOne(targetEntity = DomesticCurrency.class, fetch = FetchType.EAGER)
+	@JoinColumn(nullable = false, name = "DOMESTIC_CURRENCY_ID")
+	private DomesticCurrency domesticCurrency;
+
+	@Column(name = "IS_ACTIVE")
 	private Boolean active;
 
 	@JsonIgnore
-	@ManyToOne 
-	@JoinColumn (name = "ITEM_ID", insertable = false, updatable = false)
+	@ManyToOne (fetch = FetchType.LAZY)
 	private Item item;
 
 	public Price() {
 		super();
 	}
-	public Price(
-				Long id,
-				String amount, 
-				String currencyTitle,
-				Boolean active,
-				Item item) {
+
+	public Price(Long id, String cost, DomesticCurrency domesticCurrency, Boolean active, Item item) {
 		this.id = id;
-		this.amount = amount;
-		this.currencyTitle = currencyTitle;
+		this.cost = cost;
+		this.domesticCurrency = domesticCurrency;
 		this.active = active;
 		this.item = item;
 	}
+
 
 	public Long getId() {
 		return this.id;
@@ -51,22 +61,21 @@ public class Price extends Base {
 		this.id = id;
 	}
 
-	public String getAmount() {
-		return this.amount;
+	public String getCost() {
+		return this.cost;
 	}
 
-	public void setAmount(String amount) {
-		this.amount = amount;
+	public void setCost(String cost) {
+		this.cost = cost;
 	}
 
-	public String getCurrencyTitle() {
-		return this.currencyTitle;
+	public DomesticCurrency getDomesticCurrency() {
+		return this.domesticCurrency;
 	}
 
-	public void setCurrencyTitle(String currencyTitle) {
-		this.currencyTitle = currencyTitle;
+	public void setDomesticCurrency(DomesticCurrency domesticCurrency) {
+		this.domesticCurrency = domesticCurrency;
 	}
-
 
 	public Boolean isActive() {
 		return this.active;
@@ -92,11 +101,11 @@ public class Price extends Base {
 	public String toString() {
 		return "{" +
 			" id='" + getId() + "'" +
-			", amount='" + getAmount() + "'" +
-			", currencyTitle='" + getCurrencyTitle() + "'" +
+			", cost='" + getCost() + "'" +
+			", domesticCurrency='" + getDomesticCurrency() + "'" +
 			", active='" + isActive() + "'" +
 			", item='" + getItem() + "'" +
 			"}";
 	}
-
+	
 }

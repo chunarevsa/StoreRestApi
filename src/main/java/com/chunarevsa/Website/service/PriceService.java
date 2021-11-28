@@ -10,7 +10,6 @@ import com.chunarevsa.Website.Exception.NotFound;
 import com.chunarevsa.Website.Exception.NotFoundDomesticCurrency;
 import com.chunarevsa.Website.repo.PriceRepository;
 import com.chunarevsa.Website.service.inter.PriceServiceInterface;
-import com.chunarevsa.Website.service.valid.DomesticCurrencyValid;
 import com.chunarevsa.Website.service.valid.PriceValid;
 
 import org.springframework.http.HttpStatus;
@@ -25,15 +24,12 @@ public class PriceService implements PriceServiceInterface {
 
 	private final PriceRepository priceRepository;
 	private final PriceValid priceValid;
-	private final DomesticCurrencyValid currencyValid;
 
 	public PriceService(
 				PriceRepository priceRepository,
-				PriceValid priceValid, 
-				DomesticCurrencyValid currencyValid) {
+				PriceValid priceValid) {
 		this.priceRepository = priceRepository;
 		this.priceValid = priceValid;
-		this.currencyValid = currencyValid;
 	}
 
 	// Сохранение всех цен

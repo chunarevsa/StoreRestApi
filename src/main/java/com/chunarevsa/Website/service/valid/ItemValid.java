@@ -37,7 +37,6 @@ public class ItemValid {
 	// Проверка на незаполеннные данные
 	public boolean bodyIsEmpty (Item bodyItem) throws FormIsEmpty {
 		if (
-			bodyItem.getSku().isEmpty()  || 
 			bodyItem.getName().isEmpty() || 
 			bodyItem.getType().isEmpty() || 
 			bodyItem.getDescription().isEmpty()) {

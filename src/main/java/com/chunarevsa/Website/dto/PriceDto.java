@@ -20,8 +20,8 @@ public class PriceDto {
 	public static PriceDto toModel (Price price) {
 		PriceDto priceModel = new PriceDto();
 		priceModel.setId(price.getId());
-		priceModel.setAmount(price.getAmount());
-		priceModel.setCurrencyTitle(price.getCurrencyTitle());
+		//priceModel.setAmount(price.getAmount());
+		//priceModel.setCurrencyTitle(price.getCurrencyTitle());
 		return priceModel;
 	}
 

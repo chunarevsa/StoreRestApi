@@ -90,7 +90,6 @@ public class ItemService implements ItemServiceInterface {
 		priceService.saveAllPrice(bodyItem);
 
 		Item item = itemRepository.findById(id).orElseThrow();
-		item.setSku(bodyItem.getSku());
 		item.setName(bodyItem.getName());
 		item.setType(bodyItem.getType());
 		item.setDescription(bodyItem.getDescription());

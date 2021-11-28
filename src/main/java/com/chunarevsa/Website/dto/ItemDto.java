@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 public class ItemDto {
 
 	private Long id;
-	private String sku;
 	private String name;
 	private String type;
 	private String description;
@@ -21,7 +20,6 @@ public class ItemDto {
 		
 		ItemDto itemDto = new ItemDto();
 		itemDto.setId(item.getId());
-		itemDto.setSku(item.getSku());
 		itemDto.setName(item.getName());
 		itemDto.setType(item.getType());
 		itemDto.setDescription(item.getDescription());
@@ -37,14 +35,6 @@ public class ItemDto {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getSku() {
-		return this.sku;
-	}
-
-	public void setSku(String sku) {
-		this.sku = sku;
 	}
 
 	public String getName() {
@@ -83,7 +73,6 @@ public class ItemDto {
 	public String toString() {
 		return "{" +
 			" id='" + getId() + "'" +
-			", sku='" + getSku() + "'" +
 			", name='" + getName() + "'" +
 			", type='" + getType() + "'" +
 			", description='" + getDescription() + "'" +
