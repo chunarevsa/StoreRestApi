@@ -39,7 +39,7 @@ public class User extends Base {
 	@Column(name = "IS_ACTIVE", nullable = false)
 	private Boolean active;
 
-	// Переделать в фаил - доделать
+	// TODO: 
 	private String avatar;
 
 	@ManyToMany(fetch = FetchType.EAGER) // Каскады - доделать

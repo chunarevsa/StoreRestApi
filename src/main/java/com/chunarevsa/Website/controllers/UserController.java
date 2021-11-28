@@ -39,7 +39,7 @@ public class UserController {
 		this.applicationEventPublisher = applicationEventPublisher;
 	}
 
-	@GetMapping("/{username}") // - доделать 
+	@GetMapping("/{username}")
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity getUserProfile (
 							@AuthenticationPrincipal JwtUser jwtUser,

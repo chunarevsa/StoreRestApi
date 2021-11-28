@@ -19,7 +19,7 @@ public class Price extends Base {
 	private Long id;
 	
 	private String amount;
-	private String currencyCode;
+	private String currencyTitle;
 	private Boolean active;
 
 	@JsonIgnore
@@ -33,12 +33,12 @@ public class Price extends Base {
 	public Price(
 				Long id,
 				String amount, 
-				String currencyCode,
+				String currencyTitle,
 				Boolean active,
 				Item item) {
 		this.id = id;
 		this.amount = amount;
-		this.currencyCode = currencyCode;
+		this.currencyTitle = currencyTitle;
 		this.active = active;
 		this.item = item;
 	}
@@ -59,13 +59,14 @@ public class Price extends Base {
 		this.amount = amount;
 	}
 
-	public String getCurrencyCode() {
-		return this.currencyCode;
+	public String getCurrencyTitle() {
+		return this.currencyTitle;
 	}
 
-	public void setCurrencyCode(String currencyCode) {
-		this.currencyCode = currencyCode;
+	public void setCurrencyTitle(String currencyTitle) {
+		this.currencyTitle = currencyTitle;
 	}
+
 
 	public Boolean isActive() {
 		return this.active;
@@ -92,13 +93,10 @@ public class Price extends Base {
 		return "{" +
 			" id='" + getId() + "'" +
 			", amount='" + getAmount() + "'" +
-			", currencyCode='" + getCurrencyCode() + "'" +
+			", currencyTitle='" + getCurrencyTitle() + "'" +
 			", active='" + isActive() + "'" +
 			", item='" + getItem() + "'" +
 			"}";
 	}
-
-
-	
 
 }

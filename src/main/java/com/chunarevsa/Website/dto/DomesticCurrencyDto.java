@@ -1,0 +1,45 @@
+package com.chunarevsa.Website.dto;
+
+import com.chunarevsa.Website.Entity.DomesticCurrency;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class DomesticCurrencyDto {
+
+	private String title;
+	private String cost;
+
+	public DomesticCurrencyDto() {
+	}
+
+	public DomesticCurrencyDto(String title, String cost) {
+		this.title = title;
+		this.cost = cost;
+	}
+
+	public static DomesticCurrencyDto fromUser (DomesticCurrency currency) {
+		DomesticCurrencyDto currencyDto = new DomesticCurrencyDto();
+		currencyDto.setTitle(currency.getTitle());
+		currencyDto.setCost(currency.getCost());
+		return currencyDto;
+	}
+
+	public String getTitle() {
+		return this.title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getCost() {
+		return this.cost;
+	}
+
+	public void setCost(String cost) {
+		this.cost = cost;
+	}
+
+
+
+}

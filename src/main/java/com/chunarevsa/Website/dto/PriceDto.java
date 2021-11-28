@@ -6,22 +6,22 @@ public class PriceDto {
 	
 	private Long id;
 	private String amount;
-	private String currencyCode;
+	private String currencyTitle;
 
 	public PriceDto() {
 	}
 
-	public PriceDto(Long id, String amount, String currencyCode) {
+	public PriceDto(Long id, String amount, String currencyTitle) {
 		this.id = id;
 		this.amount = amount;
-		this.currencyCode = currencyCode;
+		this.currencyTitle = currencyTitle;
 	}
 
 	public static PriceDto toModel (Price price) {
 		PriceDto priceModel = new PriceDto();
 		priceModel.setId(price.getId());
 		priceModel.setAmount(price.getAmount());
-		priceModel.setCurrencyCode(price.getCurrencyCode());
+		priceModel.setCurrencyTitle(price.getCurrencyTitle());
 		return priceModel;
 	}
 
@@ -41,12 +41,12 @@ public class PriceDto {
 		this.amount = amount;
 	}
 
-	public String getCurrencyCode() {
-		return this.currencyCode;
+	public String getCurrencyTitle() {
+		return this.currencyTitle;
 	}
 
-	public void setCurrencyCode(String currencyCode) {
-		this.currencyCode = currencyCode;
+	public void setCurrencyTitle(String currencyTitle) {
+		this.currencyTitle = currencyTitle;
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class PriceDto {
 		return "{" +
 			" id='" + getId() + "'" +
 			", amount='" + getAmount() + "'" +
-			", currencyCode='" + getCurrencyCode() + "'" +
+			", currencyTitle='" + getCurrencyTitle() + "'" +
 			"}";
 	}
 

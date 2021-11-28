@@ -4,7 +4,7 @@ import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.Exception.InvalidPriceFormat;
 import com.chunarevsa.Website.Exception.NotFound;
-import com.chunarevsa.Website.Exception.NotFoundCurrency;
+import com.chunarevsa.Website.Exception.NotFoundDomesticCurrency;
 import com.chunarevsa.Website.dto.ItemDto;
 import com.chunarevsa.Website.dto.IdDto;
 import com.chunarevsa.Website.repo.ItemRepository;
@@ -32,7 +32,7 @@ public class ItemService implements ItemServiceInterface {
 
 	// Создание 
 	@Override
-	public Item addItem(Item bodyItem) throws FormIsEmpty, InvalidPriceFormat, NotFoundCurrency {
+	public Item addItem(Item bodyItem) throws FormIsEmpty, InvalidPriceFormat, NotFoundDomesticCurrency {
 
 		// Проверка на незаполеннные данные
 		
@@ -77,7 +77,7 @@ public class ItemService implements ItemServiceInterface {
 
 	// Перезапись параметров
 	@Override
-	public Item overridItem (long id, Item bodyItem) throws NotFound, FormIsEmpty, InvalidPriceFormat, NotFoundCurrency {
+	public Item overridItem (long id, Item bodyItem) throws NotFound, FormIsEmpty, InvalidPriceFormat, NotFoundDomesticCurrency {
 		// Проверка на наличие 
 		if (!itemValid.itemIsPresent(id)) {
 			throw new NotFound(HttpStatus.NOT_FOUND);

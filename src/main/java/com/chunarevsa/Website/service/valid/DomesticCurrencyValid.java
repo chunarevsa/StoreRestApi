@@ -1,38 +1,38 @@
 package com.chunarevsa.Website.service.valid;
 
-import com.chunarevsa.Website.Entity.Currency;
-import com.chunarevsa.Website.repo.CurrencyRepository;
+import com.chunarevsa.Website.Entity.DomesticCurrency;
+import com.chunarevsa.Website.repo.DomesticCurrencyRepository;
 
 import org.springframework.stereotype.Service;
 
 @Service
-public class CurrencyValid {
+public class DomesticCurrencyValid {
 
-	private final CurrencyRepository currencyRepository;
+	private final DomesticCurrencyRepository currencyRepository;
 
-	public CurrencyValid(CurrencyRepository currencyRepository) {
+	public DomesticCurrencyValid(DomesticCurrencyRepository currencyRepository) {
 		this.currencyRepository = currencyRepository;
 	}
 
 	// Проверка на наличие по ид
 	public boolean currencyIsPresent(long id) {
 
-		Currency currency = currencyRepository.findById(id).orElse(null);
+		DomesticCurrency currency = currencyRepository.findById(id).orElse(null);
 		if (currency == null) {
 			return false;
 		}
 		return true;  
 	}
 
-	// Проверка на наличие валюты с таким code
+	/* // Проверка на наличие валюты с таким code
 	public boolean codeIsPresent (String code) {
-		Currency currencyByCode = currencyRepository.findByCode(code);
+		DomesticCurrency currencyByCode = currencyRepository.findByCode(code);
 		if (currencyByCode == null) {
 			return false;
 		}	 
 		System.out.println(currencyByCode.getCode());
 		return true;
-	}
+	} */
 
 	// Проверка status
 	public boolean currencyIsActive (long id) {
@@ -44,11 +44,11 @@ public class CurrencyValid {
 	}
 
 	// Проверка на незаполеннные данные
-	public boolean bodyIsEmpty (Currency bodyCurrency) {
+	/* public boolean bodyIsEmpty (DomesticCurrency bodyCurrency) {
 		if (bodyCurrency.getCode().isEmpty()) {
 			return true;
 		}
 		return false;
-	}
+	} */
 	
 }

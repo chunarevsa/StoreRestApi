@@ -7,10 +7,10 @@ import com.chunarevsa.Website.Entity.Price;
 import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.Exception.InvalidPriceFormat;
 import com.chunarevsa.Website.Exception.NotFound;
-import com.chunarevsa.Website.Exception.NotFoundCurrency;
+import com.chunarevsa.Website.Exception.NotFoundDomesticCurrency;
 import com.chunarevsa.Website.repo.PriceRepository;
 import com.chunarevsa.Website.service.inter.PriceServiceInterface;
-import com.chunarevsa.Website.service.valid.CurrencyValid;
+import com.chunarevsa.Website.service.valid.DomesticCurrencyValid;
 import com.chunarevsa.Website.service.valid.PriceValid;
 
 import org.springframework.http.HttpStatus;
@@ -25,12 +25,12 @@ public class PriceService implements PriceServiceInterface {
 
 	private final PriceRepository priceRepository;
 	private final PriceValid priceValid;
-	private final CurrencyValid currencyValid;
+	private final DomesticCurrencyValid currencyValid;
 
 	public PriceService(
 				PriceRepository priceRepository,
 				PriceValid priceValid, 
-				CurrencyValid currencyValid) {
+				DomesticCurrencyValid currencyValid) {
 		this.priceRepository = priceRepository;
 		this.priceValid = priceValid;
 		this.currencyValid = currencyValid;
@@ -38,7 +38,7 @@ public class PriceService implements PriceServiceInterface {
 
 	// Сохранение всех цен
 	@Override
-	public void saveAllPrice(Item bodyItem) throws InvalidPriceFormat, FormIsEmpty, NotFoundCurrency {
+	public void saveAllPrice(Item bodyItem) throws InvalidPriceFormat, FormIsEmpty, NotFoundDomesticCurrency {
 		
 		Set<Price> pricesSet = bodyItem.getPrices();
 		int i = 1;
@@ -54,12 +54,12 @@ public class PriceService implements PriceServiceInterface {
 				throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
 			} 
 
-			boolean codeIsPresent = currencyValid.codeIsPresent(price.getCurrencyCode());
+			/* boolean codeIsPresent = currencyValid.codeIsPresent(price.getCurrencyCode());
 			System.out.println(codeIsPresent);
 			if (!codeIsPresent) {
 				log.warn("IN saveAllPrice.codeIsPresent - price {} currency is NOT correct", i);
-				throw new NotFoundCurrency(HttpStatus.NOT_FOUND);
-			} 
+				throw new NotFoundDomesticCurrency(HttpStatus.NOT_FOUND);
+			}  */
 
 			price.setActive(true);
 			

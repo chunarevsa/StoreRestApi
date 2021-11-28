@@ -2,12 +2,12 @@ package com.chunarevsa.Website.Exception;
 
 import org.springframework.http.HttpStatus;
 
-public class NotFoundCurrency  extends AllException {
+public class NotFoundDomesticCurrency  extends AllException {
 
-	public NotFoundCurrency() {
+	public NotFoundDomesticCurrency() {
 	}
 
-	public NotFoundCurrency(HttpStatus httpStatus) {
+	public NotFoundDomesticCurrency(HttpStatus httpStatus) {
 		this.clientMessage = "Такой валюты не существует";
 		this.httpStatus = httpStatus;
 	}

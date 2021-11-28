@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-// Добавить обработку исключений (доделать)
+// TODO: Добавить обработку исключений (доделать)
 @Service
 public class UserService implements UserServiceInterface{
 
@@ -54,7 +54,6 @@ public class UserService implements UserServiceInterface{
 		newUser.addRoles(getRoles(isAdmin));
 		newUser.setActive(true);
 		newUser.setIsEmailVerified(false);
-
 		return newUser;
 	}
 	
