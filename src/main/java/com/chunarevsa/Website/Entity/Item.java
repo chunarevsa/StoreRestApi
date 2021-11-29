@@ -6,17 +6,13 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 @Entity
@@ -41,16 +37,9 @@ public class Item extends Base {
 	@Column(name = "IS_ACTIVE", nullable = false)
 	private Boolean active;
 
-	/* @OneToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "ITEM_PRICES", // связь через промежуточную таблицу 
-			joinColumns = { @JoinColumn(name = "ITEM_ID", referencedColumnName = "ITEM_ID")},
-			inverseJoinColumns = { @JoinColumn(name = "PRICE_ID", referencedColumnName = "PRICE_ID")})
-	private Set<Price> prices = new HashSet<>(); */
-
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "PRICE_ID")
-	@JsonIgnoreProperties("price")
-	private Set<Price> prices = new HashSet<>(); 
+	@OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "ITEM_ID")
+	private Set<Price> prices = new HashSet<>();
 
 	public Item() {
 		super();

@@ -1,6 +1,5 @@
 package com.chunarevsa.Website.Entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,8 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -29,29 +26,28 @@ public class Price extends Base {
 	@Column(name = "COST")
 	private String cost;
 
-	@OneToOne(targetEntity = DomesticCurrency.class, fetch = FetchType.EAGER)
-	@JoinColumn(nullable = false, name = "DOMESTIC_CURRENCY_ID")
-	private DomesticCurrency domesticCurrency;
+	@Column(name = "CURRENCY")
+	private String currencyTitle;
 
 	@Column(name = "IS_ACTIVE")
 	private Boolean active;
 
 	@JsonIgnore
 	@ManyToOne (fetch = FetchType.LAZY)
+	@JoinColumn (name = "ITEM_ID", insertable = false, updatable = false)
 	private Item item;
 
 	public Price() {
 		super();
 	}
 
-	public Price(Long id, String cost, DomesticCurrency domesticCurrency, Boolean active, Item item) {
+	public Price(Long id, String cost, String currencyTitle, Boolean active, Item item) {
 		this.id = id;
 		this.cost = cost;
-		this.domesticCurrency = domesticCurrency;
+		this.currencyTitle = currencyTitle;
 		this.active = active;
 		this.item = item;
 	}
-
 
 	public Long getId() {
 		return this.id;
@@ -69,12 +65,12 @@ public class Price extends Base {
 		this.cost = cost;
 	}
 
-	public DomesticCurrency getDomesticCurrency() {
-		return this.domesticCurrency;
+	public String getCurrencyTitle() {
+		return this.currencyTitle;
 	}
 
-	public void setDomesticCurrency(DomesticCurrency domesticCurrency) {
-		this.domesticCurrency = domesticCurrency;
+	public void setCurrencyTitle(String currencyTitle) {
+		this.currencyTitle = currencyTitle;
 	}
 
 	public Boolean isActive() {
@@ -102,10 +98,10 @@ public class Price extends Base {
 		return "{" +
 			" id='" + getId() + "'" +
 			", cost='" + getCost() + "'" +
-			", domesticCurrency='" + getDomesticCurrency() + "'" +
+			", currencyTitle='" + getCurrencyTitle() + "'" +
 			", active='" + isActive() + "'" +
 			", item='" + getItem() + "'" +
 			"}";
 	}
-	
+
 }
