@@ -16,7 +16,7 @@ public class ItemDto {
 
 	public ItemDto() {}
 
-	public static ItemDto toModel (Item item) {
+	public static ItemDto fromUser (Item item) {
 		
 		ItemDto itemDto = new ItemDto();
 		itemDto.setId(item.getId());
@@ -24,7 +24,7 @@ public class ItemDto {
 		itemDto.setType(item.getType());
 		itemDto.setDescription(item.getDescription());
 		itemDto.setPrices(item.getPrices().stream()
-				.map(PriceDto :: toModel).collect(Collectors.toSet()));
+				.map(PriceDto :: fromUser).collect(Collectors.toSet()));
 		
 		return itemDto;
 	} 

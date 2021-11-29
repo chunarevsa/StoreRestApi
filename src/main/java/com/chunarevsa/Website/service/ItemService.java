@@ -1,16 +1,21 @@
 package com.chunarevsa.Website.service;
 
+import java.util.Optional;
+
 import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.Exception.InvalidPriceFormat;
 import com.chunarevsa.Website.Exception.NotFound;
 import com.chunarevsa.Website.Exception.NotFoundDomesticCurrency;
 import com.chunarevsa.Website.dto.ItemDto;
+import com.chunarevsa.Website.dto.ItemRequest;
 import com.chunarevsa.Website.dto.IdDto;
 import com.chunarevsa.Website.repo.ItemRepository;
 import com.chunarevsa.Website.service.inter.ItemServiceInterface;
 import com.chunarevsa.Website.service.valid.ItemValid;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -30,20 +35,35 @@ public class ItemService implements ItemServiceInterface {
 		this.priceService = priceService;
 	}
 
+	public Page<Item> getPage(Pageable pageable) {
+		Page<Item> page = findAllByActive(true, pageable);
+		return page;
+	}
+
+	private Page<Item> findAllByActive(boolean active, Pageable pageable) {
+		return itemRepository.findAllByActive(active, pageable);
+	}
+
+	public ItemDto getItemDto(Long id) {
+		Item item = findById(id).get();
+		return ItemDto.fromUser(item);
+	}
+
+	private Optional<Item> findById (Long id) {
+		return itemRepository.findById(id);
+	}
+
 	// Создание 
 	@Override
-	public Item addItem(Item bodyItem) throws FormIsEmpty, InvalidPriceFormat, NotFoundDomesticCurrency {
+	public Optional<Item> addItem(ItemRequest itemRequest)  {
 
-		// Проверка на незаполеннные данные
+		Item item = new Item();
+		item.setName(itemRequest.getName());
+		item.setType(itemRequest.getDescription());
+		item.setActive(itemRequest.getActive());
 		
-		if (itemValid.bodyIsEmpty(bodyItem)) {
-			throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
-		}
 		
-		// Включение (active = true)
-		bodyItem.setActive(true);
 
-		// Сохранение цен
 		priceService.saveAllPrice(bodyItem);		
 		Item item = itemRepository.save(bodyItem);
 		return item;
@@ -67,7 +87,6 @@ public class ItemService implements ItemServiceInterface {
 	}
 
 	// Получение модели
-	@Override
 	public ItemDto getItemModel(Long id) throws NotFound {
 		if (!itemValid.itemIsPresent(id)) {
 			throw new NotFound(HttpStatus.NOT_FOUND);
@@ -130,5 +149,6 @@ public class ItemService implements ItemServiceInterface {
 		
 		return new IdDto(bodyItem.getId());
 	}
+
 	
 }

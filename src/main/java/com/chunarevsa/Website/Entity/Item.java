@@ -66,7 +66,7 @@ public class Item extends Base {
 		System.out.println(prices);
 		prices.add(price);
 		price.setItem(this);
-	}
+	} // TODO:
 
 	public void addPricies (Set<Price> prices) {
 		System.out.println("IN addPricies");

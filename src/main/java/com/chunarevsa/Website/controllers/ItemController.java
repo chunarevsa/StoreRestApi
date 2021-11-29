@@ -1,14 +1,22 @@
 package com.chunarevsa.Website.controllers;
 
+import javax.validation.Valid;
+
 import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Exception.AllException;
+import com.chunarevsa.Website.dto.ItemRequest;
 import com.chunarevsa.Website.repo.PriceRepository;
 import com.chunarevsa.Website.service.ItemService;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,40 +27,36 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/item")
 public class ItemController {
 	
 	private final ItemService itemService;
 	
-	public ItemController (
-				ItemService itemService, 
-				PriceRepository priceRepository) {
+	public ItemController (ItemService itemService) {
 			this.itemService = itemService;
 	}
 
-	// Получение списка всех Items с ограничением страницы (10)
-	/* @RequestMapping (path = "/item", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<Item> findAllItem (@PageableDefault (sort = { "active"}, direction = Sort.Direction.DESC)  Pageable pageable) { 
-		// Сортировка по 10 элементов и только со значением active = true
-		Page<Item> pageItems = itemRepository.findByStatus(Status.ACTIVE, pageable);
-		return pageItems;
-	} */ 
+	// Получение списка всех item с ограничением страницы (10)
+	@GetMapping
+	@PreAuthorize("hasRole('USER')")
+	public Page<Item> getAll (@PageableDefault Pageable pageable) { 
+		return itemService.getPage(pageable);
+	} 
 
 	// Получение по id
-	@RequestMapping (path = "/item/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity getOneItem (@PathVariable(value = "id") Long id) throws AllException { 
-		itemService.getItem(id);
-		//System.out.println(itemService.getItem(id));
-
-		//System.out.println(itemService.getItemModel(id));
-		return ResponseEntity.ok().body(itemService.getItemModel(id));
+	@RequestMapping ("/{id}")
+	@PreAuthorize("hasRole('USER')")
+	public ResponseEntity getOneItem (@PathVariable(value = "id") Long id) throws AllException {
+	
+		return ResponseEntity.ok().body(itemService.getItemDto(id));
 	} 
 
 	// Добавление 
-	@PostMapping (path = "/item", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus (value = HttpStatus.CREATED)	
-	public Item createdItem (@RequestBody Item bodyItem) throws AllException {
-		return itemService.addItem(bodyItem);
-		// Потом переделать на ResponseEntity
+	@PostMapping
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity createdItem (@Valid @RequestBody ItemRequest itemRequest) throws AllException {
+		
+		return itemService.addItem(itemRequest)
 	} 	
 				
 	 // Изменение

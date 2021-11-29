@@ -14,22 +14,29 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-// TODO: Проверить логирование
+// TODO: логирование
 @Service
 public class DomesticCurrencyService implements DomesticCurrencyServiceInterface {
 
 	private final DomesticCurrencyRepository domesticCurrencyRepository;
-	//private final DomesticCurrencyValid domesticCurrencyValid;
+
 
 	@Autowired
 	public DomesticCurrencyService(
-				DomesticCurrencyRepository domesticCurrencyRepository 
-				//DomesticCurrencyValid domesticCurrencyValid
-				) {
+				DomesticCurrencyRepository domesticCurrencyRepository) {
 		this.domesticCurrencyRepository = domesticCurrencyRepository;
-		//this.domesticCurrencyValid = domesticCurrencyValid;
+
 	}
 
+	public Page<DomesticCurrency> getPage(Pageable pageable) {
+		Page<DomesticCurrency> page = findAllByActive(true, pageable);
+		return page;
+	}
+
+	private Page<DomesticCurrency> findAllByActive(boolean active, Pageable pageable) {
+		return domesticCurrencyRepository.findAllByActive(active, pageable);
+	}
+	
 	// Создание
 	@Override
 	public Optional<DomesticCurrency> addCurrency (DomesticCurrencyRequest currencyRequest) throws InvalidPriceFormat {
@@ -97,15 +104,6 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 		currency.setActive(false);
 		save(currency);
 
-	}
-
-	public Page<DomesticCurrency> getPage(Pageable pageable) {
-		Page<DomesticCurrency> page = findAllByActive(true, pageable);
-		return page;
-	}
-
-	private Page<DomesticCurrency> findAllByActive(boolean active, Pageable pageable) {
-		return domesticCurrencyRepository.findAllByActive(active, pageable);
 	}
 
 

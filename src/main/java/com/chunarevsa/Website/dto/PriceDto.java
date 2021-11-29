@@ -17,11 +17,9 @@ public class PriceDto {
 		this.currencyTitle = currencyTitle;
 	}
 
-	public static PriceDto toModel (Price price) {
+	public static PriceDto fromUser (Price price) {
 		PriceDto priceModel = new PriceDto();
 		priceModel.setId(price.getId());
-		//priceModel.setAmount(price.getAmount());
-		//priceModel.setCurrencyTitle(price.getCurrencyTitle());
 		return priceModel;
 	}
 
