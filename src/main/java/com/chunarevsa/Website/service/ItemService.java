@@ -62,7 +62,7 @@ public class ItemService implements ItemServiceInterface {
 		item.setType(itemRequest.getDescription());
 		item.setActive(itemRequest.getActive());
 		
-		
+		itemRequest.getPricies().stream().map(priceRequset -> priceService.getPriceFromRequest(priceRequest, domesticCurrencyService.findCurrencyByTitile(priceRequest.getCurrencyTitle())));
 
 		priceService.saveAllPrice(bodyItem);		
 		Item item = itemRepository.save(bodyItem);

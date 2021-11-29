@@ -1,26 +1,19 @@
 package com.chunarevsa.Website.dto;
 
-import com.chunarevsa.Website.Entity.Price;
-
-// Цена для пользователя
-public class PriceDto {
+// Ввод цены
+public class PriceRequest {
 	
 	private String cost;
 	private String currencyTitle;
+	private Boolean active;
 
-	public PriceDto() {
+	public PriceRequest() {
 	}
 
-	public PriceDto(String cost, String currencyTitle) {
+	public PriceRequest(String cost, String currencyTitle, Boolean active) {
 		this.cost = cost;
 		this.currencyTitle = currencyTitle;
-	}
-
-	public static PriceDto fromUser (Price price) {
-		PriceDto priceDto = new PriceDto();
-		priceDto.setCost(price.getCost());
-		priceDto.setCurrencyTitle(price.getCurrencyTitle());
-		return priceDto;
+		this.active = active;
 	}
 
 	public String getCost() {
@@ -39,12 +32,29 @@ public class PriceDto {
 		this.currencyTitle = currencyTitle;
 	}
 
+	public Boolean isActive() {
+		return this.active;
+	}
+
+	public Boolean getActive() {
+		return this.active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+
+
 	@Override
 	public String toString() {
 		return "{" +
 			" cost='" + getCost() + "'" +
 			", currencyTitle='" + getCurrencyTitle() + "'" +
+			", active='" + isActive() + "'" +
 			"}";
 	}
+
+
+
 
 }

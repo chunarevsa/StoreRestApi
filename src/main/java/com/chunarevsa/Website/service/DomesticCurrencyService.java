@@ -77,11 +77,11 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 
 	// Получение по title
 	public DomesticCurrencyDto getCurrencyDtoByTitle (String title) {
-		DomesticCurrency currency = findByTitile(title).get();
+		DomesticCurrency currency = findCurrencyByTitile(title).get();
 		return DomesticCurrencyDto.fromUser(currency);
 	}
 
-	private Optional<DomesticCurrency> findByTitile(String title) {
+	public Optional<DomesticCurrency> findCurrencyByTitile(String title) {
 		return domesticCurrencyRepository.findByTitle(title);
 	}	
 
@@ -89,7 +89,7 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 	@Override
 	public Optional<DomesticCurrency> overrideCurrency (String title, DomesticCurrencyRequest currencyRequest) {
 
-		DomesticCurrency currency = findByTitile(title).get();
+		DomesticCurrency currency = findCurrencyByTitile(title).get();
 		currency.setTitle(currencyRequest.getTitle());
 		currency.setCost(currencyRequest.getCost());
 		currency.setActive(currencyRequest.isActive());
@@ -100,7 +100,7 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 	@Override
 	public void deleteCurrency(String title) {
 
-		DomesticCurrency currency = findByTitile(title).get();
+		DomesticCurrency currency = findCurrencyByTitile(title).get();
 		currency.setActive(false);
 		save(currency);
 

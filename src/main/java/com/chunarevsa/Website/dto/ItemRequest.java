@@ -1,22 +1,16 @@
 package com.chunarevsa.Website.dto;
 
+import java.util.Set;
+
 public class ItemRequest {
 	
 	private String name;
 	private String type;
 	private String description;
 	private Boolean active;
-	private String cost;
+	private Set<PriceRequest> pricies;
 
 	public ItemRequest() {
-	}
-
-	public ItemRequest(String name, String type, String description, Boolean active, String cost) {
-		this.name = name;
-		this.type = type;
-		this.description = description;
-		this.active = active;
-		this.cost = cost;
 	}
 
 	public String getName() {
@@ -55,12 +49,12 @@ public class ItemRequest {
 		this.active = active;
 	}
 
-	public String getCost() {
-		return this.cost;
+	public Set<PriceRequest> getPricies() {
+		return this.pricies;
 	}
 
-	public void setCost(String cost) {
-		this.cost = cost;
+	public void setPricies(Set<PriceRequest> pricies) {
+		this.pricies = pricies;
 	}
 
 	@Override
@@ -70,9 +64,8 @@ public class ItemRequest {
 			", type='" + getType() + "'" +
 			", description='" + getDescription() + "'" +
 			", active='" + isActive() + "'" +
-			", cost='" + getCost() + "'" +
+			", pricies='" + getPricies() + "'" +
 			"}";
 	}
-
 
 }
