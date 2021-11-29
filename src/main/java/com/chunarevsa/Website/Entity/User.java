@@ -71,15 +71,12 @@ public class User extends Base {
 	}
 
 	public void addRole(Role role) {
-
 		roles.add(role);
 		role.getUsers().add(this);
    }
 
 	public void addRoles(Set<Role> roles) {
-
 		roles.forEach(this::addRole);
-		
   	}
 	
 	public void verificationConfirmed() {

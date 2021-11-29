@@ -57,6 +57,7 @@ public class ItemController {
 	public ResponseEntity createdItem (@Valid @RequestBody ItemRequest itemRequest) throws AllException {
 		
 		return itemService.addItem(itemRequest)
+				.map(currency -> ResponseEntity.ok().body("Item добавлен")).orElseThrow();
 	} 	
 				
 	 // Изменение

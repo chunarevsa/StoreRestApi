@@ -1,14 +1,12 @@
 package com.chunarevsa.Website.service;
 
-import java.util.*;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.chunarevsa.Website.Entity.DomesticCurrency;
 import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Entity.Price;
-import com.chunarevsa.Website.Exception.FormIsEmpty;
-import com.chunarevsa.Website.Exception.InvalidPriceFormat;
 import com.chunarevsa.Website.Exception.NotFound;
-import com.chunarevsa.Website.Exception.NotFoundDomesticCurrency;
 import com.chunarevsa.Website.dto.PriceRequest;
 import com.chunarevsa.Website.repo.PriceRepository;
 import com.chunarevsa.Website.service.inter.PriceServiceInterface;
@@ -23,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class PriceService implements PriceServiceInterface {
+public class PriceService implements PriceServiceInterface { // TODO: interface
 
 	private final PriceRepository priceRepository;
 	private final DomesticCurrencyService domesticCurrencyService;
@@ -41,44 +39,58 @@ public class PriceService implements PriceServiceInterface {
 
 	// Сохранение всех цен
 	@Override
-	public void saveAllPrice(Item bodyItem) throws InvalidPriceFormat, FormIsEmpty, NotFoundDomesticCurrency {
+	public Set<Price> saveAllPrice(Set<PriceRequest> setPriceRequest, Item item) {
+		System.out.println("saveAllPrice");
+		Set<Price> setPrice = setPriceRequest.stream()
+				.map(priceRequest -> getPriceFromRequest(priceRequest, item))
+				.collect(Collectors.toSet());
 		
-		Set<Price> pricesSet = bodyItem.getPrices();
-		int i = 1;
-		try {
-		for (Price price : pricesSet) {
-			 if (!priceValid.amountIsCorrect(price)) {
-				log.warn("IN saveAllPrice.amountIsCorrect - price {} amount is NOT correct ", i);
-				throw new InvalidPriceFormat(HttpStatus.BAD_REQUEST);
-			} 
-			
-			if (priceValid.bodyIsEmpty(price)) {
-				log.warn("IN saveAllPrice.bodyIsEmpty - price {} amount is NOT correct ", i);
-				throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
-			} 
+		return setPrice.stream().map(price -> savePrice(price)).collect(Collectors.toSet());
+	}
 
-			/* boolean codeIsPresent = currencyValid.codeIsPresent(price.getCurrencyCode());
-			System.out.println(codeIsPresent);
-			if (!codeIsPresent) {
-				log.warn("IN saveAllPrice.codeIsPresent - price {} currency is NOT correct", i);
-				throw new NotFoundDomesticCurrency(HttpStatus.NOT_FOUND);
-			}  */
-
-			price.setActive(true);
-			
-			log.info("IN saveAllPrice - price {} is correct", i);
-			i++;
+	public Price getPriceFromRequest(PriceRequest priceRequest, Item item) { // TODO: mb optional
+		// TODO: сделать price active из реквества а не true
+		System.out.println("getPriceFromRequest");
+		Price price = new Price();
+		if (!validateCostInPriceRequest(priceRequest.getCost())) {
+			price.setActive(false);
+			System.err.println("Сумма " + priceRequest.getCost() + "заполнена не верно");
+			return price;
 		}	
-		} catch (NumberFormatException e) {
-			throw new InvalidPriceFormat(HttpStatus.BAD_REQUEST);
+		price.setCost(priceRequest.getCost());
+
+		DomesticCurrency domesticCurrency = domesticCurrencyService.findCurrencyByTitile(priceRequest.getCurrency()).get();
+		if (domesticCurrency == null) {
+			price.setActive(false);
+			System.err.println("Валюта" + priceRequest + "заполнена не верно");
+			return price;
 		}
-		priceRepository.saveAll(bodyItem.getPrices());
-		log.info("IN All Price is correct");
+		price.setCurrencyTitle(priceRequest.getCurrency());
+		try {
+			price.setItem(item);
+		} catch (Exception e) {
+			price.setActive(false);
+			return price;
+		}
+		price.setActive(true);
+		return price;
+	}
+
+	public boolean validateCostInPriceRequest(String cost) {
+		int i = Integer.parseInt(cost);
+		if (i < 0 ) {
+			return false;
+		}
+		return true;
+	}
+
+	public Price savePrice(Price price) {
+		return priceRepository.save(price);
 	}
 
 	// Удаление цены
 	// Пока не используется 
-	@Override
+
 	public void deletePrice (Long id) throws NotFound {
 		// Проверка на наличие 
 		if (!priceValid.priceIsPresent(id)) {
@@ -94,32 +106,6 @@ public class PriceService implements PriceServiceInterface {
 		priceRepository.save(price);
 		log.info("IN delete - item with id: {} successfully deleted", id, price);
 		 
-	}
-
-	public boolean validatePriceRequest(PriceRequest priceRequest) {
-		int i = Integer.parseInt(priceRequest.getCost());
-		if (i < 0) {
-			return false;
-		}
-		return true;
-	}
-
-	public Price getPriceFromRequest(PriceRequest priceRequest) throws InvalidPriceFormat, NotFoundDomesticCurrency { // TODO: mb optional
-		Price price = new Price();
-		if (!validatePriceRequest(priceRequest)) {
-			throw new InvalidPriceFormat();
-		}
-		DomesticCurrency domesticCurrency = domesticCurrencyService.findCurrencyByTitile(priceRequest.getCurrencyTitle()).get();
-		if (domesticCurrency == null) {
-			throw new NotFoundDomesticCurrency();
-		}
-		price.setActive(true);
-		price.setCurrencyTitle(priceRequest.getCurrencyTitle());
-		price.setCost(priceRequest.getCost());
-		
-				
-		
-		return null;
 	}
 
 	// Сохранение конкретной цены - доделать

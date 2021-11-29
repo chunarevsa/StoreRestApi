@@ -4,15 +4,15 @@ package com.chunarevsa.Website.dto;
 public class PriceRequest {
 	
 	private String cost;
-	private String currencyTitle;
+	private String currency;
 	private Boolean active;
 
 	public PriceRequest() {
 	}
 
-	public PriceRequest(String cost, String currencyTitle, Boolean active) {
+	public PriceRequest(String cost, String currency, Boolean active) {
 		this.cost = cost;
-		this.currencyTitle = currencyTitle;
+		this.currency = currency;
 		this.active = active;
 	}
 
@@ -24,12 +24,12 @@ public class PriceRequest {
 		this.cost = cost;
 	}
 
-	public String getCurrencyTitle() {
-		return this.currencyTitle;
+	public String getCurrency() {
+		return this.currency;
 	}
 
-	public void setCurrencyTitle(String currencyTitle) {
-		this.currencyTitle = currencyTitle;
+	public void setCurrency(String currency) {
+		this.currency = currency;
 	}
 
 	public Boolean isActive() {
@@ -49,7 +49,7 @@ public class PriceRequest {
 	public String toString() {
 		return "{" +
 			" cost='" + getCost() + "'" +
-			", currencyTitle='" + getCurrencyTitle() + "'" +
+			", currencyTitle='" + getCurrency() + "'" +
 			", active='" + isActive() + "'" +
 			"}";
 	}

@@ -55,19 +55,20 @@ public class ItemService implements ItemServiceInterface {
 
 	// Создание 
 	@Override
-	public Optional<Item> addItem(ItemRequest itemRequest)  {
+	public Optional<Item> addItem (ItemRequest itemRequest) {
 
 		Item item = new Item();
 		item.setName(itemRequest.getName());
 		item.setType(itemRequest.getDescription());
 		item.setActive(itemRequest.getActive());
-		
-		itemRequest.getPricies().stream().map(priceRequset -> priceService.getPriceFromRequest(priceRequest, domesticCurrencyService.findCurrencyByTitile(priceRequest.getCurrencyTitle())));
+		priceService.saveAllPrice(itemRequest.getPricies(), item);
+		saveItem(item);
+		return Optional.of(item);
 
-		priceService.saveAllPrice(bodyItem);		
-		Item item = itemRepository.save(bodyItem);
-		return item;
+	}
 
+	private Item saveItem(Item item) {
+		return itemRepository.save(item);
 	}
 
 	// Получение однго итема
@@ -91,7 +92,7 @@ public class ItemService implements ItemServiceInterface {
 		if (!itemValid.itemIsPresent(id)) {
 			throw new NotFound(HttpStatus.NOT_FOUND);
 		}
-		return ItemDto.toModel(itemRepository.findById(id).orElseThrow());
+		return ItemDto.fromUser(itemRepository.findById(id).orElseThrow());
 	}
 
 	// Перезапись параметров
@@ -106,7 +107,7 @@ public class ItemService implements ItemServiceInterface {
 			throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
 		}  
 		// Проверка цен
-		priceService.saveAllPrice(bodyItem);
+		//priceService.saveAllPrice(itemRequest.getPricies(), item);
 
 		Item item = itemRepository.findById(id).orElseThrow();
 		item.setName(bodyItem.getName());
