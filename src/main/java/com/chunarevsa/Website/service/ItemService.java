@@ -59,28 +59,16 @@ public class ItemService implements ItemServiceInterface {
 	@Override
 	public Optional<Item> addItem (ItemRequest itemRequest) {
 		System.out.println("addItem");
-
 		Item newItem = new Item();
-		System.out.println("itemRequest.getName() is :"+ itemRequest.getName());
 		newItem.setName(itemRequest.getName());
-		System.out.println("itemRequest.getDescription() is :" + itemRequest.getDescription());
-		newItem.setType(itemRequest.getDescription());
-		System.out.println("itemRequest.getActive() is :"+itemRequest.getActive());
+		newItem.setDescription(itemRequest.getDescription());
+		newItem.setType(itemRequest.getType());
 		newItem.setActive(itemRequest.getActive());
-
 		Set<Price> pricies = priceService.getPriciesFromRequest(itemRequest.getPricies());
-		System.out.println("pricies is :" + pricies);
 
 		newItem.setPrices(pricies);
-
 		priceService.savePricies(newItem);
-
 		Item item = saveItem(newItem);
-		System.out.println("\n");
-		System.err.println("new item is :" + item);
-		System.out.println("\n");
-		System.err.println("pricies is :" + item.getPrices());
-		System.out.println("\n");
 		return Optional.of(item);
 
 	}

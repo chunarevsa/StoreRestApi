@@ -46,11 +46,6 @@ public class PriceService implements PriceServiceInterface { // TODO: interface
 				.map(priceRequest -> getPriceFromRequest(priceRequest))
 				.collect(Collectors.toSet());
 		
-		//Set<Price> savedPricies = saveAll(pricies); // без связи с Item
-		/* Set<Price> allPriceWithItem = pricies.stream()
-				.map(savedPrice -> addPriceInItem(savedPrice, newItem) )
-				.collect(Collectors.toSet()); */
-		
 		return pricies;
 	}
 
@@ -77,19 +72,6 @@ public class PriceService implements PriceServiceInterface { // TODO: interface
 		return price;
 	}
 
-
-	/* public Price addPriceInItem(Price price, Item item) {
-		price.setItem(item);
-		return price;
-	} */
-
-	/* private Set<Price> saveAll(Set<Price> pricies) {
-		return priceRepository.saveAllPricies(pricies);
-		// return (Set<Price>) priceRepository.saveAll(setPricies);
-	} */
-
-	
-
 	private void validatePriceRequest(PriceRequest priceRequest) {
 
 		if (!validateCostInPriceRequest(priceRequest.getCost())) {
@@ -114,46 +96,6 @@ public class PriceService implements PriceServiceInterface { // TODO: interface
 		}
 		return true;
 	}
-
-	
-
-
-	/* public Price getPriceFromRequest(PriceRequest priceRequest, Item item) { // TODO: mb optional
-		// TODO: сделать price active из реквества а не true
-		System.out.println("getPriceFromRequest");
-		Price price = new Price();
-
-		if (!validateCostInPriceRequest(priceRequest.getCost())) {
-			price.setActive(false);
-			System.err.println("Сумма " + priceRequest.getCost() + "заполнена не верно");
-			return price;
-		}	
-		price.setCost(priceRequest.getCost());
-
-		DomesticCurrency domesticCurrency = domesticCurrencyService.findCurrencyByTitile(priceRequest.getCurrency()).get();
-		if (domesticCurrency == null) {
-			price.setActive(false);
-			System.err.println("Валюта" + priceRequest + "заполнена не верно");
-			return price;
-		}
-		price.setCurrencyTitle(priceRequest.getCurrency());
-
-		try {
-			price.getItem();
-			price.setItem(item);
-
-			System.out.println("price.getItem() is :" + price.getItem());
-		} catch (Exception e) {
-			System.err.println("ОШИБКА в setItem");
-			price.setActive(false);
-			return price;
-		} 
-
-		price.setActive(true);
-		return price;
-
-	} */
-
 
 	// Удаление цены
 	// Пока не используется 
