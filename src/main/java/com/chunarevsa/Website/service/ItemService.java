@@ -2,16 +2,16 @@ package com.chunarevsa.Website.service;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Entity.Price;
-import com.chunarevsa.Website.Exception.FormIsEmpty;
-import com.chunarevsa.Website.Exception.InvalidPriceFormat;
 import com.chunarevsa.Website.Exception.NotFound;
-import com.chunarevsa.Website.Exception.NotFoundDomesticCurrency;
+import com.chunarevsa.Website.dto.IdDto;
 import com.chunarevsa.Website.dto.ItemDto;
 import com.chunarevsa.Website.dto.ItemRequest;
-import com.chunarevsa.Website.dto.IdDto;
+import com.chunarevsa.Website.dto.PriceDto;
+import com.chunarevsa.Website.dto.PriceRequest;
 import com.chunarevsa.Website.repo.ItemRepository;
 import com.chunarevsa.Website.service.inter.ItemServiceInterface;
 import com.chunarevsa.Website.service.valid.ItemValid;
@@ -37,14 +37,28 @@ public class ItemService implements ItemServiceInterface {
 		this.priceService = priceService;
 	}
 
-	public Page<Item> getPage(Pageable pageable) {
-		Page<Item> page = findAllByActive(true, pageable);
-		return page;
+	public Page<Item> getPageItemFromAdmin(Pageable pageable) {
+		return findAllItem(pageable);
 	}
 
-	private Page<Item> findAllByActive(boolean active, Pageable pageable) {
-		return itemRepository.findAllByActive(active, pageable);
+	public Set<Price> getItemPriciesFromAdmin(Long itemId, Pageable pageable) {
+		return priceService.getPagePricies(itemId ,pageable);
 	}
+
+	public Set<ItemDto> getItemsDtoFromUser() {
+		Set<Item> items = findAllByActive(true);
+		Set<ItemDto> itemsDto = items.stream().
+				map(item -> getItemDto(item.getId())).collect(Collectors.toSet());
+		return itemsDto;
+	}
+
+	public Set<PriceDto> getItemPriciesFromUser(Long itemId) {
+		return priceService.getItemPriciesDto(itemId);
+	}
+
+	/* private Page<Item> findAllByActive(boolean active, Pageable pageable) {
+		return itemRepository.findAllByActive(active, pageable);
+	} */
 
 	public ItemDto getItemDto(Long id) {
 		Item item = findById(id).get();
@@ -78,19 +92,13 @@ public class ItemService implements ItemServiceInterface {
 		return itemRepository.save(item);
 	}
 
+	public Optional<Price> editPrice(PriceRequest priceRequest, Long priceId) {
+		return priceService.editPrice(priceRequest, priceId);
+	}
+
 	// Получение однго итема
 	@Override
 	public Item getItem (Long id) throws NotFound {
-		// Проверка на наличие 
-		if (!itemValid.itemIsPresent(id)) {
-			throw new NotFound(HttpStatus.NOT_FOUND);
-		}
-
-		// Выводим только в случае active = true
-		if (!itemValid.itemIsActive(id)) {
-			throw new NotFound(HttpStatus.NOT_FOUND);
-		}
-
 		return itemRepository.findById(id).orElseThrow();
 	}
 
@@ -104,29 +112,14 @@ public class ItemService implements ItemServiceInterface {
 
 	// Перезапись параметров
 	@Override
-	public Item overridItem (long id, Item bodyItem) throws NotFound, FormIsEmpty, InvalidPriceFormat, NotFoundDomesticCurrency {
-		// Проверка на наличие 
-		if (!itemValid.itemIsPresent(id)) {
-			throw new NotFound(HttpStatus.NOT_FOUND);
-		} 
-		// Проверка на незаполеннные данные
-		 if (itemValid.bodyIsEmpty(bodyItem)) {
-			throw new FormIsEmpty(HttpStatus.BAD_REQUEST);
-		}  
-		// Проверка цен
-		//priceService.saveAllPrice(itemRequest.getPricies(), item);
+	public Optional<Item> editItem (long id, ItemRequest itemRequest)  {
 
 		Item item = itemRepository.findById(id).orElseThrow();
-		item.setName(bodyItem.getName());
-		item.setType(bodyItem.getType());
-		item.setDescription(bodyItem.getDescription());
-		// Возможность вернуть удалённый 
-		item.setActive(bodyItem.isActive());
-		item.setPrices(bodyItem.getPrices());
-
-		// Запись параметров
-		itemRepository.save(item);
-		return item;
+		item.setName(itemRequest.getName());
+		item.setType(itemRequest.getType());
+		item.setDescription(itemRequest.getDescription());
+		item.setActive(itemRequest.isActive());
+		return Optional.of(saveItem(item));
 	}
 
 	// Удаление
@@ -158,5 +151,12 @@ public class ItemService implements ItemServiceInterface {
 		return new IdDto(bodyItem.getId());
 	}
 
-	
+	private Page<Item> findAllItem(Pageable pageable) {
+		return itemRepository.findAll(pageable);
+	}
+
+	private Set<Item> findAllByActive(boolean active) {
+		return itemRepository.findAllByActive(active);
+	}
+
 }

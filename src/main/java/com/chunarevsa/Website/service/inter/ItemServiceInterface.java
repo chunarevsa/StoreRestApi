@@ -3,10 +3,7 @@ package com.chunarevsa.Website.service.inter;
 import java.util.Optional;
 
 import com.chunarevsa.Website.Entity.Item;
-import com.chunarevsa.Website.Exception.FormIsEmpty;
-import com.chunarevsa.Website.Exception.InvalidPriceFormat;
 import com.chunarevsa.Website.Exception.NotFound;
-import com.chunarevsa.Website.Exception.NotFoundDomesticCurrency;
 import com.chunarevsa.Website.dto.IdDto;
 import com.chunarevsa.Website.dto.ItemDto;
 import com.chunarevsa.Website.dto.ItemRequest;
@@ -23,7 +20,7 @@ public interface ItemServiceInterface {
 	public ItemDto getItemModel(Long id) throws NotFound;
 
 	// Перезапись параметров
-	public Item overridItem (long id, Item bodyItem) throws NotFound, FormIsEmpty, InvalidPriceFormat, NotFoundDomesticCurrency;
+	public Optional<Item> editItem (long id, ItemRequest itemRequest);
 
 	// Удаление
 	public void deleteItem(long id) throws NotFound;

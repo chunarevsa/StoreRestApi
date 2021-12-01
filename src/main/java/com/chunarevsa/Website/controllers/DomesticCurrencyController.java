@@ -60,7 +60,7 @@ public class DomesticCurrencyController {
 	@PutMapping("/edit/{title}") // TODO: сделать через параметр
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity editCurrency (@PathVariable(value = "title") String title, 
-							@Valid @RequestBody DomesticCurrencyRequest currencyRequest) throws AllException {
+				@Valid @RequestBody DomesticCurrencyRequest currencyRequest) throws AllException {
 
 		return ResponseEntity.ok(domesticCurrencyService.overrideCurrency(title, currencyRequest));
 	} 
