@@ -63,7 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		"/swagger-ui.html", "/webjars/**");
 	}
 
-	/* @Override
+	@Override
 	protected void configure (HttpSecurity httpSecurity) throws Exception {
 		
 		httpSecurity.cors()
@@ -83,10 +83,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						.anyRequest().authenticated(); // остально только для авторизованых	
 		
 		httpSecurity.addFilterBefore(JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-	}  */
+	} 
 
 	// Доступ ко всем url
-	@Override
+	/*@Override
 	protected void configure (HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.cors()
 					.and()
@@ -104,6 +104,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						.anyRequest().authenticated(); 
 		httpSecurity.addFilterBefore(JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
-	}
+	} */
 
 } 

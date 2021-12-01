@@ -55,9 +55,10 @@ public class ItemController {
 	@PostMapping
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity createdItem (@Valid @RequestBody ItemRequest itemRequest) throws AllException {
-		
+		System.out.println("itemRequest is :" + itemRequest);
+		System.out.println("itemRequest.getPricies() is :" + itemRequest.getPricies());
 		return itemService.addItem(itemRequest)
-				.map(currency -> ResponseEntity.ok().body("Item добавлен")).orElseThrow();
+				.map(item -> ResponseEntity.ok().body("Item добавлен")).orElseThrow();
 	} 	
 				
 	 // Изменение
