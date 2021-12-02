@@ -32,41 +32,46 @@ public class DomesticCurrencyController {
 		this.domesticCurrencyService = domesticCurrencyService;
 	}
 
-	// Получение списка всех Currency с ограничением страницы (10)
+	// Получение страницы всех Currency
+	@GetMapping("/all")
+	@PreAuthorize("hasRole('ADMIN')")
+	public Page<DomesticCurrency> getCurrenciesFromAdmin (@PageableDefault Pageable pageable) { 
+		return domesticCurrencyService.getCurrenciesFromAdmin(pageable);
+	}
+	
+	// Получение списка CurrencyDto 
 	@GetMapping
 	@PreAuthorize("hasRole('USER')")
-	public Page<DomesticCurrency> getAll (@PageableDefault Pageable pageable) { 
-		return domesticCurrencyService.getPage(pageable);
+	public ResponseEntity getCurrenciesDtoFromUser () { 
+		return ResponseEntity.ok().body(domesticCurrencyService.getCurrenciesDtoFromUser());
 	} 
 
-	// Получить по title
+	// Получить CurrencyDto по title
 	@GetMapping("/{title}") //Проверка если вдруг выключена, то просто включить
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity getCurrencyByTitle (@PathVariable(value = "title") String title) { 
-		
 		return ResponseEntity.ok(domesticCurrencyService.getCurrencyDtoByTitle(title));
 	}
 
-	// Добавление 
+	// Добавление Currency
 	@PostMapping
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity createdCurrency (@Valid @RequestBody DomesticCurrencyRequest currencyRequest) throws AllException {
-		
+	public ResponseEntity addCurrency (@Valid @RequestBody DomesticCurrencyRequest currencyRequest) throws AllException {
 		return domesticCurrencyService.addCurrency(currencyRequest) // TODO: исключение
 			.map(currency -> ResponseEntity.ok().body("Валюта добавлена")).orElseThrow();
 	} 	
 				
 	 // Изменение
-	@PutMapping("/edit/{title}") // TODO: сделать через параметр
+	@PutMapping("{title}/edit/") // TODO: сделать через параметр
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity editCurrency (@PathVariable(value = "title") String title, 
 				@Valid @RequestBody DomesticCurrencyRequest currencyRequest) throws AllException {
 
-		return ResponseEntity.ok(domesticCurrencyService.overrideCurrency(title, currencyRequest));
+		return ResponseEntity.ok(domesticCurrencyService.editCurrency(title, currencyRequest));
 	} 
 
    // Удаление
-	@DeleteMapping("/delete/{title}")
+	@DeleteMapping("/{title}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity deleteCurrency (@PathVariable(value = "title") String title) throws AllException {
 		domesticCurrencyService.deleteCurrency(title);

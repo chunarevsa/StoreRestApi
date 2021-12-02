@@ -14,6 +14,6 @@ public interface PriceRepository extends JpaRepository<Price, Long>{
 
 	Set<Price> findAllByActive(boolean active);
 
-	Set<Price> findAllByItem(Long itemId, Pageable pageable);
+	Set<Price> findAllByItem(Long itemId);
 
 }

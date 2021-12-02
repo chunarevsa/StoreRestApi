@@ -1,6 +1,8 @@
 package com.chunarevsa.Website.service;
 
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.chunarevsa.Website.Entity.DomesticCurrency;
 import com.chunarevsa.Website.Exception.InvalidPriceFormat;
@@ -20,36 +22,90 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 
 	private final DomesticCurrencyRepository domesticCurrencyRepository;
 
-
 	@Autowired
 	public DomesticCurrencyService(
 				DomesticCurrencyRepository domesticCurrencyRepository) {
 		this.domesticCurrencyRepository = domesticCurrencyRepository;
-
 	}
 
-	public Page<DomesticCurrency> getPage(Pageable pageable) {
-		Page<DomesticCurrency> page = findAllByActive(true, pageable);
-		return page;
+	public Page<DomesticCurrency> getCurrenciesFromAdmin(Pageable pageable) {
+		return findAllCurrency(pageable);
 	}
 
-	private Page<DomesticCurrency> findAllByActive(boolean active, Pageable pageable) {
-		return domesticCurrencyRepository.findAllByActive(active, pageable);
+	// Получение страницы всех Currency
+	@Override
+	public Set<DomesticCurrencyDto> getCurrenciesDtoFromUser () {
+		Set<DomesticCurrency> currencies = findAllByActive(true);
+		Set<DomesticCurrencyDto> currenciesDto = currencies.stream()
+				.map(currency -> getCurrencyDto(currency.getId())).collect(Collectors.toSet());
+
+		return currenciesDto;
 	}
-	
-	// Создание
+
+	// Получить CurrencyDto по title
+	@Override
+	public DomesticCurrencyDto getCurrencyDtoByTitle (String title) {
+		DomesticCurrency currency = findCurrencyByTitile(title).get();
+		return DomesticCurrencyDto.fromUser(currency);
+	}
+
+	// Добавление Currency
 	@Override
 	public Optional<DomesticCurrency> addCurrency (DomesticCurrencyRequest currencyRequest) throws InvalidPriceFormat {
-		 
+		
 		DomesticCurrency newCurrency = new DomesticCurrency();
 		newCurrency.setTitle(currencyRequest.getTitle());
 		if (!validateCost(currencyRequest.getCost())) {
-			throw new InvalidPriceFormat();
+			throw new InvalidPriceFormat(); // TODO: исключение
 		}
 		newCurrency.setCost(currencyRequest.getCost()); 
 		newCurrency.setActive(currencyRequest.isActive());
-		save(newCurrency);
+		saveCurrency(newCurrency);
 		return Optional.of(newCurrency);
+	}	
+
+	// Запись параметров
+	@Override
+	public Optional<DomesticCurrency> editCurrency (String title, DomesticCurrencyRequest currencyRequest) {
+
+		DomesticCurrency currency = findCurrencyByTitile(title).get();
+		currency.setTitle(currencyRequest.getTitle());
+		currency.setCost(currencyRequest.getCost());
+		currency.setActive(currencyRequest.isActive());
+		saveCurrency(currency);
+		return Optional.of(currency);
+	}
+
+	// Удаление (Выключение) Currency
+	@Override
+	public Optional<DomesticCurrency> deleteCurrency(String title) {
+
+		DomesticCurrency currency = findCurrencyByTitile(title).get();
+		currency.setActive(false);
+		saveCurrency(currency);
+		return Optional.of(currency);  // mb не нужно, можно void
+
+	}
+
+	private DomesticCurrencyDto getCurrencyDto(Long id) {
+		DomesticCurrency domesticCurrency = findById(id).get();
+		return DomesticCurrencyDto.fromUser(domesticCurrency);
+	}
+
+	public Optional<DomesticCurrency> findCurrencyByTitile(String title) {
+		return domesticCurrencyRepository.findByTitle(title);
+	}
+
+	private Page<DomesticCurrency> findAllCurrency(Pageable pageable) {
+		return domesticCurrencyRepository.findAll(pageable);
+	}
+
+	private Set<DomesticCurrency> findAllByActive(boolean active) {
+		return domesticCurrencyRepository.findAllByActive(active);
+	}
+
+	private Optional<DomesticCurrency> findById(Long id) {
+		return domesticCurrencyRepository.findById(id);
 	}
 
 	private boolean validateCost(String cost) {
@@ -71,39 +127,8 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 
 	}
 
-	private DomesticCurrency save(DomesticCurrency currency) {
+	private DomesticCurrency saveCurrency(DomesticCurrency currency) {
 		return domesticCurrencyRepository.save(currency);
 	}
-
-	// Получение по title
-	public DomesticCurrencyDto getCurrencyDtoByTitle (String title) {
-		DomesticCurrency currency = findCurrencyByTitile(title).get();
-		return DomesticCurrencyDto.fromUser(currency);
-	}
-
-	public Optional<DomesticCurrency> findCurrencyByTitile(String title) {
-		return domesticCurrencyRepository.findByTitle(title);
-	}	
-
-	// Запись параметров
-	@Override
-	public Optional<DomesticCurrency> overrideCurrency (String title, DomesticCurrencyRequest currencyRequest) {
-
-		DomesticCurrency currency = findCurrencyByTitile(title).get();
-		currency.setTitle(currencyRequest.getTitle());
-		currency.setCost(currencyRequest.getCost());
-		currency.setActive(currencyRequest.isActive());
-		save(currency);
-		return Optional.of(currency);
-	}
-
-	@Override
-	public void deleteCurrency(String title) {
-
-		DomesticCurrency currency = findCurrencyByTitile(title).get();
-		currency.setActive(false);
-		save(currency);
-
-	}
-
+	
 }

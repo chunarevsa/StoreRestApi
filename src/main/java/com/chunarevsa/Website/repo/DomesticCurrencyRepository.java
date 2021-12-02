@@ -1,6 +1,7 @@
 package com.chunarevsa.Website.repo;
 
 import java.util.Optional;
+import java.util.Set;
 
 import com.chunarevsa.Website.Entity.DomesticCurrency;
 
@@ -12,5 +13,7 @@ public interface DomesticCurrencyRepository extends JpaRepository<DomesticCurren
 	
 	Optional<DomesticCurrency> findByTitle(String title);
 
-	Page<DomesticCurrency> findAllByActive(boolean active, Pageable pageable);
+	Set<DomesticCurrency> findAllByActive(boolean active);
+
+	Page<DomesticCurrency> findAll (Pageable pageable);
 }

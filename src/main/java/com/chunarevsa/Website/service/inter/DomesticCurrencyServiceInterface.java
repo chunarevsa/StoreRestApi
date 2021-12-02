@@ -1,23 +1,29 @@
 package com.chunarevsa.Website.service.inter;
 
 import java.util.Optional;
+import java.util.Set;
 
 import com.chunarevsa.Website.Entity.DomesticCurrency;
 import com.chunarevsa.Website.Exception.InvalidPriceFormat;
+import com.chunarevsa.Website.dto.DomesticCurrencyDto;
 import com.chunarevsa.Website.dto.DomesticCurrencyRequest;
 
-
-
 public interface DomesticCurrencyServiceInterface {
-	 // TODO:
-	// Создание
+
+	// Получение страницы всех Currency
+	public Set<DomesticCurrencyDto> getCurrenciesDtoFromUser();
+	
+	// Получить CurrencyDto по title
+	public DomesticCurrencyDto getCurrencyDtoByTitle(String title);
+
+	// Добавление Currency
 	public Optional<DomesticCurrency> addCurrency (DomesticCurrencyRequest currencyRequest) throws InvalidPriceFormat;
 
 	// Запись параметров
-	public Optional<DomesticCurrency> overrideCurrency (String title, DomesticCurrencyRequest currencyRequest);
+	public Optional<DomesticCurrency> editCurrency (String title, DomesticCurrencyRequest currencyRequest);
 
-	// Удаление
-	public void deleteCurrency(String title);
+	// Удаление (Выключение) Currency
+	public Optional<DomesticCurrency> deleteCurrency(String title);
 	
 }	
 

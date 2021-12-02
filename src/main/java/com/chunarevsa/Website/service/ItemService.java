@@ -6,45 +6,47 @@ import java.util.stream.Collectors;
 
 import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Entity.Price;
-import com.chunarevsa.Website.Exception.NotFound;
-import com.chunarevsa.Website.dto.IdDto;
 import com.chunarevsa.Website.dto.ItemDto;
 import com.chunarevsa.Website.dto.ItemRequest;
 import com.chunarevsa.Website.dto.PriceDto;
 import com.chunarevsa.Website.dto.PriceRequest;
 import com.chunarevsa.Website.repo.ItemRepository;
 import com.chunarevsa.Website.service.inter.ItemServiceInterface;
-import com.chunarevsa.Website.service.valid.ItemValid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ItemService implements ItemServiceInterface {
 
 	private final ItemRepository itemRepository;
-	private final ItemValid itemValid;
 	private final PriceService priceService;
 
+	@Autowired
 	public ItemService(
 				ItemRepository itemRepository,
-				ItemValid itemValid,
 				PriceService priceService) {
-		this.itemValid = itemValid;
 		this.itemRepository = itemRepository;
 		this.priceService = priceService;
 	}
 
+	// Получение страницы со всеми Item
+	@Override
 	public Page<Item> getPageItemFromAdmin(Pageable pageable) {
 		return findAllItem(pageable);
+
 	}
 
-	public Set<Price> getItemPriciesFromAdmin(Long itemId, Pageable pageable) {
-		return priceService.getPagePricies(itemId ,pageable);
+	// Получение всех цен у айтема (влючая выкленные)
+	@Override
+	public Set<Price> getItemPriciesFromAdmin(Long itemId) {
+		return priceService.getItemPricies(itemId);
 	}
 
+	// Получение списка всех ItemDto
+	@Override
 	public Set<ItemDto> getItemsDtoFromUser() {
 		Set<Item> items = findAllByActive(true);
 		Set<ItemDto> itemsDto = items.stream().
@@ -52,24 +54,13 @@ public class ItemService implements ItemServiceInterface {
 		return itemsDto;
 	}
 
+	// Получение списка всех PriceDto у конкретного Item
+	@Override
 	public Set<PriceDto> getItemPriciesFromUser(Long itemId) {
 		return priceService.getItemPriciesDto(itemId);
 	}
 
-	/* private Page<Item> findAllByActive(boolean active, Pageable pageable) {
-		return itemRepository.findAllByActive(active, pageable);
-	} */
-
-	public ItemDto getItemDto(Long id) {
-		Item item = findById(id).get();
-		return ItemDto.fromUser(item);
-	}
-
-	private Optional<Item> findById (Long id) {
-		return itemRepository.findById(id);
-	}
-
-	// Создание 
+	// Добавление Item
 	@Override
 	public Optional<Item> addItem (ItemRequest itemRequest) {
 		System.out.println("addItem");
@@ -78,85 +69,68 @@ public class ItemService implements ItemServiceInterface {
 		newItem.setDescription(itemRequest.getDescription());
 		newItem.setType(itemRequest.getType());
 		newItem.setActive(itemRequest.getActive());
-		Set<Price> pricies = priceService.getPriciesFromRequest(itemRequest.getPricies());
+		Set<Price> pricies = priceService.getItemPriciesFromRequest(itemRequest.getPricies());
 
 		newItem.setPrices(pricies);
-		priceService.savePricies(newItem);
-		Item item = saveItem(newItem);
+		priceService.savePricies(newItem.getPrices());
+		Item item = saveItem(newItem).get();
 		return Optional.of(item);
 
 	}
 
-	private Item saveItem(Item item) {
-		System.out.println("saveItem");
-		return itemRepository.save(item);
-	}
-
-	public Optional<Price> editPrice(PriceRequest priceRequest, Long priceId) {
-		return priceService.editPrice(priceRequest, priceId);
-	}
-
-	// Получение однго итема
-	@Override
-	public Item getItem (Long id) throws NotFound {
-		return itemRepository.findById(id).orElseThrow();
-	}
-
-	// Получение модели
-	public ItemDto getItemModel(Long id) throws NotFound {
-		if (!itemValid.itemIsPresent(id)) {
-			throw new NotFound(HttpStatus.NOT_FOUND);
-		}
-		return ItemDto.fromUser(itemRepository.findById(id).orElseThrow());
-	}
-
-	// Перезапись параметров
+	// Изменение Item (без цен)
 	@Override
 	public Optional<Item> editItem (long id, ItemRequest itemRequest)  {
 
-		Item item = itemRepository.findById(id).orElseThrow();
+		Item item = itemRepository.findById(id).orElseThrow(); // mb get())
 		item.setName(itemRequest.getName());
 		item.setType(itemRequest.getType());
 		item.setDescription(itemRequest.getDescription());
 		item.setActive(itemRequest.isActive());
-		return Optional.of(saveItem(item));
+		saveItem(item);
+		return Optional.of(item);
 	}
 
-	// Удаление
+	// Изменение и удаление цены
 	@Override
-	public void deleteItem(long id) throws NotFound {
-		// Проверка на наличие 
-		if (!itemValid.itemIsPresent(id)) {
-			throw new NotFound(HttpStatus.NOT_FOUND);
-		}
-		// Удаляем только в случае active 
-		if (!itemValid.itemIsActive(id)) {
-			throw new NotFound(HttpStatus.NOT_FOUND);
-		}
+	public Optional<Price> editItemPrice(PriceRequest priceRequest, Long priceId) {
+		return priceService.editPrice(priceRequest, priceId);
+	}
 
-		Item item = itemRepository.findById(id).orElseThrow();
+	// Удаление (Выключение) Item
+	@Override
+	public Optional<Item> deleteItem(long itemId) {
+
+		Item item = itemRepository.findById(itemId).orElseThrow();
+		priceService.deletePricies(item.getPrices());
 		item.setActive(false);
-		itemRepository.save(item);
-	}	
+		saveItem(item);
+		return Optional.of(item);
 
-	//  Id в JSON
-	@Override
-	public IdDto getIdByJson (Item bodyItem) throws NotFound {
-		// Проверка на наличие 
-		if (!itemValid.itemIsPresent(bodyItem.getId())) {
-			throw new NotFound(HttpStatus.NOT_FOUND);
-		}
-		itemRepository.save(bodyItem);
-		
-		return new IdDto(bodyItem.getId());
 	}
+
+	// Получение ItemDto
+	@Override
+	public ItemDto getItemDto(Long id) {
+		Item item = findById(id).get();
+		return ItemDto.fromUser(item);
+	}
+
+	private Set<Item> findAllByActive(boolean active) {
+		return itemRepository.findAllByActive(active);
+	} 
 
 	private Page<Item> findAllItem(Pageable pageable) {
 		return itemRepository.findAll(pageable);
 	}
 
-	private Set<Item> findAllByActive(boolean active) {
-		return itemRepository.findAllByActive(active);
+	private Optional<Item> findById (Long id) {
+		return itemRepository.findById(id);
+	}
+
+	private Optional<Item> saveItem(Item item) {
+		System.out.println("saveItem");
+		return Optional.of(itemRepository.save(item));
 	}
 
 }
