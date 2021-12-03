@@ -41,7 +41,6 @@ public class PriceService implements PriceServiceInterface {
 	// Сохранение всех цен
 	@Override
 	public Set<Price> savePricies(Set<Price> pricies) {
-		System.out.println("savePricies");
 		return pricies.stream().map(price -> savePrice(price).get()).collect(Collectors.toSet());
 	}
 

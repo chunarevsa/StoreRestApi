@@ -10,8 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-// 2
-// Из User в UserDetails, По сути User для SpringSecurity
+
 public class JwtUser extends User implements UserDetails{
 
 	public JwtUser (final User user) {

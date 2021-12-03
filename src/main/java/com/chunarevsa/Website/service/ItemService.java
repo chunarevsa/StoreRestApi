@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Entity.Price;
+import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.dto.ItemDto;
 import com.chunarevsa.Website.dto.ItemRequest;
 import com.chunarevsa.Website.dto.PriceDto;
@@ -26,13 +27,16 @@ public class ItemService implements ItemServiceInterface {
 
 	private final ItemRepository itemRepository;
 	private final PriceService priceService;
+	private final UserService userService;
 
 	@Autowired
 	public ItemService(
 				ItemRepository itemRepository,
-				PriceService priceService) {
+				PriceService priceService,
+				UserService userService) {
 		this.itemRepository = itemRepository;
 		this.priceService = priceService;
+		this.userService = userService;
 	}
 
 	// Получение Items 
@@ -71,6 +75,20 @@ public class ItemService implements ItemServiceInterface {
 		} 
 		return getItemPriciesFromUser(itemId);
 	}
+
+	public Optional<ItemDto> byeItem(Long itemId, JwtUser jwtUser) {
+		
+		Item item = findById(itemId).get();
+		/* String username = jwtUser.getUsername().toString();
+		User user = userService.findByUsername(username).get();
+		Set<Item> items = user.getItems();
+		items.add(item);
+		user.setItems(items);
+		saveItems(user.getItems());
+		userService.saveUser(user).get(); */
+
+		return  getItemDto(item.getId());
+	} 
 
 	// Добавление Item
 	@Override
@@ -118,15 +136,17 @@ public class ItemService implements ItemServiceInterface {
 		return Optional.of(item);
 	}
 
-	
-	// Получение страницы со всеми Item
+	// Получение ItemsDto принадлежашие User TODO: может быть равно нулю
+	public Set<ItemDto> getUserItemsDto(JwtUser jwtUser) {
+		return null;
+	}
 
+	// Получение страницы со всеми Item
 	private Page<Item> getPageItemFromAdmin(Pageable pageable) {
 		return findAllItem(pageable);
 	}
 
 	// Получение всех цен у айтема (влючая выкленные)
-
 	private Set<Price> getItemPriciesFromAdmin(Long itemId) {
 		Item item = findById(itemId).get();
 		return item.getPrices();
@@ -164,8 +184,14 @@ public class ItemService implements ItemServiceInterface {
 		return itemRepository.findById(id);
 	}
 
+	/* public Set<Item> saveItems(Set<Item> items) {
+		return items.stream().map(item -> saveItem(item).get()).collect(Collectors.toSet());
+	} */
+
 	private Optional<Item> saveItem(Item item) {
 		return Optional.of(itemRepository.save(item));
 	}
+
+	
 
 }

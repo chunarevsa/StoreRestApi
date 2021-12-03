@@ -1,7 +1,5 @@
 package com.chunarevsa.Website.controllers;
 
-import java.util.stream.Collectors;
-
 import javax.validation.Valid;
 
 import com.chunarevsa.Website.dto.LogOutRequestDto;
@@ -23,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
-// Настроить контроллеры (доступ пользователя и доступ админа)- доделать
-// Контроллер для пользователя
 @RestController
 @RequestMapping ("/user")
 public class UserController {
@@ -39,27 +35,25 @@ public class UserController {
 		this.applicationEventPublisher = applicationEventPublisher;
 	}
 
+	@GetMapping("/profile")
+	@PreAuthorize("hasRole('USER')")
+	public ResponseEntity getMyUserProfile (@AuthenticationPrincipal JwtUser jwtUser) {
+		return ResponseEntity.ok().body(userService.getMyUserProfile(jwtUser));
+	} 
+
 	@GetMapping("/{username}")
 	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity getUserProfile (
-							@AuthenticationPrincipal JwtUser jwtUser,
-							@PathVariable(value = "username") String username) {
+	public ResponseEntity getUserProfile(@PathVariable(value = "username") String username,
+					@AuthenticationPrincipal JwtUser jwtUser) {
 
-		return ResponseEntity.ok(userService.getUserDto(username));
-		
+		return ResponseEntity.ok().body(userService.getUserProfile(username));
 	}
 
-	@GetMapping("/me")
+	/* @GetMapping("/profile/items")
 	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity getMyProfile (@AuthenticationPrincipal JwtUser jwtUser) {
-		return ResponseEntity.ok(
-			"My username :" + jwtUser.getUsername() + "\n" +
-			"My email :" + jwtUser.getEmail() + "\n" +
-			"My roles :" +  
-			jwtUser.getRoles().stream().map(role -> role.getRole().name()).collect(Collectors.toSet()) + "\n" +
-			"My avatar :" + jwtUser.getAvatar() +  "\n" +
-			"It's all");
-	} // сделать через сервис
+	public ResponseEntity getUserItems (@AuthenticationPrincipal JwtUser jwtUser) {
+		return ResponseEntity.ok().body(userService.getMyItems(jwtUser));
+	}  */
 
 	@GetMapping("/all")
 	@PreAuthorize("hasRole('ADMIN')")
@@ -69,18 +63,16 @@ public class UserController {
 	}
 
 	@PostMapping("/logout")
-	public ResponseEntity logout(@AuthenticationPrincipal JwtUser jwtUser, 
-			@Valid @RequestBody LogOutRequestDto logOutRequestDto) {
+	public ResponseEntity logout(@Valid @RequestBody LogOutRequestDto logOutRequestDto,
+					@AuthenticationPrincipal JwtUser jwtUser) {
+
 		userService.logout(jwtUser, logOutRequestDto);
 		Object credentials = SecurityContextHolder.getContext().getAuthentication().getCredentials();
-
 		UserLogoutSuccess logoutSuccess = new UserLogoutSuccess(
 			jwtUser.getEmail(), credentials.toString(), logOutRequestDto);
-		
 		applicationEventPublisher.publishEvent(logoutSuccess);
 		return ResponseEntity.ok("Log out successful");
 	}
-
 
 }
 

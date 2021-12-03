@@ -63,6 +63,14 @@ public class ItemController {
 		return ResponseEntity.ok().body(itemService.getItemPricies(itemId, jwtUser));
 	}
 
+	@PostMapping("/{id}/bye")
+	@PreAuthorize("hasRole('USER')")
+	public ResponseEntity byeItem (@PathVariable(value = "id") Long itemId,
+					@AuthenticationPrincipal JwtUser jwtUser) {
+		
+		return ResponseEntity.ok().body(itemService.byeItem(itemId, jwtUser));
+	} 
+
 	// Добавление Item
 	@PostMapping("/add")
 	@PreAuthorize("hasRole('ADMIN')")

@@ -8,11 +8,13 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Entity.Role;
 import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.Entity.UserDevice;
 import com.chunarevsa.Website.Entity.payload.RegistrationRequest;
 import com.chunarevsa.Website.Exception.UserLogoutException;
+import com.chunarevsa.Website.dto.ItemDto;
 import com.chunarevsa.Website.dto.LogOutRequestDto;
 import com.chunarevsa.Website.dto.UserDto;
 import com.chunarevsa.Website.repo.UserRepository;
@@ -32,6 +34,7 @@ public class UserService implements UserServiceInterface{
 	private final RoleService roleService;
 	private final UserDeviceService userDeviceService;
 	private final RefreshTokenService refreshTokenService;
+	//private final ItemService itemService;
 
 	@Autowired
 	public UserService(
@@ -39,12 +42,15 @@ public class UserService implements UserServiceInterface{
 				RoleService roleService,
 				PasswordEncoder passwordEncoder,
 				UserDeviceService userDeviceService,
-				RefreshTokenService refreshTokenService) {
+				RefreshTokenService refreshTokenService
+				// ,ItemService itemService
+				) {
 		this.userRepository = userRepository;
 		this.roleService = roleService;
 		this.passwordEncoder = passwordEncoder;
 		this.userDeviceService = userDeviceService;
 		this.refreshTokenService = refreshTokenService;
+		//this.itemService = itemService;
 	}
 
 	@Override 
@@ -59,10 +65,34 @@ public class UserService implements UserServiceInterface{
 		newUser.setIsEmailVerified(false);
 		return newUser;
 	}
+
+	public Optional<UserDto> getMyUserProfile(JwtUser jwtUser) {
+		String username = jwtUser.getUsername();
+		return getUserProfile(username);
+	}
 	
-	@Override
-	public User save(User user) {
-		return userRepository.save(user);
+	public Optional<UserDto> getUserProfile (String username) {
+		User user = findByUsername(username).get();
+
+		return Optional.of(UserDto.fromUser(user));
+	}
+
+	/* public Set<ItemDto> getMyItems(JwtUser jwtUser) {
+		return itemService.getUserItemsDto(jwtUser);
+	} */
+
+	/* public Optional<User> addItemToUser(Item item, String username) {
+		User user = findByUsername(username).get();
+		Set<Item> items = user.getItems();
+		items.add(item);
+		user.setItems(items);
+		itemService.saveItems(user.getItems());
+		User savedUser = saveUser(user).get();
+		return Optional.of(savedUser);
+	}	 */
+
+	public Optional<User> saveUser(User user) {
+		return Optional.of(userRepository.save(user));
   	}
 	
 	private Set<Role> getRoles(Boolean isAdmin) {
@@ -86,10 +116,7 @@ public class UserService implements UserServiceInterface{
 		return userRepository.findByUsername(username);
 	}
 
-	public UserDto getUserDto (String username) {
-		User user = findByUsername(username).get();
-		return UserDto.fromUser(user);
-	}
+	
 
 	@Override
 	public User findById(Long id) {
@@ -142,6 +169,5 @@ public class UserService implements UserServiceInterface{
 		refreshTokenService.deleteById(userDevice.getRefreshToken().getId());
 
 	}
-
 	
 } 

@@ -41,7 +41,11 @@ public class Price extends Base {
 		super();
 	}
 
-	public Price(Long id, String cost, String currencyTitle, Boolean active, Item item) {
+	public Price(Long id, 
+					String cost, 
+					String currencyTitle, 
+					Boolean active, 
+					Item item) {
 		this.id = id;
 		this.cost = cost;
 		this.currencyTitle = currencyTitle;

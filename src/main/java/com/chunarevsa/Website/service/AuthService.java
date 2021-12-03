@@ -48,7 +48,6 @@ public class AuthService {
 	}
 
 	public Optional<User> registrationUser (RegistrationRequest registrationRequest) {
-		System.out.println("registrationUser");
 
 		String email = registrationRequest.getEmail();
 		if (emailAlreadyExists(email)) {
@@ -56,7 +55,7 @@ public class AuthService {
 	  }  
 	  User newUser = userService.addNewUser(registrationRequest);
 	  
-	  User savedNewUser = userService.save(newUser);
+	  User savedNewUser = userService.saveUser(newUser).get();
 	  return Optional.ofNullable(savedNewUser);
 	}
 
@@ -78,15 +77,13 @@ public class AuthService {
 		emailVerificationTokenService.save(verificationToken);
 		registeredUser.verificationConfirmed();
 
-		userService.save(registeredUser);
+		userService.saveUser(registeredUser);
 		return Optional.of(registeredUser);
 	}
 
 	public Optional<Authentication> authenticateUser(LoginRequestDto loginRequestDto) {
 		UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword());
 		return Optional.ofNullable(authenticationManager.authenticate(user));
-			
-
 	}
 
 	public Optional<RefreshToken> createAndPersistRefreshTokenForDevice(Authentication authentication,

@@ -3,6 +3,7 @@ package com.chunarevsa.Website.Entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -45,6 +47,13 @@ public class User extends Base {
 	@Column(name = "AVATAR") //TODO:
 	private String avatar;
 
+	@Column(name = "BALANCE") 
+	private String balance;
+
+	@OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "USER_ID")
+	private Set<Item> items = new HashSet<>();
+
 	@ManyToMany(fetch = FetchType.EAGER) // Каскады - доделать
 	@JoinTable(name = "USER_AUTHORITY", // связь через промежуточную таблицу 
 			// колонка 1 называется USER_ID и ссылается на USER_ID из user
@@ -67,9 +76,12 @@ public class User extends Base {
 		this.password = user.password;
 		this.active = user.active;
 		this.avatar = user.avatar;
+		this.balance = user.balance;
 		this.roles = user.roles;
 		this.isEmailVerified = user.isEmailVerified;
+		this.items = user.items;
 	}
+	
 
 	public void addRole(Role role) {
 		roles.add(role);
@@ -156,6 +168,23 @@ public class User extends Base {
 		this.isEmailVerified = isEmailVerified;
 	}
 
+	public String getBalance() {
+		return this.balance;
+	}
+
+	public void setBalance(String balance) {
+		this.balance = balance;
+	}
+
+
+	public Set<Item> getItems() {
+		return this.items;
+	}
+
+	public void setItems(Set<Item> items) {
+		this.items = items;
+	}
+
 	@Override
 	public String toString() {
 		return "{" +
@@ -165,10 +194,11 @@ public class User extends Base {
 			", password='" + getPassword() + "'" +
 			", active='" + isActive() + "'" +
 			", avatar='" + getAvatar() + "'" +
+			", balance='" + getBalance() + "'" +
+			", items='" + getItems() + "'" +
 			", roles='" + getRoles() + "'" +
 			", isEmailVerified='" + isIsEmailVerified() + "'" +
 			"}";
 	}
-
 
 }
