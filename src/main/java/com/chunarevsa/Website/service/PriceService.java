@@ -28,18 +28,11 @@ public class PriceService implements PriceServiceInterface { // TODO: interface
 		this.domesticCurrencyService = domesticCurrencyService;
 	}
 
-	// Получение всех Price
-	@Override
-	public Set<Price> getItemPricies(Long itemId) {
-		
-		return priceRepository.findAllByItem(itemId);
-	}
-
 	// Получение всех цен в PriceDto
 	@Override
-	public Set<PriceDto> getItemPriciesDto(Long itemId) {
+	public Set<PriceDto> getItemPriciesDto(Set<Price> pricies) {
 		
-		Set<Price> pricies = findAllByActive(true);
+		//Set<Price> pricies = findAllByActive(true);
 		pricies.removeIf(price -> price.getActive() == false);
 		Set<PriceDto> priciesDto = pricies.stream()
 				.map(price -> getItemPriceDto(price.getId())).collect(Collectors.toSet());
@@ -49,8 +42,8 @@ public class PriceService implements PriceServiceInterface { // TODO: interface
 
 	// Получение цены в PriceDto
 	@Override
-	public PriceDto getItemPriceDto(Long id) {
-		Price price = findById(id).get();
+	public PriceDto getItemPriceDto(Long priceId) {
+		Price price = findById(priceId).get();
 		return PriceDto.fromUser(price);
 	}
 

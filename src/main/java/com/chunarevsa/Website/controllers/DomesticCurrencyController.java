@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import com.chunarevsa.Website.Entity.DomesticCurrency;
 import com.chunarevsa.Website.Exception.AllException;
 import com.chunarevsa.Website.dto.DomesticCurrencyRequest;
+import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.service.DomesticCurrencyService;
 
 import org.springframework.data.domain.Page;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,19 +34,14 @@ public class DomesticCurrencyController {
 		this.domesticCurrencyService = domesticCurrencyService;
 	}
 
-	// Получение страницы всех Currency
+	// Получение всех Currency
+	// Если ADMIN -> page Currencies, если USER -> set CurrenciesDto
 	@GetMapping("/all")
-	@PreAuthorize("hasRole('ADMIN')")
-	public Page<DomesticCurrency> getCurrenciesFromAdmin (@PageableDefault Pageable pageable) { 
-		return domesticCurrencyService.getCurrenciesFromAdmin(pageable);
-	}
-	
-	// Получение списка CurrencyDto 
-	@GetMapping
 	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity getCurrenciesDtoFromUser () { 
-		return ResponseEntity.ok().body(domesticCurrencyService.getCurrenciesDtoFromUser());
-	} 
+	public ResponseEntity getCurrencies(@PageableDefault Pageable pageable,
+				@AuthenticationPrincipal JwtUser jwtUser) { 
+		return  ResponseEntity.ok().body(getCurrencies(pageable, jwtUser));
+	}
 
 	// Получить CurrencyDto по title
 	@GetMapping("/{title}") //Проверка если вдруг выключена, то просто включить
@@ -54,15 +51,15 @@ public class DomesticCurrencyController {
 	}
 
 	// Добавление Currency
-	@PostMapping
+	@PostMapping("/add")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity addCurrency (@Valid @RequestBody DomesticCurrencyRequest currencyRequest) throws AllException {
 		return domesticCurrencyService.addCurrency(currencyRequest) // TODO: исключение
 			.map(currency -> ResponseEntity.ok().body("Валюта добавлена")).orElseThrow();
 	} 	
-				
+	
 	 // Изменение
-	@PutMapping("{title}/edit/") // TODO: сделать через параметр
+	@PutMapping("/{title}/edit") // TODO: сделать через параметр
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity editCurrency (@PathVariable(value = "title") String title, 
 				@Valid @RequestBody DomesticCurrencyRequest currencyRequest) throws AllException {
@@ -71,10 +68,17 @@ public class DomesticCurrencyController {
 	} 
 
    // Удаление
-	@DeleteMapping("/{title}")
+	@DeleteMapping("/{title}/delete")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity deleteCurrency (@PathVariable(value = "title") String title) throws AllException {
 		domesticCurrencyService.deleteCurrency(title);
 		return ResponseEntity.ok("Валюта " + title + " была удалена");
 	}	
+
+	/* // Получение списка CurrencyDto 
+	@GetMapping
+	@PreAuthorize("hasRole('USER')")
+	public ResponseEntity getCurrenciesDtoFromUser () { 
+		return ResponseEntity.ok().body(domesticCurrencyService.getCurrenciesDtoFromUser());
+	}  */
 }

@@ -1,5 +1,6 @@
 package com.chunarevsa.Website.service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -9,11 +10,13 @@ import com.chunarevsa.Website.Exception.InvalidPriceFormat;
 import com.chunarevsa.Website.dto.DomesticCurrencyDto;
 import com.chunarevsa.Website.dto.DomesticCurrencyRequest;
 import com.chunarevsa.Website.repo.DomesticCurrencyRepository;
+import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.service.inter.DomesticCurrencyServiceInterface;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 // TODO: логирование
@@ -26,6 +29,16 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 	public DomesticCurrencyService(
 				DomesticCurrencyRepository domesticCurrencyRepository) {
 		this.domesticCurrencyRepository = domesticCurrencyRepository;
+	}
+
+	public Object getCurrencies (Pageable pageable, JwtUser jwtUser) {
+		List<String> roles = jwtUser.getAuthorities().stream()
+				.map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+		
+		if (roles.contains("ROLE_ADMIN")) {
+			return getCurrenciesFromAdmin(pageable);
+		} 
+		return getCurrenciesDtoFromUser();
 	}
 
 	public Page<DomesticCurrency> getCurrenciesFromAdmin(Pageable pageable) {
@@ -67,7 +80,7 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 	// Запись параметров
 	@Override
 	public Optional<DomesticCurrency> editCurrency (String title, DomesticCurrencyRequest currencyRequest) {
-
+		System.out.println("editCurrency");
 		DomesticCurrency currency = findCurrencyByTitile(title).get();
 		currency.setTitle(currencyRequest.getTitle());
 		currency.setCost(currencyRequest.getCost());
@@ -93,6 +106,7 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 	}
 
 	public Optional<DomesticCurrency> findCurrencyByTitile(String title) {
+		System.out.println("findCurrencyByTitile");
 		return domesticCurrencyRepository.findByTitle(title);
 	}
 
@@ -128,6 +142,7 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 	}
 
 	private DomesticCurrency saveCurrency(DomesticCurrency currency) {
+		System.out.println("saveCurrency");
 		return domesticCurrencyRepository.save(currency);
 	}
 	

@@ -59,7 +59,7 @@ public class UserController {
 			jwtUser.getRoles().stream().map(role -> role.getRole().name()).collect(Collectors.toSet()) + "\n" +
 			"My avatar :" + jwtUser.getAvatar() +  "\n" +
 			"It's all");
-	}
+	} // сделать через сервис
 
 	@GetMapping("/all")
 	@PreAuthorize("hasRole('ADMIN')")

@@ -1,5 +1,6 @@
 package com.chunarevsa.Website.service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -11,11 +12,13 @@ import com.chunarevsa.Website.dto.ItemRequest;
 import com.chunarevsa.Website.dto.PriceDto;
 import com.chunarevsa.Website.dto.PriceRequest;
 import com.chunarevsa.Website.repo.ItemRepository;
+import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.service.inter.ItemServiceInterface;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,17 +35,48 @@ public class ItemService implements ItemServiceInterface {
 		this.priceService = priceService;
 	}
 
+	public Object getItems(Pageable pageable, JwtUser jwtUser) {
+		
+		List<String> roles = jwtUser.getAuthorities().stream()
+				.map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+		
+		if (roles.contains("ROLE_ADMIN")) {
+			return getPageItemFromAdmin(pageable);
+		} 
+		return getItemsDtoFromUser();
+	}
+
+	public Object getItem(Long itemId, JwtUser jwtUser) {
+		List<String> roles = jwtUser.getAuthorities().stream()
+				.map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+		
+		if (roles.contains("ROLE_ADMIN")) {
+			return findById(itemId);
+		} 
+		return getItemDto(itemId);
+	}
+
+	public Object getItemPricies (Long itemId, JwtUser jwtUser) {
+		List<String> roles = jwtUser.getAuthorities().stream()
+				.map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+	
+		if (roles.contains("ROLE_ADMIN")) {
+			return getItemPriciesFromAdmin(itemId);
+		} 
+		return getItemPriciesFromUser(itemId);
+	}
+
 	// Получение страницы со всеми Item
 	@Override
 	public Page<Item> getPageItemFromAdmin(Pageable pageable) {
 		return findAllItem(pageable);
-
 	}
 
 	// Получение всех цен у айтема (влючая выкленные)
 	@Override
 	public Set<Price> getItemPriciesFromAdmin(Long itemId) {
-		return priceService.getItemPricies(itemId);
+		Item item = findById(itemId).get();
+		return item.getPrices();
 	}
 
 	// Получение списка всех ItemDto
@@ -57,7 +91,8 @@ public class ItemService implements ItemServiceInterface {
 	// Получение списка всех PriceDto у конкретного Item
 	@Override
 	public Set<PriceDto> getItemPriciesFromUser(Long itemId) {
-		return priceService.getItemPriciesDto(itemId);
+		Item item = findById(itemId).get();
+		return priceService.getItemPriciesDto(item.getPrices());
 	}
 
 	// Добавление Item
@@ -70,7 +105,6 @@ public class ItemService implements ItemServiceInterface {
 		newItem.setType(itemRequest.getType());
 		newItem.setActive(itemRequest.getActive());
 		Set<Price> pricies = priceService.getItemPriciesFromRequest(itemRequest.getPricies());
-
 		newItem.setPrices(pricies);
 		priceService.savePricies(newItem.getPrices());
 		Item item = saveItem(newItem).get();
@@ -106,7 +140,6 @@ public class ItemService implements ItemServiceInterface {
 		item.setActive(false);
 		saveItem(item);
 		return Optional.of(item);
-
 	}
 
 	// Получение ItemDto

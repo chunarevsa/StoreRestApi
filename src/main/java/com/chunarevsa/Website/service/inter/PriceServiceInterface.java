@@ -9,14 +9,11 @@ import com.chunarevsa.Website.dto.PriceRequest;
 
 public interface PriceServiceInterface {
 
-	// Получение всех Price
-	public Set<Price> getItemPricies(Long itemId);
-
 	// Получение всех цен в PriceDto
-	public Set<PriceDto> getItemPriciesDto(Long itemId);
+	public Set<PriceDto> getItemPriciesDto(Set<Price> pricies);
 
 	// Получение цены в PriceDto
-	public PriceDto getItemPriceDto(Long id);
+	public PriceDto getItemPriceDto(Long priceId);
 
 	// Получение списка Price из списка PriceRequest
 	public Set<Price> getItemPriciesFromRequest (Set<PriceRequest> setPriciesRequests);

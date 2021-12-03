@@ -59,7 +59,7 @@ public class Item extends Base {
 		this.prices = prices;
 	}
 
-	public void addPrice(Price price) {
+	/* public void addPrice(Price price) {
 		System.out.println("IN addPrice");
 		System.out.println("price is :" + price);
 		System.out.println("this :" + this);
@@ -71,7 +71,7 @@ public class Item extends Base {
 	public void addPricies (Set<Price> prices) {
 		System.out.println("IN addPricies");
 		prices.forEach(this::addPrice);
-	}
+	} */
 
 	public Long getId() {
 		return this.id;
