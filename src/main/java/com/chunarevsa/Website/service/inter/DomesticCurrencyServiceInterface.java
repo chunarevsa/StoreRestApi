@@ -7,14 +7,19 @@ import com.chunarevsa.Website.Entity.DomesticCurrency;
 import com.chunarevsa.Website.Exception.InvalidPriceFormat;
 import com.chunarevsa.Website.dto.DomesticCurrencyDto;
 import com.chunarevsa.Website.dto.DomesticCurrencyRequest;
+import com.chunarevsa.Website.security.jwt.JwtUser;
+
+import org.springframework.data.domain.Pageable;
 
 public interface DomesticCurrencyServiceInterface {
 
-	// Получение страницы всех Currency
-	public Set<DomesticCurrencyDto> getCurrenciesDtoFromUser();
-	
-	// Получить CurrencyDto по title
-	public DomesticCurrencyDto getCurrencyDtoByTitle(String title);
+	// Получение всех Currency
+	// Если ADMIN -> page Currencies, если USER -> set CurrenciesDto
+	public Object getCurrencies (Pageable pageable, JwtUser jwtUser);
+
+	// Получить Currency
+	// Если ADMIN -> Currency, если USER ->  CurrencyDto
+	public Object getCurrency(String title, JwtUser jwtUser);
 
 	// Добавление Currency
 	public Optional<DomesticCurrency> addCurrency (DomesticCurrencyRequest currencyRequest) throws InvalidPriceFormat;
@@ -24,6 +29,9 @@ public interface DomesticCurrencyServiceInterface {
 
 	// Удаление (Выключение) Currency
 	public Optional<DomesticCurrency> deleteCurrency(String title);
+
+	// Получение Currency по title
+	public Optional<DomesticCurrency> findCurrencyByTitile(String title);
 	
 }	
 

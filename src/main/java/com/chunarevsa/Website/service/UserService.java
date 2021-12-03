@@ -1,6 +1,9 @@
 package com.chunarevsa.Website.service;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -74,7 +77,6 @@ public class UserService implements UserServiceInterface{
 	@Override
 	public List<User> getAll() {
 		List<User> result = userRepository.findAll();
-
 		return result;
 	}
 

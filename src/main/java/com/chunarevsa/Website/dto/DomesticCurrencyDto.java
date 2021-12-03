@@ -40,6 +40,12 @@ public class DomesticCurrencyDto {
 		this.cost = cost;
 	}
 
-
+	@Override
+	public String toString() {
+		return "{" +
+			" title='" + getTitle() + "'" +
+			", cost='" + getCost() + "'" +
+			"}";
+	}
 
 }

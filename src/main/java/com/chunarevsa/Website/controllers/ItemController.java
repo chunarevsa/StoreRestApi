@@ -43,16 +43,6 @@ public class ItemController {
 		return ResponseEntity.ok().body(itemService.getItems(pageable, jwtUser));
 	} 
 
-	// Получение у Item списка всех цен
-	// Если ADMIN -> set Pricies, если USER -> set PriciesDto
-	@GetMapping("/{id}/pricies")
-	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity getItemPricies (@PathVariable(value = "id") Long itemId, 
-					@AuthenticationPrincipal JwtUser jwtUser) throws AllException {
-	
-		return ResponseEntity.ok().body(itemService.getItemPricies(itemId, jwtUser));
-	}
-
 	// Получение Item
 	// Если ADMIN -> Item, если USER -> ItemDto
 	@GetMapping("/{id}")
@@ -61,6 +51,16 @@ public class ItemController {
 			@AuthenticationPrincipal JwtUser jwtUser) throws AllException {
 
 		return ResponseEntity.ok().body(itemService.getItem(id, jwtUser));
+	}
+
+	// Получение у Item списка всех цен
+	// Если ADMIN -> set Pricies, если USER -> set PriciesDto
+	@GetMapping("/{id}/pricies")
+	@PreAuthorize("hasRole('USER')")
+	public ResponseEntity getItemPricies (@PathVariable(value = "id") Long itemId, 
+					@AuthenticationPrincipal JwtUser jwtUser) throws AllException {
+	
+		return ResponseEntity.ok().body(itemService.getItemPricies(itemId, jwtUser));
 	}
 
 	// Добавление Item
@@ -96,36 +96,5 @@ public class ItemController {
 		itemService.deleteItem(id);
 		return ResponseEntity.ok().body("Item " + id + " был удален");
 	}
-
-
-	/* // Получение списка всех ItemDto
-	@GetMapping 
-	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity getItemsDtoFromUser () { 
-		return ResponseEntity.ok().body(itemService.getItemsDtoFromUser());
-	} */
-
-	/* // Получение страницы со всеми Item  
-	@GetMapping("/all")
-	@PreAuthorize("hasRole('ADMIN')")
-	public Page<Item> getPageItemFromAdmin (@PageableDefault Pageable pageable) { 
-		return itemService.getPageItemFromAdmin(pageable);
-	}  */
-
-	/* // Получение ItemDto
-	@GetMapping("/{id}")
-	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity getItemDto (@PathVariable(value = "id") Long id) throws AllException {
-	
-		return ResponseEntity.ok().body(itemService.getItemDto(id));
-	} */
-
-	/* // Получение всех цен у айтема (влючая выкленные)
-	@GetMapping("/{id}/pricies/all")
-	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity getItemPriciesFromAdmin (@PathVariable(value = "id") Long itemId,
-				@AuthenticationPrincipal JwtUser jwtUser) throws AllException {
-		return ResponseEntity.ok().body(itemService.getItemPriciesFromAdmin(itemId, jwtUser));
-	} // TODO: Проверить показывает ли выключенные цены */
 
 }

@@ -24,7 +24,7 @@ public class JwtUserDetailsService implements UserDetailsService{
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		System.out.println("loadUserByUsername");
+
 		Optional<User> user = userRepository.findByEmail(email);
 		if (user == null) {
 			throw new UsernameNotFoundException("User with email: " + email + " not found");
@@ -35,7 +35,7 @@ public class JwtUserDetailsService implements UserDetailsService{
 	}
 
 	public UserDetails loadUserById(Long id) {
-		System.out.println("loadUserById");
+
 		Optional<User> user = userRepository.findById(id);
 		
 		return user.map(JwtUser::new)

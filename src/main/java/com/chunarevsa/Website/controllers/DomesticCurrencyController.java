@@ -2,13 +2,11 @@ package com.chunarevsa.Website.controllers;
 
 import javax.validation.Valid;
 
-import com.chunarevsa.Website.Entity.DomesticCurrency;
 import com.chunarevsa.Website.Exception.AllException;
 import com.chunarevsa.Website.dto.DomesticCurrencyRequest;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.service.DomesticCurrencyService;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -40,14 +38,17 @@ public class DomesticCurrencyController {
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity getCurrencies(@PageableDefault Pageable pageable,
 				@AuthenticationPrincipal JwtUser jwtUser) { 
-		return  ResponseEntity.ok().body(getCurrencies(pageable, jwtUser));
+
+		return  ResponseEntity.ok().body(domesticCurrencyService.getCurrencies(pageable, jwtUser));
 	}
 
-	// Получить CurrencyDto по title
+	// Получить Currency
+	// Если ADMIN -> Currency, если USER ->  CurrencyDto
 	@GetMapping("/{title}") //Проверка если вдруг выключена, то просто включить
 	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity getCurrencyByTitle (@PathVariable(value = "title") String title) { 
-		return ResponseEntity.ok(domesticCurrencyService.getCurrencyDtoByTitle(title));
+	public ResponseEntity getCurrencyByTitle (@PathVariable(value = "title") String title,
+				@AuthenticationPrincipal JwtUser jwtUser) { 
+		return ResponseEntity.ok(domesticCurrencyService.getCurrency(title ,jwtUser));
 	}
 
 	// Добавление Currency
@@ -58,7 +59,7 @@ public class DomesticCurrencyController {
 			.map(currency -> ResponseEntity.ok().body("Валюта добавлена")).orElseThrow();
 	} 	
 	
-	 // Изменение
+	// Изменение Currency
 	@PutMapping("/{title}/edit") // TODO: сделать через параметр
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity editCurrency (@PathVariable(value = "title") String title, 
@@ -75,10 +76,4 @@ public class DomesticCurrencyController {
 		return ResponseEntity.ok("Валюта " + title + " была удалена");
 	}	
 
-	/* // Получение списка CurrencyDto 
-	@GetMapping
-	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity getCurrenciesDtoFromUser () { 
-		return ResponseEntity.ok().body(domesticCurrencyService.getCurrenciesDtoFromUser());
-	}  */
 }

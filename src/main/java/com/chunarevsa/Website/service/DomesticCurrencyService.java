@@ -31,38 +31,27 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 		this.domesticCurrencyRepository = domesticCurrencyRepository;
 	}
 
+	@Override
 	public Object getCurrencies (Pageable pageable, JwtUser jwtUser) {
 		List<String> roles = jwtUser.getAuthorities().stream()
 				.map(GrantedAuthority::getAuthority).collect(Collectors.toList());
-		
 		if (roles.contains("ROLE_ADMIN")) {
 			return getCurrenciesFromAdmin(pageable);
 		} 
 		return getCurrenciesDtoFromUser();
 	}
 
-	public Page<DomesticCurrency> getCurrenciesFromAdmin(Pageable pageable) {
-		return findAllCurrency(pageable);
-	}
-
-	// Получение страницы всех Currency
 	@Override
-	public Set<DomesticCurrencyDto> getCurrenciesDtoFromUser () {
-		Set<DomesticCurrency> currencies = findAllByActive(true);
-		Set<DomesticCurrencyDto> currenciesDto = currencies.stream()
-				.map(currency -> getCurrencyDto(currency.getId())).collect(Collectors.toSet());
-
-		return currenciesDto;
+	public Object getCurrency(String title, JwtUser jwtUser) {
+		List<String> roles = jwtUser.getAuthorities().stream()
+				.map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+		if (roles.contains("ROLE_ADMIN")) {
+			return findCurrencyByTitile(title);
+		} 
+		return getCurrencyDtoByTitle(title);
 	}
 
-	// Получить CurrencyDto по title
-	@Override
-	public DomesticCurrencyDto getCurrencyDtoByTitle (String title) {
-		DomesticCurrency currency = findCurrencyByTitile(title).get();
-		return DomesticCurrencyDto.fromUser(currency);
-	}
-
-	// Добавление Currency
+	// Добавление Currency	
 	@Override
 	public Optional<DomesticCurrency> addCurrency (DomesticCurrencyRequest currencyRequest) throws InvalidPriceFormat {
 		
@@ -75,9 +64,9 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 		newCurrency.setActive(currencyRequest.isActive());
 		saveCurrency(newCurrency);
 		return Optional.of(newCurrency);
-	}	
+	}
 
-	// Запись параметров
+	// Изменение Currency
 	@Override
 	public Optional<DomesticCurrency> editCurrency (String title, DomesticCurrencyRequest currencyRequest) {
 		System.out.println("editCurrency");
@@ -92,21 +81,37 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 	// Удаление (Выключение) Currency
 	@Override
 	public Optional<DomesticCurrency> deleteCurrency(String title) {
-
 		DomesticCurrency currency = findCurrencyByTitile(title).get();
 		currency.setActive(false);
 		saveCurrency(currency);
-		return Optional.of(currency);  // mb не нужно, можно void
-
+		return Optional.of(currency);  
 	}
 
-	private DomesticCurrencyDto getCurrencyDto(Long id) {
+	// Получение списка DomesticCurrencyDto для USER
+	private Set<DomesticCurrencyDto> getCurrenciesDtoFromUser () {
+		Set<DomesticCurrency> currencies = findAllByActive(true);
+		Set<DomesticCurrencyDto> currenciesDto = currencies.stream()
+				.map(currency -> getCurrencyDto(currency.getId()).get()).collect(Collectors.toSet());
+		return currenciesDto;
+	}
+
+	// Получить CurrencyDto по title
+	private Optional<DomesticCurrencyDto> getCurrencyDtoByTitle(String title) {
+		DomesticCurrency currency = findCurrencyByTitile(title).get();
+		return Optional.of(DomesticCurrencyDto.fromUser(currency));
+	}
+
+	private Page<DomesticCurrency> getCurrenciesFromAdmin(Pageable pageable) {
+		return findAllCurrency(pageable);
+	}
+
+	private Optional<DomesticCurrencyDto> getCurrencyDto(Long id) {
 		DomesticCurrency domesticCurrency = findById(id).get();
-		return DomesticCurrencyDto.fromUser(domesticCurrency);
+		return  Optional.of(DomesticCurrencyDto.fromUser(domesticCurrency));
 	}
 
+	@Override
 	public Optional<DomesticCurrency> findCurrencyByTitile(String title) {
-		System.out.println("findCurrencyByTitile");
 		return domesticCurrencyRepository.findByTitle(title);
 	}
 
@@ -141,9 +146,9 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 
 	}
 
-	private DomesticCurrency saveCurrency(DomesticCurrency currency) {
+	private Optional<DomesticCurrency> saveCurrency(DomesticCurrency currency) {
 		System.out.println("saveCurrency");
-		return domesticCurrencyRepository.save(currency);
+		return  Optional.of(domesticCurrencyRepository.save(currency)) ;
 	}
 	
 }

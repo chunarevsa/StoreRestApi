@@ -46,7 +46,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 							HttpServletRequest request, 
 							HttpServletResponse response, 
 							FilterChain filterChain) throws ServletException, IOException {
-		System.out.println("doFilterInternal");
 		try {
 
 			String jwt = getJwtFromRequest(request);			
@@ -58,7 +57,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, jwt, authorities);
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				SecurityContextHolder.getContext().setAuthentication(authentication);
-
 		  }
 		} catch (Exception | InvalidTokenRequestException e) {
 			// доделать обработка ошибки 

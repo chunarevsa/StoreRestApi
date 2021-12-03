@@ -35,27 +35,33 @@ public class ItemService implements ItemServiceInterface {
 		this.priceService = priceService;
 	}
 
+	// Получение Items 
+	// Если ADMIN -> page Items, если USER -> set ItemsDto
+	@Override
 	public Object getItems(Pageable pageable, JwtUser jwtUser) {
-		
 		List<String> roles = jwtUser.getAuthorities().stream()
 				.map(GrantedAuthority::getAuthority).collect(Collectors.toList());
-		
 		if (roles.contains("ROLE_ADMIN")) {
 			return getPageItemFromAdmin(pageable);
 		} 
 		return getItemsDtoFromUser();
 	}
 
+	// Получение Item
+	// Если ADMIN -> Item, если USER -> ItemDto
+	@Override
 	public Object getItem(Long itemId, JwtUser jwtUser) {
 		List<String> roles = jwtUser.getAuthorities().stream()
 				.map(GrantedAuthority::getAuthority).collect(Collectors.toList());
-		
 		if (roles.contains("ROLE_ADMIN")) {
 			return findById(itemId);
 		} 
 		return getItemDto(itemId);
 	}
 
+	// Получение у Item списка всех цен
+	// Если ADMIN -> set Pricies, если USER -> set PriciesDto
+	@Override
 	public Object getItemPricies (Long itemId, JwtUser jwtUser) {
 		List<String> roles = jwtUser.getAuthorities().stream()
 				.map(GrantedAuthority::getAuthority).collect(Collectors.toList());
@@ -66,39 +72,9 @@ public class ItemService implements ItemServiceInterface {
 		return getItemPriciesFromUser(itemId);
 	}
 
-	// Получение страницы со всеми Item
-	@Override
-	public Page<Item> getPageItemFromAdmin(Pageable pageable) {
-		return findAllItem(pageable);
-	}
-
-	// Получение всех цен у айтема (влючая выкленные)
-	@Override
-	public Set<Price> getItemPriciesFromAdmin(Long itemId) {
-		Item item = findById(itemId).get();
-		return item.getPrices();
-	}
-
-	// Получение списка всех ItemDto
-	@Override
-	public Set<ItemDto> getItemsDtoFromUser() {
-		Set<Item> items = findAllByActive(true);
-		Set<ItemDto> itemsDto = items.stream().
-				map(item -> getItemDto(item.getId())).collect(Collectors.toSet());
-		return itemsDto;
-	}
-
-	// Получение списка всех PriceDto у конкретного Item
-	@Override
-	public Set<PriceDto> getItemPriciesFromUser(Long itemId) {
-		Item item = findById(itemId).get();
-		return priceService.getItemPriciesDto(item.getPrices());
-	}
-
 	// Добавление Item
 	@Override
 	public Optional<Item> addItem (ItemRequest itemRequest) {
-		System.out.println("addItem");
 		Item newItem = new Item();
 		newItem.setName(itemRequest.getName());
 		newItem.setDescription(itemRequest.getDescription());
@@ -116,7 +92,7 @@ public class ItemService implements ItemServiceInterface {
 	@Override
 	public Optional<Item> editItem (long id, ItemRequest itemRequest)  {
 
-		Item item = itemRepository.findById(id).orElseThrow(); // mb get())
+		Item item = findById(id).get(); // mb get())
 		item.setName(itemRequest.getName());
 		item.setType(itemRequest.getType());
 		item.setDescription(itemRequest.getDescription());
@@ -135,18 +111,45 @@ public class ItemService implements ItemServiceInterface {
 	@Override
 	public Optional<Item> deleteItem(long itemId) {
 
-		Item item = itemRepository.findById(itemId).orElseThrow();
+		Item item = findById(itemId).get();
 		priceService.deletePricies(item.getPrices());
 		item.setActive(false);
 		saveItem(item);
 		return Optional.of(item);
 	}
 
+	
+	// Получение страницы со всеми Item
+
+	private Page<Item> getPageItemFromAdmin(Pageable pageable) {
+		return findAllItem(pageable);
+	}
+
+	// Получение всех цен у айтема (влючая выкленные)
+
+	private Set<Price> getItemPriciesFromAdmin(Long itemId) {
+		Item item = findById(itemId).get();
+		return item.getPrices();
+	}
+
+	// Получение списка всех ItemDto
+	private Set<ItemDto> getItemsDtoFromUser() {
+		Set<Item> items = findAllByActive(true);
+		Set<ItemDto> itemsDto = items.stream().
+				map(item -> getItemDto(item.getId()).get()).collect(Collectors.toSet());
+		return itemsDto;
+	}
+
+	// Получение списка всех PriceDto у конкретного Item
+	private Set<PriceDto> getItemPriciesFromUser(Long itemId) {
+		Item item = findById(itemId).get();
+		return priceService.getItemPriciesDto(item.getPrices());
+	}
+
 	// Получение ItemDto
-	@Override
-	public ItemDto getItemDto(Long id) {
+	private Optional<ItemDto> getItemDto(Long id) {
 		Item item = findById(id).get();
-		return ItemDto.fromUser(item);
+		return Optional.of(ItemDto.fromUser(item));
 	}
 
 	private Set<Item> findAllByActive(boolean active) {
@@ -162,7 +165,6 @@ public class ItemService implements ItemServiceInterface {
 	}
 
 	private Optional<Item> saveItem(Item item) {
-		System.out.println("saveItem");
 		return Optional.of(itemRepository.save(item));
 	}
 

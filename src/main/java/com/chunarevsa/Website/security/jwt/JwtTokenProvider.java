@@ -34,7 +34,6 @@ public class JwtTokenProvider {
 
 	// Создание токена
 	public String createToken (JwtUser jwtUser) {
-		System.out.println("createToken");
 
 		Instant expiryDate = Instant.now().plusMillis(jwtExpiration);
 		String authorities = getUserAuthotities(jwtUser);

@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PriceService implements PriceServiceInterface { // TODO: interface
+public class PriceService implements PriceServiceInterface { 
 
 	private final PriceRepository priceRepository;
 	private final DomesticCurrencyService domesticCurrencyService;
@@ -28,56 +28,88 @@ public class PriceService implements PriceServiceInterface { // TODO: interface
 		this.domesticCurrencyService = domesticCurrencyService;
 	}
 
-	// Получение всех цен в PriceDto
-	@Override
-	public Set<PriceDto> getItemPriciesDto(Set<Price> pricies) {
-		
-		//Set<Price> pricies = findAllByActive(true);
-		pricies.removeIf(price -> price.getActive() == false);
-		Set<PriceDto> priciesDto = pricies.stream()
-				.map(price -> getItemPriceDto(price.getId())).collect(Collectors.toSet());
-		
-		return priciesDto;
-	}
-
-	// Получение цены в PriceDto
-	@Override
-	public PriceDto getItemPriceDto(Long priceId) {
-		Price price = findById(priceId).get();
-		return PriceDto.fromUser(price);
-	}
-
 	// Получение списка Price из списка PriceRequest
 	@Override
 	public Set<Price> getItemPriciesFromRequest (Set<PriceRequest> priciesRequest) {
-		System.out.println("getSetPricies");
 
 		Set<Price> pricies = priciesRequest.stream() // без связи с Item
-				.map(priceRequest -> getItemPriceFromRequest(priceRequest))
+				.map(priceRequest -> getItemPriceFromRequest(priceRequest).get())
 				.collect(Collectors.toSet());
-		
 		return pricies;
 	}
 
+	// Сохранение всех цен
+	@Override
+	public Set<Price> savePricies(Set<Price> pricies) {
+		System.out.println("savePricies");
+		return pricies.stream().map(price -> savePrice(price).get()).collect(Collectors.toSet());
+	}
+
+	// Изменение цены
+	@Override
+	public Optional<Price> editPrice(PriceRequest priceRequest, Long priceId) {
+
+		Price price = findPriceById(priceId);
+		if (price == null) {
+			System.err.println("ЦЕНА НЕ НАЙДЕЙНА, ДОБАВИТЬ ИСКЛЮЧЕНИЕ");
+		}
+		Price newPrice = getItemPriceFromRequest(priceRequest).get();
+		price.setCost(newPrice.getCost());
+		price.setCurrencyTitle(newPrice.getCurrencyTitle());
+		price.setActive(newPrice.getActive());
+		return savePrice(price);
+	}
+
+	// Удаление всех цен @
+	@Override
+	public Set<Price> deletePricies (Set<Price> prices) { 
+		return prices.stream()
+				.map(price -> deletePrice(price.getId()).get()).collect(Collectors.toSet());
+	}
+
+	// Удаление цены
+	private Optional<Price> deletePrice (Long id) {
+
+		Price price = priceRepository.findById(id).orElseThrow();
+		price.setActive(false);
+		priceRepository.save(price);
+		return Optional.of(price);
+	}
+
+	// Получение всех цен в PriceDto
+	@Override
+	public Set<PriceDto> getItemPriciesDto(Set<Price> pricies) {
+
+		pricies.removeIf(price -> price.getActive() == false);
+		Set<PriceDto> priciesDto = pricies.stream()
+				.map(price -> getItemPriceDto(price.getId()).get()).collect(Collectors.toSet());
+		return priciesDto;
+	}
+
+
+	// Получение цены в PriceDto
+	private Optional<PriceDto> getItemPriceDto(Long priceId) {
+
+		Price price = findById(priceId).get();
+		return Optional.of(PriceDto.fromUser(price));
+	}
+
 	// Получение Price из PriceRequest
-	private Price getItemPriceFromRequest(PriceRequest priceRequest) {
-		System.out.println("getPriceFromRequest");
-		
+	private Optional<Price> getItemPriceFromRequest(PriceRequest priceRequest) {
+
 		Price price = new Price();
 		price.setCost(priceRequest.getCost());
 		price.setCurrencyTitle(priceRequest.getCurrency());
-
 		if  (!validatePriceRequest(priceRequest)) {
 			price.setActive(false);
 		}
 		price.setActive(priceRequest.getActive());
-
-		return price;
+		return Optional.of(price);
 	}
 
 	// Валидация PriceRequest
 	private boolean validatePriceRequest(PriceRequest priceRequest) {
-		System.out.println("validatePriceRequest");
+
 		if (!validateCostInPriceRequest(priceRequest.getCost())) {
 			System.err.println("Сумма " + priceRequest.getCost() + " заполнена не верно");
 			priceRequest.setActive(false);
@@ -98,7 +130,7 @@ public class PriceService implements PriceServiceInterface { // TODO: interface
 
 	// Валидация cost
 	private boolean validateCostInPriceRequest(String cost) {
-		System.out.println("validateCostInPriceRequest");
+
 		int i = Integer.parseInt(cost);
 		if (i < 0 ) {
 			return false;
@@ -106,49 +138,11 @@ public class PriceService implements PriceServiceInterface { // TODO: interface
 		return true;
 	}
 
-	// Изменение цены
-	@Override
-	public Optional<Price> editPrice(PriceRequest priceRequest, Long priceId) {
-		
-		Price price = findPriceById(priceId);
-		if (price == null) {
-			System.err.println("ЦЕНА НЕ НАЙДЕЙНА, ДОБАВИТЬ ИСКЛЮЧЕНИЕ");
-		}
-		Price newPrice = getItemPriceFromRequest(priceRequest);
-		price.setCost(newPrice.getCost());
-		price.setCurrencyTitle(newPrice.getCurrencyTitle());
-		price.setActive(newPrice.getActive());
-		
-		return Optional.of(savePrice(price));
-	}
-
-	// Удаление всех цен
-	@Override
-	public Set<Price> deletePricies (Set<Price> prices) {
-		return prices.stream()
-				.map(price -> deletePrice(price.getId())).collect(Collectors.toSet());
-	}
-
-	// Удаление цены
-	private Price deletePrice (Long id) {
-		Price price = priceRepository.findById(id).orElseThrow();
-		price.setActive(false);
-		priceRepository.save(price);
-		return price;
-	}
-
-	// Сохранение всех цен
-	@Override
-	public Set<Price> savePricies(Set<Price> pricies) {
-		System.out.println("savePricies");
-		return pricies.stream().map(price -> savePrice(price)).collect(Collectors.toSet());
-	}
-
-	// Сохранение цены
-	private Price savePrice(Price newPrice) {
-		System.out.println("savePrice");
+	// Сохранение Price
+	private Optional<Price> savePrice(Price newPrice) {
+	
 		Price price = priceRepository.save(newPrice);
-		return price;
+		return Optional.of(price);
 	}
 
 	private Price findPriceById(Long priceId) {
@@ -157,10 +151,6 @@ public class PriceService implements PriceServiceInterface { // TODO: interface
 
 	private Optional<Price> findById (Long id) {
 		return priceRepository.findById(id);
-	}
-
-	private Set<Price> findAllByActive(boolean active) {
-		return priceRepository.findAllByActive(active);
 	}
 	
 }

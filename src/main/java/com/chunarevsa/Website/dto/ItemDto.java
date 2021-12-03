@@ -1,8 +1,8 @@
 package com.chunarevsa.Website.dto;
 
-import java.util.*;
-
 import com.chunarevsa.Website.Entity.Item;
+
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -79,6 +79,5 @@ public class ItemDto {
 			", prices='" + getPrices() + "'" +
 			"}";
 	}
-
 
 }

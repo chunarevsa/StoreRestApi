@@ -55,7 +55,6 @@ public class JwtUser extends User implements UserDetails{
 		return super.getIsEmailVerified();
 	}
 
-
 	@Override
 	 public boolean equals(Object obj) {
 		  if (obj == this)
@@ -71,6 +70,5 @@ public class JwtUser extends User implements UserDetails{
 	public int hashCode() {
 		return Objects.hash(getId());
 	}
-	
 	
 } 

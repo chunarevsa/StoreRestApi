@@ -1,6 +1,7 @@
 package com.chunarevsa.Website.Entity;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -56,7 +57,7 @@ public class User extends Base {
 	private Boolean isEmailVerified;
 	
 	public User() {
-		super(); // ? - доделать
+		super(); 
 	}
 
 	public User(User user) {

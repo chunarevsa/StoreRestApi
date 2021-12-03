@@ -31,7 +31,6 @@ public class JwtTokenValidator {
 	}
 
 	public boolean validateToken(String token) throws InvalidTokenRequestException {
-		System.out.println("validateToken");
 
 		try {
 			Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
@@ -61,7 +60,7 @@ public class JwtTokenValidator {
 	}
 
 	private void valifateTokenIsNotForALoggedOutDevice(String token) throws InvalidTokenRequestException {
-		System.out.println("valifateTokenIsNotForALoggedOutDevice");
+
 		UserLogoutSuccess previouslyLoggedOutEvent = loggedOutJwtTokenCache.getLogoutEventForToken(token);
 		if (previouslyLoggedOutEvent != null) {
 			String userEmail = previouslyLoggedOutEvent.getUserEmail();
