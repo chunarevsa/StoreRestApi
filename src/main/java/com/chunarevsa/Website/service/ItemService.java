@@ -88,6 +88,7 @@ public class ItemService implements ItemServiceInterface {
 		saveItems(user.getItems());
 		userService.saveUser(user).get();
 		return  getItemDto(item.getId());
+		
 	}
 
 	// Добавление Item

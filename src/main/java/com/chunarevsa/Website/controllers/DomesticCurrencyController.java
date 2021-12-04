@@ -52,6 +52,7 @@ public class DomesticCurrencyController {
 		return ResponseEntity.ok(domesticCurrencyService.getCurrency(title ,jwtUser));
 	}
 
+	// Покупка DomesticCurrency
 	@PostMapping("/{title}/bye")
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity byeItem (

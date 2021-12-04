@@ -87,6 +87,20 @@ public class User extends Base {
 		this.accounts = user.accounts;
 	}
 
+	public User(Long id, String username, String email, String password, Boolean active, String avatar, Boolean isEmailVerified, String balance, Set<Item> items, Set<Role> roles, Set<Account> accounts) {
+		this.id = id;
+		this.username = username;
+		this.email = email;
+		this.password = password;
+		this.active = active;
+		this.avatar = avatar;
+		this.isEmailVerified = isEmailVerified;
+		this.balance = balance;
+		this.items = items;
+		this.roles = roles;
+		this.accounts = accounts;
+	}
+
 	public void addRole(Role role) {
 		roles.add(role);
 		role.getUsers().add(this);

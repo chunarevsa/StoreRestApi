@@ -60,25 +60,29 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 		return getCurrencyDtoByTitle(title);
 	}
 
-	public Object byeCurrency(String currencytitle, String amount, JwtUser jwtUser) {
-		//DomesticCurrency currency = findCurrencyByTitile(title).get();
-		User user = userService.findByUsername(jwtUser.getUsername().toString()).get();
+	public Object byeCurrency(String currencyTitle, String amountDomesticCurrency, JwtUser jwtUser) {
 		
+		User user = userService.findByUsername(jwtUser.getUsername().toString()).get();
 		double userBalance = Math.round(Double.parseDouble(user.getBalance()));
-		double amountD = Math.round(Double.parseDouble(amount));
 
-		if (userBalance < amountD ) {
+		DomesticCurrency domesticCurrency = findCurrencyByTitile(currencyTitle).get();
+
+		double costCurrency = Math.round(Double.parseDouble(domesticCurrency.getCost()));
+		double amountDomesticCurrencyInt = Math.round(Double.parseDouble(amountDomesticCurrency));
+
+		if (userBalance < (costCurrency * amountDomesticCurrencyInt)) {
 			System.err.println("Суммы не достаточно для покупки "); // TODO: искл
 			return ResponseEntity.badRequest().body("Суммы не достаточно для покупки ");
 		}
-		double newUserBalance = Math.round(userBalance - amountD);
+
+		double newUserBalance = Math.round(userBalance - (costCurrency * amountDomesticCurrencyInt));
 		user.setBalance(Double.toString(newUserBalance));
 
-		Optional<Account> account = accountService.byeCurrency(currencytitle, amount);
-		
+		Set<Account> accounts = accountService.byeCurrency(currencyTitle, amountDomesticCurrency, user);
+		user.setAccounts(accounts);
 		userService.saveUser(user);
 		System.err.println("user balance is :" + user.getBalance());
-		return account;
+		return user.getAccounts();
 	}
 
 	// Добавление Currency	
