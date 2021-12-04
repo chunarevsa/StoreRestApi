@@ -17,6 +17,7 @@ import com.chunarevsa.Website.Exception.UserLogoutException;
 import com.chunarevsa.Website.dto.ItemDto;
 import com.chunarevsa.Website.dto.LogOutRequestDto;
 import com.chunarevsa.Website.dto.UserDto;
+import com.chunarevsa.Website.dto.UserProfileDto;
 import com.chunarevsa.Website.repo.UserRepository;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.service.inter.UserServiceInterface;
@@ -34,7 +35,6 @@ public class UserService implements UserServiceInterface{
 	private final RoleService roleService;
 	private final UserDeviceService userDeviceService;
 	private final RefreshTokenService refreshTokenService;
-	//private final ItemService itemService;
 
 	@Autowired
 	public UserService(
@@ -42,15 +42,12 @@ public class UserService implements UserServiceInterface{
 				RoleService roleService,
 				PasswordEncoder passwordEncoder,
 				UserDeviceService userDeviceService,
-				RefreshTokenService refreshTokenService
-				//,ItemService itemService
-				) {
+				RefreshTokenService refreshTokenService) {
 		this.userRepository = userRepository;
 		this.roleService = roleService;
 		this.passwordEncoder = passwordEncoder;
 		this.userDeviceService = userDeviceService;
 		this.refreshTokenService = refreshTokenService;
-		//this.itemService = itemService;
 	}
 
 	@Override 
@@ -66,9 +63,10 @@ public class UserService implements UserServiceInterface{
 		return newUser;
 	}
 
-	public Optional<UserDto> getMyUserProfile(JwtUser jwtUser) {
+	public Optional<UserProfileDto> getMyUserProfile(JwtUser jwtUser) {
 		String username = jwtUser.getUsername().toString();
-		return getUserProfile(username);
+		User user = findByUsername(username).get();
+		return Optional.of(UserProfileDto.fromUser(user));
 	}
 	
 	public Optional<UserDto> getUserProfile (String username) {
@@ -83,16 +81,6 @@ public class UserService implements UserServiceInterface{
 				.map(item -> ItemDto.fromUser(item)).collect(Collectors.toSet());
 		return itemsDto;
 	}
-
-	/* public Optional<User> addItemToUser(Item item, String username) {
-		User user = findByUsername(username).get();
-		Set<Item> items = user.getItems();
-		items.add(item);
-		user.setItems(items);
-		itemService.saveItems(user.getItems());
-		User savedUser = saveUser(user).get();
-		return Optional.of(savedUser);
-	}	 */
 
 	public Optional<User> saveUser(User user) {
 		return Optional.of(userRepository.save(user));
@@ -119,8 +107,6 @@ public class UserService implements UserServiceInterface{
 		return userRepository.findByUsername(username);
 	}
 
-	
-
 	@Override
 	public User findById(Long id) {
 
@@ -132,7 +118,7 @@ public class UserService implements UserServiceInterface{
 		return user;
 	}
 
-	// Переделать на выключение (доделать)
+	// TODO: Переделать на выключение (доделать) 
 	@Override
 	public void delete(Long id) {
 		userRepository.deleteById(id);

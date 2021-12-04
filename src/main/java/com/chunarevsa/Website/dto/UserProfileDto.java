@@ -4,37 +4,50 @@ import com.chunarevsa.Website.Entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserDto {
-	
+public class UserProfileDto {
+
 	private Long id;
 	private String username;
 	private String avatar;
+	private String email;
+	private String balance;
 
-	public UserDto() {
+
+	public UserProfileDto() {
 	}
 
-	public UserDto(Long id, String username, String avatar) {
+	public UserProfileDto(Long id, 
+								String username, 
+								String avatar, 
+								String email, 
+								String balance) {
 		this.id = id;
 		this.username = username;
 		this.avatar = avatar;
-		
+		this.email = email;
+		this.balance = balance;
 	}
-
+	
 	public User toUser () {
 		User user = new User();
 		user.setId(id);
 		user.setUsername(username);
 		user.setAvatar(avatar);
+		user.setEmail(email);
+		user.setBalance(balance);
 		return user;
 	}
 
-	public static UserDto fromUser (User user) {
-		UserDto userDto = new UserDto();
+	public static UserProfileDto fromUser (User user) {
+		UserProfileDto userDto = new UserProfileDto();
 		userDto.setId(user.getId());
 		userDto.setUsername(user.getUsername());
 		userDto.setAvatar(user.getAvatar());
+		userDto.setEmail(user.getEmail());
+		userDto.setBalance(user.getBalance() +" $");
 		return userDto;
 	}
+
 
 	public Long getId() {
 		return this.id;
@@ -60,4 +73,21 @@ public class UserDto {
 		this.avatar = avatar;
 	}
 
-} 
+	public String getEmail() {
+		return this.email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getBalance() {
+		return this.balance;
+	}
+
+	public void setBalance(String balance) {
+		this.balance = balance;
+	}
+
+	
+}
