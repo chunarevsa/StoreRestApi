@@ -81,10 +81,6 @@ public class ItemService implements ItemServiceInterface {
 		Item item = findById(itemId).get();
 		String username = jwtUser.getUsername().toString();
 		User user = userService.findByUsername(username).get();
-		/* String balance = user.getBalance();
-		if (balance == null) {
-			user.setBalance("0");
-		} */
 
 		Set<Item> items = user.getItems();
 		items.add(item);
