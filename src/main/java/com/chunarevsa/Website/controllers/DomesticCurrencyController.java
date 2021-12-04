@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -50,6 +51,16 @@ public class DomesticCurrencyController {
 				@AuthenticationPrincipal JwtUser jwtUser) { 
 		return ResponseEntity.ok(domesticCurrencyService.getCurrency(title ,jwtUser));
 	}
+
+	@PostMapping("/{title}/bye")
+	@PreAuthorize("hasRole('USER')")
+	public ResponseEntity byeItem (
+					@PathVariable(value = "title") String title,
+					@RequestParam String amount,
+					@AuthenticationPrincipal JwtUser jwtUser) {
+		
+		return ResponseEntity.ok().body(domesticCurrencyService.byeCurrency(title, amount, jwtUser));
+	} 
 
 	// Добавление Currency
 	@PostMapping("/add")

@@ -101,9 +101,7 @@ public class ItemService implements ItemServiceInterface {
 		Set<Price> pricies = priceService.getItemPriciesFromRequest(itemRequest.getPricies());
 		newItem.setPrices(pricies);
 		priceService.savePricies(newItem.getPrices());
-		Item item = saveItem(newItem).get();
-		return Optional.of(item);
-
+		return saveItem(newItem);
 	}
 
 	// Изменение Item (без цен)

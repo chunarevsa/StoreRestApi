@@ -35,8 +35,7 @@ public class AdminService {
 	}
 
 	private double getInDouble(String num) {
-		double value = Double.parseDouble(num);
-		return value;
+		return Double.parseDouble(num);
 	}
 
 	private boolean validateAmount (String amount) {

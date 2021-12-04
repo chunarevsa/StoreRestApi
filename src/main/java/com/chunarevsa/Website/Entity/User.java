@@ -47,6 +47,9 @@ public class User extends Base {
 	@Column(name = "AVATAR") //TODO:
 	private String avatar;
 
+	@Column(name = "IS_EMAIL_VERIFIED", nullable = false)
+	private Boolean isEmailVerified;
+
 	@Column(name = "BALANCE") 
 	private String balance;
 
@@ -62,25 +65,27 @@ public class User extends Base {
 			inverseJoinColumns = { @JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID") })
 	private Set<Role> roles = new HashSet<>();
 
-	@Column(name = "IS_EMAIL_VERIFIED", nullable = false)
-	private Boolean isEmailVerified;
+	@OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "USER_ID")
+	private Set<Account> accounts = new HashSet<>();
 	
 	public User() {
 		super(); 
 	}
 
-	public User(User user) { // TODO: mb по полям
+	public User(User user) {
 		this.id = user.id;
 		this.username = user.username;
 		this.email = user.email;
 		this.password = user.password;
 		this.active = user.active;
 		this.avatar = user.avatar;
-		this.balance = user.balance;
-		this.roles = user.roles;
 		this.isEmailVerified = user.isEmailVerified;
+		this.balance = user.balance;
 		this.items = user.items;
-	} 
+		this.roles = user.roles;
+		this.accounts = user.accounts;
+	}
 
 	public void addRole(Role role) {
 		roles.add(role);
@@ -184,6 +189,14 @@ public class User extends Base {
 		this.items = items;
 	}
 
+	public Set<Account> getAccounts() {
+		return this.accounts;
+	}
+
+	public void setAccounts(Set<Account> accounts) {
+		this.accounts = accounts;
+	}
+
 	@Override
 	public String toString() {
 		return "{" +
@@ -193,10 +206,11 @@ public class User extends Base {
 			", password='" + getPassword() + "'" +
 			", active='" + isActive() + "'" +
 			", avatar='" + getAvatar() + "'" +
+			", isEmailVerified='" + isIsEmailVerified() + "'" +
 			", balance='" + getBalance() + "'" +
 			", items='" + getItems() + "'" +
 			", roles='" + getRoles() + "'" +
-			", isEmailVerified='" + isIsEmailVerified() + "'" +
+			", accounts='" + getAccounts() + "'" +
 			"}";
 	}
 

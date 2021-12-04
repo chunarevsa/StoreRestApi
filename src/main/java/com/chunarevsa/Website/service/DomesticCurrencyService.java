@@ -5,7 +5,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.chunarevsa.Website.Entity.Account;
 import com.chunarevsa.Website.Entity.DomesticCurrency;
+import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.Exception.InvalidPriceFormat;
 import com.chunarevsa.Website.dto.DomesticCurrencyDto;
 import com.chunarevsa.Website.dto.DomesticCurrencyRequest;
@@ -16,6 +18,7 @@ import com.chunarevsa.Website.service.inter.DomesticCurrencyServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
@@ -24,11 +27,17 @@ import org.springframework.stereotype.Service;
 public class DomesticCurrencyService implements DomesticCurrencyServiceInterface {
 
 	private final DomesticCurrencyRepository domesticCurrencyRepository;
+	private final UserService userService;
+	private final AccountService accountService;
 
 	@Autowired
 	public DomesticCurrencyService(
-				DomesticCurrencyRepository domesticCurrencyRepository) {
+				DomesticCurrencyRepository domesticCurrencyRepository,
+				UserService userService,
+				AccountService accountService) {
 		this.domesticCurrencyRepository = domesticCurrencyRepository;
+		this.userService = userService;
+		this.accountService = accountService;
 	}
 
 	@Override
@@ -49,6 +58,27 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 			return findCurrencyByTitile(title);
 		} 
 		return getCurrencyDtoByTitle(title);
+	}
+
+	public Object byeCurrency(String currencytitle, String amount, JwtUser jwtUser) {
+		//DomesticCurrency currency = findCurrencyByTitile(title).get();
+		User user = userService.findByUsername(jwtUser.getUsername().toString()).get();
+		
+		double userBalance = Math.round(Double.parseDouble(user.getBalance()));
+		double amountD = Math.round(Double.parseDouble(amount));
+
+		if (userBalance < amountD ) {
+			System.err.println("Суммы не достаточно для покупки "); // TODO: искл
+			return ResponseEntity.badRequest().body("Суммы не достаточно для покупки ");
+		}
+		double newUserBalance = Math.round(userBalance - amountD);
+		user.setBalance(Double.toString(newUserBalance));
+
+		Optional<Account> account = accountService.byeCurrency(currencytitle, amount);
+		
+		userService.saveUser(user);
+		System.err.println("user balance is :" + user.getBalance());
+		return account;
 	}
 
 	// Добавление Currency	
@@ -150,5 +180,6 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 		System.out.println("saveCurrency");
 		return  Optional.of(domesticCurrencyRepository.save(currency)) ;
 	}
+
 	
 }
