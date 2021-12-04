@@ -43,7 +43,7 @@ public class UserService implements UserServiceInterface{
 				PasswordEncoder passwordEncoder,
 				UserDeviceService userDeviceService,
 				RefreshTokenService refreshTokenService
-				// ,ItemService itemService
+				//,ItemService itemService
 				) {
 		this.userRepository = userRepository;
 		this.roleService = roleService;
@@ -67,19 +67,22 @@ public class UserService implements UserServiceInterface{
 	}
 
 	public Optional<UserDto> getMyUserProfile(JwtUser jwtUser) {
-		String username = jwtUser.getUsername();
+		String username = jwtUser.getUsername().toString();
 		return getUserProfile(username);
 	}
 	
 	public Optional<UserDto> getUserProfile (String username) {
 		User user = findByUsername(username).get();
-
 		return Optional.of(UserDto.fromUser(user));
 	}
 
-	/* public Set<ItemDto> getMyItems(JwtUser jwtUser) {
-		return itemService.getUserItemsDto(jwtUser);
-	} */
+	public Set<ItemDto> getMyItems(JwtUser jwtUser) {
+		User user = findByUsername(jwtUser.getUsername().toString()).get();
+		Set<Item> items = user.getItems();
+		Set<ItemDto> itemsDto =	items.stream()
+				.map(item -> ItemDto.fromUser(item)).collect(Collectors.toSet());
+		return itemsDto;
+	}
 
 	/* public Optional<User> addItemToUser(Item item, String username) {
 		User user = findByUsername(username).get();

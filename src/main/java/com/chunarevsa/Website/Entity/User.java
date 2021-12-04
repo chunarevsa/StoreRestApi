@@ -69,7 +69,7 @@ public class User extends Base {
 		super(); 
 	}
 
-	public User(User user) {
+	public User(User user) { // TODO: mb по полям
 		this.id = user.id;
 		this.username = user.username;
 		this.email = user.email;
@@ -80,8 +80,7 @@ public class User extends Base {
 		this.roles = user.roles;
 		this.isEmailVerified = user.isEmailVerified;
 		this.items = user.items;
-	}
-	
+	} 
 
 	public void addRole(Role role) {
 		roles.add(role);

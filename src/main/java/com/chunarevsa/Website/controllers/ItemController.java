@@ -77,7 +77,7 @@ public class ItemController {
 	public ResponseEntity addItem (@Valid @RequestBody ItemRequest itemRequest) throws AllException {
 
 		return itemService.addItem(itemRequest) // TODO: исключение
-				.map(item -> ResponseEntity.ok().body("Item добавлен")).orElseThrow();
+				.map(item -> ResponseEntity.ok().body(item)).orElseThrow();
 	} 	
 	
 	 // Изменение Item (без цен)

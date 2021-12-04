@@ -76,19 +76,18 @@ public class ItemService implements ItemServiceInterface {
 		return getItemPriciesFromUser(itemId);
 	}
 
-	public Optional<ItemDto> byeItem(Long itemId, JwtUser jwtUser) {
+	public Optional<ItemDto> byeItem(Long itemId, JwtUser jwtUser) { //TODO :добвить списание денег
 		
 		Item item = findById(itemId).get();
-		/* String username = jwtUser.getUsername().toString();
+		String username = jwtUser.getUsername().toString();
 		User user = userService.findByUsername(username).get();
 		Set<Item> items = user.getItems();
 		items.add(item);
 		user.setItems(items);
 		saveItems(user.getItems());
-		userService.saveUser(user).get(); */
-
+		userService.saveUser(user).get();
 		return  getItemDto(item.getId());
-	} 
+	}
 
 	// Добавление Item
 	@Override
@@ -184,14 +183,12 @@ public class ItemService implements ItemServiceInterface {
 		return itemRepository.findById(id);
 	}
 
-	/* public Set<Item> saveItems(Set<Item> items) {
+	public Set<Item> saveItems(Set<Item> items) {
 		return items.stream().map(item -> saveItem(item).get()).collect(Collectors.toSet());
-	} */
+	} 
 
 	private Optional<Item> saveItem(Item item) {
 		return Optional.of(itemRepository.save(item));
 	}
-
-	
 
 }
