@@ -55,8 +55,7 @@ public class DomesticCurrencyController {
 	// Покупка DomesticCurrency
 	@PostMapping("/{title}/bye")
 	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity byeItem (
-					@PathVariable(value = "title") String title,
+	public ResponseEntity byeCurrency (@PathVariable(value = "title") String title,
 					@RequestParam String amount,
 					@AuthenticationPrincipal JwtUser jwtUser) {
 		

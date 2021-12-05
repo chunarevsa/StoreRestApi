@@ -1,8 +1,6 @@
 package com.chunarevsa.Website.service;
 
-import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import com.chunarevsa.Website.Entity.Account;
 import com.chunarevsa.Website.Entity.User;
@@ -26,8 +24,8 @@ public class AccountService {
 		if (!validateAmount(amountDomesticCurrency)) {
 			System.err.println("!validateAmount(amountDomesticCurrency)"); // TODO: искл
 		}
-		Set<Account> userAcounts = user.getAccounts();
-		Account userAccount = userAcounts.stream()
+		Set<Account> userAccounts = user.getAccounts();
+		Account userAccount = userAccounts.stream()
 				.filter(acc -> currencyTitle.equals(acc.getCurrencyTitle()))
 				.findAny().orElse(null);
 		
@@ -37,16 +35,16 @@ public class AccountService {
 			newAccount.setAmount(String.valueOf(1));
 			newAccount.setCurrencyTitle(currencyTitle);
 			Account savedAccount = accountRepository.save(newAccount);
-			userAcounts.add(savedAccount);
-			return userAcounts;
+			userAccounts.add(savedAccount);
+			return userAccounts;
 		}
 
 		int userBalanceDomesticCurrency = Integer.parseInt(userAccount.getAmount());
 		int add = Integer.parseInt(amountDomesticCurrency);
 		int newUserBalance = userBalanceDomesticCurrency + add;
 		userAccount.setAmount(Integer.toString(newUserBalance));
-		userAcounts.add(userAccount);
-		return userAcounts;
+		userAccounts.add(userAccount);
+		return userAccounts;
 
 	}
 

@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.chunarevsa.Website.Entity.Account;
 import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Entity.Price;
 import com.chunarevsa.Website.Entity.User;
@@ -76,17 +77,49 @@ public class ItemService implements ItemServiceInterface {
 		return getItemPriciesFromUser(itemId);
 	}
 
-	public Optional<ItemDto> byeItem(Long itemId, JwtUser jwtUser) { //TODO :добвить списание денег
+	public Optional<ItemDto> byeItem(Long itemId, String currencyTitle, JwtUser jwtUser) { //TODO :добвить списание денег
 		
 		Item item = findById(itemId).get();
 		String username = jwtUser.getUsername().toString();
 		User user = userService.findByUsername(username).get();
 
+		Set<Account> userAccounts = user.getAccounts();
+		Account userAccount = userAccounts.stream()
+				.filter(acc -> currencyTitle.equals(acc.getCurrencyTitle()))
+				.findAny().orElse(null);
+		
+		if (userAccount == null) {
+			System.err.println("У вас нет такой валюты "); // TODO: искл
+		}
+
+		Set<Price> prices = item.getPrices();
+		Price price = prices.stream().filter(itemPrice -> currencyTitle.equals(itemPrice.getCurrencyTitle()))
+			.findAny().orElse(null);
+		if (price == null) {
+			System.err.println("Данный Item нельзя приобрести за эту валюту"); // TODO: искл
+		}
+		int itemCost =  Integer.parseInt(price.getCost());
+		int balanceDomesticCurrency = Integer.parseInt(userAccount.getAmount());
+		if (balanceDomesticCurrency < itemCost) {
+			System.err.println("У вас не достаточно данной валюты на счёту");
+		}
+		String result =  Integer.toString(balanceDomesticCurrency -itemCost);
+		userAccount.setAmount(result);
+		userAccounts.add(userAccount);
+		user.setAccounts(userAccounts); // надо ли?
+
 		Set<Item> items = user.getItems();
 		items.add(item);
 		user.setItems(items);
 		saveItems(user.getItems());
-		userService.saveUser(user).get();
+		userService.saveUser(user);
+		System.err.println(" " );
+		System.err.println("список итемов юзера :" + item.getId());
+		System.err.println(" " );
+		System.err.println("user balance $ :" + user.getBalance().toString());
+		System.err.println(" " ); 
+		System.err.println("user userAccount :" + userAccount.getAmount());
+		System.err.println(" " );
 		return  getItemDto(item.getId());
 		
 	}

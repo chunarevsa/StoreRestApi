@@ -62,10 +62,9 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 
 	public Object byeCurrency(String currencyTitle, String amountDomesticCurrency, JwtUser jwtUser) {
 		
+		DomesticCurrency domesticCurrency = findCurrencyByTitile(currencyTitle).get();
 		User user = userService.findByUsername(jwtUser.getUsername().toString()).get();
 		double userBalance = Math.round(Double.parseDouble(user.getBalance()));
-
-		DomesticCurrency domesticCurrency = findCurrencyByTitile(currencyTitle).get();
 
 		double costCurrency = Math.round(Double.parseDouble(domesticCurrency.getCost()));
 		double amountDomesticCurrencyInt = Math.round(Double.parseDouble(amountDomesticCurrency));
