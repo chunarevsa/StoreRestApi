@@ -1,34 +1,30 @@
 package com.chunarevsa.Website.Entity;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-
+// USER_ITEM принадлежащие конкретному User через UserInventory/InventoryUnit
+// По сути это копия ITEM, но без цен (т.е без возможности его купить другим пользователем). 
+// Изменяя ITEM USER_ITEM не будет меняться
 @Entity
-@Table(name = "ITEM")
-public class Item extends Base {
-
+@Table(name = "USER_ITEM")
+public class UserItem extends Base {
+	
 	@Id
-	@Column (name = "ITEM_ID")
+	@Column (name = "USER_ITEM_ID")
 	@GeneratedValue(strategy =  GenerationType.SEQUENCE, generator = "item_seq")
 	@SequenceGenerator(name = "item_seq", allocationSize = 1)
 	private Long id;
-	
+
+	@Column(name = "ITEM_ID", nullable = false)
+	private Long itemId;
+
 	@Column(name = "NAME", nullable = false)
 	private String name;
 
@@ -41,42 +37,22 @@ public class Item extends Base {
 	@Column(name = "IS_ACTIVE", nullable = false)
 	private Boolean active;
 
-	@OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "ITEM_ID")
-	private Set<Price> prices = new HashSet<>();
-
-	/* @JsonIgnore
-	@ManyToOne (fetch = FetchType.LAZY)
-	@JoinColumn (name = "ITEM_ID", insertable = false)
-	private UserInventory userInventory; */
-
-	/* @JsonIgnore
-	@ManyToOne (fetch = FetchType.LAZY)
-	@JoinColumn (name = "USER_ID", insertable = false, updatable = false)
-	private User user; */
+	@OneToOne(optional = false, mappedBy = "userItem")
+	private InventoryUnit inventoryUnit;
 
 
-	public Item() {
+	public UserItem() {
 		super();
 	}
 
-	public Item(Long id, 
-					String name, 
-					String type, 
-					String description, 
-					Boolean active, 
-					Set<Price> prices
-					//,User user,
-					//UserInventory userInventory
-					) {
+	public UserItem(Long id, Long itemId, String name, String type, String description, Boolean active, InventoryUnit inventoryUnit) {
 		this.id = id;
+		this.itemId = itemId;
 		this.name = name;
 		this.type = type;
 		this.description = description;
 		this.active = active;
-		this.prices = prices;
-		//this.user = user;
-		
+		this.inventoryUnit = inventoryUnit;
 	}
 
 	public Long getId() {
@@ -85,6 +61,14 @@ public class Item extends Base {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Long getItemId() {
+		return this.itemId;
+	}
+
+	public void setItemId(Long itemId) {
+		this.itemId = itemId;
 	}
 
 	public String getName() {
@@ -123,22 +107,14 @@ public class Item extends Base {
 		this.active = active;
 	}
 
-	public Set<Price> getPrices() {
-		return this.prices;
+	public InventoryUnit getInventoryUnit() {
+		return this.inventoryUnit;
 	}
 
-	public void setPrices(Set<Price> prices) {
-		this.prices = prices;
+	public void setInventoryUnit(InventoryUnit inventoryUnit) {
+		this.inventoryUnit = inventoryUnit;
 	}
 
-	/* public User getUser() {
-		return this.user;
-	}
 
-	public void setUser(User user) {
-		this.user = user;
-	} */
 
-	
-
-}
+} 

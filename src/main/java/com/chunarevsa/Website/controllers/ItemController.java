@@ -67,10 +67,11 @@ public class ItemController {
 	@PostMapping("/{id}/bye")
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity byeItem (@PathVariable(value = "id") Long itemId,
+					@RequestParam String amountitem,
 					@RequestParam String currencytitle,
 					@AuthenticationPrincipal JwtUser jwtUser) {
 		
-		return ResponseEntity.ok().body(itemService.byeItem(itemId, currencytitle, jwtUser));
+		return ResponseEntity.ok().body(itemService.byeItem(itemId, amountitem, currencytitle, jwtUser));
 	} 
 
 	// Добавление Item

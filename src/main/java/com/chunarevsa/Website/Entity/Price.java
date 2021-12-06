@@ -27,7 +27,7 @@ public class Price extends Base {
 	private String cost;
 
 	@Column(name = "CURRENCY")
-	private String currencyTitle;
+	private String currencyTitle; 
 
 	@Column(name = "IS_ACTIVE")
 	private Boolean active;

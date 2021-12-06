@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -53,10 +54,6 @@ public class User extends Base {
 	@Column(name = "BALANCE") 
 	private String balance;
 
-	@OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "USER_ID")
-	private Set<Item> items = new HashSet<>();
-
 	@ManyToMany(fetch = FetchType.EAGER) // Каскады - доделать
 	@JoinTable(name = "USER_AUTHORITY", // связь через промежуточную таблицу 
 			// колонка 1 называется USER_ID и ссылается на USER_ID из user
@@ -68,6 +65,10 @@ public class User extends Base {
 	@OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "USER_ID")
 	private Set<Account> accounts = new HashSet<>();
+
+	@OneToOne(optional = false, cascade = CascadeType.ALL)
+	@JoinColumn(name ="INVENTORY_ID")
+	private UserInventory userInventory;
 	
 	public User() {
 		super(); 
@@ -82,12 +83,22 @@ public class User extends Base {
 		this.avatar = user.avatar;
 		this.isEmailVerified = user.isEmailVerified;
 		this.balance = user.balance;
-		this.items = user.items;
 		this.roles = user.roles;
 		this.accounts = user.accounts;
+		this.userInventory = user.userInventory;
 	}
 
-	public User(Long id, String username, String email, String password, Boolean active, String avatar, Boolean isEmailVerified, String balance, Set<Item> items, Set<Role> roles, Set<Account> accounts) {
+	public User(Long id, 
+					String username, 
+					String email, 
+					String password, 
+					Boolean active, 
+					String avatar, 
+					Boolean isEmailVerified, 
+					String balance, 
+					Set<Role> roles, 
+					Set<Account> accounts,
+					UserInventory userInventory) {
 		this.id = id;
 		this.username = username;
 		this.email = email;
@@ -96,9 +107,9 @@ public class User extends Base {
 		this.avatar = avatar;
 		this.isEmailVerified = isEmailVerified;
 		this.balance = balance;
-		this.items = items;
 		this.roles = roles;
 		this.accounts = accounts;
+		this.userInventory = userInventory;
 	}
 
 	public void addRole(Role role) {
@@ -194,15 +205,6 @@ public class User extends Base {
 		this.balance = balance;
 	}
 
-
-	public Set<Item> getItems() {
-		return this.items;
-	}
-
-	public void setItems(Set<Item> items) {
-		this.items = items;
-	}
-
 	public Set<Account> getAccounts() {
 		return this.accounts;
 	}
@@ -211,21 +213,14 @@ public class User extends Base {
 		this.accounts = accounts;
 	}
 
-	@Override
-	public String toString() {
-		return "{" +
-			" id='" + getId() + "'" +
-			", username='" + getUsername() + "'" +
-			", email='" + getEmail() + "'" +
-			", password='" + getPassword() + "'" +
-			", active='" + isActive() + "'" +
-			", avatar='" + getAvatar() + "'" +
-			", isEmailVerified='" + isIsEmailVerified() + "'" +
-			", balance='" + getBalance() + "'" +
-			", items='" + getItems() + "'" +
-			", roles='" + getRoles() + "'" +
-			", accounts='" + getAccounts() + "'" +
-			"}";
+	public UserInventory getUserInventory() {
+		return this.userInventory;
 	}
+
+	public void setUserInventory(UserInventory userInventory) {
+		this.userInventory = userInventory;
+	}
+
+	
 
 }

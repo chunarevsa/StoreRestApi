@@ -36,6 +36,7 @@ public class Account extends Base {
 
 	public Account() {
 		super();
+		this.amount = String.valueOf(0);
 	}
 
 	public Account(Long id, String amount, String currencyTitle, User user) {

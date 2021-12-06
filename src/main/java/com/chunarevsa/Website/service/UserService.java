@@ -12,6 +12,7 @@ import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Entity.Role;
 import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.Entity.UserDevice;
+import com.chunarevsa.Website.Entity.UserInventory;
 import com.chunarevsa.Website.Entity.payload.RegistrationRequest;
 import com.chunarevsa.Website.Exception.UserLogoutException;
 import com.chunarevsa.Website.dto.ItemDto;
@@ -60,6 +61,8 @@ public class UserService implements UserServiceInterface{
 		newUser.addRoles(getRoles(isAdmin));
 		newUser.setActive(true);
 		newUser.setIsEmailVerified(false);
+		UserInventory userInventory = new UserInventory();
+		newUser.setUserInventory(userInventory);
 		return newUser;
 	}
 
@@ -74,13 +77,13 @@ public class UserService implements UserServiceInterface{
 		return Optional.of(UserDto.fromUser(user));
 	}
 
-	public Set<ItemDto> getMyItems(JwtUser jwtUser) {
+	/* public Set<ItemDto> getMyItems(JwtUser jwtUser) {
 		User user = findByUsername(jwtUser.getUsername().toString()).get();
 		Set<Item> items = user.getItems();
 		Set<ItemDto> itemsDto =	items.stream()
 				.map(item -> ItemDto.fromUser(item)).collect(Collectors.toSet());
 		return itemsDto;
-	}
+	} */
 
 	public Optional<User> saveUser(User user) {
 		return Optional.of(userRepository.save(user));

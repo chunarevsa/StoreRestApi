@@ -32,11 +32,11 @@ public class AccountService {
 		if (userAccount == null) {
 			System.err.println("userAccount == null");
 			Account newAccount = new Account();
-			newAccount.setAmount(String.valueOf(1));
+			//newAccount.setAmount(String.valueOf(1));
 			newAccount.setCurrencyTitle(currencyTitle);
 			Account savedAccount = accountRepository.save(newAccount);
 			userAccounts.add(savedAccount);
-			return userAccounts;
+			return userAccounts; // TODO: Проверить нужно ли
 		}
 
 		int userBalanceDomesticCurrency = Integer.parseInt(userAccount.getAmount());
@@ -45,7 +45,6 @@ public class AccountService {
 		userAccount.setAmount(Integer.toString(newUserBalance));
 		userAccounts.add(userAccount);
 		return userAccounts;
-
 	}
 
 	private boolean validateAmount(String amount) {
