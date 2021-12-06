@@ -22,7 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity (debug = true)
-@EnableJpaRepositories (basePackages = "com.chunarevsa.Website.repo") // - доделать
+@EnableJpaRepositories (basePackages = "com.chunarevsa.Website.repo") 
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
@@ -77,33 +77,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.and()
 						.authorizeRequests()
 						.antMatchers( // Доступны без авторизации
-									"/auth/*",
-									"/item/*"
+									"/auth/*"
 									).permitAll()
 						.anyRequest().authenticated(); // остально только для авторизованых	
 		
 		httpSecurity.addFilterBefore(JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 	} 
-
-	// Доступ ко всем url
-	/*@Override
-	protected void configure (HttpSecurity httpSecurity) throws Exception {
-		httpSecurity.cors()
-					.and()
-						.httpBasic().disable() // ? доделать
-						.csrf().disable() // защита от взлома
-						.exceptionHandling().authenticationEntryPoint(jwtAuthenricationEntryPoint)
-					.and()	
-						// сессии пока отключены - доделать
-						.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-					.and()
-						.authorizeRequests()
-						.antMatchers( // Доступны без авторизации
-									"/**"
-									).permitAll()
-						.anyRequest().authenticated(); 
-		httpSecurity.addFilterBefore(JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-
-	} */
 
 } 

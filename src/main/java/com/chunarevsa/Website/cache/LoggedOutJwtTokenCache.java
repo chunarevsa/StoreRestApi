@@ -29,7 +29,6 @@ public class LoggedOutJwtTokenCache {
 	}
 
 	public void markLogoutEventForToken(UserLogoutSuccess event) {
-		System.out.println("markLogoutEventForToken");
 		String token = event.getToken();
 		if (tokenEventMap.containsKey(token)) {
 			String.format("Log out token is already present ", event.getUserEmail());
@@ -44,14 +43,12 @@ public class LoggedOutJwtTokenCache {
 	}
 
 	private long getTTLForToken(Date tokenExpiryDate) {
-		System.out.println("getTTLForToken");
 		long secondAtExpity = tokenExpiryDate.toInstant().getEpochSecond();
 		long secondAtLogout = Instant.now().getEpochSecond();
 		return Math.max(0, secondAtExpity - secondAtLogout);
 	}
 
 	public UserLogoutSuccess getLogoutEventForToken(String token) {
-		System.out.println("getLogoutEventForToken");
 		return tokenEventMap.get(token);
 	}
 

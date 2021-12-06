@@ -21,14 +21,17 @@ public class AdminControllers {
 		this.adminService = adminService;
 	}
 
+	/**
+	 * Добавление $ пользователю
+	 * @param username 
+	 * @param amount
+	 */
 	@PostMapping("/addmoney")
 	@PreAuthorize("hasRole('ADMIN')")
-	//@PreAuthorize("hasRole('ADMIN)")
 	public ResponseEntity addMoneyToUser (@RequestParam String username, 
 			@RequestParam String amount) {
 		adminService.addMoneyToUser(username, amount);
 		return ResponseEntity.ok().body("Amount of " + amount + " $ was added to " + username);
 	}
-
 	
 }
