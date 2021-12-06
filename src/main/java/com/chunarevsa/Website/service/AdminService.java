@@ -31,7 +31,7 @@ public class AdminService {
 
 		user.setBalance(Double.toString(sum));
 		userService.saveUser(user);
-		System.out.println("Новый баланс :" + user.getBalance() + "$");
+		System.out.println("Новый баланс " + username + " :"+ user.getBalance() + " $");
 	}
 
 	private double getInDouble(String num) {

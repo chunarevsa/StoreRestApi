@@ -8,12 +8,14 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Entity.Role;
 import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.Entity.UserDevice;
 import com.chunarevsa.Website.Entity.UserInventory;
 import com.chunarevsa.Website.Entity.payload.RegistrationRequest;
 import com.chunarevsa.Website.Exception.UserLogoutException;
+import com.chunarevsa.Website.dto.ItemDto;
 import com.chunarevsa.Website.dto.LogOutRequestDto;
 import com.chunarevsa.Website.dto.UserDto;
 import com.chunarevsa.Website.dto.UserProfileDto;
@@ -34,6 +36,7 @@ public class UserService implements UserServiceInterface{
 	private final RoleService roleService;
 	private final UserDeviceService userDeviceService;
 	private final RefreshTokenService refreshTokenService;
+	private final UserInventoryService userInventoryService;
 
 	@Autowired
 	public UserService(
@@ -41,12 +44,14 @@ public class UserService implements UserServiceInterface{
 				RoleService roleService,
 				PasswordEncoder passwordEncoder,
 				UserDeviceService userDeviceService,
-				RefreshTokenService refreshTokenService) {
+				RefreshTokenService refreshTokenService,
+				UserInventoryService userInventoryService) {
 		this.userRepository = userRepository;
 		this.roleService = roleService;
 		this.passwordEncoder = passwordEncoder;
 		this.userDeviceService = userDeviceService;
 		this.refreshTokenService = refreshTokenService;
+		this.userInventoryService = userInventoryService;
 	}
 
 	@Override 
@@ -75,12 +80,20 @@ public class UserService implements UserServiceInterface{
 		return Optional.of(UserDto.fromUser(user));
 	}
 
+	public Object getUserInventory(JwtUser jwtUser) {
+		User user = findByUsername(jwtUser.getUsername()).get();
+		return userInventoryService.getUserInventory(user);
+	}
+
 	/* public Set<ItemDto> getMyItems(JwtUser jwtUser) {
+		
 		User user = findByUsername(jwtUser.getUsername().toString()).get();
-		Set<Item> items = user.getItems();
+
+		/* Set<Item> items = user.getItems();
+
 		Set<ItemDto> itemsDto =	items.stream()
-				.map(item -> ItemDto.fromUser(item)).collect(Collectors.toSet());
-		return itemsDto;
+				.map(item -> ItemDto.fromUser(item)).collect(Collectors.toSet()); 
+		return null;
 	} */
 
 	public Optional<User> saveUser(User user) {
@@ -159,5 +172,7 @@ public class UserService implements UserServiceInterface{
 		refreshTokenService.deleteById(userDevice.getRefreshToken().getId());
 
 	}
+
+	
 	
 } 

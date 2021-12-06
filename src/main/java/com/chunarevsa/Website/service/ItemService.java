@@ -11,6 +11,7 @@ import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Entity.Price;
 import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.Entity.UserInventory;
+import com.chunarevsa.Website.dto.InventoryUnitDto;
 import com.chunarevsa.Website.dto.ItemDto;
 import com.chunarevsa.Website.dto.ItemRequest;
 import com.chunarevsa.Website.dto.PriceDto;
@@ -121,7 +122,8 @@ public class ItemService implements ItemServiceInterface {
 		Set<InventoryUnit> inventoryUnits = userInventoryService.addUserItem(userInventory, item, amountItems);
 		
 		userService.saveUser(savedUser);
-		return  inventoryUnits;
+
+		return  inventoryUnits.stream().map(unit -> InventoryUnitDto.fromUser(unit)).collect(Collectors.toSet());
 	}
 
 	// Добавление Item
@@ -169,9 +171,9 @@ public class ItemService implements ItemServiceInterface {
 	}
 
 	// Получение ItemsDto принадлежашие User TODO: может быть равно нулю
-	public Set<ItemDto> getUserItemsDto(JwtUser jwtUser) {
+	/* public Set<ItemDto> getUserItemsDto(JwtUser jwtUser) {
 		return null;
-	}
+	} */
 
 	// Получение страницы со всеми Item
 	private Page<Item> getPageItemFromAdmin(Pageable pageable) {

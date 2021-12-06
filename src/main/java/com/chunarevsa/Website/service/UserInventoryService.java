@@ -1,12 +1,15 @@
 package com.chunarevsa.Website.service;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.chunarevsa.Website.Entity.InventoryUnit;
 import com.chunarevsa.Website.Entity.Item;
+import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.Entity.UserInventory;
 import com.chunarevsa.Website.Entity.UserItem;
+import com.chunarevsa.Website.dto.UserInventoryDto;
 import com.chunarevsa.Website.repo.InventoryUnitRepository;
 import com.chunarevsa.Website.repo.UserInventoryRepository;
 import com.chunarevsa.Website.repo.UserItemRepository;
@@ -71,7 +74,11 @@ public class UserInventoryService {
 
 	}
 
+	public Optional<UserInventoryDto> getUserInventory(User user) {
+		
+		return Optional.of(UserInventoryDto.fromUser(user.getUserInventory()));
+	}
 
-
+	
 	
 }

@@ -9,6 +9,7 @@ import com.chunarevsa.Website.Entity.Account;
 import com.chunarevsa.Website.Entity.DomesticCurrency;
 import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.Exception.InvalidPriceFormat;
+import com.chunarevsa.Website.dto.AccountDto;
 import com.chunarevsa.Website.dto.DomesticCurrencyDto;
 import com.chunarevsa.Website.dto.DomesticCurrencyRequest;
 import com.chunarevsa.Website.repo.DomesticCurrencyRepository;
@@ -81,7 +82,10 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 		user.setAccounts(accounts);
 		userService.saveUser(user);
 		System.err.println("user balance is :" + user.getBalance());
-		return user.getAccounts();
+		
+		return user.getAccounts().stream()
+				.map(account -> AccountDto.fromUser(account)).collect(Collectors.toSet());
+
 	}
 
 	// Добавление Currency	

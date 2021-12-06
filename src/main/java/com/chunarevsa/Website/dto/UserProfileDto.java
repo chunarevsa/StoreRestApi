@@ -1,5 +1,8 @@
 package com.chunarevsa.Website.dto;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import com.chunarevsa.Website.Entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -11,7 +14,7 @@ public class UserProfileDto {
 	private String avatar;
 	private String email;
 	private String balance;
-
+	private Set<AccountDto> accountsDto;
 
 	public UserProfileDto() {
 	}
@@ -20,12 +23,14 @@ public class UserProfileDto {
 								String username, 
 								String avatar, 
 								String email, 
-								String balance) {
+								String balance,
+								Set<AccountDto> accountsDto) {
 		this.id = id;
 		this.username = username;
 		this.avatar = avatar;
 		this.email = email;
 		this.balance = balance;
+		this.accountsDto = accountsDto;
 	}
 	
 	public User toUser () {
@@ -44,10 +49,11 @@ public class UserProfileDto {
 		userDto.setUsername(user.getUsername());
 		userDto.setAvatar(user.getAvatar());
 		userDto.setEmail(user.getEmail());
-		userDto.setBalance(user.getBalance() +" $");
+		userDto.setBalance(user.getBalance());
+		userDto.setAccountsDto(user.getAccounts().stream()
+			.map(AccountDto::fromUser).collect(Collectors.toSet()));
 		return userDto;
 	}
-
 
 	public Long getId() {
 		return this.id;
@@ -82,12 +88,21 @@ public class UserProfileDto {
 	}
 
 	public String getBalance() {
-		return this.balance;
+		return this.balance + " $";
 	}
 
 	public void setBalance(String balance) {
 		this.balance = balance;
 	}
+
+	public Set<AccountDto> getAccountsDto() {
+		return this.accountsDto;
+	}
+
+	public void setAccountsDto(Set<AccountDto> accountsDto) {
+		this.accountsDto = accountsDto;
+	}
+
 
 	
 }

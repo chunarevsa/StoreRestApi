@@ -15,6 +15,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "INVENTORY")
 public class UserInventory extends Base {
@@ -29,6 +31,7 @@ public class UserInventory extends Base {
 	@JoinColumn(name = "INVENTORY_ID")
 	private Set<InventoryUnit> inventoryUnit = new HashSet<>();
 
+	@JsonIgnore
 	@OneToOne(optional = false, mappedBy = "userInventory")
 	private User user;
 

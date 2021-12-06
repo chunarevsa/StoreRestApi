@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import com.chunarevsa.Website.dto.LogOutRequestDto;
 import com.chunarevsa.Website.event.UserLogoutSuccess;
 import com.chunarevsa.Website.security.jwt.JwtUser;
+import com.chunarevsa.Website.service.UserInventoryService;
 import com.chunarevsa.Website.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +28,15 @@ public class UserController {
 
 	private final UserService userService;
 	private final ApplicationEventPublisher applicationEventPublisher;
+	private final UserInventoryService userInventoryService;
 
 	@Autowired
 	public UserController(UserService userService,
-			ApplicationEventPublisher applicationEventPublisher) {
+			ApplicationEventPublisher applicationEventPublisher,
+			UserInventoryService userInventoryService) {
 		this.userService = userService;
 		this.applicationEventPublisher = applicationEventPublisher;
+		this.userInventoryService = userInventoryService;
 	}
 
 	@GetMapping("/profile")
@@ -49,18 +53,12 @@ public class UserController {
 		return ResponseEntity.ok().body(userService.getUserProfile(username));
 	}
 
-	@GetMapping("/profile/items")
+	@GetMapping("/profile/inventory")
 	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity getUserItems (@AuthenticationPrincipal JwtUser jwtUser) {
-		return ResponseEntity.ok().body(userService.getMyItems(jwtUser));
+	public ResponseEntity getUserInventory (@AuthenticationPrincipal JwtUser jwtUser) {
+		
+		return ResponseEntity.ok().body(userService.getUserInventory(jwtUser));	
 	} 
-
-	// my inventory 
-	// my balance (accounts + balance)
-	// 
-
-
-
 
 	@GetMapping("/all")
 	@PreAuthorize("hasRole('ADMIN')")
@@ -70,6 +68,7 @@ public class UserController {
 	}
 
 	@PostMapping("/logout")
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity logout(@Valid @RequestBody LogOutRequestDto logOutRequestDto,
 					@AuthenticationPrincipal JwtUser jwtUser) {
 
