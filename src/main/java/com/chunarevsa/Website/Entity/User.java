@@ -67,7 +67,7 @@ public class User extends Base {
 	private Set<Account> accounts = new HashSet<>();
 
 	@OneToOne(optional = false, cascade = CascadeType.ALL)
-	@JoinColumn(name ="INVENTORY_ID")
+	@JoinColumn(name ="INVENTORY_ID", unique = true)
 	private UserInventory userInventory;
 	
 	public User() {

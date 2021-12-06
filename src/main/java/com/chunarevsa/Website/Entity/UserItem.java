@@ -9,6 +9,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 // USER_ITEM принадлежащие конкретному User через UserInventory/InventoryUnit
 // По сути это копия ITEM, но без цен (т.е без возможности его купить другим пользователем). 
 // Изменяя ITEM USER_ITEM не будет меняться
@@ -18,8 +20,8 @@ public class UserItem extends Base {
 	
 	@Id
 	@Column (name = "USER_ITEM_ID")
-	@GeneratedValue(strategy =  GenerationType.SEQUENCE, generator = "item_seq")
-	@SequenceGenerator(name = "item_seq", allocationSize = 1)
+	@GeneratedValue(strategy =  GenerationType.SEQUENCE, generator = "user_item_seq")
+	@SequenceGenerator(name = "user_item_seq", allocationSize = 1)
 	private Long id;
 
 	@Column(name = "ITEM_ID", nullable = false)
@@ -37,9 +39,9 @@ public class UserItem extends Base {
 	@Column(name = "IS_ACTIVE", nullable = false)
 	private Boolean active;
 
+	@JsonIgnore
 	@OneToOne(optional = false, mappedBy = "userItem")
 	private InventoryUnit inventoryUnit;
-
 
 	public UserItem() {
 		super();

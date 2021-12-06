@@ -154,7 +154,8 @@ public class ItemService implements ItemServiceInterface {
 			newUserItem.setDescription(item.getDescription());
 			newUserItem.setActive(item.getActive());
 			UserItem savedUserItem = userItemRepository.save(newUserItem);
-
+			System.err.println("savedUserItem" + savedUserItem.getId());
+			System.err.println("savedUserItem" + savedUserItem);
 			newInventoryUnit.setUserItem(savedUserItem);
 			InventoryUnit savedInventoryUnit = inventoryUnitRepository.save(newInventoryUnit);
 			inventoryUnits.add(savedInventoryUnit);

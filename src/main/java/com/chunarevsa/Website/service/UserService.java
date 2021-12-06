@@ -8,14 +8,12 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Entity.Role;
 import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.Entity.UserDevice;
 import com.chunarevsa.Website.Entity.UserInventory;
 import com.chunarevsa.Website.Entity.payload.RegistrationRequest;
 import com.chunarevsa.Website.Exception.UserLogoutException;
-import com.chunarevsa.Website.dto.ItemDto;
 import com.chunarevsa.Website.dto.LogOutRequestDto;
 import com.chunarevsa.Website.dto.UserDto;
 import com.chunarevsa.Website.dto.UserProfileDto;
