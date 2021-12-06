@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 // Изменяя ITEM USER_ITEM не будет меняться
 @Entity
 @Table(name = "USER_ITEM")
-public class UserItem extends Base {
+public class UserItem extends Base { // TODO: возможно без base
 	
 	@Id
 	@Column (name = "USER_ITEM_ID")

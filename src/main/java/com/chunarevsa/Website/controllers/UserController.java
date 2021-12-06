@@ -49,11 +49,18 @@ public class UserController {
 		return ResponseEntity.ok().body(userService.getUserProfile(username));
 	}
 
-	/* @GetMapping("/profile/items")
+	@GetMapping("/profile/items")
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity getUserItems (@AuthenticationPrincipal JwtUser jwtUser) {
 		return ResponseEntity.ok().body(userService.getMyItems(jwtUser));
-	} */
+	} 
+
+	// my inventory 
+	// my balance (accounts + balance)
+	// 
+
+
+
 
 	@GetMapping("/all")
 	@PreAuthorize("hasRole('ADMIN')")
