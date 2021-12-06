@@ -80,4 +80,16 @@ public class InventoryUnit extends Base {
 		this.userInventory = userInventory;
 	}
 
+
+	@Override
+	public String toString() {
+		return "{" +
+			" id='" + getId() + "'" +
+			", amountItems='" + getAmountItems() + "'" +
+			", userItem='" + getUserItem() + "'" +
+			", userInventory='" + getUserInventory() + "'" +
+			"}";
+	}
+
+
 } 

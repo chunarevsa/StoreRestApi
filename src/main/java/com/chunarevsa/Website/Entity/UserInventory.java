@@ -67,4 +67,15 @@ public class UserInventory extends Base {
 	}
 
 
+	@Override
+	public String toString() {
+		return "{" +
+			" id='" + getId() + "'" +
+			", inventoryUnit='" + getInventoryUnit() + "'" +
+			", user='" + getUser() + "'" +
+			"}";
+	}
+
+
+
 }

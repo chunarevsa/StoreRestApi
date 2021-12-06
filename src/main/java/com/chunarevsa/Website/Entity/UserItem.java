@@ -23,7 +23,7 @@ public class UserItem extends Base {
 	private Long id;
 
 	@Column(name = "ITEM_ID", nullable = false)
-	private Long itemId;
+	private String itemId;
 
 	@Column(name = "NAME", nullable = false)
 	private String name;
@@ -45,7 +45,7 @@ public class UserItem extends Base {
 		super();
 	}
 
-	public UserItem(Long id, Long itemId, String name, String type, String description, Boolean active, InventoryUnit inventoryUnit) {
+	public UserItem(Long id, String itemId, String name, String type, String description, Boolean active, InventoryUnit inventoryUnit) {
 		this.id = id;
 		this.itemId = itemId;
 		this.name = name;
@@ -63,11 +63,11 @@ public class UserItem extends Base {
 		this.id = id;
 	}
 
-	public Long getItemId() {
+	public String getItemId() {
 		return this.itemId;
 	}
 
-	public void setItemId(Long itemId) {
+	public void setItemId(String itemId) {
 		this.itemId = itemId;
 	}
 
@@ -113,6 +113,20 @@ public class UserItem extends Base {
 
 	public void setInventoryUnit(InventoryUnit inventoryUnit) {
 		this.inventoryUnit = inventoryUnit;
+	}
+
+
+	@Override
+	public String toString() {
+		return "{" +
+			" id='" + getId() + "'" +
+			", itemId='" + getItemId() + "'" +
+			", name='" + getName() + "'" +
+			", type='" + getType() + "'" +
+			", description='" + getDescription() + "'" +
+			", active='" + isActive() + "'" +
+			", inventoryUnit='" + getInventoryUnit() + "'" +
+			"}";
 	}
 
 

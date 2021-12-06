@@ -221,6 +221,23 @@ public class User extends Base {
 		this.userInventory = userInventory;
 	}
 
+
+	@Override
+	public String toString() {
+		return "{" +
+			" id='" + getId() + "'" +
+			", username='" + getUsername() + "'" +
+			", email='" + getEmail() + "'" +
+			", password='" + getPassword() + "'" +
+			", active='" + isActive() + "'" +
+			", avatar='" + getAvatar() + "'" +
+			", isEmailVerified='" + isIsEmailVerified() + "'" +
+			", balance='" + getBalance() + "'" +
+			", roles='" + getRoles() + "'" +
+			", accounts='" + getAccounts() + "'" +
+			", userInventory='" + getUserInventory() + "'" +
+			"}";
+	}
 	
 
 }

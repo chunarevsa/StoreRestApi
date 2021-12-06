@@ -10,6 +10,7 @@ import com.chunarevsa.Website.Entity.InventoryUnit;
 import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Entity.Price;
 import com.chunarevsa.Website.Entity.User;
+import com.chunarevsa.Website.Entity.UserInventory;
 import com.chunarevsa.Website.Entity.UserItem;
 import com.chunarevsa.Website.dto.ItemDto;
 import com.chunarevsa.Website.dto.ItemRequest;
@@ -17,6 +18,7 @@ import com.chunarevsa.Website.dto.PriceDto;
 import com.chunarevsa.Website.dto.PriceRequest;
 import com.chunarevsa.Website.repo.InventoryUnitRepository;
 import com.chunarevsa.Website.repo.ItemRepository;
+import com.chunarevsa.Website.repo.UserInventoryRepository;
 import com.chunarevsa.Website.repo.UserItemRepository;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.service.inter.ItemServiceInterface;
@@ -35,6 +37,7 @@ public class ItemService implements ItemServiceInterface {
 	private final UserService userService;
 	private final UserItemRepository userItemRepository;
 	private final InventoryUnitRepository inventoryUnitRepository;
+	private final UserInventoryRepository userInventoryRepository;
 
 	@Autowired
 	public ItemService(
@@ -42,12 +45,14 @@ public class ItemService implements ItemServiceInterface {
 				PriceService priceService,
 				UserService userService,
 				UserItemRepository userItemRepository,
-				InventoryUnitRepository inventoryUnitRepository) {
+				InventoryUnitRepository inventoryUnitRepository,
+				UserInventoryRepository userInventoryRepository) {
 		this.itemRepository = itemRepository;
 		this.priceService = priceService;
 		this.userService = userService;
 		this.userItemRepository = userItemRepository;
 		this.inventoryUnitRepository = inventoryUnitRepository;
+		this.userInventoryRepository = userInventoryRepository;
 	}
 
 	// Получение Items 
@@ -87,99 +92,92 @@ public class ItemService implements ItemServiceInterface {
 		return getItemPriciesFromUser(itemId);
 	}
 
-	public Optional<ItemDto> byeItem(Long itemId, String amountItems, String currencyTitle, JwtUser jwtUser) { //TODO :добвить списание денег
-		System.err.println("1");
+	public Object byeItem(Long itemId, String amountItems, String currencyTitle, JwtUser jwtUser) { //TODO :добвить списание денег
+
 		Item item = findById(itemId).get();
 		String username = jwtUser.getUsername().toString();
 		User user = userService.findByUsername(username).get();
-		System.err.println("2");
+
 		Set<Account> userAccounts = user.getAccounts();
-		System.err.println("3");
 		Account userAccount = userAccounts.stream()
 				.filter(acc -> currencyTitle.equals(acc.getCurrencyTitle()))
 				.findAny().orElse(null);
-		System.err.println("4");
+
 		if (userAccount == null) {
 			System.err.println("У вас нет такой валюты "); // TODO: искл
 		}
-		System.err.println("5");
+
 		Set<Price> prices = item.getPrices();
 		Price price = prices.stream().filter(itemPrice -> currencyTitle.equals(itemPrice.getCurrencyTitle()))
 			.findAny().orElse(null);
-			System.err.println("6");
+		
 		if (price == null) {
 			System.err.println("Данный Item нельзя приобрести за эту валюту"); // TODO: искл
 		}
+
 		int itemCost =  Integer.parseInt(price.getCost());
 		int amountItemsInt = Integer.parseInt(amountItems);
 		int balanceDomesticCurrency = Integer.parseInt(userAccount.getAmount());
-		System.err.println("7");
+		
 		if (balanceDomesticCurrency < (itemCost*amountItemsInt)) {
 			System.err.println("У вас не достаточно данной валюты на счёту");
 		}
+
 		String result =  Integer.toString(balanceDomesticCurrency - (itemCost*amountItemsInt));
-		System.err.println("8");
 		userAccount.setAmount(result);
 		userAccounts.add(userAccount);
 		user.setAccounts(userAccounts); // надо ли?
-		System.err.println("9");
 
-		// Получение списка ячеек инвенторя user
-		Set<InventoryUnit> userInventoryUnits = user.getUserInventory().getInventoryUnit();
-		System.err.println("10");
-		// Проверка есть ли ячейка уже с таким итемом по itemId
-		InventoryUnit inventoryUnit = userInventoryUnits.stream()
-				.filter(unit -> item.getId().equals(unit.getUserItem().getItemId()))
-				.findAny().orElse(null);
-		System.out.println(inventoryUnit);
-		System.err.println("11");
-		// Если такой ячейки нет
-		if (inventoryUnit == null) {
-			System.err.println("12");
+
+		User savedUser = userService.saveUser(user).get(); // может в самый низ
+
+		UserInventory userInventory = savedUser.getUserInventory();
+
+		Set<InventoryUnit> inventoryUnits = userInventory.getInventoryUnit();
+
+		Set<UserItem> userItems = inventoryUnits.stream().map(unit -> unit.getUserItem()).collect(Collectors.toSet());
+
+		UserItem userItem = userItems.stream().filter(
+			userItems1 -> Long.toString(item.getId()).equals(userItems1.getItemId()))
+			.findAny().orElse(null);
+			
+		if (userItem == null) {
+			System.err.println("userItem == null");
 			InventoryUnit newInventoryUnit = new InventoryUnit();
-			System.err.println("13");
 			newInventoryUnit.setAmountItems(amountItems);
-			System.err.println("14");
 
 			UserItem newUserItem = new UserItem();
-			System.err.println("15");
-			newUserItem.setItemId(item.getId());
+			System.out.println("UserItem newUserItem = new UserItem()");
+			newUserItem.setItemId(Long.toString(item.getId()));
 			newUserItem.setName(item.getName());
 			newUserItem.setType(item.getType());
 			newUserItem.setDescription(item.getDescription());
 			newUserItem.setActive(item.getActive());
-			System.err.println("16");
-			UserItem userItem = userItemRepository.save(newUserItem);
-			System.err.println("17");
+			UserItem savedUserItem = userItemRepository.save(newUserItem);
 
-			newInventoryUnit.setUserItem(userItem);
-			System.err.println("18");
-			inventoryUnitRepository.save(newInventoryUnit);
-			System.err.println("19");
+			newInventoryUnit.setUserItem(savedUserItem);
+			InventoryUnit savedInventoryUnit = inventoryUnitRepository.save(newInventoryUnit);
+			inventoryUnits.add(savedInventoryUnit);
+
 
 		} else {
-			System.err.println("20");
-			inventoryUnit.setAmountItems(inventoryUnit.getAmountItems() + amountItems);
-			inventoryUnitRepository.save(inventoryUnit);
-			System.err.println("21");
+			System.err.println("userItem else");
+			InventoryUnit inventoryUnit = inventoryUnits.stream()
+				.filter(unit -> userItem.equals(unit.getUserItem())).findAny().orElse(null);
+			
+			int oldAmountItems =  Integer.parseInt(inventoryUnit.getAmountItems());
+			int add = Integer.parseInt(amountItems);
+			int newAmountItems =  oldAmountItems + add;
+
+			inventoryUnit.setAmountItems(Integer.toString(newAmountItems));
+			inventoryUnits.add(inventoryUnit);
+
 		}
-		
-		/* Set<Item> items = user.getItems();
-		items.add(item);
-		user.setItems(items);
-		saveItems(user.getItems()); */
-		System.err.println("22");
-		userService.saveUser(user);
-		/* System.err.println(" " );
-		System.err.println("список итемов юзера :" + item.getId());
-		System.err.println(" " );
-		System.err.println("user balance $ :" + user.getBalance().toString());
-		System.err.println(" " ); 
-		System.err.println("user userAccount :" + userAccount.getAmount());
-		System.err.println(" " ); */
-		System.err.println("23");
-		return  getItemDto(item.getId());
-		
+		userInventory.setInventoryUnit(inventoryUnits);
+		userInventoryRepository.save(userInventory);
+		userService.saveUser(savedUser);
+
+		return  inventoryUnits;
 	}
 
 	// Добавление Item

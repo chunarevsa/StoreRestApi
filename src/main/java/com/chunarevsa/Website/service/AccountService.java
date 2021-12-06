@@ -32,19 +32,21 @@ public class AccountService {
 		if (userAccount == null) {
 			System.err.println("userAccount == null");
 			Account newAccount = new Account();
-			//newAccount.setAmount(String.valueOf(1));
+			newAccount.setAmount(amountDomesticCurrency);
 			newAccount.setCurrencyTitle(currencyTitle);
 			Account savedAccount = accountRepository.save(newAccount);
 			userAccounts.add(savedAccount);
-			return userAccounts; // TODO: Проверить нужно ли
+			// return userAccounts; // TODO: Проверить нужно ли
+		} else {
+			int userBalanceDomesticCurrency = Integer.parseInt(userAccount.getAmount());
+			int add = Integer.parseInt(amountDomesticCurrency);
+			int newUserBalance = userBalanceDomesticCurrency + add;
+			userAccount.setAmount(Integer.toString(newUserBalance));
+			userAccounts.add(userAccount);
 		}
-
-		int userBalanceDomesticCurrency = Integer.parseInt(userAccount.getAmount());
-		int add = Integer.parseInt(amountDomesticCurrency);
-		int newUserBalance = userBalanceDomesticCurrency + add;
-		userAccount.setAmount(Integer.toString(newUserBalance));
-		userAccounts.add(userAccount);
+		
 		return userAccounts;
+
 	}
 
 	private boolean validateAmount(String amount) {
