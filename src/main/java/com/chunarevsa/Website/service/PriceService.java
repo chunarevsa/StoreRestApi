@@ -93,6 +93,17 @@ public class PriceService implements PriceServiceInterface {
 		return Optional.of(PriceDto.fromUser(price));
 	}
 
+	// Проверка есть ли у Item такая цена
+	public String getCostInCurrency(Set<Price> prices, String currencyTitle) {
+		Price price = prices.stream().filter(itemPrice -> currencyTitle.equals(itemPrice.getCurrencyTitle()))
+			.findAny().orElse(null);
+		
+		if (price == null) {
+			System.err.println("Данный Item нельзя приобрести за эту валюту"); // TODO: искл
+		}
+		return price.getCost();
+	}
+
 	// Получение Price из PriceRequest
 	private Optional<Price> getItemPriceFromRequest(PriceRequest priceRequest) {
 
