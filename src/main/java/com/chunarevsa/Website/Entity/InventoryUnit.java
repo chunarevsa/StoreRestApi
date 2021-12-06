@@ -80,7 +80,6 @@ public class InventoryUnit extends Base {
 		this.userInventory = userInventory;
 	}
 
-
 	@Override
 	public String toString() {
 		return "{" +
@@ -90,6 +89,5 @@ public class InventoryUnit extends Base {
 			", userInventory='" + getUserInventory() + "'" +
 			"}";
 	}
-
 
 } 

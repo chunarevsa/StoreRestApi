@@ -16,7 +16,7 @@ import com.chunarevsa.Website.Entity.UserInventory;
 import com.chunarevsa.Website.Entity.payload.RegistrationRequest;
 import com.chunarevsa.Website.Exception.UserLogoutException;
 import com.chunarevsa.Website.dto.ItemDto;
-import com.chunarevsa.Website.dto.LogOutRequestDto;
+import com.chunarevsa.Website.dto.LogOutRequest;
 import com.chunarevsa.Website.dto.UserDto;
 import com.chunarevsa.Website.dto.UserProfileDto;
 import com.chunarevsa.Website.repo.UserRepository;
@@ -85,17 +85,6 @@ public class UserService implements UserServiceInterface{
 		return userInventoryService.getUserInventory(user);
 	}
 
-	/* public Set<ItemDto> getMyItems(JwtUser jwtUser) {
-		
-		User user = findByUsername(jwtUser.getUsername().toString()).get();
-
-		/* Set<Item> items = user.getItems();
-
-		Set<ItemDto> itemsDto =	items.stream()
-				.map(item -> ItemDto.fromUser(item)).collect(Collectors.toSet()); 
-		return null;
-	} */
-
 	public Optional<User> saveUser(User user) {
 		return Optional.of(userRepository.save(user));
   	}
@@ -159,10 +148,10 @@ public class UserService implements UserServiceInterface{
 		return listUsers.stream()
 		.map(user -> UserDto.fromUser(user) ).collect(Collectors.toList());
 
-	}
+	} 
 
 	public void logout(JwtUser jwtUser, 
-					@Valid LogOutRequestDto logOutRequestDto) {
+					@Valid LogOutRequest logOutRequestDto) {
 		String deviceId = logOutRequestDto.getDeviceInfo().getDeviceId();
 		UserDevice userDevice = userDeviceService.findByUserId(jwtUser.getId())
 						.filter(device -> device.getDeviceId().equals(deviceId))

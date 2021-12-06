@@ -1,7 +1,9 @@
 package com.chunarevsa.Website.dto;
 
 import com.chunarevsa.Website.Entity.UserItem;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserItemDto {
 	
 	private Long id;
@@ -19,9 +21,7 @@ public class UserItemDto {
 		userItemDto.setType(userItem.getType());
 		userItemDto.setDescription(userItem.getDescription());
 		return userItemDto;
-		
 	}
-
 
 	public Long getId() {
 		return this.id;
@@ -55,5 +55,14 @@ public class UserItemDto {
 		this.description = description;
 	}
 
+	@Override
+	public String toString() {
+		return "{" +
+			" id='" + getId() + "'" +
+			", name='" + getName() + "'" +
+			", type='" + getType() + "'" +
+			", description='" + getDescription() + "'" +
+			"}";
+	}
 
 }

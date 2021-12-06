@@ -48,9 +48,5 @@ public class DeviceInfo {
 			", notificationToken='" + getNotificationToken() + "'" +
 			"}";
 	}
-
-
-
-
 	
 }

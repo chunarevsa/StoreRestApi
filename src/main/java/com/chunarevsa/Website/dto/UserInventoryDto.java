@@ -4,7 +4,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.chunarevsa.Website.Entity.UserInventory;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserInventoryDto {
 
 	private Set<InventoryUnitDto> inventoryUnitDto;
@@ -28,5 +30,12 @@ public class UserInventoryDto {
 	public void setInventoryUnitDto(Set<InventoryUnitDto> inventoryUnitDto) {
 		this.inventoryUnitDto = inventoryUnitDto;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "{" +
+			" inventoryUnitDto='" + getInventoryUnitDto() + "'" +
+			"}";
+	}
+
 }

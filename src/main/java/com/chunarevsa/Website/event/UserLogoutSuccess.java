@@ -3,7 +3,7 @@ package com.chunarevsa.Website.event;
 import java.time.Instant;
 import java.util.Date;
 
-import com.chunarevsa.Website.dto.LogOutRequestDto;
+import com.chunarevsa.Website.dto.LogOutRequest;
 
 import org.springframework.context.ApplicationEvent;
 
@@ -11,13 +11,13 @@ public class UserLogoutSuccess extends ApplicationEvent {
 	
 	private final String userEmail;
 	private final String token;
-	private final transient LogOutRequestDto logoutRequestDto;
+	private final transient LogOutRequest logoutRequestDto;
 	private final Date eventTime;
 
 	public UserLogoutSuccess(
 				String userEmail, 
 				String token,
-				LogOutRequestDto logoutRequestDto) {
+				LogOutRequest logoutRequestDto) {
 		super(userEmail);
 		this.userEmail = userEmail;
 		this.token = token;
@@ -37,7 +37,7 @@ public class UserLogoutSuccess extends ApplicationEvent {
 		return this.eventTime;
 	}
 
-	public LogOutRequestDto getLogoutRequestDto () {
+	public LogOutRequest getLogoutRequestDto () {
 		return logoutRequestDto;
 	}
 

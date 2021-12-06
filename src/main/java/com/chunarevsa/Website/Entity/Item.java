@@ -41,17 +41,6 @@ public class Item extends Base {
 	@JoinColumn(name = "ITEM_ID")
 	private Set<Price> prices = new HashSet<>();
 
-	/* @JsonIgnore
-	@ManyToOne (fetch = FetchType.LAZY)
-	@JoinColumn (name = "ITEM_ID", insertable = false)
-	private UserInventory userInventory; */
-
-	/* @JsonIgnore
-	@ManyToOne (fetch = FetchType.LAZY)
-	@JoinColumn (name = "USER_ID", insertable = false, updatable = false)
-	private User user; */
-
-
 	public Item() {
 		super();
 	}
@@ -61,18 +50,13 @@ public class Item extends Base {
 					String type, 
 					String description, 
 					Boolean active, 
-					Set<Price> prices
-					//,User user,
-					//UserInventory userInventory
-					) {
+					Set<Price> prices) {
 		this.id = id;
 		this.name = name;
 		this.type = type;
 		this.description = description;
 		this.active = active;
-		this.prices = prices;
-		//this.user = user;
-		
+		this.prices = prices;		
 	}
 
 	public Long getId() {
@@ -127,14 +111,16 @@ public class Item extends Base {
 		this.prices = prices;
 	}
 
-	/* public User getUser() {
-		return this.user;
+	@Override
+	public String toString() {
+		return "{" +
+			" id='" + getId() + "'" +
+			", name='" + getName() + "'" +
+			", type='" + getType() + "'" +
+			", description='" + getDescription() + "'" +
+			", active='" + isActive() + "'" +
+			", prices='" + getPrices() + "'" +
+			"}";
 	}
-
-	public void setUser(User user) {
-		this.user = user;
-	} */
-
-	
 
 }

@@ -47,7 +47,7 @@ public class UserRegistrationCompleteListener implements ApplicationListener<Use
 			mailService.sendMessageVerification(userEmail, emailConfirmationUrl);
 		} catch (Exception e) {
 			System.err.println("sendEmailVerificatione - ERROR");
-			System.err.println(e);
+			System.err.println(e); // TODO: искл
 		}
 	
 	}

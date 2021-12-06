@@ -2,10 +2,9 @@ package com.chunarevsa.Website.controllers;
 
 import javax.validation.Valid;
 
-import com.chunarevsa.Website.dto.LogOutRequestDto;
+import com.chunarevsa.Website.dto.LogOutRequest;
 import com.chunarevsa.Website.event.UserLogoutSuccess;
 import com.chunarevsa.Website.security.jwt.JwtUser;
-import com.chunarevsa.Website.service.UserInventoryService;
 import com.chunarevsa.Website.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,30 +20,41 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+/**
+ * 
+ */
 @RestController
 @RequestMapping ("/user")
 public class UserController {
 
 	private final UserService userService;
 	private final ApplicationEventPublisher applicationEventPublisher;
-	private final UserInventoryService userInventoryService;
 
 	@Autowired
 	public UserController(UserService userService,
-			ApplicationEventPublisher applicationEventPublisher,
-			UserInventoryService userInventoryService) {
+			ApplicationEventPublisher applicationEventPublisher) {
 		this.userService = userService;
 		this.applicationEventPublisher = applicationEventPublisher;
-		this.userInventoryService = userInventoryService;
 	}
 
+	/**
+	 * Получение свего профиля
+	 * В профиле отражена информация о самом пользователе, 
+	 * его балансе $ и баланс внутренних валют.
+	 * @param jwtUser
+	 */
 	@GetMapping("/profile")
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity getMyUserProfile (@AuthenticationPrincipal JwtUser jwtUser) {
 		return ResponseEntity.ok().body(userService.getMyUserProfile(jwtUser));
 	} 
 
+	/**
+	 * Получение информации о пользователе
+	 * Доступно всем авторизованным пользователяим
+	 * @param username
+	 * @param jwtUser
+	 */
 	@GetMapping("/{username}")
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity getUserProfile(@PathVariable(value = "username") String username,
@@ -53,6 +63,11 @@ public class UserController {
 		return ResponseEntity.ok().body(userService.getUserProfile(username));
 	}
 
+	/**
+	 * Получение своего инвенторя
+	 * Вся информация выдаётся через DTO
+	 * @param jwtUser
+	 */
 	@GetMapping("/profile/inventory")
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity getUserInventory (@AuthenticationPrincipal JwtUser jwtUser) {
@@ -60,6 +75,11 @@ public class UserController {
 		return ResponseEntity.ok().body(userService.getUserInventory(jwtUser));	
 	} 
 
+	/**
+	 * Получение списка всех пользователей
+	 * @param jwtUser
+	 * @return
+	 */
 	@GetMapping("/all")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity getAllUsers (@AuthenticationPrincipal JwtUser jwtUser) {
@@ -67,9 +87,13 @@ public class UserController {
 		return ResponseEntity.ok(userService.findAllUsersDto());
 	}
 
+	/**
+	 * Logout
+	 * Происходит по конкретному девайсу
+	 */
 	@PostMapping("/logout")
 	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity logout(@Valid @RequestBody LogOutRequestDto logOutRequestDto,
+	public ResponseEntity logout(@Valid @RequestBody LogOutRequest logOutRequestDto,
 					@AuthenticationPrincipal JwtUser jwtUser) {
 
 		userService.logout(jwtUser, logOutRequestDto);

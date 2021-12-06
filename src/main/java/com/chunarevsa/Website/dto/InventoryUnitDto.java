@@ -1,7 +1,9 @@
 package com.chunarevsa.Website.dto;
 
 import com.chunarevsa.Website.Entity.InventoryUnit;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class InventoryUnitDto {
 
 	private Long id;
@@ -43,6 +45,12 @@ public class InventoryUnitDto {
 		this.userItemDto = userItemDto;
 	}
 
-
-
+	@Override
+	public String toString() {
+		return "{" +
+			" id='" + getId() + "'" +
+			", amountItems='" + getAmountItems() + "'" +
+			", userItemDto='" + getUserItemDto() + "'" +
+			"}";
+	}
 }

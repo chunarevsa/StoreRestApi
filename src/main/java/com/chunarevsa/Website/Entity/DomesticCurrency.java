@@ -7,12 +7,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
-//  Внутренняя вертуальная валюта - Gold, Silver...
+//  Внутренняя вертуальная валюта - gold, silver...
 @Entity 
-@Table(name = "DOMESTIC_CURRENCY",uniqueConstraints = { 
-		@UniqueConstraint(name = "UniqueCode", columnNames = { "DOMESTIC_CURRENCY_TITLE"}) })
+@Table(name = "DOMESTIC_CURRENCY")
 public class DomesticCurrency extends Base {
 
 	@Id
@@ -88,7 +86,5 @@ public class DomesticCurrency extends Base {
 			", active='" + isActive() + "'" +
 			"}";
 	}
-
-
 
 }

@@ -26,7 +26,6 @@ public abstract class Base implements Serializable {
 	@JoinColumn (nullable = false, updatable = true)
 	private Instant updated;
 
-
 	public Instant getCreated() {
 		return this.created;
 	}

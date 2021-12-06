@@ -99,6 +99,4 @@ public class RefreshToken extends Base {
 		this.expityDate = expityDate;
 	}
 
-
-
 }

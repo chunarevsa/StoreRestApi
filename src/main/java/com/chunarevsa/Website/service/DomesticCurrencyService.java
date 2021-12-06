@@ -61,7 +61,7 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 		return getCurrencyDtoByTitle(title);
 	}
 
-	public Object byeCurrency(String currencyTitle, String amountDomesticCurrency, JwtUser jwtUser) {
+	public Object buyCurrency(String currencyTitle, String amountDomesticCurrency, JwtUser jwtUser) {
 		
 		DomesticCurrency domesticCurrency = findCurrencyByTitile(currencyTitle).get();
 		User user = userService.findByUsername(jwtUser.getUsername().toString()).get();
@@ -117,11 +117,10 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 
 	// Удаление (Выключение) Currency
 	@Override
-	public Optional<DomesticCurrency> deleteCurrency(String title) {
+	public void deleteCurrency(String title) {
 		DomesticCurrency currency = findCurrencyByTitile(title).get();
 		currency.setActive(false);
 		saveCurrency(currency);
-		return Optional.of(currency);  
 	}
 
 	// Получение списка DomesticCurrencyDto для USER

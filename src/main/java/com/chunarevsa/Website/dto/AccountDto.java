@@ -35,5 +35,12 @@ public class AccountDto {
 		this.currencyTitle = currencyTitle;
 	}
 
-	
+	@Override
+	public String toString() {
+		return "{" +
+			" amount='" + getAmount() + "'" +
+			", currencyTitle='" + getCurrencyTitle() + "'" +
+			"}";
+	}
+
 }

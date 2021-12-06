@@ -221,7 +221,6 @@ public class User extends Base {
 		this.userInventory = userInventory;
 	}
 
-
 	@Override
 	public String toString() {
 		return "{" +
@@ -239,5 +238,4 @@ public class User extends Base {
 			"}";
 	}
 	
-
 }

@@ -92,5 +92,15 @@ public class EmailVerificationToken {
 		this.expiryDate = expiryDate;
 	}
 
+	@Override
+	public String toString() {
+		return "{" +
+			" id='" + getId() + "'" +
+			", token='" + getToken() + "'" +
+			", user='" + getUser() + "'" +
+			", tokenStatus='" + getTokenStatus() + "'" +
+			", expiryDate='" + getExpiryDate() + "'" +
+			"}";
+	}
 
 }

@@ -10,7 +10,7 @@ import com.chunarevsa.Website.Entity.payload.RegistrationRequest;
 import com.chunarevsa.Website.Entity.token.EmailVerificationToken;
 import com.chunarevsa.Website.Entity.token.RefreshToken;
 import com.chunarevsa.Website.Exception.AlredyUseException;
-import com.chunarevsa.Website.dto.LoginRequestDto;
+import com.chunarevsa.Website.dto.LoginRequest;
 import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 
@@ -81,13 +81,13 @@ public class AuthService {
 		return Optional.of(registeredUser);
 	}
 
-	public Optional<Authentication> authenticateUser(LoginRequestDto loginRequestDto) {
+	public Optional<Authentication> authenticateUser(LoginRequest loginRequestDto) {
 		UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword());
 		return Optional.ofNullable(authenticationManager.authenticate(user));
 	}
 
 	public Optional<RefreshToken> createAndPersistRefreshTokenForDevice(Authentication authentication,
-			@Valid LoginRequestDto loginRequestDto) {
+			@Valid LoginRequest loginRequestDto) {
 		User jwtUser = (User) authentication.getPrincipal();
 
 		userDeviceService.findByUserId(

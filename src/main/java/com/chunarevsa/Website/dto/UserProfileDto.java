@@ -102,7 +102,17 @@ public class UserProfileDto {
 	public void setAccountsDto(Set<AccountDto> accountsDto) {
 		this.accountsDto = accountsDto;
 	}
-
-
+	
+	@Override
+	public String toString() {
+		return "{" +
+			" id='" + getId() + "'" +
+			", username='" + getUsername() + "'" +
+			", avatar='" + getAvatar() + "'" +
+			", email='" + getEmail() + "'" +
+			", balance='" + getBalance() + "'" +
+			", accountsDto='" + getAccountsDto() + "'" +
+			"}";
+	}
 	
 }

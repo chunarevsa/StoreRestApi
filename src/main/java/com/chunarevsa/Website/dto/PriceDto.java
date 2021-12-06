@@ -1,8 +1,10 @@
 package com.chunarevsa.Website.dto;
 
 import com.chunarevsa.Website.Entity.Price;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-// Цена для пользователя
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PriceDto {
 	
 	private String cost;

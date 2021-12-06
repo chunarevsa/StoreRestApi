@@ -18,7 +18,7 @@ import com.chunarevsa.Website.Entity.token.RefreshToken;
 public class UserDevice extends Base {
 	
 	@Id
-	@Column(name = "USER_DEVICE_ID") // TODO: ?
+	@Column(name = "USER_DEVICE_ID")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_device_seq")
 	@SequenceGenerator(name = "user_device_seq", allocationSize = 1)
 	private Long id;

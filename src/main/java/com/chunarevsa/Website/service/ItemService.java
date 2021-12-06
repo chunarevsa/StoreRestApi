@@ -84,7 +84,7 @@ public class ItemService implements ItemServiceInterface {
 		return getItemPriciesFromUser(itemId);
 	}
 
-	public Object byeItem(Long itemId, String amountItems, String currencyTitle, JwtUser jwtUser) { //TODO :добвить списание денег
+	public Object buyItem(Long itemId, String amountItems, String currencyTitle, JwtUser jwtUser) { //TODO :добвить списание денег
 
 		Item item = findById(itemId).get();
 		String username = jwtUser.getUsername().toString();
@@ -161,19 +161,14 @@ public class ItemService implements ItemServiceInterface {
 
 	// Удаление (Выключение) Item
 	@Override
-	public Optional<Item> deleteItem(long itemId) {
+	public void deleteItem(long itemId) {
 
 		Item item = findById(itemId).get();
 		priceService.deletePricies(item.getPrices());
 		item.setActive(false);
 		saveItem(item);
-		return Optional.of(item);
-	}
 
-	// Получение ItemsDto принадлежашие User TODO: может быть равно нулю
-	/* public Set<ItemDto> getUserItemsDto(JwtUser jwtUser) {
-		return null;
-	} */
+	}
 
 	// Получение страницы со всеми Item
 	private Page<Item> getPageItemFromAdmin(Pageable pageable) {

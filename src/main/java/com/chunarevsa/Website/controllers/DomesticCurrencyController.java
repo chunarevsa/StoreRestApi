@@ -22,7 +22,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
+/**
+ * Внутренняя валюта gold, silver..
+ * 
+ */
 @RestController
 @RequestMapping("/currency")
 public class DomesticCurrencyController {
@@ -33,8 +36,12 @@ public class DomesticCurrencyController {
 		this.domesticCurrencyService = domesticCurrencyService;
 	}
 
-	// Получение всех Currency
-	// Если ADMIN -> page Currencies, если USER -> set CurrenciesDto
+	/**
+	 * Получение всех Currency
+	 * Если ADMIN -> page Currencies, если USER -> set CurrenciesDto
+	 * @param pageable
+	 * @param jwtUser
+	 */
 	@GetMapping("/all")
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity getCurrencies(@PageableDefault Pageable pageable,
@@ -43,34 +50,53 @@ public class DomesticCurrencyController {
 		return  ResponseEntity.ok().body(domesticCurrencyService.getCurrencies(pageable, jwtUser));
 	}
 
-	// Получить Currency
-	// Если ADMIN -> Currency, если USER ->  CurrencyDto
+	/**
+	 * Получить Currency
+	 * Если ADMIN -> Currency, если USER ->  CurrencyDto
+	 * @param title
+	 * @param jwtUser
+	 */
 	@GetMapping("/{title}") //Проверка если вдруг выключена, то просто включить
 	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity getCurrencyByTitle (@PathVariable(value = "title") String title,
+	public ResponseEntity getCurrencyByTitle(@PathVariable(value = "title") String title,
 				@AuthenticationPrincipal JwtUser jwtUser) { 
+
 		return ResponseEntity.ok(domesticCurrencyService.getCurrency(title ,jwtUser));
 	}
 
-	// Покупка DomesticCurrency
-	@PostMapping("/{title}/bye")
+	/**
+	 * Покупка Currency
+	 * @param title
+	 * @param amount
+	 * @param jwtUser
+	 */
+	@PostMapping("/buy")
 	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity byeCurrency (@PathVariable(value = "title") String title,
+	public ResponseEntity buyCurrency(@RequestParam String title,
 					@RequestParam String amount,
 					@AuthenticationPrincipal JwtUser jwtUser) {
 		
-		return ResponseEntity.ok().body(domesticCurrencyService.byeCurrency(title, amount, jwtUser));
+		return ResponseEntity.ok().body(domesticCurrencyService.buyCurrency(title, amount, jwtUser));
 	} 
 
-	// Добавление Currency
+	/**
+	 * Добавление Currency
+	 * @param currencyRequest
+	 */
 	@PostMapping("/add")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity addCurrency (@Valid @RequestBody DomesticCurrencyRequest currencyRequest) throws AllException {
+	public ResponseEntity addCurrency(@Valid @RequestBody DomesticCurrencyRequest currencyRequest) throws AllException {
+
 		return domesticCurrencyService.addCurrency(currencyRequest) // TODO: исключение
 			.map(currency -> ResponseEntity.ok().body("Валюта добавлена")).orElseThrow();
 	} 	
 	
-	// Изменение Currency
+	/**
+	 * Изменение Currency
+	 * @param title
+	 * @param currencyRequest
+
+	 */
 	@PutMapping("/{title}/edit") // TODO: сделать через параметр
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity editCurrency (@PathVariable(value = "title") String title, 
@@ -79,7 +105,10 @@ public class DomesticCurrencyController {
 		return ResponseEntity.ok(domesticCurrencyService.editCurrency(title, currencyRequest));
 	} 
 
-   // Удаление
+	/**
+	 * Удаление
+	 * @param title
+	 */
 	@DeleteMapping("/{title}/delete")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity deleteCurrency (@PathVariable(value = "title") String title) throws AllException {

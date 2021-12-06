@@ -117,7 +117,6 @@ public class UserItem extends Base { // TODO: возможно без base
 		this.inventoryUnit = inventoryUnit;
 	}
 
-
 	@Override
 	public String toString() {
 		return "{" +
@@ -130,7 +129,5 @@ public class UserItem extends Base { // TODO: возможно без base
 			", inventoryUnit='" + getInventoryUnit() + "'" +
 			"}";
 	}
-
-
 
 } 

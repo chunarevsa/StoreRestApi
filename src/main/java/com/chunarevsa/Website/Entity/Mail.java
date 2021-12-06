@@ -49,7 +49,6 @@ public class Mail {
 		this.message = message;
 	}
 
-
 	@Override
 	public String toString() {
 		return "{" +
@@ -59,6 +58,5 @@ public class Mail {
 			", message='" + getMessage() + "'" +
 			"}";
 	}
-
 
 }

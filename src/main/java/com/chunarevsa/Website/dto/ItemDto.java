@@ -1,11 +1,12 @@
 package com.chunarevsa.Website.dto;
 
 import com.chunarevsa.Website.Entity.Item;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ItemDto {
 
 	private Long id;
@@ -79,5 +80,6 @@ public class ItemDto {
 			", prices='" + getPrices() + "'" +
 			"}";
 	}
+
 
 }

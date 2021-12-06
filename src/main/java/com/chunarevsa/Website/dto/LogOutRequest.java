@@ -4,15 +4,15 @@ import javax.validation.Valid;
 
 import com.chunarevsa.Website.Entity.payload.DeviceInfo;
 
-public class LogOutRequestDto {
+public class LogOutRequest {
 	
 	@Valid
 	private DeviceInfo deviceInfo;
 
-	public LogOutRequestDto() {
+	public LogOutRequest() {
 	}
 
-	public LogOutRequestDto(DeviceInfo deviceInfo) {
+	public LogOutRequest(DeviceInfo deviceInfo) {
 		this.deviceInfo = deviceInfo;
 	}
 

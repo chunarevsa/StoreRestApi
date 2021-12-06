@@ -31,7 +31,7 @@ public interface ItemServiceInterface {
 	public Optional<Item> editItem (long id, ItemRequest itemRequest);
 
 	// Удаление (Выключение) Item
-	public Optional<Item> deleteItem(long itemId);
+	public void deleteItem(long itemId);
 
 	// Изменение и удаление цены
 	public Optional<Price> editItemPrice(PriceRequest priceRequest, Long priceId);

@@ -60,4 +60,13 @@ public class UserDto {
 		this.avatar = avatar;
 	}
 
+	@Override
+	public String toString() {
+		return "{" +
+			" id='" + getId() + "'" +
+			", username='" + getUsername() + "'" +
+			", avatar='" + getAvatar() + "'" +
+			"}";
+	}
+
 } 

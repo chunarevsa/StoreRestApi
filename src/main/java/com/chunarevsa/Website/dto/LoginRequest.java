@@ -4,7 +4,8 @@ import javax.validation.Valid;
 
 import com.chunarevsa.Website.Entity.payload.DeviceInfo;
 
-public class LoginRequestDto {
+// TODO: для всех реквество сделать валидацию
+public class LoginRequest {
 	
    private String username;
    private String email;
@@ -13,10 +14,10 @@ public class LoginRequestDto {
    @Valid
    private DeviceInfo deviceInfo;
 
-	public LoginRequestDto() {
+	public LoginRequest() {
 	}
 
-	public LoginRequestDto(String username, String email, String password, DeviceInfo deviceInfo) {
+	public LoginRequest(String username, String email, String password, DeviceInfo deviceInfo) {
 		this.username = username;
 		this.email = email;
 		this.password = password;

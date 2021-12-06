@@ -1,11 +1,9 @@
 package com.chunarevsa.Website.service.inter;
 
 import java.util.Optional;
-import java.util.Set;
 
 import com.chunarevsa.Website.Entity.DomesticCurrency;
 import com.chunarevsa.Website.Exception.InvalidPriceFormat;
-import com.chunarevsa.Website.dto.DomesticCurrencyDto;
 import com.chunarevsa.Website.dto.DomesticCurrencyRequest;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 
@@ -28,7 +26,7 @@ public interface DomesticCurrencyServiceInterface {
 	public Optional<DomesticCurrency> editCurrency (String title, DomesticCurrencyRequest currencyRequest);
 
 	// Удаление (Выключение) Currency
-	public Optional<DomesticCurrency> deleteCurrency(String title);
+	public void deleteCurrency(String title);
 
 	// Получение Currency по title
 	public Optional<DomesticCurrency> findCurrencyByTitile(String title);

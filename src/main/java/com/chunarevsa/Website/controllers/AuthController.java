@@ -7,7 +7,7 @@ import com.chunarevsa.Website.Entity.payload.RegistrationRequest;
 import com.chunarevsa.Website.Entity.token.RefreshToken;
 import com.chunarevsa.Website.Exception.UserLoginException;
 import com.chunarevsa.Website.Exception.UserRegistrationException;
-import com.chunarevsa.Website.dto.LoginRequestDto;
+import com.chunarevsa.Website.dto.LoginRequest;
 import com.chunarevsa.Website.event.UserRegistrationComplete;
 import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
 import com.chunarevsa.Website.security.jwt.JwtUser;
@@ -45,7 +45,11 @@ public class AuthController {
 		this.jwtTokenProvider = jwtTokenProvider;
 	}
 
-	// Регистрация
+	/**
+	 * Регистрация пользователя
+	 * "registerAsAdmin": "true" - зарегистрировать администратором
+	 * @param registrationRequest
+	 */
 	@PostMapping ("/register")
 	public ResponseEntity registration (@Valid @RequestBody RegistrationRequest registrationRequest ) {
 		
@@ -55,9 +59,13 @@ public class AuthController {
 						UserRegistrationComplete userRegistrationComplete = new UserRegistrationComplete(user, urlBuilder);
 						applicationEventPublisher.publishEvent(userRegistrationComplete);
 						return ResponseEntity.ok("Для завершения регистрации перейдите по ссылке в письме");
-					}).orElseThrow(() -> new UserRegistrationException(registrationRequest.getEmail(), "Нет такого пользователя в базе"));
+					}).orElseThrow(() -> new UserRegistrationException(registrationRequest.getEmail(), "Пользователь с такой почтой уже существует"));
 	}
 
+	/**
+	 * Подтверждение учетной записи
+	 * @param token
+	 */
 	@GetMapping("/registrationConfirmation")
 	public ResponseEntity confirmRegistration (@RequestParam("token") String token) {
 
@@ -65,8 +73,12 @@ public class AuthController {
 					.map(user -> ResponseEntity.ok().body("Учётная запись подтверждена")).orElseThrow();
 	}
 
+	/**
+	 * Логин по почте, паролю и устройству
+	 * @param loginRequestDto
+	 */
 	@PostMapping("/login")
-	public ResponseEntity login (@Valid @RequestBody LoginRequestDto loginRequestDto) {
+	public ResponseEntity login (@Valid @RequestBody LoginRequest loginRequestDto) {
 
 		Authentication authentication = authService.authenticateUser(loginRequestDto)
 			.orElseThrow(() -> new UserLoginException("Не удалось войти в систему - " + loginRequestDto));
