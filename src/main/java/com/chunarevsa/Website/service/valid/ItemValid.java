@@ -1,5 +1,5 @@
 package com.chunarevsa.Website.service.valid;
-
+/* 
 import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Exception.FormIsEmpty;
 import com.chunarevsa.Website.repo.ItemRepository;
@@ -44,4 +44,4 @@ public class ItemValid {
 		}
 		return false;
 	}
-}
+} */

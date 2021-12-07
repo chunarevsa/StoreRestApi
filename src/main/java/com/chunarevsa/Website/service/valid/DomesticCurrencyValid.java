@@ -1,5 +1,5 @@
 package com.chunarevsa.Website.service.valid;
-
+/* 
 import com.chunarevsa.Website.Entity.DomesticCurrency;
 import com.chunarevsa.Website.repo.DomesticCurrencyRepository;
 
@@ -24,7 +24,7 @@ public class DomesticCurrencyValid {
 		return true;  
 	}
 
-	/* // Проверка на наличие валюты с таким code
+	 // Проверка на наличие валюты с таким code
 	public boolean codeIsPresent (String code) {
 		DomesticCurrency currencyByCode = currencyRepository.findByCode(code);
 		if (currencyByCode == null) {
@@ -32,7 +32,7 @@ public class DomesticCurrencyValid {
 		}	 
 		System.out.println(currencyByCode.getCode());
 		return true;
-	} */
+	} 
 
 	// Проверка status
 	public boolean currencyIsActive (long id) {
@@ -44,11 +44,11 @@ public class DomesticCurrencyValid {
 	}
 
 	// Проверка на незаполеннные данные
-	/* public boolean bodyIsEmpty (DomesticCurrency bodyCurrency) {
+	 public boolean bodyIsEmpty (DomesticCurrency bodyCurrency) {
 		if (bodyCurrency.getCode().isEmpty()) {
 			return true;
 		}
 		return false;
-	} */
+	} 
 	
-}
+} */
