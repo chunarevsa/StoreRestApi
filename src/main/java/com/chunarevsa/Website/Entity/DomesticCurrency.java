@@ -11,7 +11,7 @@ import javax.persistence.Table;
 //  Внутренняя вертуальная валюта - gold, silver...
 @Entity 
 @Table(name = "DOMESTIC_CURRENCY")
-public class DomesticCurrency extends Base {
+public class DomesticCurrency extends DateAudit {
 
 	@Id
 	@Column (name = "DOMESTIC_CURRENCY_ID")

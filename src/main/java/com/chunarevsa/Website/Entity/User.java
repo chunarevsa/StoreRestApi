@@ -23,7 +23,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "USER")
-public class User extends Base { 
+public class User extends DateAudit { 
 
 	@Id
 	@Column(name = "USER_ID")

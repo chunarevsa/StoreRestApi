@@ -15,7 +15,7 @@ import javax.persistence.SequenceGenerator;
 import com.chunarevsa.Website.Entity.token.RefreshToken;
 
 @Entity(name = "USER_DEVICE")
-public class UserDevice extends Base {
+public class UserDevice extends DateAudit {
 	
 	@Id
 	@Column(name = "USER_DEVICE_ID")

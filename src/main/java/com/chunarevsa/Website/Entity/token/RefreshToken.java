@@ -12,13 +12,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
-import com.chunarevsa.Website.Entity.Base;
+import com.chunarevsa.Website.Entity.DateAudit;
 import com.chunarevsa.Website.Entity.UserDevice;
 
 import org.hibernate.annotations.NaturalId;
 
 @Entity(name = "REFRESH_TOKEN")
-public class RefreshToken extends Base {
+public class RefreshToken extends DateAudit {
 	
 	@Id
 	@Column(name = "TOKEN_ID")

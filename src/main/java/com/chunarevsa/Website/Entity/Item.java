@@ -17,7 +17,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "ITEM")
-public class Item extends Base {
+public class Item extends DateAudit {
 
 	@Id
 	@Column (name = "ITEM_ID")

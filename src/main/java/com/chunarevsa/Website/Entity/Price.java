@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "PRICE")
-public class Price extends Base {	
+public class Price extends DateAudit {	
 
 	@Id
 	@Column(name = "PRICE_ID")
