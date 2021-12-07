@@ -5,12 +5,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.chunarevsa.Website.Entity.Account;
-import com.chunarevsa.Website.Entity.InventoryUnit;
 import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Entity.Price;
-import com.chunarevsa.Website.Entity.User;
-import com.chunarevsa.Website.Entity.UserInventory;
 import com.chunarevsa.Website.dto.InventoryUnitDto;
 import com.chunarevsa.Website.dto.ItemDto;
 import com.chunarevsa.Website.dto.ItemRequest;
@@ -32,23 +28,22 @@ public class ItemService implements ItemServiceInterface {
 	private final ItemRepository itemRepository;
 	private final PriceService priceService;
 	private final UserService userService;
-	private final UserInventoryService userInventoryService;
 
 
 	@Autowired
 	public ItemService(
 				ItemRepository itemRepository,
 				PriceService priceService,
-				UserService userService,
-				UserInventoryService userInventoryService) {
+				UserService userService) {
 		this.itemRepository = itemRepository;
 		this.priceService = priceService;
 		this.userService = userService;
-		this.userInventoryService = userInventoryService;
 	}
 
-	// Получение Items 
-	// Если ADMIN -> page Items, если USER -> set ItemsDto
+	/**
+	 * Получение Items 
+	 * Если ADMIN -> page Items, если USER -> set ItemsDto
+	 */
 	@Override
 	public Object getItems(Pageable pageable, JwtUser jwtUser) {
 		List<String> roles = jwtUser.getAuthorities().stream()
@@ -59,8 +54,10 @@ public class ItemService implements ItemServiceInterface {
 		return getItemsDtoFromUser();
 	}
 
-	// Получение Item
-	// Если ADMIN -> Item, если USER -> ItemDto
+	/**
+	 * Получение Item
+	 * Если ADMIN -> Item, если USER -> ItemDto
+	 */
 	@Override
 	public Object getItem(Long itemId, JwtUser jwtUser) {
 		List<String> roles = jwtUser.getAuthorities().stream()
@@ -71,8 +68,10 @@ public class ItemService implements ItemServiceInterface {
 		return getItemDto(itemId);
 	}
 
-	// Получение у Item списка всех цен
-	// Если ADMIN -> set Pricies, если USER -> set PriciesDto
+	/**
+	 * Получение у Item списка всех Price
+	 * Если ADMIN -> set Pricies, если USER -> set PriciesDto
+	 */
 	@Override
 	public Object getItemPricies (Long itemId, JwtUser jwtUser) {
 		List<String> roles = jwtUser.getAuthorities().stream()
@@ -84,49 +83,20 @@ public class ItemService implements ItemServiceInterface {
 		return getItemPriciesFromUser(itemId);
 	}
 
-	public Object buyItem(Long itemId, String amountItems, String currencyTitle, JwtUser jwtUser) { //TODO :добвить списание денег
+	/**
+	 * Покупка UsetItem (копии Item) за внутреннюю валюту
+	 */
+	@Override
+	public Set<InventoryUnitDto> buyItem(Long itemId, String amountItems, String currencyTitle, JwtUser jwtUser) { //TODO :добвить списание денег
 
 		Item item = findById(itemId).get();
-		String username = jwtUser.getUsername().toString();
-		User user = userService.findByUsername(username).get();
-
-		// TODO: мб вынести в usersevice
-		Set<Account> userAccounts = user.getAccounts();
-		Account userAccount = userAccounts.stream()
-				.filter(acc -> currencyTitle.equals(acc.getCurrencyTitle()))
-				.findAny().orElse(null);
-
-		if (userAccount == null) {
-			System.err.println("У вас нет такой валюты "); // TODO: искл
-		}
-
 		String cost = priceService.getCostInCurrency(item.getPrices(), currencyTitle);
-
-		int itemCost =  Integer.parseInt(cost);
-		int amountItemsInt = Integer.parseInt(amountItems);
-		int balanceDomesticCurrency = Integer.parseInt(userAccount.getAmount());
-		
-		if (balanceDomesticCurrency < (itemCost*amountItemsInt)) {
-			System.err.println("У вас не достаточно данной валюты на счёту");
-		}
-
-		String result =  Integer.toString(balanceDomesticCurrency - (itemCost*amountItemsInt));
-		userAccount.setAmount(result);
-		userAccounts.add(userAccount);
-		user.setAccounts(userAccounts); // надо ли?
-		User savedUser = userService.saveUser(user).get(); // может в самый низ
-
-		UserInventory userInventory = savedUser.getUserInventory();
-
-		// Добавление UserItem в инвентарь
-		Set<InventoryUnit> inventoryUnits = userInventoryService.addUserItem(userInventory, item, amountItems);
-		
-		userService.saveUser(savedUser);
-
-		return  inventoryUnits.stream().map(unit -> InventoryUnitDto.fromUser(unit)).collect(Collectors.toSet());
+		return  userService.getSavedInventoryUnit(jwtUser, currencyTitle, cost, amountItems, item);
 	}
 
-	// Добавление Item
+	/**
+	 * Добавление Item
+	 */
 	@Override
 	public Optional<Item> addItem (ItemRequest itemRequest) {
 		Item newItem = new Item();
@@ -140,7 +110,9 @@ public class ItemService implements ItemServiceInterface {
 		return saveItem(newItem);
 	}
 
-	// Изменение Item (без цен)
+	/**
+	 * Изменение Item (без цен)
+	 */
 	@Override
 	public Optional<Item> editItem (long id, ItemRequest itemRequest)  {
 
@@ -153,13 +125,17 @@ public class ItemService implements ItemServiceInterface {
 		return Optional.of(item);
 	}
 
-	// Изменение и удаление цены
+	/**
+	 * Изменение и удаление (выключение) Price 
+	 */
 	@Override
 	public Optional<Price> editItemPrice(PriceRequest priceRequest, Long priceId) {
 		return priceService.editPrice(priceRequest, priceId);
 	}
 
-	// Удаление (Выключение) Item
+	/**
+	 * Удаление (Выключение) Item
+	 */
 	@Override
 	public void deleteItem(long itemId) {
 
@@ -170,18 +146,24 @@ public class ItemService implements ItemServiceInterface {
 
 	}
 
-	// Получение страницы со всеми Item
+	/**
+	 * Получение страницы со всеми Item
+	 */
 	private Page<Item> getPageItemFromAdmin(Pageable pageable) {
 		return findAllItem(pageable);
 	}
 
-	// Получение всех цен у айтема (влючая выкленные)
+	/**
+	 * Получение всех Price у айтема (влючая выкленные)
+	 */
 	private Set<Price> getItemPriciesFromAdmin(Long itemId) {
 		Item item = findById(itemId).get();
 		return item.getPrices();
 	}
 
-	// Получение списка всех ItemDto
+	/**
+	 * Получение списка всех ItemDto
+	 */
 	private Set<ItemDto> getItemsDtoFromUser() {
 		Set<Item> items = findAllByActive(true);
 		Set<ItemDto> itemsDto = items.stream().
@@ -189,13 +171,17 @@ public class ItemService implements ItemServiceInterface {
 		return itemsDto;
 	}
 
-	// Получение списка всех PriceDto у конкретного Item
+	/**
+	 * Получение списка всех PriceDto у конкретного Item
+	 */
 	private Set<PriceDto> getItemPriciesFromUser(Long itemId) {
 		Item item = findById(itemId).get();
 		return priceService.getItemPriciesDto(item.getPrices());
 	}
 
-	// Получение ItemDto
+	/**
+	 * Получение ItemDto
+	 */
 	private Optional<ItemDto> getItemDto(Long id) {
 		Item item = findById(id).get();
 		return Optional.of(ItemDto.fromUser(item));

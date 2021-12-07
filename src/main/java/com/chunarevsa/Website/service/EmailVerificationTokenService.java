@@ -36,15 +36,6 @@ public class EmailVerificationTokenService {
 					"Expired token. Please issue a new request"); */
 			System.out.println("Expired token. Please issue a new request"); // TODO:
 		}
-
-	}
-
-	public EmailVerificationToken save (EmailVerificationToken verificationToken) {
-		return emailVerificationTokenRepository.save(verificationToken);
-	}
-
-	public String createNewToken() {
-		return UUID.randomUUID().toString();
 	}
 
 	public void createVirficationToken(User user, String token) {
@@ -57,8 +48,12 @@ public class EmailVerificationTokenService {
 		emailVerificationTokenRepository.save(emailVerificationToken);
 	}
 
+	public EmailVerificationToken save (EmailVerificationToken verificationToken) {
+		return emailVerificationTokenRepository.save(verificationToken);
+	}
 
-
-
+	public String createNewToken() {
+		return UUID.randomUUID().toString();
+	}
 
 }

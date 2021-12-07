@@ -23,6 +23,9 @@ public class UserDeviceService {
 		return userDeviceRepository.findByUserId(userId);
 	}
 
+	/**
+	 * Создание нового устройства для пользователя
+	 */
 	public UserDevice createUserDevice(DeviceInfo deviceInfo) {
 		UserDevice userDevice = new UserDevice();
 		userDevice.setDeviceId(deviceInfo.getDeviceId());

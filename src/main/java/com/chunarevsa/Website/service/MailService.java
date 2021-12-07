@@ -28,7 +28,10 @@ public class MailService {
 	public MailService(JavaMailSender mailSender) {
 		this.mailSender = mailSender;
 	}
-	
+
+	/**
+	 * Отправка сообщения с подтверждением
+	 */
 	public void sendMessageVerification (String emailTo, String emailConfirmationUrl) throws MessagingException {
 
 		Mail mailMessage = new Mail();

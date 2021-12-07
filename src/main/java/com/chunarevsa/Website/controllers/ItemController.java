@@ -50,13 +50,13 @@ public class ItemController {
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity getItems(@PageableDefault Pageable pageable, 
 				@AuthenticationPrincipal JwtUser jwtUser) { 
+
 		return ResponseEntity.ok().body(itemService.getItems(pageable, jwtUser));
 	} 
 
 	/**
 	 * Получение Item
 	 * Если ADMIN -> Item, если USER -> ItemDto
-	 * 
 	 */
 	@GetMapping("/{id}")
 	@PreAuthorize("hasRole('USER')")
@@ -81,7 +81,7 @@ public class ItemController {
 	}
 
 	/**
-	 * Покупка Item за внутреннюю валюту
+	 * Покупка UsetItem (копии Item) за внутреннюю валюту
 	 * @param itemId
 	 * @param amountitem
 	 * @param currencytitle

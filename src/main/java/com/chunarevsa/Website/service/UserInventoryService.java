@@ -31,18 +31,25 @@ public class UserInventoryService {
 		this.inventoryUnitRepository = inventoryUnitRepository;
 	}
 
+	/**
+	 * Добавление пользователю UserItem
+	 */
 	public Set<InventoryUnit> addUserItem(UserInventory userInventory, Item item, String amountItems) {
 		Set<InventoryUnit> inventoryUnits = userInventory.getInventoryUnit();
+
 		Set<UserItem> userItems = inventoryUnits.stream().map(unit -> unit.getUserItem()).collect(Collectors.toSet());
 		UserItem userItem = userItems.stream().filter(
 			userItems1 -> Long.toString(item.getId()).equals(userItems1.getItemId()))
 			.findAny().orElse(null);
 			
+		// Проверка есть ли у пользователя ячейка с таким UserItem
 		if (userItem == null) {
+			// Создание новой ячейки 
 			System.err.println("Такого item у вас ещё нет. Создаём новую ячейку");
 			InventoryUnit newInventoryUnit = new InventoryUnit();
 			newInventoryUnit.setAmountItems(amountItems);
 
+			// Создание новой копии Item
 			UserItem newUserItem = new UserItem();
 			System.out.println("UserItem newUserItem = new UserItem()");
 			newUserItem.setItemId(Long.toString(item.getId()));
@@ -56,9 +63,11 @@ public class UserInventoryService {
 			inventoryUnits.add(savedInventoryUnit);
 
 		} else {
+			// Добавление количества UserItem
 			InventoryUnit inventoryUnit = inventoryUnits.stream()
 				.filter(unit -> userItem.equals(unit.getUserItem())).findAny().orElse(null);
 			
+			// Изменение количество UserItem в ячейке
 			int oldAmountItems =  Integer.parseInt(inventoryUnit.getAmountItems());
 			int add = Integer.parseInt(amountItems);
 			int newAmountItems =  oldAmountItems + add;
@@ -74,6 +83,10 @@ public class UserInventoryService {
 
 	}
 
+	/**
+	 * Получение инвенторя своего инвенторя в UserInventoryDto c
+	 * Ячейками в InventoryUnitDto с UserItemDto
+	 */
 	public Optional<UserInventoryDto> getUserInventory(User user) {
 		
 		return Optional.of(UserInventoryDto.fromUser(user.getUserInventory()));

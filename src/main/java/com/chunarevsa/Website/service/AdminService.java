@@ -5,6 +5,9 @@ import com.chunarevsa.Website.Entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Функции администратора 
+ */
 @Service
 public class AdminService {
 
@@ -15,6 +18,11 @@ public class AdminService {
 		this.userService = userService;
 	}
 
+	/**
+	 * Добавление суммы пользователю
+	 * @param username
+	 * @param amount
+	 */
 	public void addMoneyToUser(String username, String amount) {
 
 		User user = userService.findByUsername(username).get();
@@ -34,10 +42,16 @@ public class AdminService {
 		System.out.println("Новый баланс " + username + " :"+ user.getBalance() + " $");
 	}
 
+	/**
+	 * Представление суммы в double
+	 */
 	private double getInDouble(String num) {
 		return Double.parseDouble(num);
 	}
 
+	/**
+	 * Валидация суммы поступления
+	 */
 	private boolean validateAmount (String amount) {
 		try {
 			double value = Double.parseDouble(amount);
@@ -49,8 +63,5 @@ public class AdminService {
 		} catch (Exception e) {
 			return false;
 		}
-		
 	}
-
-	
 }

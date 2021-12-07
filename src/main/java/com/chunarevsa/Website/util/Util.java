@@ -9,7 +9,6 @@ public class Util {
 	}
 
 	public static String generateRandomUuid() {
-		System.err.println("generateRandomUuid" );
 		return UUID.randomUUID().toString();
 	}
 	

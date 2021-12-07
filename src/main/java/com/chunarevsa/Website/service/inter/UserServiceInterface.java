@@ -2,25 +2,59 @@ package com.chunarevsa.Website.service.inter;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
+import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.Entity.payload.RegistrationRequest;
+import com.chunarevsa.Website.dto.InventoryUnitDto;
+import com.chunarevsa.Website.dto.LogOutRequest;
+import com.chunarevsa.Website.dto.UserDto;
+import com.chunarevsa.Website.dto.UserInventoryDto;
+import com.chunarevsa.Website.dto.UserProfileDto;
+import com.chunarevsa.Website.security.jwt.JwtUser;
 
 public interface UserServiceInterface {
 	
-	// Добавить обработку ошибок - доделать
-	User addNewUser (RegistrationRequest newUser);
+	/**
+	 * Регистрация пользователя
+	 */
+	Optional<User> addNewUser (RegistrationRequest registerRequest);
 
-	// User save(User user);
+	/**
+	 * Получение свего профиля
+	 */
+	Optional<UserProfileDto> getMyUserProfile(JwtUser jwtUser);
 
-	List<User> getAll();
+	/**
+	 * Получение информации о пользователе
+	 */
+	Optional<UserDto> getUserProfile (String username);
+
+	/**
+	 * Получение своего инвенторя
+	 */
+	Optional<UserInventoryDto> getUserInventory(JwtUser jwtUser);
+
+	/**
+	 * Получение списка всех пользователей
+	 */
+	List<UserDto> findAllUsersDto();
+
+	/**
+	 * Logout
+	 * Происходит по конкретному девайсу
+	 */
+	void logout(JwtUser jwtUser, LogOutRequest logOutRequestDto);
+
+	/**
+	 * Получение сохраненного инвенторя
+	 */
+	Set<InventoryUnitDto> getSavedInventoryUnit(JwtUser jwtUser, String currencyTitle,
+							String cost,String amountItems,Item item);
 
 	Optional<User> findByUsername(String username);
 
-	User findById(Long id);
-
-	void delete(Long id);
-	
 	Optional<User> findByEmail(String email);
 
 } 

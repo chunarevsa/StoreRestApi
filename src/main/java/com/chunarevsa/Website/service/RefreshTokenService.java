@@ -24,7 +24,7 @@ public class RefreshTokenService {
 	public void deleteById(Long id) {
 		refreshTokenRepository.deleteById(id);
 	}
-
+	
 	public RefreshToken createRefrechToken() {
 		RefreshToken refreshToken = new RefreshToken();
 		refreshToken.setExpityDate(Instant.now().plusMillis(refreshTokenDurationMs));

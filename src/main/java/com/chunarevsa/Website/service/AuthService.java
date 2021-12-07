@@ -13,6 +13,7 @@ import com.chunarevsa.Website.Exception.AlredyUseException;
 import com.chunarevsa.Website.dto.LoginRequest;
 import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
 import com.chunarevsa.Website.security.jwt.JwtUser;
+import com.chunarevsa.Website.service.inter.AuthServiceInterface;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,7 +23,7 @@ import org.springframework.stereotype.Service;
 
 // TODO: log
 @Service
-public class AuthService {
+public class AuthService implements AuthServiceInterface {
 
 	private final UserService userService;
 	private final JwtTokenProvider jwtTokenProvider;
@@ -47,23 +48,27 @@ public class AuthService {
 		this.refreshTokenService = refreshTokenService;
 	}
 
+	/**
+	 * Регистрация новго пользователя
+	 * @param registrationRequest
+	 * @return
+	 */
+	@Override
 	public Optional<User> registrationUser (RegistrationRequest registrationRequest) {
 
 		String email = registrationRequest.getEmail();
 		if (emailAlreadyExists(email)) {
 			throw new AlredyUseException("Email"); // TODO:
 	  }  
-	  User newUser = userService.addNewUser(registrationRequest);
-	  
+	  User newUser = userService.addNewUser(registrationRequest).get();
 	  User savedNewUser = userService.saveUser(newUser).get();
 	  return Optional.ofNullable(savedNewUser);
 	}
 
-	// Закинуть в валидацию - доделать
-	private boolean emailAlreadyExists(String userEmail) {
-		return userService.existsByEmail(userEmail);
-	}
-
+	/**
+	 * Подтверждение учетной записи
+	 */
+	@Override
 	public Optional<User> confirmEmailRegistration(String token) { // TODO: обработка исключений
 		EmailVerificationToken verificationToken = emailVerificationTokenService.findByToken(token).orElseThrow();
 		User registeredUser = verificationToken.getUser();
@@ -81,11 +86,19 @@ public class AuthService {
 		return Optional.of(registeredUser);
 	}
 
+	/**
+	 * Логин по почте, паролю и устройству
+	 */
+	@Override
 	public Optional<Authentication> authenticateUser(LoginRequest loginRequestDto) {
 		UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword());
 		return Optional.ofNullable(authenticationManager.authenticate(user));
 	}
 
+	/**
+	 * Обновление токена для устройства
+	 */
+	@Override
 	public Optional<RefreshToken> createAndPersistRefreshTokenForDevice(Authentication authentication,
 			@Valid LoginRequest loginRequestDto) {
 		User jwtUser = (User) authentication.getPrincipal();
@@ -106,8 +119,18 @@ public class AuthService {
 		return Optional.ofNullable(refreshToken);
 	}
 
+	/**
+	 * Создание нового токена
+	 */
 	public String createToken (JwtUser jwtUser) {
 		return jwtTokenProvider.createToken(jwtUser);
 	}	
+
+	/**
+	 * Проверка на наличие пользователя с такой почтой
+	 */
+	private boolean emailAlreadyExists(String userEmail) {
+		return userService.existsByEmail(userEmail);
+	}
 
 }

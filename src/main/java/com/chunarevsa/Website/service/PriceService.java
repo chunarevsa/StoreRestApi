@@ -28,7 +28,9 @@ public class PriceService implements PriceServiceInterface {
 		this.domesticCurrencyService = domesticCurrencyService;
 	}
 
-	// Получение списка Price из списка PriceRequest
+	/**
+	 * Получение списка Price из списка PriceRequest
+	 */
 	@Override
 	public Set<Price> getItemPriciesFromRequest (Set<PriceRequest> priciesRequest) {
 
@@ -38,13 +40,17 @@ public class PriceService implements PriceServiceInterface {
 		return pricies;
 	}
 
-	// Сохранение всех цен
+	/**
+	 * Сохранение списка Price
+	 */
 	@Override
 	public Set<Price> savePricies(Set<Price> pricies) {
 		return pricies.stream().map(price -> savePrice(price).get()).collect(Collectors.toSet());
 	}
 
-	// Изменение цены
+	/**
+	 * Изменение Price
+	 */
 	@Override
 	public Optional<Price> editPrice(PriceRequest priceRequest, Long priceId) {
 
@@ -59,14 +65,18 @@ public class PriceService implements PriceServiceInterface {
 		return savePrice(price);
 	}
 
-	// Удаление всех цен @
+	/**
+	 * Удаление списка Price
+	 */
 	@Override
 	public Set<Price> deletePricies (Set<Price> prices) { 
 		return prices.stream()
 				.map(price -> deletePrice(price.getId()).get()).collect(Collectors.toSet());
 	}
 
-	// Удаление цены
+	/**
+	 * Удаление Price
+	 */
 	private Optional<Price> deletePrice (Long id) {
 
 		Price price = priceRepository.findById(id).orElseThrow();
@@ -75,7 +85,9 @@ public class PriceService implements PriceServiceInterface {
 		return Optional.of(price);
 	}
 
-	// Получение всех цен в PriceDto
+	/**
+	 * Получение всех цен в PriceDto
+	 */
 	@Override
 	public Set<PriceDto> getItemPriciesDto(Set<Price> pricies) {
 
@@ -85,15 +97,17 @@ public class PriceService implements PriceServiceInterface {
 		return priciesDto;
 	}
 
-
-	// Получение цены в PriceDto
+	/**
+	 * Получение цены в PriceDto
+	 */
 	private Optional<PriceDto> getItemPriceDto(Long priceId) {
-
 		Price price = findById(priceId).get();
 		return Optional.of(PriceDto.fromUser(price));
 	}
 
-	// Проверка есть ли у Item такая цена
+	/**
+	 * Проверка есть ли у Item такая цена
+	 */
 	public String getCostInCurrency(Set<Price> prices, String currencyTitle) {
 		Price price = prices.stream().filter(itemPrice -> currencyTitle.equals(itemPrice.getCurrencyTitle()))
 			.findAny().orElse(null);
@@ -104,7 +118,9 @@ public class PriceService implements PriceServiceInterface {
 		return price.getCost();
 	}
 
-	// Получение Price из PriceRequest
+	/**
+	 * Получение Price из PriceRequest
+	 */
 	private Optional<Price> getItemPriceFromRequest(PriceRequest priceRequest) {
 
 		Price price = new Price();
@@ -117,7 +133,9 @@ public class PriceService implements PriceServiceInterface {
 		return Optional.of(price);
 	}
 
-	// Валидация PriceRequest
+	/**
+	 * Валидация PriceRequest
+	 */
 	private boolean validatePriceRequest(PriceRequest priceRequest) {
 
 		if (!validateCostInPriceRequest(priceRequest.getCost())) {
@@ -135,20 +153,24 @@ public class PriceService implements PriceServiceInterface {
 			System.err.println("Цена " + priceRequest.isActive() + " выключена");
 			return false;
 		}
-		return true;
+		return true; // TODO: искл
 	}
 
-	// Валидация cost
+	/**
+	 * Валидация cost
+	 */
 	private boolean validateCostInPriceRequest(String cost) {
 
 		int i = Integer.parseInt(cost);
 		if (i < 0 ) {
-			return false;
+			return false;// TODO: искл
 		}
 		return true;
 	}
 
-	// Сохранение Price
+	/**
+	 * Сохранение Price
+	 */
 	private Optional<Price> savePrice(Price newPrice) {
 	
 		Price price = priceRepository.save(newPrice);
