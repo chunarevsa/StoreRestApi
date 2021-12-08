@@ -9,10 +9,13 @@ import com.chunarevsa.Website.event.UserRegistrationComplete;
 import com.chunarevsa.Website.exception.UserLoginException;
 import com.chunarevsa.Website.exception.UserRegistrationException;
 import com.chunarevsa.Website.payload.LoginRequest;
+import com.chunarevsa.Website.payload.ApiResponse;
 import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.service.AuthService;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +30,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("/auth/")
+@Api(value = "Authorization", description = "Авторизация пользователей")
 public class AuthController {
+
+	private static final Logger logger = LogManager.getLogger(AuthController.class);
 
 	private final AuthService authService;
 	private final ApplicationEventPublisher applicationEventPublisher;
@@ -50,6 +59,7 @@ public class AuthController {
 	 * "registerAsAdmin": "true" - зарегистрировать администратором
 	 * @param registrationRequest
 	 */
+	@ApiOperation(value = "Регистрация пользователя")
 	@PostMapping ("/register")
 	public ResponseEntity registration (@Valid @RequestBody RegistrationRequest registrationRequest ) {
 		
@@ -58,7 +68,8 @@ public class AuthController {
 						UriComponentsBuilder urlBuilder = ServletUriComponentsBuilder.fromCurrentContextPath().path("/auth/registrationConfirmation");
 						UserRegistrationComplete userRegistrationComplete = new UserRegistrationComplete(user, urlBuilder);
 						applicationEventPublisher.publishEvent(userRegistrationComplete);
-						return ResponseEntity.ok("Для завершения регистрации перейдите по ссылке в письме");
+						logger.info("Пользователь зарегистрировался: " + user);
+						return ResponseEntity.ok(new ApiResponse(true, "Для завершения регистрации перейдите по ссылке в письме"));
 					}).orElseThrow(() -> new UserRegistrationException(registrationRequest.getEmail(), "Пользователь с такой почтой уже существует"));
 	}
 
@@ -66,6 +77,7 @@ public class AuthController {
 	 * Подтверждение учетной записи
 	 * @param token
 	 */
+	@ApiOperation(value = "Подтверждение учетной записи")
 	@GetMapping("/registrationConfirmation")
 	public ResponseEntity confirmRegistration (@RequestParam("token") String token) {
 
@@ -77,6 +89,7 @@ public class AuthController {
 	 * Логин по почте, паролю и устройству
 	 * @param loginRequestDto
 	 */
+	@ApiOperation(value = "Логин по почте, паролю и устройству")
 	@PostMapping("/login")
 	public ResponseEntity login (@Valid @RequestBody LoginRequest loginRequestDto) {
 
@@ -84,6 +97,7 @@ public class AuthController {
 			.orElseThrow(() -> new UserLoginException("Не удалось войти в систему - " + loginRequestDto));
 
 		JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
+		logger.info("Вход в систему  " + jwtUser.getUsername());
 		SecurityContextHolder.getContext().setAuthentication(authentication);  
 		
 		return authService.createAndPersistRefreshTokenForDevice(authentication, loginRequestDto)

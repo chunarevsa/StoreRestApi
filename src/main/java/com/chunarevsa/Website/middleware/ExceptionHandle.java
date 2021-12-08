@@ -1,7 +1,7 @@
 package com.chunarevsa.Website.middleware;
 
 import com.chunarevsa.Website.exception.AllException;
-import com.chunarevsa.Website.payload.Response;
+import com.chunarevsa.Website.payload.ApiResponse;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -13,8 +13,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class ExceptionHandle extends ResponseEntityExceptionHandler {
 	
 	@ExceptionHandler(AllException.class)
-	protected ResponseEntity<Response> handleAllException(AllException allException) {
-		Response response = new Response(allException.getClientMessage(), allException.httpStatus);
+	protected ResponseEntity<ApiResponse> handleAllException(AllException allException) {
+		ApiResponse response = new ApiResponse(null, null); // TODO:
 		return new ResponseEntity<>(response, allException.httpStatus);
   }
 

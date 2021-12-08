@@ -27,7 +27,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	private final JwtUserDetailsService jwtUserDetailsService;
-
 	private final JwtAuthenricationEntryPoint jwtAuthenricationEntryPoint;
 
 	@Autowired
@@ -47,7 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new JwtAuthenticationFilter();
 	}
 
-	@Override // ? - доделать
+	@Override 
 	protected void configure (AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
 	}
@@ -57,7 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 	}
 
-	@Override // ? - доделать
+	@Override 
 	public void configure (WebSecurity webSecurity) {
 		webSecurity.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/**",
 		"/swagger-ui.html", "/webjars/**");
@@ -68,11 +67,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		httpSecurity.cors()
 					.and()
-						.httpBasic().disable() // ? доделать
-						.csrf().disable() // защита от взлома
+						.httpBasic().disable() 
+						.csrf().disable() 
 						.exceptionHandling().authenticationEntryPoint(jwtAuthenricationEntryPoint)
 					.and()	
-						// сессии пока отключены - доделать
+						
 						.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 					.and()
 						.authorizeRequests()

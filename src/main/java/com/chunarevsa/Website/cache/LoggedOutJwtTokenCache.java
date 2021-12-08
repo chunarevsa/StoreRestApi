@@ -7,6 +7,8 @@ import java.util.concurrent.TimeUnit;
 import com.chunarevsa.Website.event.UserLogoutSuccess;
 import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -16,8 +18,9 @@ import net.jodah.expiringmap.ExpiringMap;
 @Component
 public class LoggedOutJwtTokenCache {
 	
-	private final ExpiringMap<String, UserLogoutSuccess> tokenEventMap;
+	private static final Logger logger = LogManager.getLogger(LoggedOutJwtTokenCache.class);
 
+	private final ExpiringMap<String, UserLogoutSuccess> tokenEventMap;
 	private final JwtTokenProvider jwtTokenProvider;
 
 	@Autowired
@@ -31,14 +34,11 @@ public class LoggedOutJwtTokenCache {
 	public void markLogoutEventForToken(UserLogoutSuccess event) {
 		String token = event.getToken();
 		if (tokenEventMap.containsKey(token)) {
-			String.format("Log out token is already present ", event.getUserEmail());
+			logger.info(String.format("Токен [%s] уже есть в кэше", event.getUserEmail()));
 		} else {
 			Date tokenExpiryDate = jwtTokenProvider.getTokenExpiryFromJwt(token);
 			long ttlForToken = getTTLForToken(tokenExpiryDate);
-			System.out.println("ttlForToken :" +ttlForToken);
-
 			tokenEventMap.put(token, event, ttlForToken, TimeUnit.SECONDS);
-
 		}
 	}
 

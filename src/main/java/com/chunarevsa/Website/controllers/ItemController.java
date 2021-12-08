@@ -1,13 +1,20 @@
 package com.chunarevsa.Website.controllers;
 
+import java.util.Optional;
+
 import javax.validation.Valid;
 
+import com.chunarevsa.Website.entity.Item;
+import com.chunarevsa.Website.entity.Price;
 import com.chunarevsa.Website.exception.AllException;
+import com.chunarevsa.Website.payload.ApiResponse;
 import com.chunarevsa.Website.payload.ItemRequest;
 import com.chunarevsa.Website.payload.PriceRequest;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.service.ItemService;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -24,17 +31,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 /**
  * Товар который можно приобрести за внутреннюю валюту
- * Например: броня, стрелы, скин... что угодно.
- * Пользователь приобретает копию товара - UserItem
- * UserItem добавляется в одну из ячеек в инвентаре пользователя
- * 
+ * Например: броня, стрелы, скин... что угодно. 
  */
 @RestController
 @RequestMapping("/item")
+@Api(value = "Item Rest API", description = "Товар который можно приобрести за внутреннюю валюту")
 public class ItemController {
 	
+	private static final Logger logger = LogManager.getLogger(ItemController.class);
+
 	private final ItemService itemService;
 	
 	@Autowired
@@ -48,6 +58,7 @@ public class ItemController {
 	 */
 	@GetMapping("/all")
 	@PreAuthorize("hasRole('USER')")
+	@ApiOperation(value = "Получение Items. Формат ответа зависить от роли")
 	public ResponseEntity getItems(@PageableDefault Pageable pageable, 
 				@AuthenticationPrincipal JwtUser jwtUser) { 
 
@@ -60,6 +71,7 @@ public class ItemController {
 	 */
 	@GetMapping("/{id}")
 	@PreAuthorize("hasRole('USER')")
+	@ApiOperation(value = "Получение Item. Формат ответа зависить от роли")
 	public ResponseEntity getItem (@PathVariable(value = "id") Long id, 
 			@AuthenticationPrincipal JwtUser jwtUser) throws AllException {
 
@@ -74,6 +86,7 @@ public class ItemController {
 	 */
 	@GetMapping("/{id}/pricies")
 	@PreAuthorize("hasRole('USER')")
+	@ApiOperation(value = "Получение у Item списка всех Price. Формат ответа зависить от роли")
 	public ResponseEntity getItemPricies (@PathVariable(value = "id") Long itemId, 
 					@AuthenticationPrincipal JwtUser jwtUser) throws AllException {
 	
@@ -81,7 +94,7 @@ public class ItemController {
 	}
 
 	/**
-	 * Покупка UsetItem (копии Item) за внутреннюю валюту
+	 * Покупка Item за внутреннюю валюту
 	 * @param itemId
 	 * @param amountitem
 	 * @param currencytitle
@@ -89,6 +102,7 @@ public class ItemController {
 	 */
 	@PostMapping("/{id}/buy")
 	@PreAuthorize("hasRole('USER')")
+	@ApiOperation(value = "Покупка Item за внутреннюю валюту")
 	public ResponseEntity buyItem (@PathVariable(value = "id") Long itemId,
 					@RequestParam String amountitem,
 					@RequestParam String currencytitle,
@@ -103,10 +117,11 @@ public class ItemController {
 	 */
 	@PostMapping("/add")
 	@PreAuthorize("hasRole('ADMIN')")
+	@ApiOperation(value = "Добавление Item")
 	public ResponseEntity addItem (@Valid @RequestBody ItemRequest itemRequest) throws AllException {
-
-		return itemService.addItem(itemRequest) // TODO: исключение
-				.map(item -> ResponseEntity.ok().body(item)).orElseThrow();
+		Optional<Item> addedItem = itemService.addItem(itemRequest);
+		logger.info("Создан новый Item :" + addedItem.get().getId()); // TODO: исключение
+		return ResponseEntity.ok().body(addedItem);
 	} 	
 	
 	 /**
@@ -116,10 +131,12 @@ public class ItemController {
 	  */
 	@PutMapping("/{id}/edit")
 	@PreAuthorize("hasRole('ADMIN')")
+	@ApiOperation(value = "Изменение Item (без цен)")
 	public ResponseEntity editItem (@PathVariable(value = "id") Long id, 
 				@Valid @RequestBody ItemRequest itemRequest) throws AllException {
-		
-		return ResponseEntity.ok(itemService.editItem(id, itemRequest)); 
+		Optional<Item> editedItem = itemService.editItem(id, itemRequest);
+		logger.info("Item " + id + " был изменен");
+		return ResponseEntity.ok(editedItem); 
 	}
 
 	/**
@@ -127,9 +144,12 @@ public class ItemController {
 	 */
 	@PutMapping("/price/{priceId}/edit")
 	@PreAuthorize("hasRole('ADMIN')")
+	@ApiOperation(value = "Получение Items. Формат ответа зависить от роли")
 	public ResponseEntity editItemPrice (@PathVariable(value = "priceId") Long priceId,
 				@Valid @RequestBody PriceRequest priceRequest) throws AllException {
-		return ResponseEntity.ok().body(itemService.editItemPrice(priceRequest, priceId));
+		Optional<Price> editedItemPrice = itemService.editItemPrice(priceRequest, priceId);
+		logger.info("Цена " + priceId + " была изменена");
+		return ResponseEntity.ok().body(editedItemPrice);
 	} 
 
 	/**
@@ -138,9 +158,11 @@ public class ItemController {
 	 */
 	@DeleteMapping("/{id}/delete")
 	@PreAuthorize("hasRole('ADMIN')")
+	@ApiOperation(value = "Получение Items. Формат ответа зависить от роли")
 	public ResponseEntity deleteItem (@PathVariable(value = "id") Long id) throws AllException {
 		itemService.deleteItem(id);
-		return ResponseEntity.ok().body("Item " + id + " был удален");
+		logger.info("Item " + id + " был выключен");
+		return ResponseEntity.ok(new ApiResponse(true, "Item " + id + " был удален"));
 	}
 
 }

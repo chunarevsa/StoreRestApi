@@ -3,10 +3,13 @@ package com.chunarevsa.Website.controllers;
 import javax.validation.Valid;
 
 import com.chunarevsa.Website.exception.AllException;
+import com.chunarevsa.Website.payload.ApiResponse;
 import com.chunarevsa.Website.payload.DomesticCurrencyRequest;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.service.DomesticCurrencyService;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +25,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 /**
  * Внутренняя валюта gold, silver..
  * 
  */
 @RestController
 @RequestMapping("/currency")
+@Api(value = "Currency Rest API", description = "Внутренняя валюта (gold, silver...)")
 public class DomesticCurrencyController {
+
+	private static final Logger logger = LogManager.getLogger(DomesticCurrencyController.class);
 	
 	private final DomesticCurrencyService domesticCurrencyService;
 
@@ -44,6 +53,7 @@ public class DomesticCurrencyController {
 	 */
 	@GetMapping("/all")
 	@PreAuthorize("hasRole('USER')")
+	@ApiOperation(value = "Получение всех Currency. Формат ответа зависить от роли")
 	public ResponseEntity getCurrencies(@PageableDefault Pageable pageable,
 				@AuthenticationPrincipal JwtUser jwtUser) { 
 
@@ -58,6 +68,7 @@ public class DomesticCurrencyController {
 	 */
 	@GetMapping("/{title}") //Проверка если вдруг выключена, то просто включить
 	@PreAuthorize("hasRole('USER')")
+	@ApiOperation(value = "Получить Currency. Формат ответа зависить от роли")
 	public ResponseEntity getCurrencyByTitle(@PathVariable(value = "title") String title,
 				@AuthenticationPrincipal JwtUser jwtUser) { 
 
@@ -72,10 +83,11 @@ public class DomesticCurrencyController {
 	 */
 	@PostMapping("/buy")
 	@PreAuthorize("hasRole('USER')")
+	@ApiOperation(value = "Покупка внутренней валюты за $ ")
 	public ResponseEntity buyCurrency(@RequestParam String title,
 					@RequestParam String amount,
 					@AuthenticationPrincipal JwtUser jwtUser) {
-		
+
 		return ResponseEntity.ok().body(domesticCurrencyService.buyCurrency(title, amount, jwtUser));
 	} 
 
@@ -85,10 +97,11 @@ public class DomesticCurrencyController {
 	 */
 	@PostMapping("/add")
 	@PreAuthorize("hasRole('ADMIN')")
+	@ApiOperation(value = "Добавление Currency")
 	public ResponseEntity addCurrency(@Valid @RequestBody DomesticCurrencyRequest currencyRequest) throws AllException {
 
 		return domesticCurrencyService.addCurrency(currencyRequest) // TODO: исключение
-			.map(currency -> ResponseEntity.ok().body("Валюта добавлена")).orElseThrow();
+			.map(currency -> ResponseEntity.ok(new ApiResponse(true, "Валюта " + currency + " была добавлена") )).orElseThrow();
 	} 	
 	
 	/**
@@ -97,8 +110,9 @@ public class DomesticCurrencyController {
 	 * @param currencyRequest
 
 	 */
-	@PutMapping("/{title}/edit") // TODO: сделать через параметр
+	@PutMapping("/{title}/edit") 
 	@PreAuthorize("hasRole('ADMIN')")
+	@ApiOperation(value = "Изменение Currency")
 	public ResponseEntity editCurrency (@PathVariable(value = "title") String title, 
 				@Valid @RequestBody DomesticCurrencyRequest currencyRequest) throws AllException {
 
@@ -106,14 +120,16 @@ public class DomesticCurrencyController {
 	} 
 
 	/**
-	 * Удаление
+	 * Удаление (выключение)
 	 * @param title
 	 */
 	@DeleteMapping("/{title}/delete")
 	@PreAuthorize("hasRole('ADMIN')")
+	@ApiOperation(value = "Удаление валюты ")
 	public ResponseEntity deleteCurrency (@PathVariable(value = "title") String title) throws AllException {
 		domesticCurrencyService.deleteCurrency(title);
-		return ResponseEntity.ok("Валюта " + title + " была удалена");
+		logger.info("Валюта " + title + " была удалена");
+		return ResponseEntity.ok(new ApiResponse(true, "Валюта " + title + " была удалена"));
 	}	
 
 }
