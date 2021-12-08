@@ -2,8 +2,8 @@ package com.chunarevsa.Website.controllers;
 
 import javax.validation.Valid;
 
-import com.chunarevsa.Website.dto.LogOutRequest;
 import com.chunarevsa.Website.event.UserLogoutSuccess;
+import com.chunarevsa.Website.payload.LogOutRequest;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.service.UserService;
 

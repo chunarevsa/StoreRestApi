@@ -1,4 +1,4 @@
-package com.chunarevsa.Website.dto;
+package com.chunarevsa.Website.payload;
 
 // Ввод цены
 public class PriceRequest {

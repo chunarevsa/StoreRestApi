@@ -3,7 +3,7 @@ package com.chunarevsa.Website.event;
 import java.time.Instant;
 import java.util.Date;
 
-import com.chunarevsa.Website.dto.LogOutRequest;
+import com.chunarevsa.Website.payload.LogOutRequest;
 
 import org.springframework.context.ApplicationEvent;
 

@@ -8,10 +8,10 @@ import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Entity.User;
 import com.chunarevsa.Website.Entity.payload.RegistrationRequest;
 import com.chunarevsa.Website.dto.InventoryUnitDto;
-import com.chunarevsa.Website.dto.LogOutRequest;
 import com.chunarevsa.Website.dto.UserDto;
 import com.chunarevsa.Website.dto.UserInventoryDto;
 import com.chunarevsa.Website.dto.UserProfileDto;
+import com.chunarevsa.Website.payload.LogOutRequest;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 
 public interface UserServiceInterface {

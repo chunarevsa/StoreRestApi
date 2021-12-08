@@ -6,8 +6,8 @@ import java.util.Set;
 import com.chunarevsa.Website.Entity.Item;
 import com.chunarevsa.Website.Entity.Price;
 import com.chunarevsa.Website.dto.InventoryUnitDto;
-import com.chunarevsa.Website.dto.ItemRequest;
-import com.chunarevsa.Website.dto.PriceRequest;
+import com.chunarevsa.Website.payload.ItemRequest;
+import com.chunarevsa.Website.payload.PriceRequest;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 
 import org.springframework.data.domain.Pageable;

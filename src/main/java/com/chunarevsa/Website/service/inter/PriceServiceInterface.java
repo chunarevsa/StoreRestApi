@@ -5,7 +5,7 @@ import java.util.Set;
 
 import com.chunarevsa.Website.Entity.Price;
 import com.chunarevsa.Website.dto.PriceDto;
-import com.chunarevsa.Website.dto.PriceRequest;
+import com.chunarevsa.Website.payload.PriceRequest;
 
 public interface PriceServiceInterface {
 

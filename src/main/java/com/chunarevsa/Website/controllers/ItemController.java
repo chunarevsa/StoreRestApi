@@ -3,8 +3,8 @@ package com.chunarevsa.Website.controllers;
 import javax.validation.Valid;
 
 import com.chunarevsa.Website.Exception.AllException;
-import com.chunarevsa.Website.dto.ItemRequest;
-import com.chunarevsa.Website.dto.PriceRequest;
+import com.chunarevsa.Website.payload.ItemRequest;
+import com.chunarevsa.Website.payload.PriceRequest;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.service.ItemService;
 

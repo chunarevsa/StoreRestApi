@@ -1,4 +1,4 @@
-package com.chunarevsa.Website.dto;
+package com.chunarevsa.Website.payload;
 
 public class DomesticCurrencyRequest {
 

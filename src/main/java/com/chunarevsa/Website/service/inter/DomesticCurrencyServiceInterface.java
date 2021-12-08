@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import com.chunarevsa.Website.Entity.DomesticCurrency;
 import com.chunarevsa.Website.Exception.InvalidPriceFormat;
-import com.chunarevsa.Website.dto.DomesticCurrencyRequest;
+import com.chunarevsa.Website.payload.DomesticCurrencyRequest;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 
 import org.springframework.data.domain.Pageable;
