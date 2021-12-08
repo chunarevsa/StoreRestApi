@@ -1,7 +1,6 @@
-package com.chunarevsa.Website.Middleware;
+package com.chunarevsa.Website.payload;
 
 import com.chunarevsa.Website.Exception.AllException;
-import com.chunarevsa.Website.payload.Response;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
