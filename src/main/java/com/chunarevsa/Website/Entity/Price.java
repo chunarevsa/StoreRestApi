@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -26,8 +27,9 @@ public class Price extends DateAudit {
 	@Column(name = "COST")
 	private String cost;
 
-	@Column(name = "CURRENCY")
-	private String currencyTitle; 
+	@OneToOne
+	@JoinColumn(name = "DOMESTIC_CURRENCY_ID", referencedColumnName = "DOMESTIC_CURRENCY_ID")
+	private DomesticCurrency domesticCurrency;
 
 	@Column(name = "IS_ACTIVE")
 	private Boolean active;
@@ -41,14 +43,10 @@ public class Price extends DateAudit {
 		super();
 	}
 
-	public Price(Long id, 
-					String cost, 
-					String currencyTitle, 
-					Boolean active, 
-					Item item) {
+	public Price(Long id, String cost, DomesticCurrency domesticCurrency, Boolean active, Item item) {
 		this.id = id;
 		this.cost = cost;
-		this.currencyTitle = currencyTitle;
+		this.domesticCurrency = domesticCurrency;
 		this.active = active;
 		this.item = item;
 	}
@@ -69,14 +67,15 @@ public class Price extends DateAudit {
 		this.cost = cost;
 	}
 
-	public String getCurrencyTitle() {
-		return this.currencyTitle;
+
+	public DomesticCurrency getDomesticCurrency() {
+		return this.domesticCurrency;
 	}
 
-	public void setCurrencyTitle(String currencyTitle) {
-		this.currencyTitle = currencyTitle;
+	public void setDomesticCurrency(DomesticCurrency domesticCurrency) {
+		this.domesticCurrency = domesticCurrency;
 	}
-
+	
 	public Boolean isActive() {
 		return this.active;
 	}
@@ -102,7 +101,7 @@ public class Price extends DateAudit {
 		return "{" +
 			" id='" + getId() + "'" +
 			", cost='" + getCost() + "'" +
-			", currencyTitle='" + getCurrencyTitle() + "'" +
+			", domesticCurrency='" + getDomesticCurrency() + "'" +
 			", active='" + isActive() + "'" +
 			", item='" + getItem() + "'" +
 			"}";

@@ -1,6 +1,5 @@
 package com.chunarevsa.Website.Entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -28,9 +27,9 @@ public class InventoryUnit extends DateAudit {
 	@Column(name = "AMOUNT_ITEMS")
 	private String amountItems;
 
-	@OneToOne(optional = false, cascade = CascadeType.ALL)
-	@JoinColumn(name = "USER_ITEM_ID", unique = true)
-	private UserItem userItem;
+	@OneToOne
+	@JoinColumn(name = "ITEM_ID", referencedColumnName = "ITEM_ID")
+	private Item item;
 
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -41,10 +40,10 @@ public class InventoryUnit extends DateAudit {
 		super();
 	}
 
-	public InventoryUnit(Long id, String amountItems, UserItem userItem, UserInventory userInventory) {
+	public InventoryUnit(Long id, String amountItems, Item item, UserInventory userInventory) {
 		this.id = id;
 		this.amountItems = amountItems;
-		this.userItem = userItem;
+		this.item = item;
 		this.userInventory = userInventory;
 	}
 
@@ -64,12 +63,12 @@ public class InventoryUnit extends DateAudit {
 		this.amountItems = amountItems;
 	}
 
-	public UserItem getUserItem() {
-		return this.userItem;
+	public Item getItem() {
+		return this.item;
 	}
 
-	public void setUserItem(UserItem userItem) {
-		this.userItem = userItem;
+	public void setItem(Item item) {
+		this.item = item;
 	}
 
 	public UserInventory getUserInventory() {
@@ -85,9 +84,8 @@ public class InventoryUnit extends DateAudit {
 		return "{" +
 			" id='" + getId() + "'" +
 			", amountItems='" + getAmountItems() + "'" +
-			", userItem='" + getUserItem() + "'" +
+			", item='" + getItem() + "'" +
 			", userInventory='" + getUserInventory() + "'" +
 			"}";
 	}
-
 } 

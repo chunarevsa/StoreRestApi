@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserInventoryDto {
 
-	private Set<InventoryUnitDto> inventoryUnitDto;
+	private Set<InventoryUnitDto> inventoryUnit;
 
 	public UserInventoryDto() {
 	}
@@ -18,23 +18,23 @@ public class UserInventoryDto {
 		UserInventoryDto userInventoryDto = new UserInventoryDto();
 		Set<InventoryUnitDto> collect = userInventory.getInventoryUnit().stream()
 				.map(InventoryUnitDto::fromUser).collect(Collectors.toSet());
-		userInventoryDto.setInventoryUnitDto(collect);
+		userInventoryDto.setInventoryUnit(collect);
 
 		return userInventoryDto;
 	}
 
-	public Set<InventoryUnitDto> getInventoryUnitDto() {
-		return this.inventoryUnitDto;
+	public Set<InventoryUnitDto> getInventoryUnit() {
+		return this.inventoryUnit;
 	}
 
-	public void setInventoryUnitDto(Set<InventoryUnitDto> inventoryUnitDto) {
-		this.inventoryUnitDto = inventoryUnitDto;
+	public void setInventoryUnit(Set<InventoryUnitDto> inventoryUnitDto) {
+		this.inventoryUnit = inventoryUnitDto;
 	}
 
 	@Override
 	public String toString() {
 		return "{" +
-			" inventoryUnitDto='" + getInventoryUnitDto() + "'" +
+			" inventoryUnitDto='" + getInventoryUnit() + "'" +
 			"}";
 	}
 

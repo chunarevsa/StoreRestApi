@@ -1,5 +1,6 @@
 package com.chunarevsa.Website.dto;
 
+import com.chunarevsa.Website.Entity.DomesticCurrency;
 import com.chunarevsa.Website.Entity.Price;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -21,7 +22,10 @@ public class PriceDto {
 	public static PriceDto fromUser (Price price) {
 		PriceDto priceDto = new PriceDto();
 		priceDto.setCost(price.getCost());
-		priceDto.setCurrencyTitle(price.getCurrencyTitle());
+		DomesticCurrency domesticCurrency = price.getDomesticCurrency();
+		
+		priceDto.setCurrencyTitle(domesticCurrency.getTitle());
+
 		return priceDto;
 	}
 

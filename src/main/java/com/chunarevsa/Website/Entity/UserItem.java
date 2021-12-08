@@ -1,5 +1,5 @@
 package com.chunarevsa.Website.Entity;
-
+/* 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -130,4 +130,4 @@ public class UserItem extends DateAudit { // TODO: возможно без base
 			"}";
 	}
 
-} 
+}  */

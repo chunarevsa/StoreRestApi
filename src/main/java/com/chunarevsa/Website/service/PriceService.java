@@ -54,13 +54,15 @@ public class PriceService implements PriceServiceInterface {
 	@Override
 	public Optional<Price> editPrice(PriceRequest priceRequest, Long priceId) {
 
+		DomesticCurrency domesticCurrency = domesticCurrencyService.findCurrencyByTitile(priceRequest.getCurrency()).get();
+
 		Price price = findPriceById(priceId);
 		if (price == null) {
 			System.err.println("ЦЕНА НЕ НАЙДЕЙНА, ДОБАВИТЬ ИСКЛЮЧЕНИЕ");
 		}
 		Price newPrice = getItemPriceFromRequest(priceRequest).get();
 		price.setCost(newPrice.getCost());
-		price.setCurrencyTitle(newPrice.getCurrencyTitle());
+		price.setDomesticCurrency(domesticCurrency);
 		price.setActive(newPrice.getActive());
 		return savePrice(price);
 	}
@@ -105,11 +107,15 @@ public class PriceService implements PriceServiceInterface {
 		return Optional.of(PriceDto.fromUser(price));
 	}
 
+
 	/**
 	 * Проверка есть ли у Item такая цена
 	 */
 	public String getCostInCurrency(Set<Price> prices, String currencyTitle) {
-		Price price = prices.stream().filter(itemPrice -> currencyTitle.equals(itemPrice.getCurrencyTitle()))
+		
+		DomesticCurrency domesticCurrency = domesticCurrencyService.findCurrencyByTitile(currencyTitle).get();
+
+		Price price = prices.stream().filter(itemPrice -> domesticCurrency.equals(itemPrice.getDomesticCurrency()))
 			.findAny().orElse(null);
 		
 		if (price == null) {
@@ -123,9 +129,11 @@ public class PriceService implements PriceServiceInterface {
 	 */
 	private Optional<Price> getItemPriceFromRequest(PriceRequest priceRequest) {
 
+		DomesticCurrency domesticCurrency = domesticCurrencyService.findCurrencyByTitile(priceRequest.getCurrency()).get();
+
 		Price price = new Price();
 		price.setCost(priceRequest.getCost());
-		price.setCurrencyTitle(priceRequest.getCurrency());
+		price.setDomesticCurrency(domesticCurrency);
 		if  (!validatePriceRequest(priceRequest)) {
 			price.setActive(false);
 		}

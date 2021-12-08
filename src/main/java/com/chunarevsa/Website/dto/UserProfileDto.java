@@ -14,7 +14,7 @@ public class UserProfileDto {
 	private String avatar;
 	private String email;
 	private String balance;
-	private Set<AccountDto> accountsDto;
+	private Set<AccountDto> accounts;
 
 	public UserProfileDto() {
 	}
@@ -30,7 +30,7 @@ public class UserProfileDto {
 		this.avatar = avatar;
 		this.email = email;
 		this.balance = balance;
-		this.accountsDto = accountsDto;
+		this.accounts = accountsDto;
 	}
 	
 	public User toUser () {
@@ -50,7 +50,7 @@ public class UserProfileDto {
 		userDto.setAvatar(user.getAvatar());
 		userDto.setEmail(user.getEmail());
 		userDto.setBalance(user.getBalance());
-		userDto.setAccountsDto(user.getAccounts().stream()
+		userDto.setAccounts(user.getAccounts().stream()
 			.map(AccountDto::fromUser).collect(Collectors.toSet()));
 		return userDto;
 	}
@@ -95,12 +95,12 @@ public class UserProfileDto {
 		this.balance = balance;
 	}
 
-	public Set<AccountDto> getAccountsDto() {
-		return this.accountsDto;
+	public Set<AccountDto> getAccounts() {
+		return this.accounts;
 	}
 
-	public void setAccountsDto(Set<AccountDto> accountsDto) {
-		this.accountsDto = accountsDto;
+	public void setAccounts(Set<AccountDto> accountsDto) {
+		this.accounts = accountsDto;
 	}
 	
 	@Override
@@ -111,7 +111,7 @@ public class UserProfileDto {
 			", avatar='" + getAvatar() + "'" +
 			", email='" + getEmail() + "'" +
 			", balance='" + getBalance() + "'" +
-			", accountsDto='" + getAccountsDto() + "'" +
+			", accountsDto='" + getAccounts() + "'" +
 			"}";
 	}
 	

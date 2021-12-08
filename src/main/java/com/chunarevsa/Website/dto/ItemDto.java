@@ -30,6 +30,15 @@ public class ItemDto {
 		return itemDto;
 	} 
 
+	public static ItemDto fromUnit (Item item) {
+		ItemDto itemDto = new ItemDto();
+		itemDto.setId(item.getId());
+		itemDto.setName(item.getName());
+		itemDto.setType(item.getType());
+		itemDto.setDescription(item.getDescription());
+		return itemDto;
+	}
+
 	public Long getId() {
 		return this.id;
 	}

@@ -8,7 +8,7 @@ public class InventoryUnitDto {
 
 	private Long id;
 	private String amountItems;
-	private UserItemDto userItemDto;
+	private ItemDtoFromUnit item;
 
 	public InventoryUnitDto() {
 	}
@@ -17,7 +17,7 @@ public class InventoryUnitDto {
 		InventoryUnitDto inventoryUnitDto = new InventoryUnitDto();
 		inventoryUnitDto.setAmountItems(inventoryUnit.getAmountItems());
 		inventoryUnitDto.setId(inventoryUnit.getId());
-		inventoryUnitDto.setUserItemDto(UserItemDto.fromUser(inventoryUnit.getUserItem()));
+		inventoryUnitDto.setItem(ItemDtoFromUnit.fromUnit(inventoryUnit.getItem()));
 		return inventoryUnitDto;
 	}
 
@@ -37,12 +37,12 @@ public class InventoryUnitDto {
 		this.amountItems = amountItems;
 	}
 
-	public UserItemDto getUserItemDto() {
-		return this.userItemDto;
+	public ItemDtoFromUnit getItem() {
+		return this.item;
 	}
 
-	public void setUserItemDto(UserItemDto userItemDto) {
-		this.userItemDto = userItemDto;
+	public void setItem(ItemDtoFromUnit item) {
+		this.item = item;
 	}
 
 	@Override
@@ -50,7 +50,9 @@ public class InventoryUnitDto {
 		return "{" +
 			" id='" + getId() + "'" +
 			", amountItems='" + getAmountItems() + "'" +
-			", userItemDto='" + getUserItemDto() + "'" +
+			", item='" + getItem() + "'" +
 			"}";
 	}
+
+
 }
