@@ -3,7 +3,7 @@ package com.chunarevsa.Website.security;
 
 import java.util.Optional;
 
-import com.chunarevsa.Website.Entity.User;
+import com.chunarevsa.Website.entity.User;
 import com.chunarevsa.Website.repo.UserRepository;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 

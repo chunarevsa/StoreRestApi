@@ -1,4 +1,4 @@
-package com.chunarevsa.Website.Exception;
+package com.chunarevsa.Website.exception;
 
 public class UserLogoutException extends RuntimeException {
 

@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.service;
 
-import com.chunarevsa.Website.Entity.User;
+import com.chunarevsa.Website.entity.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

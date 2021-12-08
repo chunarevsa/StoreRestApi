@@ -4,9 +4,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.chunarevsa.Website.Entity.DomesticCurrency;
-import com.chunarevsa.Website.Entity.Price;
 import com.chunarevsa.Website.dto.PriceDto;
+import com.chunarevsa.Website.entity.DomesticCurrency;
+import com.chunarevsa.Website.entity.Price;
 import com.chunarevsa.Website.payload.PriceRequest;
 import com.chunarevsa.Website.repo.PriceRepository;
 import com.chunarevsa.Website.service.inter.PriceServiceInterface;

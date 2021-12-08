@@ -2,7 +2,7 @@ package com.chunarevsa.Website.payload;
 
 import javax.validation.Valid;
 
-import com.chunarevsa.Website.Entity.payload.DeviceInfo;
+import com.chunarevsa.Website.entity.payload.DeviceInfo;
 
 // TODO: для всех реквество сделать валидацию
 public class LoginRequest {

@@ -1,4 +1,4 @@
-package com.chunarevsa.Website.Entity.token;
+package com.chunarevsa.Website.entity.token;
 
 public enum TokenStatus {
 	STATUS_PENDING,

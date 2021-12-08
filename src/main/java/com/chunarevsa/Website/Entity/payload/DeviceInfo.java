@@ -1,6 +1,6 @@
-package com.chunarevsa.Website.Entity.payload;
+package com.chunarevsa.Website.entity.payload;
 
-import com.chunarevsa.Website.Entity.DeviceType;
+import com.chunarevsa.Website.entity.DeviceType;
 
 public class DeviceInfo {
 

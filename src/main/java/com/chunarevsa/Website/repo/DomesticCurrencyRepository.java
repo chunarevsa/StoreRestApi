@@ -3,7 +3,7 @@ package com.chunarevsa.Website.repo;
 import java.util.Optional;
 import java.util.Set;
 
-import com.chunarevsa.Website.Entity.DomesticCurrency;
+import com.chunarevsa.Website.entity.DomesticCurrency;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

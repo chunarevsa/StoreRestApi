@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.event.listener;
 
-import com.chunarevsa.Website.Entity.User;
+import com.chunarevsa.Website.entity.User;
 import com.chunarevsa.Website.event.UserRegistrationComplete;
 import com.chunarevsa.Website.service.EmailVerificationTokenService;
 import com.chunarevsa.Website.service.MailService;

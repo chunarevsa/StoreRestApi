@@ -2,8 +2,8 @@ package com.chunarevsa.Website.service.inter;
 
 import java.util.Optional;
 
-import com.chunarevsa.Website.Entity.DomesticCurrency;
-import com.chunarevsa.Website.Exception.InvalidPriceFormat;
+import com.chunarevsa.Website.entity.DomesticCurrency;
+import com.chunarevsa.Website.exception.InvalidPriceFormat;
 import com.chunarevsa.Website.payload.DomesticCurrencyRequest;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 

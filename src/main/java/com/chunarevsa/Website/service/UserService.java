@@ -8,19 +8,19 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import com.chunarevsa.Website.Entity.Account;
-import com.chunarevsa.Website.Entity.InventoryUnit;
-import com.chunarevsa.Website.Entity.Item;
-import com.chunarevsa.Website.Entity.Role;
-import com.chunarevsa.Website.Entity.User;
-import com.chunarevsa.Website.Entity.UserDevice;
-import com.chunarevsa.Website.Entity.UserInventory;
-import com.chunarevsa.Website.Entity.payload.RegistrationRequest;
-import com.chunarevsa.Website.Exception.UserLogoutException;
 import com.chunarevsa.Website.dto.InventoryUnitDto;
 import com.chunarevsa.Website.dto.UserDto;
 import com.chunarevsa.Website.dto.UserInventoryDto;
 import com.chunarevsa.Website.dto.UserProfileDto;
+import com.chunarevsa.Website.entity.Account;
+import com.chunarevsa.Website.entity.InventoryUnit;
+import com.chunarevsa.Website.entity.Item;
+import com.chunarevsa.Website.entity.Role;
+import com.chunarevsa.Website.entity.User;
+import com.chunarevsa.Website.entity.UserDevice;
+import com.chunarevsa.Website.entity.UserInventory;
+import com.chunarevsa.Website.entity.payload.RegistrationRequest;
+import com.chunarevsa.Website.exception.UserLogoutException;
 import com.chunarevsa.Website.payload.LogOutRequest;
 import com.chunarevsa.Website.repo.UserRepository;
 import com.chunarevsa.Website.security.jwt.JwtUser;

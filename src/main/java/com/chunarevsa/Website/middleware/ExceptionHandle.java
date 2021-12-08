@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.middleware;
 
-import com.chunarevsa.Website.Exception.AllException;
+import com.chunarevsa.Website.exception.AllException;
 import com.chunarevsa.Website.payload.Response;
 
 import org.springframework.http.ResponseEntity;

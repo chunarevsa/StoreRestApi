@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.dto;
 
-import com.chunarevsa.Website.Entity.InventoryUnit;
+import com.chunarevsa.Website.entity.InventoryUnit;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)

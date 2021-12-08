@@ -8,7 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.chunarevsa.Website.Exception.InvalidTokenRequestException;
+import com.chunarevsa.Website.exception.InvalidTokenRequestException;
 import com.chunarevsa.Website.security.JwtUserDetailsService;
 
 import org.springframework.beans.factory.annotation.Autowired;

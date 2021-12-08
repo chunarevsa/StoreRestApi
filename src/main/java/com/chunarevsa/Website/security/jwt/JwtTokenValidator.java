@@ -2,9 +2,9 @@ package com.chunarevsa.Website.security.jwt;
 
 import java.util.Date;
 
-import com.chunarevsa.Website.Exception.InvalidTokenRequestException;
 import com.chunarevsa.Website.cache.LoggedOutJwtTokenCache;
 import com.chunarevsa.Website.event.UserLogoutSuccess;
+import com.chunarevsa.Website.exception.InvalidTokenRequestException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

@@ -3,9 +3,9 @@ package com.chunarevsa.Website.service.inter;
 import java.util.Optional;
 import java.util.Set;
 
-import com.chunarevsa.Website.Entity.Item;
-import com.chunarevsa.Website.Entity.Price;
 import com.chunarevsa.Website.dto.InventoryUnitDto;
+import com.chunarevsa.Website.entity.Item;
+import com.chunarevsa.Website.entity.Price;
 import com.chunarevsa.Website.payload.ItemRequest;
 import com.chunarevsa.Website.payload.PriceRequest;
 import com.chunarevsa.Website.security.jwt.JwtUser;

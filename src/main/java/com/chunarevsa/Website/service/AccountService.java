@@ -2,8 +2,8 @@ package com.chunarevsa.Website.service;
 
 import java.util.Set;
 
-import com.chunarevsa.Website.Entity.Account;
-import com.chunarevsa.Website.Entity.User;
+import com.chunarevsa.Website.entity.Account;
+import com.chunarevsa.Website.entity.User;
 import com.chunarevsa.Website.repo.AccountRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;

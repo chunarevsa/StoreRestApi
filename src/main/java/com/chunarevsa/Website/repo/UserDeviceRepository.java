@@ -2,8 +2,8 @@ package com.chunarevsa.Website.repo;
 
 import java.util.Optional;
 
-import com.chunarevsa.Website.Entity.UserDevice;
-import com.chunarevsa.Website.Entity.token.RefreshToken;
+import com.chunarevsa.Website.entity.UserDevice;
+import com.chunarevsa.Website.entity.token.RefreshToken;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

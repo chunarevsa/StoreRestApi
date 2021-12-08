@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.dto;
 
-import com.chunarevsa.Website.Entity.DomesticCurrency;
+import com.chunarevsa.Website.entity.DomesticCurrency;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)

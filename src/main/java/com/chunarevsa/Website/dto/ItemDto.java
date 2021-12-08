@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.dto;
 
-import com.chunarevsa.Website.Entity.Item;
+import com.chunarevsa.Website.entity.Item;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.Set;

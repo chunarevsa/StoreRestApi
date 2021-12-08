@@ -4,12 +4,12 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import com.chunarevsa.Website.Entity.User;
-import com.chunarevsa.Website.Entity.UserDevice;
-import com.chunarevsa.Website.Entity.payload.RegistrationRequest;
-import com.chunarevsa.Website.Entity.token.EmailVerificationToken;
-import com.chunarevsa.Website.Entity.token.RefreshToken;
-import com.chunarevsa.Website.Exception.AlredyUseException;
+import com.chunarevsa.Website.entity.User;
+import com.chunarevsa.Website.entity.UserDevice;
+import com.chunarevsa.Website.entity.payload.RegistrationRequest;
+import com.chunarevsa.Website.entity.token.EmailVerificationToken;
+import com.chunarevsa.Website.entity.token.RefreshToken;
+import com.chunarevsa.Website.exception.AlredyUseException;
 import com.chunarevsa.Website.payload.LoginRequest;
 import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
 import com.chunarevsa.Website.security.jwt.JwtUser;

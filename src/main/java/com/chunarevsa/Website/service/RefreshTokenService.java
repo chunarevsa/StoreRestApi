@@ -2,7 +2,7 @@ package com.chunarevsa.Website.service;
 
 import java.time.Instant;
 
-import com.chunarevsa.Website.Entity.token.RefreshToken;
+import com.chunarevsa.Website.entity.token.RefreshToken;
 import com.chunarevsa.Website.repo.RefreshTokenRepository;
 import com.chunarevsa.Website.util.Util;
 

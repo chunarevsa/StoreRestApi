@@ -1,4 +1,4 @@
-package com.chunarevsa.Website.Exception;
+package com.chunarevsa.Website.exception;
 
 // 6
 import org.springframework.security.core.AuthenticationException;

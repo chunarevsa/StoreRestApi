@@ -3,7 +3,7 @@ package com.chunarevsa.Website.dto;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.chunarevsa.Website.Entity.UserInventory;
+import com.chunarevsa.Website.entity.UserInventory;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)

@@ -2,12 +2,12 @@ package com.chunarevsa.Website.controllers;
 
 import javax.validation.Valid;
 
-import com.chunarevsa.Website.Entity.payload.JwtAuthenticationResponse;
-import com.chunarevsa.Website.Entity.payload.RegistrationRequest;
-import com.chunarevsa.Website.Entity.token.RefreshToken;
-import com.chunarevsa.Website.Exception.UserLoginException;
-import com.chunarevsa.Website.Exception.UserRegistrationException;
+import com.chunarevsa.Website.entity.payload.JwtAuthenticationResponse;
+import com.chunarevsa.Website.entity.payload.RegistrationRequest;
+import com.chunarevsa.Website.entity.token.RefreshToken;
 import com.chunarevsa.Website.event.UserRegistrationComplete;
+import com.chunarevsa.Website.exception.UserLoginException;
+import com.chunarevsa.Website.exception.UserRegistrationException;
 import com.chunarevsa.Website.payload.LoginRequest;
 import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
 import com.chunarevsa.Website.security.jwt.JwtUser;

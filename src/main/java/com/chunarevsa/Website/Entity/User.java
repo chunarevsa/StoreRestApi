@@ -1,4 +1,4 @@
-package com.chunarevsa.Website.Entity;
+package com.chunarevsa.Website.entity;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -4,9 +4,9 @@ import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.chunarevsa.Website.Entity.User;
-import com.chunarevsa.Website.Entity.token.EmailVerificationToken;
-import com.chunarevsa.Website.Entity.token.TokenStatus;
+import com.chunarevsa.Website.entity.User;
+import com.chunarevsa.Website.entity.token.EmailVerificationToken;
+import com.chunarevsa.Website.entity.token.TokenStatus;
 import com.chunarevsa.Website.repo.EmailVerificationTokenRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;

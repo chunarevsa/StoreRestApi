@@ -2,8 +2,8 @@ package com.chunarevsa.Website.service;
 
 import java.util.Optional;
 
-import com.chunarevsa.Website.Entity.UserDevice;
-import com.chunarevsa.Website.Entity.payload.DeviceInfo;
+import com.chunarevsa.Website.entity.UserDevice;
+import com.chunarevsa.Website.entity.payload.DeviceInfo;
 import com.chunarevsa.Website.repo.UserDeviceRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;

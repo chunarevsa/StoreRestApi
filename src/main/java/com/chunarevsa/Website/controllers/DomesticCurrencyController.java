@@ -2,7 +2,7 @@ package com.chunarevsa.Website.controllers;
 
 import javax.validation.Valid;
 
-import com.chunarevsa.Website.Exception.AllException;
+import com.chunarevsa.Website.exception.AllException;
 import com.chunarevsa.Website.payload.DomesticCurrencyRequest;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.service.DomesticCurrencyService;

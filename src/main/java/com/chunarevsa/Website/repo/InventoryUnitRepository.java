@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.repo;
 
-import com.chunarevsa.Website.Entity.InventoryUnit;
+import com.chunarevsa.Website.entity.InventoryUnit;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

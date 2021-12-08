@@ -2,7 +2,7 @@ package com.chunarevsa.Website.repo;
 
 import java.util.Set;
 
-import com.chunarevsa.Website.Entity.Item;
+import com.chunarevsa.Website.entity.Item;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

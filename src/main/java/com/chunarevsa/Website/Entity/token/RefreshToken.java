@@ -1,4 +1,4 @@
-package com.chunarevsa.Website.Entity.token;
+package com.chunarevsa.Website.entity.token;
 
 import java.time.Instant;
 
@@ -12,8 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
-import com.chunarevsa.Website.Entity.DateAudit;
-import com.chunarevsa.Website.Entity.UserDevice;
+import com.chunarevsa.Website.entity.DateAudit;
+import com.chunarevsa.Website.entity.UserDevice;
 
 import org.hibernate.annotations.NaturalId;
 

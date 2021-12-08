@@ -2,7 +2,7 @@ package com.chunarevsa.Website.repo;
 
 import java.util.Optional;
 
-import com.chunarevsa.Website.Entity.token.EmailVerificationToken;
+import com.chunarevsa.Website.entity.token.EmailVerificationToken;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

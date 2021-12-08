@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.repo;
 
-import com.chunarevsa.Website.Entity.Price;
+import com.chunarevsa.Website.entity.Price;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
