@@ -35,7 +35,7 @@ public class EmailVerificationTokenService {
 		emailVerificationToken.setTokenStatus(TokenStatus.STATUS_PENDING);
 		emailVerificationToken.setUser(user);
 		emailVerificationToken.setExpiryDate(Instant.now().plusMillis(tokenExpired));
-		logger.info("Generated Email verification token :" + emailVerificationToken );
+		logger.info("Generated Email verification token :" );
 		emailVerificationTokenRepository.save(emailVerificationToken);
 	}
 

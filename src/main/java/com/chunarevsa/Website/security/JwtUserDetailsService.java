@@ -36,7 +36,7 @@ public class JwtUserDetailsService implements UserDetailsService{
 
 		Optional<User> user = userRepository.findById(id);
 		return user.map(JwtUser::new)
-				  .orElseThrow(() -> new UsernameNotFoundException("Не удалось найти пользователя " + id));
+				  .orElseThrow(() -> new UsernameNotFoundException("Не удалось найти пользователя " + Long.toString(id)));
   }
 	
 }  

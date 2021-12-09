@@ -74,7 +74,7 @@ public class JwtTokenValidator {
 			Date logoutEventDate = previouslyLoggedOutEvent.getEventTime();
 			String errorMessage = String.format(
 					"Вы недавно вышли из системы. Авторизируйтесь повторно", userEmail,
-					logoutEventDate);
+					logoutEventDate.toString());
 			logger.info(errorMessage);
 			throw new InvalidTokenRequestException("tokenType", token, errorMessage);
 		}

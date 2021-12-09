@@ -124,7 +124,7 @@ public class AuthService implements AuthServiceInterface {
 
 		refreshToken.setUserDevice(userDevice);
 		refreshToken = refreshTokenService.save(refreshToken);
-		logger.info("Добавлено нове устройство " + userDevice.getDeviceId() 
+		logger.info("Добавлено новое устройство " + userDevice.getDeviceId() 
 				+ " для пользователя " + jwtUser.getUsername());
 		return Optional.ofNullable(refreshToken);
 	}

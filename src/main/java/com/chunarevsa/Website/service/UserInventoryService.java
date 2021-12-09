@@ -58,7 +58,7 @@ public class UserInventoryService {
 
 			inventoryUnit.setAmountItems(Integer.toString(newAmountItems));
 			inventoryUnits.add(inventoryUnit);
-			logger.info("Изменено количество Item у пользователя :" + newAmountItems);
+			logger.info("В ячейке " + inventoryUnit.getId() + " изменено количество Item :" + newAmountItems);
 			
 		}
 

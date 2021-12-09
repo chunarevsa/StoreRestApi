@@ -25,7 +25,7 @@ public class UserLogoutSuccessListener implements ApplicationListener<UserLogout
 	public void onApplicationEvent(UserLogoutSuccess event) {
 		if (event != null) {
 			DeviceInfo deviceInfo = event.getLogoutRequestDto().getDeviceInfo();
-			logger.info("Пользователь " + event.getUserEmail() + " " + deviceInfo + "покинул систему");
+			logger.info("Пользователь " + event.getUserEmail() + " " + deviceInfo.getDeviceId() + "покинул систему");
 			tokenCache.markLogoutEventForToken(event);
 		}
 		

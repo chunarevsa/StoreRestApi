@@ -146,7 +146,7 @@ public class UserService implements UserServiceInterface{
 		Set<Account> userAccounts = user.getAccounts();
 
 		Set<Account> newUserAccounts = accountService.getNewUserAccounts(userAccounts, currencyTitle, cost, amountItems);
-		user.setAccounts(newUserAccounts); // надо ли?
+		user.setAccounts(newUserAccounts); 
 
 		User savedUser = saveUser(user).get(); // может в самый низ
 		UserInventory userInventory = savedUser.getUserInventory();
@@ -154,7 +154,7 @@ public class UserService implements UserServiceInterface{
 		// Добавление Item в инвентарь
 		Set<InventoryUnit> inventoryUnits = userInventoryService.addItem(userInventory, item, amountItems);
 		saveUser(savedUser);
-		logger.info("Item " + item.getName() + " добавлен пользователю " + savedUser.getUsername());
+		logger.info(item.getName() + " добавлен пользователю " + savedUser.getUsername());
 		return inventoryUnits.stream()
 				.map(unit -> InventoryUnitDto.fromUser(unit)).collect(Collectors.toSet());
 	}

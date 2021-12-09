@@ -8,8 +8,6 @@ import com.chunarevsa.Website.payload.DomesticCurrencyRequest;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.service.DomesticCurrencyService;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -36,8 +34,6 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("/currency")
 @Api(value = "Currency Rest API", description = "Внутренняя валюта (gold, silver...)")
 public class DomesticCurrencyController {
-
-	private static final Logger logger = LogManager.getLogger(DomesticCurrencyController.class);
 	
 	private final DomesticCurrencyService domesticCurrencyService;
 
@@ -101,7 +97,7 @@ public class DomesticCurrencyController {
 	public ResponseEntity addCurrency(@Valid @RequestBody DomesticCurrencyRequest currencyRequest) throws AllException {
 
 		return domesticCurrencyService.addCurrency(currencyRequest) 
-			.map(currency -> ResponseEntity.ok(new ApiResponse(true, "Валюта " + currency + " была добавлена") ))
+			.map(currency -> ResponseEntity.ok(new ApiResponse(true, "Валюта " + currency.getTitle() + " была добавлена") ))
 			.orElseThrow(); // TODO: исключение
 	} 	
 	

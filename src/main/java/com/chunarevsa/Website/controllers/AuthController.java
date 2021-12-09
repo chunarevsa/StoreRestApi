@@ -68,7 +68,7 @@ public class AuthController {
 						UriComponentsBuilder urlBuilder = ServletUriComponentsBuilder.fromCurrentContextPath().path("/auth/registrationConfirmation");
 						UserRegistrationComplete userRegistrationComplete = new UserRegistrationComplete(user, urlBuilder);
 						applicationEventPublisher.publishEvent(userRegistrationComplete);
-						logger.info("Пользователь зарегистрировался: " + user);
+						logger.info("Пользователь зарегистрировался: " + user.getUsername());
 						return ResponseEntity.ok(new ApiResponse(true, "Для завершения регистрации перейдите по ссылке в письме"));
 					}).orElseThrow(() -> new UserRegistrationException(registrationRequest.getEmail(), "Пользователь с такой почтой уже существует"));
 	}
@@ -94,7 +94,7 @@ public class AuthController {
 	public ResponseEntity login (@Valid @RequestBody LoginRequest loginRequestDto) {
 
 		Authentication authentication = authService.authenticateUser(loginRequestDto)
-			.orElseThrow(() -> new UserLoginException("Не удалось войти в систему - " + loginRequestDto));
+			.orElseThrow(() -> new UserLoginException("Не удалось войти в систему - " + loginRequestDto.getUsername()));
 
 		JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
 		logger.info("Вход в систему  " + jwtUser.getUsername());
@@ -105,7 +105,7 @@ public class AuthController {
 					.map(refreshToken -> {
 						String jwtToken = authService.createToken(jwtUser);
 						return ResponseEntity.ok(new JwtAuthenticationResponse(jwtToken, refreshToken,  jwtTokenProvider.getExpiryDuration()));
-					}).orElseThrow(() -> new UserLoginException("Couldn't create refresh token for: [" + loginRequestDto + "]"));
+					}).orElseThrow(() -> new UserLoginException("Couldn't create refresh token for:" + loginRequestDto.getUsername())); // TODO: стиль
 
 	} 
 

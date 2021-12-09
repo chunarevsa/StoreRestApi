@@ -59,7 +59,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		  }
 		} catch (Exception | InvalidTokenRequestException e) {
 			// TODO: искл
-			logger.error("Ошибка авторизации пользователя :" + e);
+			logger.error("Ошибка авторизации пользователя :" + e.toString());
 
 		}
 		filterChain.doFilter(request, response);

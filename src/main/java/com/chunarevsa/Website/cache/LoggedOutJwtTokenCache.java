@@ -34,7 +34,7 @@ public class LoggedOutJwtTokenCache {
 	public void markLogoutEventForToken(UserLogoutSuccess event) {
 		String token = event.getToken();
 		if (tokenEventMap.containsKey(token)) {
-			logger.info(String.format("Токен [%s] уже есть в кэше", event.getUserEmail()));
+			logger.info("Токен " + event.getUserEmail() + " уже есть в кэше" );
 		} else {
 			Date tokenExpiryDate = jwtTokenProvider.getTokenExpiryFromJwt(token);
 			long ttlForToken = getTTLForToken(tokenExpiryDate);

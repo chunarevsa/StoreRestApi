@@ -111,7 +111,7 @@ public class ItemService implements ItemServiceInterface {
 		newItem.setPrices(pricies);
 		priceService.savePricies(newItem.getPrices());
 		Optional<Item> savedItem = saveItem(newItem);
-		logger.info("Создан новый Item :" + savedItem.get().getId());
+		logger.info("Создан новый Item :" + savedItem.get().getName());
 		return savedItem;
 	}
 

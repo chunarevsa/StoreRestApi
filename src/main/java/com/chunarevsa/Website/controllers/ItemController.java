@@ -1,11 +1,7 @@
 package com.chunarevsa.Website.controllers;
 
-import java.util.Optional;
-
 import javax.validation.Valid;
 
-import com.chunarevsa.Website.entity.Item;
-import com.chunarevsa.Website.entity.Price;
 import com.chunarevsa.Website.exception.AllException;
 import com.chunarevsa.Website.payload.ApiResponse;
 import com.chunarevsa.Website.payload.ItemRequest;
@@ -13,8 +9,6 @@ import com.chunarevsa.Website.payload.PriceRequest;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.service.ItemService;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -42,8 +36,6 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("/item")
 @Api(value = "Item Rest API", description = "Товар который можно приобрести за внутреннюю валюту")
 public class ItemController {
-	
-	private static final Logger logger = LogManager.getLogger(ItemController.class);
 
 	private final ItemService itemService;
 	
@@ -122,7 +114,7 @@ public class ItemController {
 
 		return ResponseEntity.ok().body(itemService.addItem(itemRequest));
 	} 	
-	
+	// TODO: ответы ApiResponse сделать одинаково во всех контр
 	 /**
 	  * Изменение Item (без цен)
 	  * @param id

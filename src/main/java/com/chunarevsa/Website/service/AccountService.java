@@ -54,7 +54,7 @@ public class AccountService implements AccountServiceInterface {
 			int add = Integer.parseInt(amountDomesticCurrency);
 			int newUserBalance = userBalanceDomesticCurrency + add;
 			logger.info("Новый баланс пользователя " + user.getUsername() 
-					+  " для валюты " + currencyTitle + " :" + newUserBalance);
+					+  " для валюты " + currencyTitle + " :" + Integer.toString(newUserBalance));
 			userAccount.setAmount(Integer.toString(newUserBalance));
 			userAccounts.add(userAccount);
 		}
@@ -92,7 +92,7 @@ public class AccountService implements AccountServiceInterface {
 		String result =  Integer.toString(balanceDomesticCurrency - (itemCost*amountItemsInt));
 		userAccount.setAmount(result);
 		userAccounts.add(userAccount);
-		logger.info("Новый баланс валюты " + currencyTitle );
+		logger.info("Новый баланс валюты " + currencyTitle + " " + result);
 		return userAccounts;
 	}
 
