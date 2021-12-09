@@ -17,7 +17,10 @@ public class RoleService {
 	public RoleService(RoleRepository roleRepository) {
 		this.roleRepository = roleRepository;
 	}
-	
+	/**
+	 * Получение списка всех ролей
+	 * @return
+	 */
 	public Collection<Role> findAll() {
 		return roleRepository.findAll();
 	}

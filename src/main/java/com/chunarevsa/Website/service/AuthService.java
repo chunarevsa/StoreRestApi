@@ -2,8 +2,6 @@ package com.chunarevsa.Website.service;
 
 import java.util.Optional;
 
-import javax.validation.Valid;
-
 import com.chunarevsa.Website.entity.User;
 import com.chunarevsa.Website.entity.UserDevice;
 import com.chunarevsa.Website.entity.payload.RegistrationRequest;
@@ -15,6 +13,8 @@ import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.service.inter.AuthServiceInterface;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,6 +24,8 @@ import org.springframework.stereotype.Service;
 // TODO: log
 @Service
 public class AuthService implements AuthServiceInterface {
+
+	private static final Logger logger = LogManager.getLogger(AuthService.class);
 
 	private final UserService userService;
 	private final JwtTokenProvider jwtTokenProvider;
@@ -58,10 +60,12 @@ public class AuthService implements AuthServiceInterface {
 
 		String email = registrationRequest.getEmail();
 		if (emailAlreadyExists(email)) {
-			throw new AlredyUseException("Email"); // TODO:
+			logger.error("Email " + email + " уже занят");
+			throw new AlredyUseException("Email"); // TODO: искл
 	  }  
 	  User newUser = userService.addNewUser(registrationRequest).get();
 	  User savedNewUser = userService.saveUser(newUser).get();
+	  logger.info("Зарегистрирован новый пользователь " + email);
 	  return Optional.ofNullable(savedNewUser);
 	}
 
@@ -69,11 +73,15 @@ public class AuthService implements AuthServiceInterface {
 	 * Подтверждение учетной записи
 	 */
 	@Override
-	public Optional<User> confirmEmailRegistration(String token) { // TODO: обработка исключений
-		EmailVerificationToken verificationToken = emailVerificationTokenService.findByToken(token).orElseThrow();
+	public Optional<User> confirmEmailRegistration(String token) { 
+
+		EmailVerificationToken verificationToken = emailVerificationTokenService.findByToken(token)
+				.orElseThrow(); // TODO: обработка исключений
+
 		User registeredUser = verificationToken.getUser();
 		if  (registeredUser.getIsEmailVerified()) {
-				return Optional.of(registeredUser);
+			logger.error("Пользователь " + registeredUser.getEmail() + " уже потверждён");
+			return Optional.of(registeredUser);
 		}
 
 		emailVerificationTokenService.verifyExpiration(verificationToken);
@@ -100,12 +108,13 @@ public class AuthService implements AuthServiceInterface {
 	 */
 	@Override
 	public Optional<RefreshToken> createAndPersistRefreshTokenForDevice(Authentication authentication,
-			@Valid LoginRequest loginRequestDto) {
+			LoginRequest loginRequestDto) {
 		User jwtUser = (User) authentication.getPrincipal();
 
 		userDeviceService.findByUserId(
 			jwtUser.getId()).map(UserDevice::getRefreshToken)
-								 .map(RefreshToken::getId).ifPresent(refreshTokenService::deleteById);
+								 .map(RefreshToken::getId)
+								 .ifPresent(refreshTokenService::deleteById);
 		
 		UserDevice userDevice = userDeviceService.createUserDevice(loginRequestDto.getDeviceInfo());
 		RefreshToken refreshToken = refreshTokenService.createRefrechToken();
@@ -115,7 +124,8 @@ public class AuthService implements AuthServiceInterface {
 
 		refreshToken.setUserDevice(userDevice);
 		refreshToken = refreshTokenService.save(refreshToken);
-
+		logger.info("Добавлено нове устройство " + userDevice.getDeviceId() 
+				+ " для пользователя " + jwtUser.getUsername());
 		return Optional.ofNullable(refreshToken);
 	}
 

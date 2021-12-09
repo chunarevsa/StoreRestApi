@@ -26,13 +26,17 @@ import com.chunarevsa.Website.repo.UserRepository;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.service.inter.UserServiceInterface;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-// TODO: Добавить обработку исключений (доделать)
+// TODO: искл
 @Service
 public class UserService implements UserServiceInterface{
+
+	private static final Logger logger = LogManager.getLogger(UserService.class);
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
@@ -73,6 +77,7 @@ public class UserService implements UserServiceInterface{
 		newUser.addRoles(getRoles(isAdmin));
 		newUser.setActive(true);
 		newUser.setIsEmailVerified(false);
+		newUser.setBalance( Double.toString(0.0) );
 		UserInventory userInventory = new UserInventory();
 		newUser.setUserInventory(userInventory);
 		return Optional.of(newUser);
@@ -124,7 +129,7 @@ public class UserService implements UserServiceInterface{
 		UserDevice userDevice = userDeviceService.findByUserId(jwtUser.getId())
 				.filter(device -> device.getDeviceId().equals(deviceId))
 				.orElseThrow(() -> new UserLogoutException(
-							logOutRequestDto.getDeviceInfo().getDeviceId(), "Invalid device Id"));
+					logOutRequestDto.getDeviceInfo().getDeviceId(), "Invalid device Id"));
 		
 		refreshTokenService.deleteById(userDevice.getRefreshToken().getId());
 	}
@@ -134,7 +139,7 @@ public class UserService implements UserServiceInterface{
 	 */
 	public Set<InventoryUnitDto> getSavedInventoryUnit(
 							JwtUser jwtUser, String currencyTitle,
-							String cost,String amountItems,Item item) {
+							String cost,String amountItems, Item item) {
 
 		String username = jwtUser.getUsername().toString();
 		User user = findByUsername(username).get();
@@ -146,10 +151,10 @@ public class UserService implements UserServiceInterface{
 		User savedUser = saveUser(user).get(); // может в самый низ
 		UserInventory userInventory = savedUser.getUserInventory();
 
-		// Добавление UserItem в инвентарь
-		Set<InventoryUnit> inventoryUnits = userInventoryService.addUserItem(userInventory, item, amountItems);
+		// Добавление Item в инвентарь
+		Set<InventoryUnit> inventoryUnits = userInventoryService.addItem(userInventory, item, amountItems);
 		saveUser(savedUser);
-		
+		logger.info("Item " + item.getName() + " добавлен пользователю " + savedUser.getUsername());
 		return inventoryUnits.stream()
 				.map(unit -> InventoryUnitDto.fromUser(unit)).collect(Collectors.toSet());
 	}

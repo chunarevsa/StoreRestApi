@@ -60,6 +60,4 @@ public class ApiResponse {
 		return this.path;
 	}
 
-
-
 }

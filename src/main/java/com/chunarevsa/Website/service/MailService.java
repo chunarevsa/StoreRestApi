@@ -38,7 +38,9 @@ public class MailService {
 		mailMessage.setFrom(username);
 		mailMessage.setTo(emailTo);
 		mailMessage.setSubject("Email Verification ");
-		mailMessage.setMessage("Добро пожаловать в наш магазин! \n Чтобы завершить регистрацию перейдите по ссылке \n " + emailConfirmationUrl);
+		mailMessage.setMessage("Добро пожаловать в наш магазин! " + 
+		"\n Чтобы завершить регистрацию перейдите по ссылке \n " + 
+		"" + emailConfirmationUrl);
 		send(mailMessage);
 	}
 

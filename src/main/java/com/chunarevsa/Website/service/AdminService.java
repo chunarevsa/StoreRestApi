@@ -2,6 +2,8 @@ package com.chunarevsa.Website.service;
 
 import com.chunarevsa.Website.entity.User;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AdminService {
+
+	private static final Logger logger = LogManager.getLogger(AdminService.class);
 
 	private final UserService userService;
 
@@ -27,26 +31,18 @@ public class AdminService {
 
 		User user = userService.findByUsername(username).get();
 		if (!validateAmount(amount)) {
+			logger.error("Сумма " + amount +" указана неверно");
 			System.err.println("ОШТБКА ВАЛИДАЦИИ"); // TODO: исключение
 		}
-		if (user.getBalance() == null) {
-			user.setBalance("0");
-		}
 
-		double oldBalance = Math.round(getInDouble(amount));
-		double toAdd = Math.round(getInDouble(user.getBalance()));
+		double oldBalance = Math.round(Double.parseDouble(amount));
+		double toAdd = Math.round(Double.parseDouble(user.getBalance()));
 		double sum =  Math.round(oldBalance + toAdd);
 
 		user.setBalance(Double.toString(sum));
 		userService.saveUser(user);
-		System.out.println("Новый баланс " + username + " :"+ user.getBalance() + " $");
-	}
+		logger.info("Новый баланс " + username + " :"+ user.getBalance() + " $");
 
-	/**
-	 * Представление суммы в double
-	 */
-	private double getInDouble(String num) {
-		return Double.parseDouble(num);
 	}
 
 	/**

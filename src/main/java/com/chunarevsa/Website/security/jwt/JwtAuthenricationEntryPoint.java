@@ -6,6 +6,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.AuthenticationException;
@@ -13,9 +15,11 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
-// ? - доделать
+// TODO: ?
 @Component
 public class JwtAuthenricationEntryPoint implements AuthenticationEntryPoint {
+
+	private static final Logger logger = LogManager.getLogger(JwtAuthenricationEntryPoint.class);
 
 	private final HandlerExceptionResolver resolver;
 
@@ -25,13 +29,10 @@ public class JwtAuthenricationEntryPoint implements AuthenticationEntryPoint {
 	}
 
 	@Override
-	public void commence(
-						HttpServletRequest request, 
-						HttpServletResponse httpServletResponse, 
-						AuthenticationException ex)
-			throws IOException, ServletException {
-				
-		System.err.println("User is unauthorised. Routing from the entry point");
+	public void commence(HttpServletRequest request, HttpServletResponse httpServletResponse, 
+						AuthenticationException ex) throws IOException, ServletException {
+		
+		logger.error("Пользователь не авторизован");
 		
 		if (request.getAttribute("javax.servlet.error.exception") != null) {
 			Throwable throwable = (Throwable) request.getAttribute("javax.servlet.error.exception");

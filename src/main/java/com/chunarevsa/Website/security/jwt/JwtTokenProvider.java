@@ -16,7 +16,9 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
-// Генерация токена на основании username, roles и тек. времени
+/**
+ * Генерация токена на основании username, roles и тек. времени
+ */
 @Component
 public class JwtTokenProvider {
 
@@ -32,20 +34,27 @@ public class JwtTokenProvider {
 		this.jwtExpiration = jwtExpiration;
 	}	
 
-	// Создание токена
+	/**
+	 * Создание токена
+	 * @param jwtUser
+	 */
 	public String createToken (JwtUser jwtUser) {
 
 		Instant expiryDate = Instant.now().plusMillis(jwtExpiration);
 		String authorities = getUserAuthotities(jwtUser);
 		return Jwts.builder()
 					.setSubject(Long.toString( jwtUser.getId() ))
-					.setIssuedAt(Date.from(Instant.now())) // Время создания токена
-					.setExpiration(Date.from(expiryDate)) // До скольки годен
-					.signWith(SignatureAlgorithm.HS512, secret) // метод кодирования
+					.setIssuedAt(Date.from(Instant.now())) 
+					.setExpiration(Date.from(expiryDate)) 
+					.signWith(SignatureAlgorithm.HS512, secret) 
 					.claim(AUTHORITIES_CLAIM, authorities)
 					.compact();
 	}
 
+	/**
+	 * Получение авторизации
+	 * @param jwtUser
+	 */
 	private String getUserAuthotities(JwtUser jwtUser) {
 		return jwtUser.getAuthorities().stream()
 						.map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
@@ -59,6 +68,10 @@ public class JwtTokenProvider {
 		return Long.parseLong(claims.getSubject());
 	}
 
+	/**
+	 * Получения списка ролей у пользоавтеля
+	 * @param token
+	 */
 	public List<GrantedAuthority> getAuthoritiesFromJWT(String token) {
 		Claims claims = Jwts.parser()
                 .setSigningKey(secret)

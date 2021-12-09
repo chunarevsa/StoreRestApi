@@ -11,11 +11,15 @@ import com.chunarevsa.Website.payload.PriceRequest;
 import com.chunarevsa.Website.repo.PriceRepository;
 import com.chunarevsa.Website.service.inter.PriceServiceInterface;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PriceService implements PriceServiceInterface { 
+
+	private static final Logger logger = LogManager.getLogger(PriceService.class);
 
 	private final PriceRepository priceRepository;
 	private final DomesticCurrencyService domesticCurrencyService;
@@ -34,7 +38,7 @@ public class PriceService implements PriceServiceInterface {
 	@Override
 	public Set<Price> getItemPriciesFromRequest (Set<PriceRequest> priciesRequest) {
 
-		Set<Price> pricies = priciesRequest.stream() // без связи с Item
+		Set<Price> pricies = priciesRequest.stream() 
 				.map(priceRequest -> getItemPriceFromRequest(priceRequest).get())
 				.collect(Collectors.toSet());
 		return pricies;
@@ -56,15 +60,18 @@ public class PriceService implements PriceServiceInterface {
 
 		DomesticCurrency domesticCurrency = domesticCurrencyService.findCurrencyByTitile(priceRequest.getCurrency()).get();
 
-		Price price = findPriceById(priceId);
+		Price price = findPriceById(priceId).get();
 		if (price == null) {
-			System.err.println("ЦЕНА НЕ НАЙДЕЙНА, ДОБАВИТЬ ИСКЛЮЧЕНИЕ");
+			logger.error("Не удалось найти цену " + priceId);
+			// TODO: Искл
 		}
 		Price newPrice = getItemPriceFromRequest(priceRequest).get();
 		price.setCost(newPrice.getCost());
 		price.setDomesticCurrency(domesticCurrency);
 		price.setActive(newPrice.getActive());
-		return savePrice(price);
+		Optional<Price> savedPrice = savePrice(price);
+		logger.info("Цена " + priceId + " была изменена");
+		return savedPrice;
 	}
 
 	/**
@@ -119,7 +126,8 @@ public class PriceService implements PriceServiceInterface {
 			.findAny().orElse(null);
 		
 		if (price == null) {
-			System.err.println("Данный Item нельзя приобрести за эту валюту"); // TODO: искл
+			logger.error("Данный Item нельзя приобрести за эту валюту");
+			// TODO: искл
 		}
 		return price.getCost();
 	}
@@ -135,7 +143,8 @@ public class PriceService implements PriceServiceInterface {
 		price.setCost(priceRequest.getCost());
 		price.setDomesticCurrency(domesticCurrency);
 		if  (!validatePriceRequest(priceRequest)) {
-			price.setActive(false);
+			logger.info("Ошибка создания цены");
+			// TODO: искл
 		}
 		price.setActive(priceRequest.getActive());
 		return Optional.of(price);
@@ -147,21 +156,21 @@ public class PriceService implements PriceServiceInterface {
 	private boolean validatePriceRequest(PriceRequest priceRequest) {
 
 		if (!validateCostInPriceRequest(priceRequest.getCost())) {
-			System.err.println("Сумма " + priceRequest.getCost() + " заполнена не верно");
-			priceRequest.setActive(false);
+			logger.error("Сумма " + priceRequest.getCost() + " заполнена не верно");
+			return false;
 		}
 
 		DomesticCurrency domesticCurrency = domesticCurrencyService.findCurrencyByTitile(priceRequest.getCurrency()).get();
 		if (domesticCurrency == null) {
-			System.err.println("Валюта" + priceRequest + " заполнена не верно");
-			priceRequest.setActive(false);
+			logger.error("Валюта" + priceRequest + " заполнена не верно");
+			return false;
 		} 
 
 		if (!priceRequest.isActive()){
-			System.err.println("Цена " + priceRequest.isActive() + " выключена");
+			logger.error("Цена " + priceRequest.isActive() + " выключена");
 			return false;
 		}
-		return true; // TODO: искл
+		return true; 
 	}
 
 	/**
@@ -171,7 +180,7 @@ public class PriceService implements PriceServiceInterface {
 
 		int i = Integer.parseInt(cost);
 		if (i < 0 ) {
-			return false;// TODO: искл
+			return false;// TODO: искл try catch
 		}
 		return true;
 	}
@@ -180,13 +189,11 @@ public class PriceService implements PriceServiceInterface {
 	 * Сохранение Price
 	 */
 	private Optional<Price> savePrice(Price newPrice) {
-	
-		Price price = priceRepository.save(newPrice);
-		return Optional.of(price);
+		return Optional.of(priceRepository.save(newPrice));
 	}
 
-	private Price findPriceById(Long priceId) {
-		return priceRepository.findById(priceId).orElseThrow(null);
+	private Optional<Price> findPriceById(Long priceId) {
+		return priceRepository.findById(priceId);
 	}
 
 	private Optional<Price> findById (Long id) {

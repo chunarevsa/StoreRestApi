@@ -100,8 +100,9 @@ public class DomesticCurrencyController {
 	@ApiOperation(value = "Добавление Currency")
 	public ResponseEntity addCurrency(@Valid @RequestBody DomesticCurrencyRequest currencyRequest) throws AllException {
 
-		return domesticCurrencyService.addCurrency(currencyRequest) // TODO: исключение
-			.map(currency -> ResponseEntity.ok(new ApiResponse(true, "Валюта " + currency + " была добавлена") )).orElseThrow();
+		return domesticCurrencyService.addCurrency(currencyRequest) 
+			.map(currency -> ResponseEntity.ok(new ApiResponse(true, "Валюта " + currency + " была добавлена") ))
+			.orElseThrow(); // TODO: исключение
 	} 	
 	
 	/**
@@ -128,7 +129,6 @@ public class DomesticCurrencyController {
 	@ApiOperation(value = "Удаление валюты ")
 	public ResponseEntity deleteCurrency (@PathVariable(value = "title") String title) throws AllException {
 		domesticCurrencyService.deleteCurrency(title);
-		logger.info("Валюта " + title + " была удалена");
 		return ResponseEntity.ok(new ApiResponse(true, "Валюта " + title + " была удалена"));
 	}	
 

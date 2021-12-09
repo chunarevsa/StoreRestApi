@@ -16,16 +16,19 @@ import com.chunarevsa.Website.repo.DomesticCurrencyRepository;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.service.inter.DomesticCurrencyServiceInterface;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
-// TODO: логирование
+
 @Service
 public class DomesticCurrencyService implements DomesticCurrencyServiceInterface {
+
+	private static final Logger logger = LogManager.getLogger(DomesticCurrencyService.class);
 
 	private final DomesticCurrencyRepository domesticCurrencyRepository;
 	private final UserService userService;
@@ -88,8 +91,8 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 		double amountDomesticCurrencyInt = Math.round(Double.parseDouble(amountDomesticCurrency));
 
 		if (userBalance < (costCurrency * amountDomesticCurrencyInt)) {
-			System.err.println("Суммы не достаточно для покупки "); // TODO: искл
-			return ResponseEntity.badRequest().body("Суммы не достаточно для покупки ");
+			logger.info("Суммы баланса пользователя " + user.getUsername() + "не достаточно для покупки валюты " + currencyTitle);
+			// TODO: искл
 		}
 
 		double newUserBalance = Math.round(userBalance - (costCurrency * amountDomesticCurrencyInt));
@@ -98,7 +101,8 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 		Set<Account> accounts = accountService.buyCurrency(currencyTitle, amountDomesticCurrency, user);
 		user.setAccounts(accounts);
 		userService.saveUser(user);
-		System.err.println("user balance is :" + user.getBalance());
+		logger.info("Пользователь " + user.getUsername() + " приобрел валюту " 
+				+ currencyTitle + "в размере " + amountDomesticCurrency);
 		
 		return user.getAccounts().stream()
 				.map(account -> AccountDto.fromUser(account)).collect(Collectors.toSet());
@@ -114,11 +118,13 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 		DomesticCurrency newCurrency = new DomesticCurrency();
 		newCurrency.setTitle(currencyRequest.getTitle());
 		if (!validateCost(currencyRequest.getCost())) {
+			logger.error("Неверный формат цены " + currencyRequest.getCost());
 			throw new InvalidPriceFormat(); // TODO: исключение
 		}
 		newCurrency.setCost(currencyRequest.getCost()); 
 		newCurrency.setActive(currencyRequest.isActive());
 		saveCurrency(newCurrency);
+		logger.info("Добавлена валюта  " + newCurrency.getTitle());
 		return Optional.of(newCurrency);
 	}
 
@@ -127,12 +133,12 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 	 */
 	@Override
 	public Optional<DomesticCurrency> editCurrency (String title, DomesticCurrencyRequest currencyRequest) {
-		System.out.println("editCurrency");
 		DomesticCurrency currency = findCurrencyByTitile(title).get();
 		currency.setTitle(currencyRequest.getTitle());
 		currency.setCost(currencyRequest.getCost());
 		currency.setActive(currencyRequest.isActive());
 		saveCurrency(currency);
+		logger.info("Валюта " + currency.getTitle() + " изменена");
 		return Optional.of(currency);
 	}
 
@@ -144,6 +150,7 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 		DomesticCurrency currency = findCurrencyByTitile(title).get();
 		currency.setActive(false);
 		saveCurrency(currency);
+		logger.info("Валюта " + title + " выключена");
 	}
 	/**
 	 * Получение валюты по Title
@@ -199,23 +206,18 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 	} 
 
 	private Optional<DomesticCurrency> saveCurrency(DomesticCurrency currency) {
-		System.out.println("saveCurrency");
 		return  Optional.of(domesticCurrencyRepository.save(currency)) ;
 	}
 
 	private boolean validateCost(String cost) {
-		System.out.println("validateCost");
 
 		try {
-			double num = Double.valueOf(cost);
-			System.out.println("num is " + num);
+			// double num = Double.valueOf(cost);
 			double numb = Double.parseDouble(cost);
-			System.out.println("numb is "+ numb);
 			if (numb < 0) {
 				return false;
 			}
 			return true;
-
 		} catch (Exception e) {
 			return false;
 		}

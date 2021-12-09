@@ -11,39 +11,43 @@ import com.chunarevsa.Website.entity.UserInventory;
 import com.chunarevsa.Website.repo.InventoryUnitRepository;
 import com.chunarevsa.Website.repo.UserInventoryRepository;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserInventoryService {
+	
+	private static final Logger logger = LogManager.getLogger(UserInventoryService.class);
 
 	private final UserInventoryRepository userInventoryRepository;
 	private final InventoryUnitRepository inventoryUnitRepository;
 
 	public UserInventoryService(
-				UserInventoryRepository userInventoryRepository,
-				InventoryUnitRepository inventoryUnitRepository) {
-	this.userInventoryRepository = userInventoryRepository;
+					UserInventoryRepository userInventoryRepository,
+					InventoryUnitRepository inventoryUnitRepository) {
+		this.userInventoryRepository = userInventoryRepository;
 		this.inventoryUnitRepository = inventoryUnitRepository;
 	}
 
 	/**
-	 * Добавление пользователю UserItem
+	 * Добавление пользователю Item
 	 */
-	public Set<InventoryUnit> addUserItem(UserInventory userInventory, Item item1, String amountItems) {
-		Set<InventoryUnit> inventoryUnits = userInventory.getInventoryUnit();
+	public Set<InventoryUnit> addItem(UserInventory userInventory, Item item1, String amountItems) {
 
+		Set<InventoryUnit> inventoryUnits = userInventory.getInventoryUnit();
 		InventoryUnit inventoryUnit = inventoryUnits.stream().filter(unit -> item1.equals(unit.getItem())).findAny().orElse(null);
 			
 		// Проверка есть ли у пользователя ячейка с таким UserItem
 		if (inventoryUnit == null) {
 			// Создание новой ячейки 
-			System.err.println("Такого item у вас ещё нет. Создаём новую ячейку");
 			InventoryUnit newInventoryUnit = new InventoryUnit();
 			newInventoryUnit.setAmountItems(amountItems);
 			newInventoryUnit.setItem(item1);
 
 			InventoryUnit savedInventoryUnit = inventoryUnitRepository.save(newInventoryUnit);
 			inventoryUnits.add(savedInventoryUnit);
+			logger.info("Добавлена новая ячейка инвенторя "+ savedInventoryUnit.getId());
 
 		} else {
 			
@@ -54,6 +58,7 @@ public class UserInventoryService {
 
 			inventoryUnit.setAmountItems(Integer.toString(newAmountItems));
 			inventoryUnits.add(inventoryUnit);
+			logger.info("Изменено количество Item у пользователя :" + newAmountItems);
 			
 		}
 

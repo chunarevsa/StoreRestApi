@@ -6,6 +6,8 @@ import com.chunarevsa.Website.cache.LoggedOutJwtTokenCache;
 import com.chunarevsa.Website.event.UserLogoutSuccess;
 import com.chunarevsa.Website.exception.InvalidTokenRequestException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -16,9 +18,14 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 
+/**
+ * Валидация токена по подписи, сроку действия и недавнему Logout
+ */
 @Component
 public class JwtTokenValidator {
 	
+	private static final Logger logger = LogManager.getLogger(JwtTokenValidator.class);
+
 	private final String secret;
 	private final LoggedOutJwtTokenCache loggedOutJwtTokenCache;
 
@@ -36,23 +43,23 @@ public class JwtTokenValidator {
 			Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
 
 		} catch (SignatureException ex) {
-			// logger.error("Invalid JWT signature");
+			logger.error("Invalid JWT signature");
 			 throw new InvalidTokenRequestException("JWT", token, "Incorrect signature");
 
 		} catch (MalformedJwtException ex) {
-			 //logger.error("Invalid JWT token");
+			 logger.error("Invalid JWT token");
 			 throw new InvalidTokenRequestException("JWT", token, "Malformed jwt token");
 
 		} catch (ExpiredJwtException ex) {
-			 //logger.error("Expired JWT token");
+			 logger.error("Expired JWT token");
 			 throw new InvalidTokenRequestException("JWT", token, "Token expired. Refresh required");
 
 		} catch (UnsupportedJwtException ex) {
-			 //logger.error("Unsupported JWT token");
+			 logger.error("Unsupported JWT token");
 			 throw new InvalidTokenRequestException("JWT", token, "Unsupported JWT token");
 
 		} catch (IllegalArgumentException ex) {
-			 //logger.error("JWT claims string is empty.");
+			 logger.error("JWT claims string is empty.");
 			 throw new InvalidTokenRequestException("JWT", token, "Illegal argument token");
 		}
 		valifateTokenIsNotForALoggedOutDevice(token);
@@ -66,8 +73,9 @@ public class JwtTokenValidator {
 			String userEmail = previouslyLoggedOutEvent.getUserEmail();
 			Date logoutEventDate = previouslyLoggedOutEvent.getEventTime();
 			String errorMessage = String.format(
-					"Token corresponds to an already logged out user [%s] at [%s]. Please login again", userEmail,
+					"Вы недавно вышли из системы. Авторизируйтесь повторно", userEmail,
 					logoutEventDate);
+			logger.info(errorMessage);
 			throw new InvalidTokenRequestException("tokenType", token, errorMessage);
 		}
 	}

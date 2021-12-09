@@ -16,6 +16,8 @@ import com.chunarevsa.Website.repo.ItemRepository;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.service.inter.ItemServiceInterface;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,10 +27,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class ItemService implements ItemServiceInterface {
 
+	private static final Logger logger = LogManager.getLogger(ItemService.class);
+
 	private final ItemRepository itemRepository;
 	private final PriceService priceService;
 	private final UserService userService;
-
 
 	@Autowired
 	public ItemService(
@@ -87,7 +90,7 @@ public class ItemService implements ItemServiceInterface {
 	 * Покупка UsetItem (копии Item) за внутреннюю валюту
 	 */
 	@Override
-	public Set<InventoryUnitDto> buyItem(Long itemId, String amountItems, String currencyTitle, JwtUser jwtUser) { //TODO :добвить списание денег
+	public Set<InventoryUnitDto> buyItem(Long itemId, String amountItems, String currencyTitle, JwtUser jwtUser) { 
 
 		Item item = findById(itemId).get();
 		String cost = priceService.getCostInCurrency(item.getPrices(), currencyTitle);
@@ -107,7 +110,9 @@ public class ItemService implements ItemServiceInterface {
 		Set<Price> pricies = priceService.getItemPriciesFromRequest(itemRequest.getPricies());
 		newItem.setPrices(pricies);
 		priceService.savePricies(newItem.getPrices());
-		return saveItem(newItem);
+		Optional<Item> savedItem = saveItem(newItem);
+		logger.info("Создан новый Item :" + savedItem.get().getId());
+		return savedItem;
 	}
 
 	/**
@@ -122,6 +127,7 @@ public class ItemService implements ItemServiceInterface {
 		item.setDescription(itemRequest.getDescription());
 		item.setActive(itemRequest.isActive());
 		saveItem(item);
+		logger.info("Item " + id + " был изменен");
 		return Optional.of(item);
 	}
 
@@ -143,7 +149,7 @@ public class ItemService implements ItemServiceInterface {
 		priceService.deletePricies(item.getPrices());
 		item.setActive(false);
 		saveItem(item);
-
+		logger.info("Item " + itemId + " был выключен");
 	}
 
 	/**

@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.chunarevsa.Website.exception.InvalidTokenRequestException;
 import com.chunarevsa.Website.security.JwtUserDetailsService;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,14 +25,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-	@Value("${jwt.header}")
+	private static final Logger logger = LogManager.getLogger(JwtAuthenticationFilter.class);
+
+	@Value("${jwt.header}") // jwt.header=Authorization
 	private String tokenRequestHeader;
 
-	@Value("${jwt.header.prefix}")
+	@Value("${jwt.header.prefix}") // jwt.header.prefix=Bearer 
 	private String tokenRequestHeaderPrefix;
-
-	// jwt.header=Authorization
-	// jwt.header.prefix=Bearer 
 
 	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
@@ -42,13 +43,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private JwtUserDetailsService jwtUserDetailsService;
 
 	@Override
-	protected void doFilterInternal(
-							HttpServletRequest request, 
-							HttpServletResponse response, 
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, 
 							FilterChain filterChain) throws ServletException, IOException {
 		try {
+			String jwt = getJwtFromRequest(request);
 
-			String jwt = getJwtFromRequest(request);			
 			if (StringUtils.hasText(jwt) && jwtTokenValidator.validateToken(jwt)) {
 				
 				Long userId = jwtTokenProvider.getUserIdFromJWT(jwt);
@@ -59,8 +58,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 		  }
 		} catch (Exception | InvalidTokenRequestException e) {
-			// доделать обработка ошибки 
-			System.err.println("Пользователь не авторизован");
+			// TODO: искл
+			logger.error("Ошибка авторизации пользователя :" + e);
+
 		}
 		filterChain.doFilter(request, response);
 	}
@@ -68,7 +68,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	// Получение токена из запроса
 	private String getJwtFromRequest(HttpServletRequest request) {
 		String token = request.getHeader(tokenRequestHeader); // jwt.header=Authorization		
-		if (StringUtils.hasText(token) && token.startsWith(tokenRequestHeaderPrefix)) { // jwt.header.prefix=Bearer 
+		if (StringUtils.hasText(token) && token.startsWith(tokenRequestHeaderPrefix)) { // jwt.header.prefix=Bearer
 			return token.replace(tokenRequestHeaderPrefix, ""); // jwt.header.prefix=Bearer 
 		}
 		return null;

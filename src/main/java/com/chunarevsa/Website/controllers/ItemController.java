@@ -117,11 +117,10 @@ public class ItemController {
 	 */
 	@PostMapping("/add")
 	@PreAuthorize("hasRole('ADMIN')")
-	@ApiOperation(value = "Добавление Item")
+	@ApiOperation(value = "Добавление Item") // TODO: AllExceptional
 	public ResponseEntity addItem (@Valid @RequestBody ItemRequest itemRequest) throws AllException {
-		Optional<Item> addedItem = itemService.addItem(itemRequest);
-		logger.info("Создан новый Item :" + addedItem.get().getId()); // TODO: исключение
-		return ResponseEntity.ok().body(addedItem);
+
+		return ResponseEntity.ok().body(itemService.addItem(itemRequest));
 	} 	
 	
 	 /**
@@ -131,12 +130,11 @@ public class ItemController {
 	  */
 	@PutMapping("/{id}/edit")
 	@PreAuthorize("hasRole('ADMIN')")
-	@ApiOperation(value = "Изменение Item (без цен)")
+	@ApiOperation(value = "Изменение Item (без цен)") // TODO: AllExceptional
 	public ResponseEntity editItem (@PathVariable(value = "id") Long id, 
 				@Valid @RequestBody ItemRequest itemRequest) throws AllException {
-		Optional<Item> editedItem = itemService.editItem(id, itemRequest);
-		logger.info("Item " + id + " был изменен");
-		return ResponseEntity.ok(editedItem); 
+
+		return ResponseEntity.ok(itemService.editItem(id, itemRequest)); 
 	}
 
 	/**
@@ -147,9 +145,8 @@ public class ItemController {
 	@ApiOperation(value = "Получение Items. Формат ответа зависить от роли")
 	public ResponseEntity editItemPrice (@PathVariable(value = "priceId") Long priceId,
 				@Valid @RequestBody PriceRequest priceRequest) throws AllException {
-		Optional<Price> editedItemPrice = itemService.editItemPrice(priceRequest, priceId);
-		logger.info("Цена " + priceId + " была изменена");
-		return ResponseEntity.ok().body(editedItemPrice);
+		
+		return ResponseEntity.ok().body(itemService.editItemPrice(priceRequest, priceId));
 	} 
 
 	/**
@@ -161,7 +158,6 @@ public class ItemController {
 	@ApiOperation(value = "Получение Items. Формат ответа зависить от роли")
 	public ResponseEntity deleteItem (@PathVariable(value = "id") Long id) throws AllException {
 		itemService.deleteItem(id);
-		logger.info("Item " + id + " был выключен");
 		return ResponseEntity.ok(new ApiResponse(true, "Item " + id + " был удален"));
 	}
 

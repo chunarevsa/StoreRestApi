@@ -19,10 +19,6 @@ public class UserDeviceService {
 		this.userDeviceRepository = userDeviceRepository;
 	}
 
-	public Optional<UserDevice> findByUserId(Long userId) {
-		return userDeviceRepository.findByUserId(userId);
-	}
-
 	/**
 	 * Создание нового устройства для пользователя
 	 */
@@ -33,6 +29,10 @@ public class UserDeviceService {
 		userDevice.setNotificationToken(deviceInfo.getNotificationToken());
 		userDevice.setIsRefreshActive(true);
 		return userDevice;
+	}
+
+	public Optional<UserDevice> findByUserId(Long userId) {
+		return userDeviceRepository.findByUserId(userId);
 	}
 
 }

@@ -27,20 +27,16 @@ public class JwtUserDetailsService implements UserDetailsService{
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
 		Optional<User> user = userRepository.findByEmail(email);
-		if (user == null) {
-			throw new UsernameNotFoundException("User with email: " + email + " not found");
-		}
 
-		return user.map(JwtUser::new)
-					.orElseThrow(() -> new UsernameNotFoundException("Couldn't find a matching user email in the database for " + email));
+		return user.map(JwtUser::new) // TODO: искл
+					.orElseThrow(() -> new UsernameNotFoundException("Не удалось найти пользователя " + email));
 	}
 
 	public UserDetails loadUserById(Long id) {
 
 		Optional<User> user = userRepository.findById(id);
-		
 		return user.map(JwtUser::new)
-				  .orElseThrow(() -> new UsernameNotFoundException("Couldn't find a matching user id in the database for " + id));
+				  .orElseThrow(() -> new UsernameNotFoundException("Не удалось найти пользователя " + id));
   }
 	
 }  

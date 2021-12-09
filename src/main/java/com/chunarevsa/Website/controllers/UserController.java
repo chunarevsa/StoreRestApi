@@ -57,6 +57,7 @@ public class UserController {
 	@ApiOperation(value = "Получение свего профиля." + 
 		" В профиле отражена информация о самом пользователе, его балансе $ и баланс внутренних валют.")
 	public ResponseEntity getMyUserProfile (@AuthenticationPrincipal JwtUser jwtUser) {
+		
 		return ResponseEntity.ok().body(userService.getMyUserProfile(jwtUser));
 	} 
 
