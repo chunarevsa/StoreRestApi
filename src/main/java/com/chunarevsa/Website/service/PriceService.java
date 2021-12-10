@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import com.chunarevsa.Website.dto.PriceDto;
 import com.chunarevsa.Website.entity.DomesticCurrency;
 import com.chunarevsa.Website.entity.Price;
+import com.chunarevsa.Website.exception.InvalidAmountFormat;
+import com.chunarevsa.Website.exception.ResourceNotFoundException;
 import com.chunarevsa.Website.payload.PriceRequest;
 import com.chunarevsa.Website.repo.PriceRepository;
 import com.chunarevsa.Website.service.inter.PriceServiceInterface;
@@ -123,12 +125,8 @@ public class PriceService implements PriceServiceInterface {
 		DomesticCurrency domesticCurrency = domesticCurrencyService.findCurrencyByTitile(currencyTitle).get();
 
 		Price price = prices.stream().filter(itemPrice -> domesticCurrency.equals(itemPrice.getDomesticCurrency()))
-			.findAny().orElse(null);
+			.findAny().orElseThrow(() -> new ResourceNotFoundException("Item", "price", currencyTitle));
 		
-		if (price == null) {
-			logger.error("Данный Item нельзя приобрести за эту валюту");
-			// TODO: искл
-		}
 		return price.getCost();
 	}
 
@@ -142,13 +140,10 @@ public class PriceService implements PriceServiceInterface {
 		Price price = new Price();
 		price.setCost(priceRequest.getCost());
 		price.setDomesticCurrency(domesticCurrency);
-		if  (!validatePriceRequest(priceRequest)) {
-			logger.info("Ошибка создания цены");
-			// TODO: искл
-		}
+		validatePriceRequest(priceRequest);
 		price.setActive(priceRequest.getActive());
 		return Optional.of(price);
-	}
+	} 
 
 	/**
 	 * Валидация PriceRequest
@@ -157,17 +152,17 @@ public class PriceService implements PriceServiceInterface {
 
 		if (!validateCostInPriceRequest(priceRequest.getCost())) {
 			logger.error("Сумма " + priceRequest.getCost() + " заполнена не верно");
-			return false;
+			throw new InvalidAmountFormat("Стоимость", "price", (priceRequest.getCost()));
 		}
 
 		DomesticCurrency domesticCurrency = domesticCurrencyService.findCurrencyByTitile(priceRequest.getCurrency()).get();
 		if (domesticCurrency == null) {
-			logger.error("Валюта" + priceRequest + " заполнена не верно");
-			return false;
+			logger.error("Валюта" + priceRequest.getCurrency() + " заполнена не верно");
+			throw new ResourceNotFoundException("Price", "валюта", priceRequest.getCurrency());
 		} 
 
 		if (!priceRequest.isActive()){
-			logger.error("Цена " + priceRequest.isActive() + " выключена");
+			logger.error("Цена " + priceRequest.getCurrency() + " не активна");
 			return false;
 		}
 		return true; 
@@ -180,7 +175,7 @@ public class PriceService implements PriceServiceInterface {
 
 		int i = Integer.parseInt(cost);
 		if (i < 0 ) {
-			return false;// TODO: искл try catch
+			return false;// TODO: валидация
 		}
 		return true;
 	}

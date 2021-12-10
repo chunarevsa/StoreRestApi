@@ -1,6 +1,6 @@
 package com.chunarevsa.Website.payload;
 
-// Ввод цены
+// TODO: Валидация
 public class PriceRequest {
 	
 	private String cost;

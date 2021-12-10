@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import com.chunarevsa.Website.entity.payload.DeviceInfo;
 
+// TODO: Валидация
 public class LogOutRequest {
 	
 	@Valid

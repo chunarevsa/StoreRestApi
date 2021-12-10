@@ -10,7 +10,8 @@ import com.chunarevsa.Website.dto.DomesticCurrencyDto;
 import com.chunarevsa.Website.entity.Account;
 import com.chunarevsa.Website.entity.DomesticCurrency;
 import com.chunarevsa.Website.entity.User;
-import com.chunarevsa.Website.exception.InvalidPriceFormat;
+import com.chunarevsa.Website.exception.InvalidAmountFormat;
+import com.chunarevsa.Website.exception.NotEnoughResourcesException;
 import com.chunarevsa.Website.payload.DomesticCurrencyRequest;
 import com.chunarevsa.Website.repo.DomesticCurrencyRepository;
 import com.chunarevsa.Website.security.jwt.JwtUser;
@@ -89,13 +90,14 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 
 		double costCurrency = Math.round(Double.parseDouble(domesticCurrency.getCost()));
 		double amountDomesticCurrencyInt = Math.round(Double.parseDouble(amountDomesticCurrency));
+		double sum = (costCurrency * amountDomesticCurrencyInt);
 
-		if (userBalance < (costCurrency * amountDomesticCurrencyInt)) {
+		if (userBalance < sum) {
 			logger.info("Суммы баланса пользователя " + user.getUsername() + "не достаточно для покупки валюты " + currencyTitle);
-			// TODO: искл
+			throw new NotEnoughResourcesException("Покупка", Double.toString(sum), currencyTitle);
 		}
 
-		double newUserBalance = Math.round(userBalance - (costCurrency * amountDomesticCurrencyInt));
+		double newUserBalance = Math.round(userBalance - sum);
 		user.setBalance(Double.toString(newUserBalance));
 
 		Set<Account> accounts = accountService.buyCurrency(currencyTitle, amountDomesticCurrency, user);
@@ -113,13 +115,13 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 	 * Добавление Currency
 	 */
 	@Override
-	public Optional<DomesticCurrency> addCurrency (DomesticCurrencyRequest currencyRequest) throws InvalidPriceFormat {
+	public Optional<DomesticCurrency> addCurrency (DomesticCurrencyRequest currencyRequest) throws InvalidAmountFormat {
 		
 		DomesticCurrency newCurrency = new DomesticCurrency();
 		newCurrency.setTitle(currencyRequest.getTitle());
 		if (!validateCost(currencyRequest.getCost())) {
 			logger.error("Неверный формат цены " + currencyRequest.getCost());
-			throw new InvalidPriceFormat(); // TODO: исключение
+			throw new InvalidAmountFormat("Цена", newCurrency.getTitle(), currencyRequest.getCost());
 		}
 		newCurrency.setCost(currencyRequest.getCost()); 
 		newCurrency.setActive(currencyRequest.isActive());
@@ -218,7 +220,7 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 				return false;
 			}
 			return true;
-		} catch (Exception e) {
+		} catch (Exception e) { // TODO: валидация
 			return false;
 		}
 

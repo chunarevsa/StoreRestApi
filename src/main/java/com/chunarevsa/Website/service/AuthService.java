@@ -8,6 +8,7 @@ import com.chunarevsa.Website.entity.payload.RegistrationRequest;
 import com.chunarevsa.Website.entity.token.EmailVerificationToken;
 import com.chunarevsa.Website.entity.token.RefreshToken;
 import com.chunarevsa.Website.exception.AlredyUseException;
+import com.chunarevsa.Website.exception.ResourceNotFoundException;
 import com.chunarevsa.Website.payload.LoginRequest;
 import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
 import com.chunarevsa.Website.security.jwt.JwtUser;
@@ -21,7 +22,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-// TODO: log
 @Service
 public class AuthService implements AuthServiceInterface {
 
@@ -61,7 +61,7 @@ public class AuthService implements AuthServiceInterface {
 		String email = registrationRequest.getEmail();
 		if (emailAlreadyExists(email)) {
 			logger.error("Email " + email + " уже занят");
-			throw new AlredyUseException("Email"); // TODO: искл
+			throw new AlredyUseException("Email", "Adress", email);
 	  }  
 	  User newUser = userService.addNewUser(registrationRequest).get();
 	  User savedNewUser = userService.saveUser(newUser).get();
@@ -76,7 +76,7 @@ public class AuthService implements AuthServiceInterface {
 	public Optional<User> confirmEmailRegistration(String token) { 
 
 		EmailVerificationToken verificationToken = emailVerificationTokenService.findByToken(token)
-				.orElseThrow(); // TODO: обработка исключений
+				.orElseThrow(() -> new ResourceNotFoundException("Token", "Email verification", token));
 
 		User registeredUser = verificationToken.getUser();
 		if  (registeredUser.getIsEmailVerified()) {

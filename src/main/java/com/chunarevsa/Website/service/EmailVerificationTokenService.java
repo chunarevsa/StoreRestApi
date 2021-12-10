@@ -7,6 +7,7 @@ import java.util.UUID;
 import com.chunarevsa.Website.entity.User;
 import com.chunarevsa.Website.entity.token.EmailVerificationToken;
 import com.chunarevsa.Website.entity.token.TokenStatus;
+import com.chunarevsa.Website.exception.InvalidTokenRequestException;
 import com.chunarevsa.Website.repo.EmailVerificationTokenRepository;
 
 import org.apache.logging.log4j.LogManager;
@@ -42,10 +43,9 @@ public class EmailVerificationTokenService {
 	public void verifyExpiration(EmailVerificationToken verificationToken) {
 		
 		if (verificationToken.getExpiryDate().compareTo(Instant.now()) < 0) {
-			/* throw new InvalidTokenRequestException("Email Verification Token", token.getToken(),
-					"Expired token. Please issue a new request"); */
 			logger.info("Токен просрочен");
-			// TODO: искл 
+			throw new InvalidTokenRequestException("Email Verification Token", verificationToken.getToken(),
+					"Токен просрочен");
 		}
 	}
 

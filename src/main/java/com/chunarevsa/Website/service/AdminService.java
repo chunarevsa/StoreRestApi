@@ -1,6 +1,7 @@
 package com.chunarevsa.Website.service;
 
 import com.chunarevsa.Website.entity.User;
+import com.chunarevsa.Website.exception.InvalidAmountFormat;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,7 +33,7 @@ public class AdminService {
 		User user = userService.findByUsername(username).get();
 		if (!validateAmount(amount)) {
 			logger.error("Сумма " + amount +" указана неверно");
-			System.err.println("ОШТБКА ВАЛИДАЦИИ"); // TODO: исключение
+			throw new InvalidAmountFormat("Cумма", "$", amount);
 		}
 
 		double oldBalance = Math.round(Double.parseDouble(amount));
@@ -56,7 +57,7 @@ public class AdminService {
 			}
 			return true;
 
-		} catch (Exception e) {
+		} catch (Exception e) { // TODO: валидация
 			return false;
 		}
 	}

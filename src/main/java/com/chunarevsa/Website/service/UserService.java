@@ -137,9 +137,8 @@ public class UserService implements UserServiceInterface{
 	/**
 	 * Получение сохраненного инвенторя
 	 */
-	public Set<InventoryUnitDto> getSavedInventoryUnit(
-							JwtUser jwtUser, String currencyTitle,
-							String cost,String amountItems, Item item) {
+	public Set<InventoryUnitDto> getSavedInventoryUnit(JwtUser jwtUser, String currencyTitle,
+			String cost,String amountItems, Item item) {
 
 		String username = jwtUser.getUsername().toString();
 		User user = findByUsername(username).get();

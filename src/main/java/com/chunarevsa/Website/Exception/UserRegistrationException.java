@@ -15,5 +15,12 @@ public class UserRegistrationException extends RuntimeException {
         this.message = message;
    }
 
+	public String getUser() {
+		return this.user;
+	}
+
+	public String getMessage() {
+		return this.message;
+	}
 
 }

@@ -4,6 +4,8 @@ import java.util.Set;
 
 import com.chunarevsa.Website.entity.Account;
 import com.chunarevsa.Website.entity.User;
+import com.chunarevsa.Website.exception.InvalidAmountFormat;
+import com.chunarevsa.Website.exception.NotEnoughResourcesException;
 import com.chunarevsa.Website.repo.AccountRepository;
 import com.chunarevsa.Website.service.inter.AccountServiceInterface;
 
@@ -35,7 +37,7 @@ public class AccountService implements AccountServiceInterface {
 	
 		if (!validateAmount(amountDomesticCurrency)) {
 			logger.error("Не выерный формат суммы валюты " + currencyTitle);
-			// TODO: искл
+			throw new InvalidAmountFormat("Сумма", currencyTitle, amountDomesticCurrency);
 		}
 		Set<Account> userAccounts = user.getAccounts();
 		Account userAccount = userAccounts.stream()
@@ -72,13 +74,8 @@ public class AccountService implements AccountServiceInterface {
 			String cost, String amountItems) {
 
 		Account userAccount = userAccounts.stream()
-				.filter(acc -> currencyTitle.equals(acc.getCurrencyTitle()))
-				.findAny().orElse(null);
-
-		if (userAccount == null) {
-			logger.error("У пользователя отсутствует валюты " +  currencyTitle);
-			System.err.println("У вас нет такой валюты "); // TODO: искл
-		}
+				.filter(acc -> currencyTitle.equals(acc.getCurrencyTitle())).findAny()
+				.orElseThrow(() -> new NotEnoughResourcesException("Покупка", amountItems, currencyTitle));
 
 		int itemCost =  Integer.parseInt(cost);
 		int amountItemsInt = Integer.parseInt(amountItems);
@@ -86,7 +83,7 @@ public class AccountService implements AccountServiceInterface {
 		
 		if (balanceDomesticCurrency < (itemCost*amountItemsInt)) {
 			logger.error("У пользователя недостаточно валюты " +  currencyTitle + " для покупки");
-			System.err.println("У вас не достаточно данной валюты на счёту"); // TODO: искл
+			throw new NotEnoughResourcesException("Покупка", amountItems, currencyTitle);
 		}
 
 		String result =  Integer.toString(balanceDomesticCurrency - (itemCost*amountItemsInt));
@@ -106,7 +103,7 @@ public class AccountService implements AccountServiceInterface {
 				return false;
 			}
 			return true;
-		} catch (Exception e) { // TODO: искл
+		} catch (Exception e) { // TODO: валидация
 			return false;
 		}
 	}

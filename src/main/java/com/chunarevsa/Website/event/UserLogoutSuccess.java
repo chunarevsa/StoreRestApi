@@ -14,9 +14,7 @@ public class UserLogoutSuccess extends ApplicationEvent {
 	private final transient LogOutRequest logoutRequestDto;
 	private final Date eventTime;
 
-	public UserLogoutSuccess(
-				String userEmail, 
-				String token,
+	public UserLogoutSuccess(String userEmail, String token,
 				LogOutRequest logoutRequestDto) {
 		super(userEmail);
 		this.userEmail = userEmail;

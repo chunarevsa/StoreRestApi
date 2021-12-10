@@ -1,5 +1,6 @@
 package com.chunarevsa.Website.payload;
 
+// TODO: Валидация
 public class DomesticCurrencyRequest {
 
 	private String title;

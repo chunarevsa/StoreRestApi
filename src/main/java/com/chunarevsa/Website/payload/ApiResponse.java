@@ -13,7 +13,6 @@ public class ApiResponse {
 	private final String cause;
 	private final String path;
 	
-	// Ответ для исключений из AllException
 	public ApiResponse(Boolean success, String data, String cause, String path) {
 		this.timestamp = Instant.now().toString();
 		this.data = data;
@@ -22,7 +21,6 @@ public class ApiResponse {
 		this.path = path;
   	}
 	
-	// Ответ при удалении      УДАЛИТЬ ПОТОМ
 	public ApiResponse(Boolean success, String data) {
 		this.timestamp = Instant.now().toString();
 		this.data = data;
@@ -36,7 +34,6 @@ public class ApiResponse {
 		return this.data;
 	}
 
-
 	public Boolean isSuccess() {
 		return this.success;
 	}
@@ -45,16 +42,13 @@ public class ApiResponse {
 		return this.success;
 	}
 
-
 	public String getTimestamp() {
 		return this.timestamp;
 	}
 
-
 	public String getCause() {
 		return this.cause;
 	}
-
 
 	public String getPath() {
 		return this.path;

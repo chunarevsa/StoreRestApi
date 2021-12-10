@@ -1,11 +1,8 @@
 package com.chunarevsa.Website.event.listener;
 
-import java.io.IOException;
-
-import javax.mail.MessagingException;
-
 import com.chunarevsa.Website.entity.User;
 import com.chunarevsa.Website.event.UserRegistrationComplete;
+import com.chunarevsa.Website.exception.MailSendException;
 import com.chunarevsa.Website.service.EmailVerificationTokenService;
 import com.chunarevsa.Website.service.MailService;
 
@@ -54,11 +51,9 @@ public class UserRegistrationCompleteListener implements ApplicationListener<Use
 			logger.info("Cообщение о потверждении отправленно на почту " + userEmail);
 		} catch (Exception e) {
 			logger.error(e);
-			System.err.println(e); // TODO: искл
+			throw new MailSendException(userEmail, "Email Verification");
 		}
 	
 	}
-
-	
 
 }

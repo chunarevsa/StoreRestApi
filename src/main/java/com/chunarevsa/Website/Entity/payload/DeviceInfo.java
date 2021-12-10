@@ -2,6 +2,7 @@ package com.chunarevsa.Website.entity.payload;
 
 import com.chunarevsa.Website.entity.DeviceType;
 
+// TODO: Валидация
 public class DeviceInfo {
 
 	private String deviceId;

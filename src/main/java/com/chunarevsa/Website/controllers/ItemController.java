@@ -2,7 +2,6 @@ package com.chunarevsa.Website.controllers;
 
 import javax.validation.Valid;
 
-import com.chunarevsa.Website.exception.AllException;
 import com.chunarevsa.Website.payload.ApiResponse;
 import com.chunarevsa.Website.payload.ItemRequest;
 import com.chunarevsa.Website.payload.PriceRequest;
@@ -65,7 +64,7 @@ public class ItemController {
 	@PreAuthorize("hasRole('USER')")
 	@ApiOperation(value = "Получение Item. Формат ответа зависить от роли")
 	public ResponseEntity getItem (@PathVariable(value = "id") Long id, 
-			@AuthenticationPrincipal JwtUser jwtUser) throws AllException {
+			@AuthenticationPrincipal JwtUser jwtUser)  {
 
 		return ResponseEntity.ok().body(itemService.getItem(id, jwtUser));
 	}
@@ -80,7 +79,7 @@ public class ItemController {
 	@PreAuthorize("hasRole('USER')")
 	@ApiOperation(value = "Получение у Item списка всех Price. Формат ответа зависить от роли")
 	public ResponseEntity getItemPricies (@PathVariable(value = "id") Long itemId, 
-					@AuthenticationPrincipal JwtUser jwtUser) throws AllException {
+					@AuthenticationPrincipal JwtUser jwtUser)  {
 	
 		return ResponseEntity.ok().body(itemService.getItemPricies(itemId, jwtUser));
 	}
@@ -110,7 +109,7 @@ public class ItemController {
 	@PostMapping("/add")
 	@PreAuthorize("hasRole('ADMIN')")
 	@ApiOperation(value = "Добавление Item") // TODO: AllExceptional
-	public ResponseEntity addItem (@Valid @RequestBody ItemRequest itemRequest) throws AllException {
+	public ResponseEntity addItem (@Valid @RequestBody ItemRequest itemRequest) {
 
 		return ResponseEntity.ok().body(itemService.addItem(itemRequest));
 	} 	
@@ -124,7 +123,7 @@ public class ItemController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@ApiOperation(value = "Изменение Item (без цен)") // TODO: AllExceptional
 	public ResponseEntity editItem (@PathVariable(value = "id") Long id, 
-				@Valid @RequestBody ItemRequest itemRequest) throws AllException {
+				@Valid @RequestBody ItemRequest itemRequest) {
 
 		return ResponseEntity.ok(itemService.editItem(id, itemRequest)); 
 	}
@@ -136,7 +135,7 @@ public class ItemController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@ApiOperation(value = "Получение Items. Формат ответа зависить от роли")
 	public ResponseEntity editItemPrice (@PathVariable(value = "priceId") Long priceId,
-				@Valid @RequestBody PriceRequest priceRequest) throws AllException {
+				@Valid @RequestBody PriceRequest priceRequest)  {
 		
 		return ResponseEntity.ok().body(itemService.editItemPrice(priceRequest, priceId));
 	} 
@@ -148,7 +147,7 @@ public class ItemController {
 	@DeleteMapping("/{id}/delete")
 	@PreAuthorize("hasRole('ADMIN')")
 	@ApiOperation(value = "Получение Items. Формат ответа зависить от роли")
-	public ResponseEntity deleteItem (@PathVariable(value = "id") Long id) throws AllException {
+	public ResponseEntity deleteItem (@PathVariable(value = "id") Long id)  {
 		itemService.deleteItem(id);
 		return ResponseEntity.ok(new ApiResponse(true, "Item " + id + " был удален"));
 	}

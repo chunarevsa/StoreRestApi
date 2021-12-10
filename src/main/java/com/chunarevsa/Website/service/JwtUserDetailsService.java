@@ -1,5 +1,5 @@
 
-package com.chunarevsa.Website.security;
+package com.chunarevsa.Website.service;
 
 import java.util.Optional;
 
@@ -27,16 +27,15 @@ public class JwtUserDetailsService implements UserDetailsService{
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
 		Optional<User> user = userRepository.findByEmail(email);
-
-		return user.map(JwtUser::new) // TODO: искл
-					.orElseThrow(() -> new UsernameNotFoundException("Не удалось найти пользователя " + email));
+		return user.map(JwtUser::new)
+			.orElseThrow(() -> new UsernameNotFoundException("Не удалось найти пользователя " + email));
 	}
 
 	public UserDetails loadUserById(Long id) {
 
 		Optional<User> user = userRepository.findById(id);
 		return user.map(JwtUser::new)
-				  .orElseThrow(() -> new UsernameNotFoundException("Не удалось найти пользователя " + Long.toString(id)));
+			.orElseThrow(() -> new UsernameNotFoundException("Не удалось найти пользователя " + id));
   }
 	
 }  

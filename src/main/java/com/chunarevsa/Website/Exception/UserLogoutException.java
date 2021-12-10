@@ -1,7 +1,11 @@
 package com.chunarevsa.Website.exception;
 
-public class UserLogoutException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class UserLogoutException extends RuntimeException {
+	
 	private final String user;
    private final String message;
 
@@ -10,5 +14,13 @@ public class UserLogoutException extends RuntimeException {
       this.user = user;
       this.message = message;
    }
-	
+
+	public String getUser() {
+		return this.user;
+	}
+
+	public String getMessage() {
+		return this.message;
+	}
+
 }

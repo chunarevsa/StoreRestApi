@@ -3,7 +3,7 @@ package com.chunarevsa.Website.service.inter;
 import java.util.Optional;
 
 import com.chunarevsa.Website.entity.DomesticCurrency;
-import com.chunarevsa.Website.exception.InvalidPriceFormat;
+import com.chunarevsa.Website.exception.InvalidAmountFormat;
 import com.chunarevsa.Website.payload.DomesticCurrencyRequest;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 
@@ -33,7 +33,7 @@ public interface DomesticCurrencyServiceInterface {
 	/**
 	 * Добавление Currency
 	 */
-	public Optional<DomesticCurrency> addCurrency (DomesticCurrencyRequest currencyRequest) throws InvalidPriceFormat;
+	public Optional<DomesticCurrency> addCurrency (DomesticCurrencyRequest currencyRequest) throws InvalidAmountFormat;
 
 	/**
 	 * Изменение Currency

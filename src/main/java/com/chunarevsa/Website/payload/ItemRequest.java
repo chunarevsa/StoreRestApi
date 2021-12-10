@@ -2,6 +2,7 @@ package com.chunarevsa.Website.payload;
 
 import java.util.Set;
 
+// TODO: Валидация
 public class ItemRequest {
 	
 	private String name;

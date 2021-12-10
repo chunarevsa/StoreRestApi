@@ -2,7 +2,7 @@ package com.chunarevsa.Website.controllers;
 
 import javax.validation.Valid;
 
-import com.chunarevsa.Website.exception.AllException;
+
 import com.chunarevsa.Website.payload.ApiResponse;
 import com.chunarevsa.Website.payload.DomesticCurrencyRequest;
 import com.chunarevsa.Website.security.jwt.JwtUser;
@@ -94,7 +94,7 @@ public class DomesticCurrencyController {
 	@PostMapping("/add")
 	@PreAuthorize("hasRole('ADMIN')")
 	@ApiOperation(value = "Добавление Currency")
-	public ResponseEntity addCurrency(@Valid @RequestBody DomesticCurrencyRequest currencyRequest) throws AllException {
+	public ResponseEntity addCurrency(@Valid @RequestBody DomesticCurrencyRequest currencyRequest)  {
 
 		return domesticCurrencyService.addCurrency(currencyRequest) 
 			.map(currency -> ResponseEntity.ok(new ApiResponse(true, "Валюта " + currency.getTitle() + " была добавлена") ))
@@ -111,7 +111,7 @@ public class DomesticCurrencyController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@ApiOperation(value = "Изменение Currency")
 	public ResponseEntity editCurrency (@PathVariable(value = "title") String title, 
-				@Valid @RequestBody DomesticCurrencyRequest currencyRequest) throws AllException {
+				@Valid @RequestBody DomesticCurrencyRequest currencyRequest) {
 
 		return ResponseEntity.ok(domesticCurrencyService.editCurrency(title, currencyRequest));
 	} 
@@ -123,7 +123,7 @@ public class DomesticCurrencyController {
 	@DeleteMapping("/{title}/delete")
 	@PreAuthorize("hasRole('ADMIN')")
 	@ApiOperation(value = "Удаление валюты ")
-	public ResponseEntity deleteCurrency (@PathVariable(value = "title") String title) throws AllException {
+	public ResponseEntity deleteCurrency (@PathVariable(value = "title") String title) {
 		domesticCurrencyService.deleteCurrency(title);
 		return ResponseEntity.ok(new ApiResponse(true, "Валюта " + title + " была удалена"));
 	}	

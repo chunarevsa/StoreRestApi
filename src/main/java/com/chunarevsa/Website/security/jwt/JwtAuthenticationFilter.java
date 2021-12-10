@@ -8,8 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.chunarevsa.Website.exception.InvalidTokenRequestException;
-import com.chunarevsa.Website.security.JwtUserDetailsService;
+import com.chunarevsa.Website.service.JwtUserDetailsService;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -57,9 +56,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 		  }
-		} catch (Exception | InvalidTokenRequestException e) {
-			// TODO: искл
+		} catch (Exception e) {
 			logger.error("Ошибка авторизации пользователя :" + e.toString());
+			throw e;
 
 		}
 		filterChain.doFilter(request, response);

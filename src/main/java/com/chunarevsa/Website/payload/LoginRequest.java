@@ -4,7 +4,7 @@ import javax.validation.Valid;
 
 import com.chunarevsa.Website.entity.payload.DeviceInfo;
 
-// TODO: для всех реквество сделать валидацию
+// TODO: Валидация
 public class LoginRequest {
 	
    private String username;
