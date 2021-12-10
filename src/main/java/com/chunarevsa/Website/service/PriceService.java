@@ -60,7 +60,7 @@ public class PriceService implements PriceServiceInterface {
 	@Override
 	public Optional<Price> editPrice(PriceRequest priceRequest, Long priceId) {
 
-		DomesticCurrency domesticCurrency = domesticCurrencyService.findCurrencyByTitile(priceRequest.getCurrency()).get();
+		DomesticCurrency domesticCurrency = domesticCurrencyService.findCurrencyByTitile(priceRequest.getCurrency());
 
 		Price price = findPriceById(priceId).get();
 		if (price == null) {
@@ -122,7 +122,7 @@ public class PriceService implements PriceServiceInterface {
 	 */
 	public String getCostInCurrency(Set<Price> prices, String currencyTitle) {
 		
-		DomesticCurrency domesticCurrency = domesticCurrencyService.findCurrencyByTitile(currencyTitle).get();
+		DomesticCurrency domesticCurrency = domesticCurrencyService.findCurrencyByTitile(currencyTitle);
 
 		Price price = prices.stream().filter(itemPrice -> domesticCurrency.equals(itemPrice.getDomesticCurrency()))
 			.findAny().orElseThrow(() -> new ResourceNotFoundException("Item", "price", currencyTitle));
@@ -135,7 +135,7 @@ public class PriceService implements PriceServiceInterface {
 	 */
 	private Optional<Price> getItemPriceFromRequest(PriceRequest priceRequest) {
 
-		DomesticCurrency domesticCurrency = domesticCurrencyService.findCurrencyByTitile(priceRequest.getCurrency()).get();
+		DomesticCurrency domesticCurrency = domesticCurrencyService.findCurrencyByTitile(priceRequest.getCurrency());
 
 		Price price = new Price();
 		price.setCost(priceRequest.getCost());
@@ -155,7 +155,7 @@ public class PriceService implements PriceServiceInterface {
 			throw new InvalidAmountFormat("Стоимость", "price", (priceRequest.getCost()));
 		}
 
-		DomesticCurrency domesticCurrency = domesticCurrencyService.findCurrencyByTitile(priceRequest.getCurrency()).get();
+		DomesticCurrency domesticCurrency = domesticCurrencyService.findCurrencyByTitile(priceRequest.getCurrency());
 		if (domesticCurrency == null) {
 			logger.error("Валюта" + priceRequest.getCurrency() + " заполнена не верно");
 			throw new ResourceNotFoundException("Price", "валюта", priceRequest.getCurrency());

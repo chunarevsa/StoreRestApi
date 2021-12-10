@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import com.chunarevsa.Website.entity.DomesticCurrency;
 import com.chunarevsa.Website.exception.InvalidAmountFormat;
+import com.chunarevsa.Website.exception.ResourceNotFoundException;
 import com.chunarevsa.Website.payload.DomesticCurrencyRequest;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 
@@ -21,7 +22,7 @@ public interface DomesticCurrencyServiceInterface {
 	 * Получить Currency
 	 * Если ADMIN -> Currency, если USER ->  CurrencyDto
 	 */
-	public Object getCurrency(String title, JwtUser jwtUser);
+	public Object getCurrency(String title, JwtUser jwtUser) throws ResourceNotFoundException;
 
 	/**
 	 * Покупка валюты
@@ -48,7 +49,7 @@ public interface DomesticCurrencyServiceInterface {
 	/**
 	 * Получение валюты по Title
 	 */
-	public Optional<DomesticCurrency> findCurrencyByTitile(String title);
+	public DomesticCurrency findCurrencyByTitile(String title);
 
 	
 }	

@@ -12,6 +12,7 @@ import com.chunarevsa.Website.entity.DomesticCurrency;
 import com.chunarevsa.Website.entity.User;
 import com.chunarevsa.Website.exception.InvalidAmountFormat;
 import com.chunarevsa.Website.exception.NotEnoughResourcesException;
+import com.chunarevsa.Website.exception.ResourceNotFoundException;
 import com.chunarevsa.Website.payload.DomesticCurrencyRequest;
 import com.chunarevsa.Website.repo.DomesticCurrencyRepository;
 import com.chunarevsa.Website.security.jwt.JwtUser;
@@ -84,7 +85,7 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 
 	public Object buyCurrency(String currencyTitle, String amountDomesticCurrency, JwtUser jwtUser) {
 		
-		DomesticCurrency domesticCurrency = findCurrencyByTitile(currencyTitle).get();
+		DomesticCurrency domesticCurrency = findCurrencyByTitile(currencyTitle);
 		User user = userService.findByUsername(jwtUser.getUsername().toString()).get();
 		double userBalance = Math.round(Double.parseDouble(user.getBalance()));
 
@@ -135,7 +136,7 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 	 */
 	@Override
 	public Optional<DomesticCurrency> editCurrency (String title, DomesticCurrencyRequest currencyRequest) {
-		DomesticCurrency currency = findCurrencyByTitile(title).get();
+		DomesticCurrency currency = findCurrencyByTitile(title);
 		currency.setTitle(currencyRequest.getTitle());
 		currency.setCost(currencyRequest.getCost());
 		currency.setActive(currencyRequest.isActive());
@@ -149,7 +150,7 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 	 */
 	@Override
 	public void deleteCurrency(String title) {
-		DomesticCurrency currency = findCurrencyByTitile(title).get();
+		DomesticCurrency currency = findCurrencyByTitile(title);
 		currency.setActive(false);
 		saveCurrency(currency);
 		logger.info("Валюта " + title + " выключена");
@@ -158,8 +159,10 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 	 * Получение валюты по Title
 	 */
 	@Override
-	public Optional<DomesticCurrency> findCurrencyByTitile(String title) {
-		return domesticCurrencyRepository.findByTitle(title);
+	public DomesticCurrency findCurrencyByTitile(String title) throws ResourceNotFoundException {
+		return domesticCurrencyRepository.findByTitle(title)
+			.orElseThrow(() -> new ResourceNotFoundException("Валюта", "title", title));
+				//"%s not found with %s : '%s'", title, fieldName, fieldValue
 	}
 
 	/**
@@ -176,7 +179,7 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 	 * Получить CurrencyDto по title
 	 */
 	private Optional<DomesticCurrencyDto> getCurrencyDtoByTitle(String title) {
-		DomesticCurrency currency = findCurrencyByTitile(title).get();
+		DomesticCurrency currency = findCurrencyByTitile(title);
 		return Optional.of(DomesticCurrencyDto.fromUser(currency));
 	}
 
