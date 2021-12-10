@@ -127,6 +127,12 @@ public class ItemController {
 
 		return ResponseEntity.ok(itemService.editItem(id, itemRequest)); 
 	}
+	
+	// Добавление цены item
+	// При покупке проврка цены на активность
+
+
+
 
 	/**
 	 * Изменение и удаление (выключение) Price 
