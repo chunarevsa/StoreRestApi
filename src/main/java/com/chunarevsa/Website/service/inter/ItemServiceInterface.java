@@ -44,6 +44,11 @@ public interface ItemServiceInterface {
 	public Optional<Item> addItem (ItemRequest itemRequest);
 
 	/**
+	 * Добавление новой цены с валидацией
+	 */
+	public Optional<Item> addItemPrice(PriceRequest priceRequest, Long itemId);
+
+	/**
 	 * Изменение и удаление (выключение) Price 
 	 */
 	public Optional<Item> editItem (long id, EditItemRequest editItemRequest);

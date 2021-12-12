@@ -7,7 +7,6 @@ import javax.validation.constraints.NotNull;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-// TODO: Валидация
 @ApiModel(value = "Login Request", description = "The login request payload")
 public class LoginRequest {
 
@@ -61,7 +60,6 @@ public class LoginRequest {
 	@Override
 	public String toString() {
 		return "{" +
-			//" username='" + getUsername() + "'" +
 			", email='" + getEmail() + "'" +
 			", password='" + getPassword() + "'" +
 			", deviceInfo='" + getDeviceInfo() + "'" +

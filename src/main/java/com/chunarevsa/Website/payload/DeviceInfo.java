@@ -7,7 +7,6 @@ import com.chunarevsa.Website.entity.DeviceType;
 
 import io.swagger.annotations.ApiModelProperty;
 
-// TODO: Валидация
 public class DeviceInfo {
 
 	@NotBlank(message = "Device id cannot be blank")

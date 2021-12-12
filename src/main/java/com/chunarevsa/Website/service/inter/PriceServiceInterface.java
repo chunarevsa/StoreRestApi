@@ -20,6 +20,11 @@ public interface PriceServiceInterface {
 	public Set<Price> savePricies(Set<Price> pricies);
 
 	/**
+	 * Валидация на наличие у Item цены в валюте из PriceRequest
+	 */
+	public Price getValidatedPrice(Set<Price> pricies, PriceRequest priceRequest);
+
+	/**
 	 * Изменение Price
 	 */
 	public Optional<Price> editPrice(PriceRequest priceRequest, Long priceId);

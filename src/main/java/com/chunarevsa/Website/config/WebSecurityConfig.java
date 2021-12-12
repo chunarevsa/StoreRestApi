@@ -56,7 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 	}
 
-	@Override 
+	@Override // TODO: прибратсься
 	public void configure (WebSecurity webSecurity) {
 		webSecurity.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/**",
 		"/swagger-ui.html", "/webjars/**");

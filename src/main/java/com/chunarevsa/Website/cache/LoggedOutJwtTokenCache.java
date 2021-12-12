@@ -52,7 +52,4 @@ public class LoggedOutJwtTokenCache {
 		return tokenEventMap.get(token);
 	}
 
-	
-
-	
 }

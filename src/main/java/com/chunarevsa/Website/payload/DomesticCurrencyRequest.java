@@ -17,8 +17,8 @@ public class DomesticCurrencyRequest {
 	@ApiModelProperty(value = "Стоимость валюты в $", required = true, allowableValues = "NonEmpty String")
 	private String cost;
 
-	@NotNull(message = "Необходимо указать будет ли валюта активна")
-	@ApiModelProperty(value = "Указывает будет ли валюта активна", required = true,
+	@NotNull(message = "Whether the currency will be active or not")
+	@ApiModelProperty(value = "Whether the currency will be active or not", required = true,
             dataType = "boolean", allowableValues = "true, false")
 	private boolean active;
 

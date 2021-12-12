@@ -26,8 +26,8 @@ public class ItemRequest {
 	@ApiModelProperty(value = "Описание Item", required = true, allowableValues = "NonEmpty String")
 	private String description;
 
-	@NotNull(message = "Необходимо указать будет ли Item активен")
-	@ApiModelProperty(value = "Указывает будет ли Item активен", required = true,
+	@NotNull(message = "Whether the Item will be active or not")
+	@ApiModelProperty(value = "Whether the Item will be active or not", required = true,
             dataType = "boolean", allowableValues = "true, false")
 	private Boolean active;
 	

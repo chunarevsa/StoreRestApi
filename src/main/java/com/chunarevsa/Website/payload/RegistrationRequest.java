@@ -21,11 +21,10 @@ public class RegistrationRequest {
 	@ApiModelProperty(value = "A valid email", required = true, allowableValues = "NonEmpty String")
 	private String email;
 
-	@NotNull(message = "Specify whether the user has to be registered as an admin or not")
-	@ApiModelProperty(value = "Flag denoting whether the user is an admin or not", required = true,
+	@NotNull(message = "Whether the user has to be registered as an admin or not")
+	@ApiModelProperty(value = "Whether the user has to be registered as an admin or not", required = true,
             dataType = "boolean", allowableValues = "true, false")
 	private Boolean registerAsAdmin;
-	// TODO: во всех реквестах сделать также с актив
 
 	public RegistrationRequest() {}
 

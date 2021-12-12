@@ -19,6 +19,7 @@ import com.chunarevsa.Website.entity.Role;
 import com.chunarevsa.Website.entity.User;
 import com.chunarevsa.Website.entity.UserDevice;
 import com.chunarevsa.Website.entity.UserInventory;
+import com.chunarevsa.Website.event.UserLogoutSuccess;
 import com.chunarevsa.Website.exception.ResourceNotFoundException;
 import com.chunarevsa.Website.exception.UserLogoutException;
 import com.chunarevsa.Website.payload.LogOutRequest;
@@ -30,6 +31,8 @@ import com.chunarevsa.Website.service.inter.UserServiceInterface;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +49,7 @@ public class UserService implements UserServiceInterface{
 	private final RefreshTokenService refreshTokenService;
 	private final UserInventoryService userInventoryService;
 	private final AccountService accountService;
+	private final ApplicationEventPublisher applicationEventPublisher;
 
 	@Autowired
 	public UserService(
@@ -55,7 +59,8 @@ public class UserService implements UserServiceInterface{
 				UserDeviceService userDeviceService,
 				RefreshTokenService refreshTokenService,
 				UserInventoryService userInventoryService,
-				AccountService accountService) {
+				AccountService accountService,
+				ApplicationEventPublisher applicationEventPublisher) {
 		this.userRepository = userRepository;
 		this.roleService = roleService;
 		this.passwordEncoder = passwordEncoder;
@@ -63,6 +68,7 @@ public class UserService implements UserServiceInterface{
 		this.refreshTokenService = refreshTokenService;
 		this.userInventoryService = userInventoryService;
 		this.accountService = accountService;
+		this.applicationEventPublisher = applicationEventPublisher;
 	}
 
 	/**
@@ -143,6 +149,12 @@ public class UserService implements UserServiceInterface{
 					logOutRequestDto.getDeviceInfo().getDeviceId(), "Invalid device Id"));
 		
 		refreshTokenService.deleteById(userDevice.getRefreshToken().getId());
+		Object credentials = SecurityContextHolder.getContext().getAuthentication().getCredentials();
+		UserLogoutSuccess logoutSuccess = new UserLogoutSuccess(
+			jwtUser.getEmail(), credentials.toString(), logOutRequestDto);
+		applicationEventPublisher.publishEvent(logoutSuccess);
+		logger.info("Пользователь покинул систему " + jwtUser.getUsername());
+		
 	}
 
 	/**

@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import com.chunarevsa.Website.entity.token.RefreshToken;
 import com.chunarevsa.Website.event.UserRegistrationComplete;
+import com.chunarevsa.Website.exception.InvalidTokenRequestException;
 import com.chunarevsa.Website.exception.UserLoginException;
 import com.chunarevsa.Website.exception.UserRegistrationException;
 import com.chunarevsa.Website.payload.LoginRequest;
@@ -59,8 +60,8 @@ public class AuthController {
 	 * "registerAsAdmin": "true" - зарегистрировать администратором
 	 * @param registrationRequest
 	 */
-	@ApiOperation(value = "Регистрация пользователя")
 	@PostMapping ("/register")
+	@ApiOperation(value = "Регистрация пользователя")
 	public ResponseEntity registration (@Valid @RequestBody RegistrationRequest registrationRequest ) {
 		
 		return authService.registrationUser(registrationRequest)
@@ -77,22 +78,23 @@ public class AuthController {
 	 * Подтверждение учетной записи
 	 * @param token
 	 */
-	@ApiOperation(value = "Подтверждение учетной записи")
 	@GetMapping("/registrationConfirmation")
+	@ApiOperation(value = "Подтверждение учетной записи")
 	public ResponseEntity confirmRegistration (@RequestParam("token") String token) {
 
 		return authService.confirmEmailRegistration(token)
-					.map(user -> ResponseEntity.ok().body("Учётная запись подтверждена")).orElseThrow();
+					.map(user -> ResponseEntity.ok(new ApiResponse(true, "Учётная запись подтверждена")))
+					.orElseThrow(() -> new InvalidTokenRequestException("Email Verification Token", token, "Не удалось подтвердить регистрацию"));
 	}
 
 	/**
 	 * Логин по почте, паролю и устройству
 	 * @param loginRequestDto
 	 */
-	@ApiOperation(value = "Логин по почте, паролю и устройству")
 	@PostMapping("/login")
+	@ApiOperation(value = "Логин по почте, паролю и устройству")
 	public ResponseEntity login (@Valid @RequestBody LoginRequest loginRequestDto) {
-		// Обработка плохих кренделей
+		
 		Authentication authentication = authService.authenticateUser(loginRequestDto)
 			.orElseThrow(() -> new UserLoginException("Не удалось войти в систему - " + loginRequestDto.getEmail()));
 
@@ -108,6 +110,4 @@ public class AuthController {
 					}).orElseThrow(() -> new UserLoginException("Couldn't create refresh token for:" + loginRequestDto.getEmail())); // TODO: стиль
 
 	} 
-
-
 } 

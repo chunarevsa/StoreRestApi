@@ -70,6 +70,11 @@ public class ItemService implements ItemServiceInterface {
 				.map(GrantedAuthority::getAuthority).collect(Collectors.toList());
 		if (roles.contains("ROLE_ADMIN")) {
 			return findById(itemId);
+		}
+		Item item = findById(itemId);
+		if (!item.isActive()){
+			logger.error("Item  " + itemId + " не активен");
+			throw new ResourceNotFoundException("Price", "active", true);
 		} 
 		return getItemDto(itemId);
 	}
@@ -143,6 +148,21 @@ public class ItemService implements ItemServiceInterface {
 	}
 
 	/**
+	 * Добавление новой цены с валидацией
+	 */
+	@Override
+	public Optional<Item> addItemPrice(PriceRequest priceRequest, Long itemId) {
+		
+		Item item = findById(itemId);
+		Price newPrice = priceService.getValidatedPrice(item.getPrices(), priceRequest);
+		item.getPrices().add(newPrice);	// TODO: getPric IES
+		priceService.savePricies(item.getPrices());
+		Item savedItem = saveItem(item);
+		logger.info("Добавлена новая цена для " + savedItem.getName());
+		return Optional.of(savedItem);
+	}
+
+	/**
 	 * Изменение и удаление (выключение) Price 
 	 */
 	@Override
@@ -183,6 +203,11 @@ public class ItemService implements ItemServiceInterface {
 	 */
 	private Set<ItemDto> getItemsDtoFromUser() {
 		Set<Item> items = findAllByActive(true);
+		if (items.isEmpty()) {
+			logger.info("Нет активных Item");
+			throw new ResourceNotFoundException("Item", "active", true);
+		}
+
 		Set<ItemDto> itemsDto = items.stream().
 				map(item -> getItemDto(item.getId())).collect(Collectors.toSet());
 		return itemsDto;
@@ -200,11 +225,6 @@ public class ItemService implements ItemServiceInterface {
 	 * Получение ItemDto
 	 */
 	private ItemDto getItemDto(Long id) {
-		Item item = findById(id);
-		if (!item.isActive()){
-			logger.error("Item  " + id + " не активен");
-			throw new ResourceNotFoundException("Price", "active", true);
-		}
 		return ItemDto.fromUser(findById(id));
 	}
 
@@ -250,4 +270,5 @@ public class ItemService implements ItemServiceInterface {
 			return false;
 		}
 	}
+
 }

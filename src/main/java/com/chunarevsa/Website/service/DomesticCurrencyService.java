@@ -57,7 +57,7 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 				.map(GrantedAuthority::getAuthority).collect(Collectors.toList());
 		if (roles.contains("ROLE_ADMIN")) {
 			return getCurrenciesFromAdmin(pageable);
-		} 
+		}
 		return getCurrenciesDtoFromUser();
 	}
 
@@ -71,6 +71,11 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 				.map(GrantedAuthority::getAuthority).collect(Collectors.toList());
 		if (roles.contains("ROLE_ADMIN")) {
 			return findCurrencyByTitile(title);
+		}
+		DomesticCurrency domesticCurrency = findCurrencyByTitile(title);
+		if (!domesticCurrency.isActive()){
+			logger.error("Currency  " + title + " не активен");
+			throw new ResourceNotFoundException("Price", "active", true);
 		} 
 		return getCurrencyDtoByTitle(title);
 	}
@@ -194,7 +199,10 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 	 */
 	private Set<DomesticCurrencyDto> getCurrenciesDtoFromUser () {
 		Set<DomesticCurrency> currencies = findAllByActive(true);
-		// TODO: выдать ошибку если нет активных валют
+		if (currencies.isEmpty()) {
+			logger.info("Нет активных Item");
+			throw new ResourceNotFoundException("Currencies", "active", true);
+		}
 		Set<DomesticCurrencyDto> currenciesDto = currencies.stream()
 				.map(currency -> getCurrencyDto(currency.getId())).collect(Collectors.toSet());
 		return currenciesDto;

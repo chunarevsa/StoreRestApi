@@ -18,8 +18,8 @@ public class PriceRequest {
 	@ApiModelProperty(value = "Внутреняя валюта", required = true, allowableValues = "NonEmpty String")
 	private String currency;
 
-	@NotNull(message = "Необходимо указать будет ли цена активна")
-	@ApiModelProperty(value = "Указывает будет ли цена активна", required = true,
+	@NotNull(message = "Whether the price will be active or not")
+	@ApiModelProperty(value = "Whether the price will be active or not", required = true,
 	dataType = "boolean", allowableValues = "true, false")
 	private Boolean active;
 

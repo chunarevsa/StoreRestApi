@@ -22,7 +22,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .ignoredParameterTypes(JwtUser.class)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.accolite.pru.health.AuthApp"))
+                .apis(RequestHandlerSelectors.basePackage("com.chunarevsa.Website"))
                 .paths(PathSelectors.regex("/api.*"))
                 .build()
                 .apiInfo(metaInfo());
@@ -30,7 +30,7 @@ public class SwaggerConfig {
 
     private ApiInfo metaInfo() {
         return new ApiInfoBuilder()
-                .description("StoreApi 1")
+                .description("StoreApi 1") // TODO: Swagger название
                 .title("Store API")
                 .version("")
                 .build();

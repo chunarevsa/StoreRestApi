@@ -109,12 +109,12 @@ public class ItemController {
 	 */
 	@PostMapping("/add")
 	@PreAuthorize("hasRole('ADMIN')")
-	@ApiOperation(value = "Добавление Item") // TODO: AllExceptional
+	@ApiOperation(value = "Добавление Item") 
 	public ResponseEntity addItem (@Valid @RequestBody ItemRequest itemRequest) {
 
 		return ResponseEntity.ok().body(itemService.addItem(itemRequest));
 	} 	
-	// TODO: ответы ApiResponse сделать одинаково во всех контр
+
 	 /**
 	  * Изменение Item (без цен)
 	  * @param id
@@ -122,19 +122,26 @@ public class ItemController {
 	  */
 	@PutMapping("/{id}/edit")
 	@PreAuthorize("hasRole('ADMIN')")
-	@ApiOperation(value = "Изменение Item (без цен)") // TODO: AllExceptional
+	@ApiOperation(value = "Изменение Item (без цен)") 
 	public ResponseEntity editItem (@PathVariable(value = "id") Long id, 
 				@Valid @RequestBody EditItemRequest editItemRequest) {
 
-		return ResponseEntity.ok(itemService.editItem(id, editItemRequest)); 
+		return ResponseEntity.ok().body(itemService.editItem(id, editItemRequest)); 
 	}
+	/**
+	 * Добавление цены Item
+	 * @param itemId
+	 * @param priceRequest
+	 */
+	@PostMapping("/{id}/pricies/add")
+	@PreAuthorize("hasRole('ADMIN')")
+	@ApiOperation(value = "Добавление цены Item")
+	public ResponseEntity addItemPrice (@PathVariable(value = "id") Long itemId,
+				@Valid @RequestBody PriceRequest priceRequest)  {
+		
+		return ResponseEntity.ok().body(itemService.addItemPrice(priceRequest, itemId));
+	} 
 	
-	// Добавление цены item
-	// При покупке проврка цены на активность
-
-
-
-
 	/**
 	 * Изменение и удаление (выключение) Price 
 	 */

@@ -62,13 +62,13 @@ public class DomesticCurrencyController {
 	 * @param title
 	 * @param jwtUser
 	 */
-	@GetMapping("/{title}") //Проверка если вдруг выключена, то просто включить
+	@GetMapping("/{title}") 
 	@PreAuthorize("hasRole('USER')")
 	@ApiOperation(value = "Получить Currency. Формат ответа зависить от роли")
 	public ResponseEntity getCurrencyByTitle(@PathVariable(value = "title") String title,
 				@AuthenticationPrincipal JwtUser jwtUser) { 
 
-		return ResponseEntity.ok(domesticCurrencyService.getCurrency(title ,jwtUser));
+		return ResponseEntity.ok().body(domesticCurrencyService.getCurrency(title ,jwtUser));
 	}
 
 	/**
@@ -96,9 +96,7 @@ public class DomesticCurrencyController {
 	@ApiOperation(value = "Добавление Currency")
 	public ResponseEntity addCurrency(@Valid @RequestBody DomesticCurrencyRequest currencyRequest)  {
 
-		return domesticCurrencyService.addCurrency(currencyRequest) 
-			.map(currency -> ResponseEntity.ok(new ApiResponse(true, "Валюта " + currency.getTitle() + " была добавлена") ))
-			.orElseThrow(); // TODO: исключение
+		return ResponseEntity.ok().body(domesticCurrencyService.addCurrency(currencyRequest));
 	} 	
 	
 	/**
@@ -113,7 +111,7 @@ public class DomesticCurrencyController {
 	public ResponseEntity editCurrency (@PathVariable(value = "title") String title, 
 				@Valid @RequestBody DomesticCurrencyRequest currencyRequest) {
 
-		return ResponseEntity.ok(domesticCurrencyService.editCurrency(title, currencyRequest));
+		return ResponseEntity.ok().body(domesticCurrencyService.editCurrency(title, currencyRequest));
 	} 
 
 	/**
