@@ -16,4 +16,6 @@ public interface DomesticCurrencyRepository extends JpaRepository<DomesticCurren
 	Set<DomesticCurrency> findAllByActive(boolean active);
 
 	Page<DomesticCurrency> findAll (Pageable pageable);
+
+	Boolean existsByTitle(String title);
 }

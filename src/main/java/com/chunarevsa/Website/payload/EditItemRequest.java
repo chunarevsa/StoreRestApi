@@ -1,15 +1,11 @@
 package com.chunarevsa.Website.payload;
 
-import java.util.Set;
-
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import io.swagger.annotations.ApiModelProperty;
 
-
-public class ItemRequest {
+public class EditItemRequest {
 	
 	@NotNull(message = "Item name cannot be null")
 	@NotBlank(message = "Item name cannot be blank")
@@ -21,7 +17,7 @@ public class ItemRequest {
 	@ApiModelProperty(value = "Тип Item", required = true, allowableValues = "NonEmpty String")
 	private String type;
 
-	
+	@NotNull(message = "Description cannot be null")
 	@NotBlank(message = "Description cannot be blank")
 	@ApiModelProperty(value = "Описание Item", required = true, allowableValues = "NonEmpty String")
 	private String description;
@@ -30,13 +26,8 @@ public class ItemRequest {
 	@ApiModelProperty(value = "Указывает будет ли Item активен", required = true,
             dataType = "boolean", allowableValues = "true, false")
 	private Boolean active;
-	
-	@NotNull(message = "Необходимо указать будет ли Item активен")
-	@NotEmpty(message = "Необходимо указать хотя бы одну цену для Item")
-	@ApiModelProperty(value = "Цены во внутренней валюте для Item", required = true, allowableValues = "NonEmpty String")
-	private Set<PriceRequest> pricies;
 
-	public ItemRequest() {
+	public EditItemRequest() {
 	}
 
 	public String getName() {
@@ -75,14 +66,6 @@ public class ItemRequest {
 		this.active = active;
 	}
 
-	public Set<PriceRequest> getPricies() {
-		return this.pricies;
-	}
-
-	public void setPricies(Set<PriceRequest> pricies) {
-		this.pricies = pricies;
-	}
-
 	@Override
 	public String toString() {
 		return "{" +
@@ -90,8 +73,9 @@ public class ItemRequest {
 			", type='" + getType() + "'" +
 			", description='" + getDescription() + "'" +
 			", active='" + isActive() + "'" +
-			", pricies='" + getPricies() + "'" +
 			"}";
 	}
 
+
+	
 }

@@ -2,14 +2,14 @@ package com.chunarevsa.Website.controllers;
 
 import javax.validation.Valid;
 
-import com.chunarevsa.Website.entity.payload.JwtAuthenticationResponse;
-import com.chunarevsa.Website.entity.payload.RegistrationRequest;
 import com.chunarevsa.Website.entity.token.RefreshToken;
 import com.chunarevsa.Website.event.UserRegistrationComplete;
 import com.chunarevsa.Website.exception.UserLoginException;
 import com.chunarevsa.Website.exception.UserRegistrationException;
 import com.chunarevsa.Website.payload.LoginRequest;
+import com.chunarevsa.Website.payload.RegistrationRequest;
 import com.chunarevsa.Website.payload.ApiResponse;
+import com.chunarevsa.Website.payload.JwtAuthenticationResponse;
 import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.service.AuthService;
@@ -92,9 +92,9 @@ public class AuthController {
 	@ApiOperation(value = "Логин по почте, паролю и устройству")
 	@PostMapping("/login")
 	public ResponseEntity login (@Valid @RequestBody LoginRequest loginRequestDto) {
-
+		// Обработка плохих кренделей
 		Authentication authentication = authService.authenticateUser(loginRequestDto)
-			.orElseThrow(() -> new UserLoginException("Не удалось войти в систему - " + loginRequestDto.getUsername()));
+			.orElseThrow(() -> new UserLoginException("Не удалось войти в систему - " + loginRequestDto.getEmail()));
 
 		JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
 		logger.info("Вход в систему  " + jwtUser.getUsername());
@@ -105,7 +105,7 @@ public class AuthController {
 					.map(refreshToken -> {
 						String jwtToken = authService.createToken(jwtUser);
 						return ResponseEntity.ok(new JwtAuthenticationResponse(jwtToken, refreshToken,  jwtTokenProvider.getExpiryDuration()));
-					}).orElseThrow(() -> new UserLoginException("Couldn't create refresh token for:" + loginRequestDto.getUsername())); // TODO: стиль
+					}).orElseThrow(() -> new UserLoginException("Couldn't create refresh token for:" + loginRequestDto.getEmail())); // TODO: стиль
 
 	} 
 

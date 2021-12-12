@@ -10,6 +10,9 @@ import com.chunarevsa.Website.dto.ItemDto;
 import com.chunarevsa.Website.dto.PriceDto;
 import com.chunarevsa.Website.entity.Item;
 import com.chunarevsa.Website.entity.Price;
+import com.chunarevsa.Website.exception.InvalidAmountFormat;
+import com.chunarevsa.Website.exception.ResourceNotFoundException;
+import com.chunarevsa.Website.payload.EditItemRequest;
 import com.chunarevsa.Website.payload.ItemRequest;
 import com.chunarevsa.Website.payload.PriceRequest;
 import com.chunarevsa.Website.repo.ItemRepository;
@@ -92,7 +95,13 @@ public class ItemService implements ItemServiceInterface {
 	@Override
 	public Set<InventoryUnitDto> buyItem(Long itemId, String amountItems, String currencyTitle, JwtUser jwtUser) { 
 
-		Item item = findById(itemId).get();
+		Item item = findById(itemId);
+		
+		if (!validateAmountItems(amountItems)) {
+			logger.error("Неверный формат суммы Items :" + amountItems);
+			throw new InvalidAmountFormat("Сумма", "Item", amountItems);
+		}
+
 		String cost = priceService.getCostInCurrency(item.getPrices(), currencyTitle);
 		return  userService.getSavedInventoryUnit(jwtUser, currencyTitle, cost, amountItems, item);
 	}
@@ -102,32 +111,34 @@ public class ItemService implements ItemServiceInterface {
 	 */
 	@Override
 	public Optional<Item> addItem (ItemRequest itemRequest) {
+		
+		Set<Price> pricies = priceService.getItemPriciesFromRequest(itemRequest.getPricies());
+		
 		Item newItem = new Item();
 		newItem.setName(itemRequest.getName());
 		newItem.setDescription(itemRequest.getDescription());
 		newItem.setType(itemRequest.getType());
 		newItem.setActive(itemRequest.getActive());
-		Set<Price> pricies = priceService.getItemPriciesFromRequest(itemRequest.getPricies());
 		newItem.setPrices(pricies);
 		priceService.savePricies(newItem.getPrices());
-		Optional<Item> savedItem = saveItem(newItem);
-		logger.info("Создан новый Item :" + savedItem.get().getName());
-		return savedItem;
+		Item savedItem = saveItem(newItem);
+		logger.info("Создан новый Item :" + savedItem.getName());
+		return Optional.of(savedItem);
 	}
 
 	/**
 	 * Изменение Item (без цен)
 	 */
 	@Override
-	public Optional<Item> editItem (long id, ItemRequest itemRequest)  {
+	public Optional<Item> editItem (long id, EditItemRequest editItemRequest)  {
 
-		Item item = findById(id).get(); // mb get())
-		item.setName(itemRequest.getName());
-		item.setType(itemRequest.getType());
-		item.setDescription(itemRequest.getDescription());
-		item.setActive(itemRequest.isActive());
+		Item item = findById(id);
+		item.setName(editItemRequest.getName());
+		item.setType(editItemRequest.getType());
+		item.setDescription(editItemRequest.getDescription());
+		item.setActive(editItemRequest.isActive());
 		saveItem(item);
-		logger.info("Item " + id + " был изменен");
+		logger.info("Item " + item.getName() + " был изменен");
 		return Optional.of(item);
 	}
 
@@ -145,7 +156,7 @@ public class ItemService implements ItemServiceInterface {
 	@Override
 	public void deleteItem(long itemId) {
 
-		Item item = findById(itemId).get();
+		Item item = findById(itemId);
 		priceService.deletePricies(item.getPrices());
 		item.setActive(false);
 		saveItem(item);
@@ -163,7 +174,7 @@ public class ItemService implements ItemServiceInterface {
 	 * Получение всех Price у айтема (влючая выкленные)
 	 */
 	private Set<Price> getItemPriciesFromAdmin(Long itemId) {
-		Item item = findById(itemId).get();
+		Item item = findById(itemId);
 		return item.getPrices();
 	}
 
@@ -173,7 +184,7 @@ public class ItemService implements ItemServiceInterface {
 	private Set<ItemDto> getItemsDtoFromUser() {
 		Set<Item> items = findAllByActive(true);
 		Set<ItemDto> itemsDto = items.stream().
-				map(item -> getItemDto(item.getId()).get()).collect(Collectors.toSet());
+				map(item -> getItemDto(item.getId())).collect(Collectors.toSet());
 		return itemsDto;
 	}
 
@@ -181,36 +192,62 @@ public class ItemService implements ItemServiceInterface {
 	 * Получение списка всех PriceDto у конкретного Item
 	 */
 	private Set<PriceDto> getItemPriciesFromUser(Long itemId) {
-		Item item = findById(itemId).get();
+		Item item = findById(itemId);
 		return priceService.getItemPriciesDto(item.getPrices());
 	}
 
 	/**
 	 * Получение ItemDto
 	 */
-	private Optional<ItemDto> getItemDto(Long id) {
-		Item item = findById(id).get();
-		return Optional.of(ItemDto.fromUser(item));
+	private ItemDto getItemDto(Long id) {
+		Item item = findById(id);
+		if (!item.isActive()){
+			logger.error("Item  " + id + " не активен");
+			throw new ResourceNotFoundException("Price", "active", true);
+		}
+		return ItemDto.fromUser(findById(id));
 	}
 
 	private Set<Item> findAllByActive(boolean active) {
-		return itemRepository.findAllByActive(active);
+		Set<Item> activeItems = itemRepository.findAllByActive(active);
+		if (activeItems == null) {
+			logger.error("Нет активных Item");
+			throw new ResourceNotFoundException("Items", "active", true);
+		}
+		return activeItems;
 	} 
 
 	private Page<Item> findAllItem(Pageable pageable) {
 		return itemRepository.findAll(pageable);
 	}
 
-	private Optional<Item> findById (Long id) {
-		return itemRepository.findById(id);
+	private Item findById (Long id) {
+		return itemRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Item", "id", id));
 	}
 
 	public Set<Item> saveItems(Set<Item> items) {
-		return items.stream().map(item -> saveItem(item).get()).collect(Collectors.toSet());
+		return items.stream().map(item -> saveItem(item)).collect(Collectors.toSet());
 	} 
 
-	private Optional<Item> saveItem(Item item) {
-		return Optional.of(itemRepository.save(item));
+	private Item saveItem(Item item) {
+		return itemRepository.save(item);
 	}
-
+	
+	/**
+	 * Проверка суммы 
+	 */
+	private boolean validateAmountItems(String amountItems) {
+		try {
+			int value = Integer.parseInt(amountItems);
+			if (value <= 0 ) {
+				return false;
+			} else {
+				return true;
+			}
+			
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
 }

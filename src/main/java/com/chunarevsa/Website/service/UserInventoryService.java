@@ -1,6 +1,5 @@
 package com.chunarevsa.Website.service;
 
-import java.util.Optional;
 import java.util.Set;
 
 import com.chunarevsa.Website.dto.UserInventoryDto;
@@ -50,7 +49,6 @@ public class UserInventoryService {
 			logger.info("Добавлена новая ячейка инвенторя "+ savedInventoryUnit.getId());
 
 		} else {
-			
 			// Изменение количество UserItem в ячейке
 			int oldAmountItems =  Integer.parseInt(inventoryUnit.getAmountItems());
 			int add = Integer.parseInt(amountItems);
@@ -59,24 +57,18 @@ public class UserInventoryService {
 			inventoryUnit.setAmountItems(Integer.toString(newAmountItems));
 			inventoryUnits.add(inventoryUnit);
 			logger.info("В ячейке " + inventoryUnit.getId() + " изменено количество Item :" + newAmountItems);
-			
 		}
-
 			userInventory.setInventoryUnit(inventoryUnits);
 			userInventoryRepository.save(userInventory);
 			return inventoryUnits;
-
 	}
 
 	/**
 	 * Получение инвенторя своего инвенторя в UserInventoryDto c
 	 * Ячейками в InventoryUnitDto с UserItemDto
 	 */
-	public Optional<UserInventoryDto> getUserInventory(User user) {
-		
-		return Optional.of(UserInventoryDto.fromUser(user.getUserInventory()));
+	public UserInventoryDto getUserInventory(User user) {
+		return UserInventoryDto.fromUser(user.getUserInventory());
 	}
 
-	
-	
 }

@@ -1,12 +1,26 @@
-package com.chunarevsa.Website.entity.payload;
+package com.chunarevsa.Website.payload;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.chunarevsa.Website.entity.DeviceType;
+
+import io.swagger.annotations.ApiModelProperty;
 
 // TODO: Валидация
 public class DeviceInfo {
 
+	@NotBlank(message = "Device id cannot be blank")
+	@ApiModelProperty(value = "Device Id", required = true, dataType = "string", allowableValues = "Non empty string")
 	private String deviceId;
+
+	@NotNull
+	@ApiModelProperty(value = "Device type Android/iOS", required = true, dataType = "string",
+		allowableValues = "DEVICE_TYPE_ANDROID, DEVICE_TYPE_IOS")
 	private DeviceType deviceType;
+
+	@NotBlank(message = "Device notification Token cannot be blank")
+	@ApiModelProperty(value = "Device notification id", dataType = "string", allowableValues = "Non empty string")
 	private String notificationToken;
 
 	public DeviceInfo() {}

@@ -1,8 +1,8 @@
 package com.chunarevsa.Website.event.listener;
 
 import com.chunarevsa.Website.cache.LoggedOutJwtTokenCache;
-import com.chunarevsa.Website.entity.payload.DeviceInfo;
 import com.chunarevsa.Website.event.UserLogoutSuccess;
+import com.chunarevsa.Website.payload.DeviceInfo;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

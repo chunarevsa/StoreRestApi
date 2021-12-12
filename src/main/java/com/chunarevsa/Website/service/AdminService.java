@@ -30,7 +30,7 @@ public class AdminService {
 	 */
 	public void addMoneyToUser(String username, String amount) {
 
-		User user = userService.findByUsername(username).get();
+		User user = userService.findByUsername(username);
 		if (!validateAmount(amount)) {
 			logger.error("Сумма " + amount +" указана неверно");
 			throw new InvalidAmountFormat("Cумма", "$", amount);
@@ -43,7 +43,6 @@ public class AdminService {
 		user.setBalance(Double.toString(sum));
 		userService.saveUser(user);
 		logger.info("Новый баланс " + username + " :"+ user.getBalance() + " $");
-
 	}
 
 	/**
@@ -52,12 +51,12 @@ public class AdminService {
 	private boolean validateAmount (String amount) {
 		try {
 			double value = Double.parseDouble(amount);
-			if (value < 0 ) {
+			if (value <= 0 ) {
 				return false;
 			}
 			return true;
 
-		} catch (Exception e) { // TODO: валидация
+		} catch (NumberFormatException e) { 
 			return false;
 		}
 	}

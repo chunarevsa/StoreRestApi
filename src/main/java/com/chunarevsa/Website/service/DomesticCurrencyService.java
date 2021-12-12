@@ -10,6 +10,7 @@ import com.chunarevsa.Website.dto.DomesticCurrencyDto;
 import com.chunarevsa.Website.entity.Account;
 import com.chunarevsa.Website.entity.DomesticCurrency;
 import com.chunarevsa.Website.entity.User;
+import com.chunarevsa.Website.exception.AlreadyUseException;
 import com.chunarevsa.Website.exception.InvalidAmountFormat;
 import com.chunarevsa.Website.exception.NotEnoughResourcesException;
 import com.chunarevsa.Website.exception.ResourceNotFoundException;
@@ -86,8 +87,13 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 	public Object buyCurrency(String currencyTitle, String amountDomesticCurrency, JwtUser jwtUser) {
 		
 		DomesticCurrency domesticCurrency = findCurrencyByTitile(currencyTitle);
-		User user = userService.findByUsername(jwtUser.getUsername().toString()).get();
+		User user = userService.findByUsername(jwtUser.getUsername().toString());
 		double userBalance = Math.round(Double.parseDouble(user.getBalance()));
+		
+		if (!validateAmountFromCurrency(amountDomesticCurrency)) {
+			logger.error("Не выерный формат суммы валюты " + currencyTitle);
+			throw new InvalidAmountFormat("Сумма", currencyTitle, amountDomesticCurrency);
+		}
 
 		double costCurrency = Math.round(Double.parseDouble(domesticCurrency.getCost()));
 		double amountDomesticCurrencyInt = Math.round(Double.parseDouble(amountDomesticCurrency));
@@ -116,14 +122,20 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 	 * Добавление Currency
 	 */
 	@Override
-	public Optional<DomesticCurrency> addCurrency (DomesticCurrencyRequest currencyRequest) throws InvalidAmountFormat {
+	public Optional<DomesticCurrency> addCurrency (DomesticCurrencyRequest currencyRequest) {
 		
+		if (currencyAlredyExists(currencyRequest.getTitle())) {
+			logger.error("Валюта " + currencyRequest.getTitle() + " уже существует");
+			throw new AlreadyUseException("Валюта", "title", currencyRequest.getTitle());
+		}
+
+		if (!validateCostCurrency(currencyRequest.getCost())) {
+			logger.error("Неверный формат цены " + currencyRequest.getCost());
+			throw new InvalidAmountFormat("Стоимость", "currncy", currencyRequest.getCost());
+		}
+
 		DomesticCurrency newCurrency = new DomesticCurrency();
 		newCurrency.setTitle(currencyRequest.getTitle());
-		if (!validateCost(currencyRequest.getCost())) {
-			logger.error("Неверный формат цены " + currencyRequest.getCost());
-			throw new InvalidAmountFormat("Цена", newCurrency.getTitle(), currencyRequest.getCost());
-		}
 		newCurrency.setCost(currencyRequest.getCost()); 
 		newCurrency.setActive(currencyRequest.isActive());
 		saveCurrency(newCurrency);
@@ -136,14 +148,27 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 	 */
 	@Override
 	public Optional<DomesticCurrency> editCurrency (String title, DomesticCurrencyRequest currencyRequest) {
+		
 		DomesticCurrency currency = findCurrencyByTitile(title);
+		
+
+		if (!currencyRequest.getTitle().equals(title) && currencyAlredyExists(currencyRequest.getTitle())) {
+				logger.error("Валюта " + currencyRequest.getTitle() + " уже существует");
+				throw new AlreadyUseException("Валюта", "title", currencyRequest.getTitle());
+		}
+		
+		if (!validateCostCurrency(currencyRequest.getCost())) {
+			logger.error("Неверный формат цены " + currencyRequest.getCost());
+			throw new InvalidAmountFormat("Стоимость", "currncy", currencyRequest.getCost());
+		}
+
 		currency.setTitle(currencyRequest.getTitle());
 		currency.setCost(currencyRequest.getCost());
 		currency.setActive(currencyRequest.isActive());
 		saveCurrency(currency);
-		logger.info("Валюта " + currency.getTitle() + " изменена");
+		logger.info("Валюта " + title + " изменена");
 		return Optional.of(currency);
-	}
+	} 
 
 	/**
 	 * Удаление (Выключение) Currency
@@ -159,10 +184,9 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 	 * Получение валюты по Title
 	 */
 	@Override
-	public DomesticCurrency findCurrencyByTitile(String title) throws ResourceNotFoundException {
+	public DomesticCurrency findCurrencyByTitile(String title) {
 		return domesticCurrencyRepository.findByTitle(title)
 			.orElseThrow(() -> new ResourceNotFoundException("Валюта", "title", title));
-				//"%s not found with %s : '%s'", title, fieldName, fieldValue
 	}
 
 	/**
@@ -170,17 +194,22 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 	 */
 	private Set<DomesticCurrencyDto> getCurrenciesDtoFromUser () {
 		Set<DomesticCurrency> currencies = findAllByActive(true);
+		// TODO: выдать ошибку если нет активных валют
 		Set<DomesticCurrencyDto> currenciesDto = currencies.stream()
-				.map(currency -> getCurrencyDto(currency.getId()).get()).collect(Collectors.toSet());
+				.map(currency -> getCurrencyDto(currency.getId())).collect(Collectors.toSet());
 		return currenciesDto;
 	}
 
 	/**
 	 * Получить CurrencyDto по title
 	 */
-	private Optional<DomesticCurrencyDto> getCurrencyDtoByTitle(String title) {
+	private DomesticCurrencyDto getCurrencyDtoByTitle(String title) {
 		DomesticCurrency currency = findCurrencyByTitile(title);
-		return Optional.of(DomesticCurrencyDto.fromUser(currency));
+		if (!currency.isActive()) {
+			logger.error("Валюта " + currency.getTitle() + " не активна");
+			throw new ResourceNotFoundException("Currency", "active", true);
+		}
+		return DomesticCurrencyDto.fromUser(currency);
 	}
 
 	/**
@@ -191,11 +220,15 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 	}
 
 	/**
-	 * Получение всех DomesticCurrencyDto
+	 * Получение DomesticCurrencyDto
 	 */
-	private Optional<DomesticCurrencyDto> getCurrencyDto(Long id) {
-		DomesticCurrency domesticCurrency = findById(id).get();
-		return  Optional.of(DomesticCurrencyDto.fromUser(domesticCurrency));
+	private DomesticCurrencyDto getCurrencyDto(Long id) {
+		DomesticCurrency domesticCurrency = findById(id);
+		if (!domesticCurrency.isActive()) {
+			logger.error("Нет активных валют");
+			throw new ResourceNotFoundException("Currency", "active", true);
+		}
+		return DomesticCurrencyDto.fromUser(domesticCurrency);
 	}
 
 	private Page<DomesticCurrency> findAllCurrency(Pageable pageable) {
@@ -203,27 +236,51 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 	}
 
 	private Set<DomesticCurrency> findAllByActive(boolean active) {
-		return domesticCurrencyRepository.findAllByActive(active);
+		Set<DomesticCurrency> activeCurrency = domesticCurrencyRepository.findAllByActive(active);
+		if (activeCurrency == null) {
+			logger.error("Нет активных валют");
+			throw new ResourceNotFoundException("currency", "active", true);
+		}
+		return activeCurrency;
 	} 
 
-	private Optional<DomesticCurrency> findById(Long id) {
-		return domesticCurrencyRepository.findById(id);
+	private DomesticCurrency findById(Long id) {
+		return domesticCurrencyRepository.findById(id)
+			.orElseThrow(() -> new ResourceNotFoundException("Валюта", "id", id));
 	} 
 
-	private Optional<DomesticCurrency> saveCurrency(DomesticCurrency currency) {
-		return  Optional.of(domesticCurrencyRepository.save(currency)) ;
+	private DomesticCurrency saveCurrency(DomesticCurrency currency) {
+		return domesticCurrencyRepository.save(currency);
 	}
 
-	private boolean validateCost(String cost) {
+	private boolean currencyAlredyExists(String title) {
+		return domesticCurrencyRepository.existsByTitle(title);
+	}
 
+	/**
+	 * Проверка суммы 
+	 */
+	private boolean validateAmountFromCurrency(String amount) {
 		try {
-			// double num = Double.valueOf(cost);
-			double numb = Double.parseDouble(cost);
-			if (numb < 0) {
+			int value = Integer.parseInt(amount);
+			if (value <= 0 ) {
 				return false;
 			}
 			return true;
-		} catch (Exception e) { // TODO: валидация
+		} catch (NumberFormatException e) { 
+			return false;
+		}
+	}
+
+	private boolean validateCostCurrency(String cost) {
+		try {
+			double numb = Double.parseDouble(cost);
+			if (numb <= 0) {
+				return false;
+			}
+			return true;
+
+		} catch (NumberFormatException e) {
 			return false;
 		}
 

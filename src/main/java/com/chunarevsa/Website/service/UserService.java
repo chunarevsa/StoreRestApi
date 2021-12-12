@@ -19,9 +19,10 @@ import com.chunarevsa.Website.entity.Role;
 import com.chunarevsa.Website.entity.User;
 import com.chunarevsa.Website.entity.UserDevice;
 import com.chunarevsa.Website.entity.UserInventory;
-import com.chunarevsa.Website.entity.payload.RegistrationRequest;
+import com.chunarevsa.Website.exception.ResourceNotFoundException;
 import com.chunarevsa.Website.exception.UserLogoutException;
 import com.chunarevsa.Website.payload.LogOutRequest;
+import com.chunarevsa.Website.payload.RegistrationRequest;
 import com.chunarevsa.Website.repo.UserRepository;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.service.inter.UserServiceInterface;
@@ -32,7 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-// TODO: искл
+
 @Service
 public class UserService implements UserServiceInterface{
 
@@ -69,6 +70,7 @@ public class UserService implements UserServiceInterface{
 	 */
 	@Override 
 	public Optional<User> addNewUser (RegistrationRequest registerRequest) {
+		
 		User newUser = new User();
 		Boolean isAdmin = registerRequest.getRegisterAsAdmin();
 		newUser.setEmail(registerRequest.getEmail());		
@@ -88,8 +90,8 @@ public class UserService implements UserServiceInterface{
 	 */
 	@Override
 	public Optional<UserProfileDto> getMyUserProfile(JwtUser jwtUser) {
-		String username = jwtUser.getUsername().toString();
-		User user = findByUsername(username).get();
+		String username = jwtUser.getUsername();
+		User user = findByUsername(username);
 		return Optional.of(UserProfileDto.fromUser(user));
 	}
 	
@@ -98,7 +100,11 @@ public class UserService implements UserServiceInterface{
 	 */
 	@Override
 	public Optional<UserDto> getUserProfile (String username) {
-		User user = findByUsername(username).get();
+		User user = findByUsername(username);
+		if (!user.isActive()) {
+			logger.error("Пользователь " + user.getUsername() + " Не активен");
+			throw new ResourceNotFoundException("Пользоватеоь", "username", username);
+		}
 		return Optional.of(UserDto.fromUser(user));
 	}
 
@@ -106,17 +112,22 @@ public class UserService implements UserServiceInterface{
 	 * Получение своего инвенторя
 	 */
 	public Optional<UserInventoryDto> getUserInventory(JwtUser jwtUser) {
-		User user = findByUsername(jwtUser.getUsername()).get();
-		return userInventoryService.getUserInventory(user);
+		User user = findByUsername(jwtUser.getUsername());
+		return Optional.of(userInventoryService.getUserInventory(user));
 	}
 
 	/**
 	 * Получение списка всех пользователей
 	 */
 	public List<UserDto> findAllUsersDto() {
-		List<User> listUsers = userRepository.findByActive(true);
-		return listUsers.stream()
-		.map(user -> UserDto.fromUser(user) ).collect(Collectors.toList());
+		List<User> activeUsers = userRepository.findByActive(true);
+		if (activeUsers == null) {
+			logger.error("Нет активных пользователей");
+			throw new ResourceNotFoundException("User", "active", true);
+		}
+
+		return activeUsers.stream() .map(activeUser -> UserDto.fromUser(activeUser))
+					.collect(Collectors.toList());
 	} 
 
 	/**
@@ -138,16 +149,16 @@ public class UserService implements UserServiceInterface{
 	 * Получение сохраненного инвенторя
 	 */
 	public Set<InventoryUnitDto> getSavedInventoryUnit(JwtUser jwtUser, String currencyTitle,
-			String cost,String amountItems, Item item) {
+			String cost, String amountItems, Item item) {
 
 		String username = jwtUser.getUsername().toString();
-		User user = findByUsername(username).get();
+		User user = findByUsername(username);
 		Set<Account> userAccounts = user.getAccounts();
 
 		Set<Account> newUserAccounts = accountService.getNewUserAccounts(userAccounts, currencyTitle, cost, amountItems);
 		user.setAccounts(newUserAccounts); 
 
-		User savedUser = saveUser(user).get(); // может в самый низ
+		User savedUser = saveUser(user); 
 		UserInventory userInventory = savedUser.getUserInventory();
 
 		// Добавление Item в инвентарь
@@ -156,24 +167,6 @@ public class UserService implements UserServiceInterface{
 		logger.info(item.getName() + " добавлен пользователю " + savedUser.getUsername());
 		return inventoryUnits.stream()
 				.map(unit -> InventoryUnitDto.fromUser(unit)).collect(Collectors.toSet());
-	}
-
-	@Override
-	public Optional<User> findByUsername(String username) {
-		return userRepository.findByUsername(username);
-	}
-
-	@Override
-	public Optional<User> findByEmail(String email) {
-		return userRepository.findByEmail(email);
-	}
-
-	public Optional<User> saveUser(User user) {
-		return Optional.of(userRepository.save(user));
-  	}
-
-	public boolean existsByEmail(String email) {
-		return userRepository.existsByEmail(email);
 	}
 
 	/**
@@ -185,6 +178,30 @@ public class UserService implements UserServiceInterface{
 			roles.removeIf(Role::isAdminRole);
 	  }
 		return roles;
+	}
+
+	@Override
+	public User findByUsername(String username) {
+		return userRepository.findByUsername(username)
+			.orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+	}
+
+	@Override
+	public User findByEmail(String email) {
+		return userRepository.findByEmail(email)
+			.orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
+	}
+
+	public User saveUser(User user) {
+		return userRepository.save(user);
+  	}
+
+	public boolean existsByEmail(String email) {
+		return userRepository.existsByEmail(email);
+	}
+
+	public boolean existsByUsername(String username) {
+		return userRepository.existsByUsername(username);
 	}
 
 } 

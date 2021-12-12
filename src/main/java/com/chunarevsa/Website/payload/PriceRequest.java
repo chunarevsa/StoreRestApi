@@ -1,10 +1,26 @@
 package com.chunarevsa.Website.payload;
 
-// TODO: Валидация
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+import io.swagger.annotations.ApiModelProperty;
+
+
 public class PriceRequest {
 	
+	@NotNull(message = "Cost cannot be null")
+	@NotBlank(message = "Cost cannot be blank")
+	@ApiModelProperty(value = "Стоимость Item", required = true, allowableValues = "NonEmpty String")
 	private String cost;
+
+	@NotNull(message = "Currency cannot be null")
+	@NotBlank(message = "Currency cannot be blank")
+	@ApiModelProperty(value = "Внутреняя валюта", required = true, allowableValues = "NonEmpty String")
 	private String currency;
+
+	@NotNull(message = "Необходимо указать будет ли цена активна")
+	@ApiModelProperty(value = "Указывает будет ли цена активна", required = true,
+	dataType = "boolean", allowableValues = "true, false")
 	private Boolean active;
 
 	public PriceRequest() {

@@ -4,7 +4,6 @@ import com.chunarevsa.Website.entity.DomesticCurrency;
 import com.chunarevsa.Website.entity.Price;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PriceDto {
 	

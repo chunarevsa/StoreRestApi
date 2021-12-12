@@ -1,13 +1,13 @@
 package com.chunarevsa.Website.service;
 
 import java.time.Instant;
-import java.util.Optional;
 import java.util.UUID;
 
 import com.chunarevsa.Website.entity.User;
 import com.chunarevsa.Website.entity.token.EmailVerificationToken;
 import com.chunarevsa.Website.entity.token.TokenStatus;
 import com.chunarevsa.Website.exception.InvalidTokenRequestException;
+import com.chunarevsa.Website.exception.ResourceNotFoundException;
 import com.chunarevsa.Website.repo.EmailVerificationTokenRepository;
 
 import org.apache.logging.log4j.LogManager;
@@ -53,8 +53,9 @@ public class EmailVerificationTokenService {
 		return UUID.randomUUID().toString();
 	}
 
-	public Optional<EmailVerificationToken> findByToken(String token) {
-		return emailVerificationTokenRepository.findByToken(token);
+	public EmailVerificationToken findByToken(String token) {
+		return emailVerificationTokenRepository.findByToken(token)
+				.orElseThrow(() -> new ResourceNotFoundException("EmailVerificationToken", "token", token));
 	}
 
 	public EmailVerificationToken save (EmailVerificationToken verificationToken) {

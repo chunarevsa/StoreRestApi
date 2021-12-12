@@ -3,6 +3,7 @@ package com.chunarevsa.Website.controllers;
 import javax.validation.Valid;
 
 import com.chunarevsa.Website.payload.ApiResponse;
+import com.chunarevsa.Website.payload.EditItemRequest;
 import com.chunarevsa.Website.payload.ItemRequest;
 import com.chunarevsa.Website.payload.PriceRequest;
 import com.chunarevsa.Website.security.jwt.JwtUser;
@@ -123,9 +124,9 @@ public class ItemController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@ApiOperation(value = "Изменение Item (без цен)") // TODO: AllExceptional
 	public ResponseEntity editItem (@PathVariable(value = "id") Long id, 
-				@Valid @RequestBody ItemRequest itemRequest) {
+				@Valid @RequestBody EditItemRequest editItemRequest) {
 
-		return ResponseEntity.ok(itemService.editItem(id, itemRequest)); 
+		return ResponseEntity.ok(itemService.editItem(id, editItemRequest)); 
 	}
 	
 	// Добавление цены item

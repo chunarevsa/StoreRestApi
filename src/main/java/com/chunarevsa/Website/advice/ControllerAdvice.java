@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-import com.chunarevsa.Website.exception.AlredyUseException;
+import com.chunarevsa.Website.exception.AlreadyUseException;
 import com.chunarevsa.Website.exception.InvalidAmountFormat;
 import com.chunarevsa.Website.exception.InvalidTokenRequestException;
 import com.chunarevsa.Website.exception.MailSendException;
@@ -47,10 +47,10 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
 		this.messageSource = messageSource;
 	}
 
-	@ExceptionHandler(value = AlredyUseException.class)
+	@ExceptionHandler(value = AlreadyUseException.class)
 	@ResponseStatus(HttpStatus.CONFLICT)
 	@ResponseBody
-	public ApiResponse handleAlredyUseException(AlredyUseException ex, WebRequest request) {
+	public ApiResponse handleAlredyUseException(AlreadyUseException ex, WebRequest request) {
 		return new ApiResponse(false, ex.getMessage(), ex.getClass().getName(), resolvePathFromWebRequest(request));
 	}
 

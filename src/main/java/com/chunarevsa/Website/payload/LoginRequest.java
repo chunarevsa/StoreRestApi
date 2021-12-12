@@ -1,36 +1,38 @@
 package com.chunarevsa.Website.payload;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
-import com.chunarevsa.Website.entity.payload.DeviceInfo;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 // TODO: Валидация
+@ApiModel(value = "Login Request", description = "The login request payload")
 public class LoginRequest {
-	
-   private String username;
+
+	@NotBlank(message = "Login Email cannot be blank")
+	@ApiModelProperty(value = "User registered email", required = true, allowableValues = "NonEmpty String")
    private String email;
+	
+	@NotNull(message = "Login password cannot be blank")
+	@ApiModelProperty(value = "Valid user password", required = true, allowableValues = "NonEmpty String")
    private String password;
 
    @Valid
+	@NotNull(message = "Device info cannot be null")
+	@ApiModelProperty(value = "Device info", required = true, dataType = "object", allowableValues = "A valid " +
+            "deviceInfo object")
    private DeviceInfo deviceInfo;
 
 	public LoginRequest() {
 	}
 
-	public LoginRequest(String username, String email, String password, DeviceInfo deviceInfo) {
-		this.username = username;
+	public LoginRequest(String email, String password, DeviceInfo deviceInfo) {
 		this.email = email;
 		this.password = password;
 		this.deviceInfo = deviceInfo;
 	} 
-
-	public String getUsername() {
-		return this.username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
 
 	public String getEmail() {
 		return this.email;
@@ -59,7 +61,7 @@ public class LoginRequest {
 	@Override
 	public String toString() {
 		return "{" +
-			" username='" + getUsername() + "'" +
+			//" username='" + getUsername() + "'" +
 			", email='" + getEmail() + "'" +
 			", password='" + getPassword() + "'" +
 			", deviceInfo='" + getDeviceInfo() + "'" +

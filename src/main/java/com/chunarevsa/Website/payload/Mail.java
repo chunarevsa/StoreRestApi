@@ -1,4 +1,4 @@
-package com.chunarevsa.Website.entity;
+package com.chunarevsa.Website.payload;
 
 public class Mail {
 

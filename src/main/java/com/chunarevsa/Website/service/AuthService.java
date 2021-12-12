@@ -4,12 +4,11 @@ import java.util.Optional;
 
 import com.chunarevsa.Website.entity.User;
 import com.chunarevsa.Website.entity.UserDevice;
-import com.chunarevsa.Website.entity.payload.RegistrationRequest;
 import com.chunarevsa.Website.entity.token.EmailVerificationToken;
 import com.chunarevsa.Website.entity.token.RefreshToken;
-import com.chunarevsa.Website.exception.AlredyUseException;
-import com.chunarevsa.Website.exception.ResourceNotFoundException;
+import com.chunarevsa.Website.exception.AlreadyUseException;
 import com.chunarevsa.Website.payload.LoginRequest;
+import com.chunarevsa.Website.payload.RegistrationRequest;
 import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
 import com.chunarevsa.Website.security.jwt.JwtUser;
 import com.chunarevsa.Website.service.inter.AuthServiceInterface;
@@ -61,12 +60,18 @@ public class AuthService implements AuthServiceInterface {
 		String email = registrationRequest.getEmail();
 		if (emailAlreadyExists(email)) {
 			logger.error("Email " + email + " уже занят");
-			throw new AlredyUseException("Email", "Adress", email);
-	  }  
-	  User newUser = userService.addNewUser(registrationRequest).get();
-	  User savedNewUser = userService.saveUser(newUser).get();
-	  logger.info("Зарегистрирован новый пользователь " + email);
-	  return Optional.ofNullable(savedNewUser);
+			throw new AlreadyUseException("Email", "Adress", email); 
+		}
+
+		if (usernameAlredyExists(registrationRequest.getUsername())) {
+			logger.error("Username" + registrationRequest.getUsername() + " уже занят");
+			throw new AlreadyUseException("User", "Username", registrationRequest.getUsername()); 
+		}
+		
+		User newUser = userService.addNewUser(registrationRequest).get();
+		User savedNewUser = userService.saveUser(newUser);
+		logger.info("Зарегистрирован новый пользователь " + email);
+		return Optional.ofNullable(savedNewUser);
 	}
 
 	/**
@@ -75,8 +80,7 @@ public class AuthService implements AuthServiceInterface {
 	@Override
 	public Optional<User> confirmEmailRegistration(String token) { 
 
-		EmailVerificationToken verificationToken = emailVerificationTokenService.findByToken(token)
-				.orElseThrow(() -> new ResourceNotFoundException("Token", "Email verification", token));
+		EmailVerificationToken verificationToken = emailVerificationTokenService.findByToken(token);
 
 		User registeredUser = verificationToken.getUser();
 		if  (registeredUser.getIsEmailVerified()) {
@@ -141,6 +145,10 @@ public class AuthService implements AuthServiceInterface {
 	 */
 	private boolean emailAlreadyExists(String userEmail) {
 		return userService.existsByEmail(userEmail);
+	}
+
+	private boolean usernameAlredyExists(String username) {
+		return userService.existsByUsername(username);
 	}
 
 }

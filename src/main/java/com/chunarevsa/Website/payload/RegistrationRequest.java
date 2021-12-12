@@ -1,11 +1,31 @@
-package com.chunarevsa.Website.entity.payload;
+package com.chunarevsa.Website.payload;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel(value = "Registration Request", description = "The registration request payload")
 public class RegistrationRequest {
 	
+	@NotBlank(message = "Registration username cannot be blank")
+	@ApiModelProperty(value = "A valid username", allowableValues = "NonEmpty String")
 	private String username;
+
+	@NotNull(message = "Registration password cannot be null")
+   @ApiModelProperty(value = "A valid password string", required = true, allowableValues = "NonEmpty String")
 	private String password;
+
+	@NotBlank(message = "Registration email cannot be blank")
+	@ApiModelProperty(value = "A valid email", required = true, allowableValues = "NonEmpty String")
 	private String email;
+
+	@NotNull(message = "Specify whether the user has to be registered as an admin or not")
+	@ApiModelProperty(value = "Flag denoting whether the user is an admin or not", required = true,
+            dataType = "boolean", allowableValues = "true, false")
 	private Boolean registerAsAdmin;
+	// TODO: во всех реквестах сделать также с актив
 
 	public RegistrationRequest() {}
 

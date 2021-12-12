@@ -6,6 +6,7 @@ import java.util.Set;
 import com.chunarevsa.Website.dto.InventoryUnitDto;
 import com.chunarevsa.Website.entity.Item;
 import com.chunarevsa.Website.entity.Price;
+import com.chunarevsa.Website.payload.EditItemRequest;
 import com.chunarevsa.Website.payload.ItemRequest;
 import com.chunarevsa.Website.payload.PriceRequest;
 import com.chunarevsa.Website.security.jwt.JwtUser;
@@ -45,7 +46,7 @@ public interface ItemServiceInterface {
 	/**
 	 * Изменение и удаление (выключение) Price 
 	 */
-	public Optional<Item> editItem (long id, ItemRequest itemRequest);
+	public Optional<Item> editItem (long id, EditItemRequest editItemRequest);
 
 	/**
 	 * Изменение и удаление (выключение) Price 

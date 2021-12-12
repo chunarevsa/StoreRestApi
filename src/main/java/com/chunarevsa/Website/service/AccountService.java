@@ -4,7 +4,6 @@ import java.util.Set;
 
 import com.chunarevsa.Website.entity.Account;
 import com.chunarevsa.Website.entity.User;
-import com.chunarevsa.Website.exception.InvalidAmountFormat;
 import com.chunarevsa.Website.exception.NotEnoughResourcesException;
 import com.chunarevsa.Website.repo.AccountRepository;
 import com.chunarevsa.Website.service.inter.AccountServiceInterface;
@@ -35,10 +34,6 @@ public class AccountService implements AccountServiceInterface {
 	@Override
 	public Set<Account> buyCurrency(String currencyTitle, String amountDomesticCurrency, User user) {
 	
-		if (!validateAmount(amountDomesticCurrency)) {
-			logger.error("Не выерный формат суммы валюты " + currencyTitle);
-			throw new InvalidAmountFormat("Сумма", currencyTitle, amountDomesticCurrency);
-		}
 		Set<Account> userAccounts = user.getAccounts();
 		Account userAccount = userAccounts.stream()
 				.filter(acc -> currencyTitle.equals(acc.getCurrencyTitle()))
@@ -93,19 +88,6 @@ public class AccountService implements AccountServiceInterface {
 		return userAccounts;
 	}
 
-	/**
-	 * Проверка суммы 
-	 */
-	private boolean validateAmount(String amount) {
-		try {
-			int value = Integer.parseInt(amount);
-			if (value < 0 ) {
-				return false;
-			}
-			return true;
-		} catch (Exception e) { // TODO: валидация
-			return false;
-		}
-	}
+	
 	
 }

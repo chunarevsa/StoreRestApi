@@ -1,7 +1,9 @@
 package com.chunarevsa.Website.dto;
 
 import com.chunarevsa.Website.entity.Item;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ItemDtoFromUnit {
 	
 	private Long id;
