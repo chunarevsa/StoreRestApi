@@ -6,11 +6,12 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-
+@ApiModel(value = "Item Request", description = "Item Request")
 public class ItemRequest {
-	
+
 	@NotNull(message = "Item name cannot be null")
 	@NotBlank(message = "Item name cannot be blank")
 	@ApiModelProperty(value = "Название Item", required = true, allowableValues = "NonEmpty String")
@@ -21,20 +22,18 @@ public class ItemRequest {
 	@ApiModelProperty(value = "Тип Item", required = true, allowableValues = "NonEmpty String")
 	private String type;
 
-	
 	@NotBlank(message = "Description cannot be blank")
 	@ApiModelProperty(value = "Описание Item", required = true, allowableValues = "NonEmpty String")
 	private String description;
 
 	@NotNull(message = "Whether the Item will be active or not")
-	@ApiModelProperty(value = "Whether the Item will be active or not", required = true,
-            dataType = "boolean", allowableValues = "true, false")
+	@ApiModelProperty(value = "Указывает будет ли Item активным", required = true, dataType = "boolean", allowableValues = "true, false")
 	private Boolean active;
-	
-	@NotNull(message = "Необходимо указать будет ли Item активен")
-	@NotEmpty(message = "Необходимо указать хотя бы одну цену для Item")
+
+	@NotNull(message = "One price must be specified")
+	@NotEmpty(message = "One price must be specified")
 	@ApiModelProperty(value = "Цены во внутренней валюте для Item", required = true, allowableValues = "NonEmpty String")
-	private Set<PriceRequest> pricies;
+	private Set<PriceRequest> prices;
 
 	public ItemRequest() {
 	}
@@ -75,23 +74,23 @@ public class ItemRequest {
 		this.active = active;
 	}
 
-	public Set<PriceRequest> getPricies() {
-		return this.pricies;
+	public Set<PriceRequest> getprices() {
+		return this.prices;
 	}
 
-	public void setPricies(Set<PriceRequest> pricies) {
-		this.pricies = pricies;
+	public void setprices(Set<PriceRequest> prices) {
+		this.prices = prices;
 	}
 
 	@Override
 	public String toString() {
 		return "{" +
-			" name='" + getName() + "'" +
-			", type='" + getType() + "'" +
-			", description='" + getDescription() + "'" +
-			", active='" + isActive() + "'" +
-			", pricies='" + getPricies() + "'" +
-			"}";
+				" name='" + getName() + "'" +
+				", type='" + getType() + "'" +
+				", description='" + getDescription() + "'" +
+				", active='" + isActive() + "'" +
+				", prices='" + getprices() + "'" +
+				"}";
 	}
 
 }

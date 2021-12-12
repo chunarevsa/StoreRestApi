@@ -7,12 +7,12 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 
-@ApiModel(value = "Logout request", description = "The logout request payload")
+@ApiModel(value = "Logout request", description = "Logout request")
 public class LogOutRequest {
 	
 	@Valid
 	@NotNull(message = "Device info cannot be null")
-	@ApiModelProperty(value = "Device info", required = true, dataType = "object", allowableValues = "A valid " +
+	@ApiModelProperty(value = "Информация об устройстве", required = true, dataType = "object", allowableValues = "A valid " +
             "deviceInfo object")
 	private DeviceInfo deviceInfo;
 

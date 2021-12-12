@@ -3,8 +3,10 @@ package com.chunarevsa.Website.payload;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+@ApiModel(value = "Currency Request", description = "Currency Request")
 public class DomesticCurrencyRequest {
 
 	@NotNull(message = "Currency title cannot be null")
@@ -18,7 +20,7 @@ public class DomesticCurrencyRequest {
 	private String cost;
 
 	@NotNull(message = "Whether the currency will be active or not")
-	@ApiModelProperty(value = "Whether the currency will be active or not", required = true,
+	@ApiModelProperty(value = "Указывает будет ли Currency активным", required = true,
             dataType = "boolean", allowableValues = "true, false")
 	private boolean active;
 

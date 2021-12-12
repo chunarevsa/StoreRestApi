@@ -7,14 +7,15 @@ import com.chunarevsa.Website.entity.DeviceType;
 
 import io.swagger.annotations.ApiModelProperty;
 
+
 public class DeviceInfo {
 
 	@NotBlank(message = "Device id cannot be blank")
-	@ApiModelProperty(value = "Device Id", required = true, dataType = "string", allowableValues = "Non empty string")
+	@ApiModelProperty(value = "Id устройства", required = true, dataType = "string", allowableValues = "Non empty string")
 	private String deviceId;
 
 	@NotNull
-	@ApiModelProperty(value = "Device type Android/iOS", required = true, dataType = "string",
+	@ApiModelProperty(value = "Тип устройства (Android/iOS)", required = true, dataType = "string",
 		allowableValues = "DEVICE_TYPE_ANDROID, DEVICE_TYPE_IOS")
 	private DeviceType deviceType;
 

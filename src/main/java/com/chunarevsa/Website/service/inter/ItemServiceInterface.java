@@ -16,7 +16,7 @@ import org.springframework.data.domain.Pageable;
 public interface ItemServiceInterface {
 
 	/**
-	 * Получение Items 
+	 * Получение Items
 	 * Если ADMIN -> page Items, если USER -> set ItemsDto
 	 */
 	public Object getItems(Pageable pageable, JwtUser jwtUser);
@@ -29,19 +29,19 @@ public interface ItemServiceInterface {
 
 	/**
 	 * Получение у Item списка всех Price
-	 * Если ADMIN -> set Pricies, если USER -> set PriciesDto
+	 * Если ADMIN -> set prices, если USER -> set pricesDto
 	 */
-	public Object getItemPricies (Long itemId, JwtUser jwtUser);
+	public Object getItemprices(Long itemId, JwtUser jwtUser);
 
 	/**
 	 * Покупка UsetItem (копии Item) за внутреннюю валюту
 	 */
 	public Set<InventoryUnitDto> buyItem(Long itemId, String amountItems, String currencyTitle, JwtUser jwtUser);
-	
+
 	/**
 	 * Добавление Item
 	 */
-	public Optional<Item> addItem (ItemRequest itemRequest);
+	public Optional<Item> addItem(ItemRequest itemRequest);
 
 	/**
 	 * Добавление новой цены с валидацией
@@ -49,12 +49,12 @@ public interface ItemServiceInterface {
 	public Optional<Item> addItemPrice(PriceRequest priceRequest, Long itemId);
 
 	/**
-	 * Изменение и удаление (выключение) Price 
+	 * Изменение и удаление (выключение) Price
 	 */
-	public Optional<Item> editItem (long id, EditItemRequest editItemRequest);
+	public Optional<Item> editItem(long id, EditItemRequest editItemRequest);
 
 	/**
-	 * Изменение и удаление (выключение) Price 
+	 * Изменение и удаление (выключение) Price
 	 */
 	public Optional<Price> editItemPrice(PriceRequest priceRequest, Long priceId);
 
@@ -63,4 +63,4 @@ public interface ItemServiceInterface {
 	 */
 	public void deleteItem(long itemId);
 
-} 
+}

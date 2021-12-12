@@ -22,7 +22,7 @@ public class RegistrationRequest {
 	private String email;
 
 	@NotNull(message = "Whether the user has to be registered as an admin or not")
-	@ApiModelProperty(value = "Whether the user has to be registered as an admin or not", required = true,
+	@ApiModelProperty(value = "Указывает обладает ли пользователь правами администратора", required = true,
             dataType = "boolean", allowableValues = "true, false")
 	private Boolean registerAsAdmin;
 

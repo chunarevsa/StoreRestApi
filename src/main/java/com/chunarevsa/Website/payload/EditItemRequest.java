@@ -3,8 +3,10 @@ package com.chunarevsa.Website.payload;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+@ApiModel(value = "Edit Item Request", description = "Edit Item Request")
 public class EditItemRequest {
 	
 	@NotNull(message = "Item name cannot be null")
@@ -23,7 +25,7 @@ public class EditItemRequest {
 	private String description;
 
 	@NotNull(message = "Whether the Item will be active or not")
-	@ApiModelProperty(value = "Whether the Item will be active or not", required = true,
+	@ApiModelProperty(value = "Указывает будет ли Item активным", required = true,
             dataType = "boolean", allowableValues = "true, false")
 	private Boolean active;
 

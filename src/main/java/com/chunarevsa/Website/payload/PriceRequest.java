@@ -3,9 +3,10 @@ package com.chunarevsa.Website.payload;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-
+@ApiModel(value = "Price Request", description = "Price Request")
 public class PriceRequest {
 	
 	@NotNull(message = "Cost cannot be null")
@@ -19,7 +20,7 @@ public class PriceRequest {
 	private String currency;
 
 	@NotNull(message = "Whether the price will be active or not")
-	@ApiModelProperty(value = "Whether the price will be active or not", required = true,
+	@ApiModelProperty(value = "Указывает будет ли Price активна", required = true,
 	dataType = "boolean", allowableValues = "true, false")
 	private Boolean active;
 

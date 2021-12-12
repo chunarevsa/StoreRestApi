@@ -7,20 +7,20 @@ import javax.validation.constraints.NotNull;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "Login Request", description = "The login request payload")
+@ApiModel(value = "Login Request", description = "Login Request")
 public class LoginRequest {
 
 	@NotBlank(message = "Login Email cannot be blank")
-	@ApiModelProperty(value = "User registered email", required = true, allowableValues = "NonEmpty String")
+	@ApiModelProperty(value = "Email", required = true, allowableValues = "NonEmpty String")
    private String email;
 	
 	@NotNull(message = "Login password cannot be blank")
-	@ApiModelProperty(value = "Valid user password", required = true, allowableValues = "NonEmpty String")
+	@ApiModelProperty(value = "Пароль", required = true, allowableValues = "NonEmpty String")
    private String password;
 
    @Valid
 	@NotNull(message = "Device info cannot be null")
-	@ApiModelProperty(value = "Device info", required = true, dataType = "object", allowableValues = "A valid " +
+	@ApiModelProperty(value = "Информация об устройстве", required = true, dataType = "object", allowableValues = "A valid " +
             "deviceInfo object")
    private DeviceInfo deviceInfo;
 

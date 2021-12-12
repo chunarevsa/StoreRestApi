@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PriceService implements PriceServiceInterface { 
+public class PriceService implements PriceServiceInterface {
 
 	private static final Logger logger = LogManager.getLogger(PriceService.class);
 
@@ -29,8 +29,8 @@ public class PriceService implements PriceServiceInterface {
 
 	@Autowired
 	public PriceService(
-				PriceRepository priceRepository,
-				DomesticCurrencyService domesticCurrencyService) {
+			PriceRepository priceRepository,
+			DomesticCurrencyService domesticCurrencyService) {
 		this.priceRepository = priceRepository;
 		this.domesticCurrencyService = domesticCurrencyService;
 	}
@@ -39,12 +39,12 @@ public class PriceService implements PriceServiceInterface {
 	 * Получение списка Price из списка PriceRequest
 	 */
 	@Override
-	public Set<Price> getItemPriciesFromRequest (Set<PriceRequest> priciesRequest) {
+	public Set<Price> getItempricesFromRequest(Set<PriceRequest> pricesRequest) {
 
-		Set<Price> pricies = priciesRequest.stream() 
+		Set<Price> prices = pricesRequest.stream()
 				.map(priceRequest -> getItemPriceFromRequest(priceRequest))
 				.collect(Collectors.toSet());
-		return pricies;
+		return prices;
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class PriceService implements PriceServiceInterface {
 		// Проверка есть ли у Item цена в валюте из PriceRquest
 		if (validateCurrencyIsPresentInItem(priceRequest, price)) {
 			logger.error("В Item " + price.getItem().getId() + " есть цена в " + priceRequest.getCurrency());
-				throw new AlreadyUseException("Price in this Item", "currency",  priceRequest.getCurrency());
+			throw new AlreadyUseException("Price in this Item", "currency", priceRequest.getCurrency());
 		}
 
 		DomesticCurrency domesticCurrency = domesticCurrencyService.findCurrencyByTitile(priceRequest.getCurrency());
@@ -75,15 +75,16 @@ public class PriceService implements PriceServiceInterface {
 	 * Валидация на наличие у Item цены в валюте из PriceRequest
 	 */
 	@Override
-	public Price getValidatedPrice(Set<Price> pricies, PriceRequest priceRequest) {
-		
+	public Price getValidatedPrice(Set<Price> prices, PriceRequest priceRequest) {
+
 		Price newItemPrice = getItemPriceFromRequest(priceRequest);
-		Price find = pricies.stream()
-			.filter(itemPrice -> newItemPrice.getDomesticCurrency().getTitle().equals(itemPrice.getDomesticCurrency().getTitle()))
-			.findAny().orElse(null);
+		Price find = prices.stream()
+				.filter(itemPrice -> newItemPrice.getDomesticCurrency().getTitle()
+						.equals(itemPrice.getDomesticCurrency().getTitle()))
+				.findAny().orElse(null);
 		if (find != null) {
 			logger.error("Цена с такой валютой уже есть у Item");
-			throw new AlreadyUseException("Price in this Item", "currency",  priceRequest.getCurrency());
+			throw new AlreadyUseException("Price in this Item", "currency", priceRequest.getCurrency());
 		}
 		return newItemPrice;
 	}
@@ -93,9 +94,9 @@ public class PriceService implements PriceServiceInterface {
 
 		if (!priceRequest.getCurrency().equals(price.getDomesticCurrency().getTitle())) {
 			Price pr = itemPrices.stream()
-				.filter(itemPrice -> priceRequest.getCurrency().equals(itemPrice.getDomesticCurrency().getTitle()))
-				.findAny().orElse(null);
-			if (pr  != null) {
+					.filter(itemPrice -> priceRequest.getCurrency().equals(itemPrice.getDomesticCurrency().getTitle()))
+					.findAny().orElse(null);
+			if (pr != null) {
 				return true;
 			}
 		}
@@ -106,7 +107,7 @@ public class PriceService implements PriceServiceInterface {
 	 * Удаление списка Price
 	 */
 	@Override
-	public Set<Price> deletePricies (Set<Price> prices) { 
+	public Set<Price> deleteprices(Set<Price> prices) {
 		return prices.stream()
 				.map(price -> deletePrice(price.getId())).collect(Collectors.toSet());
 	}
@@ -114,7 +115,7 @@ public class PriceService implements PriceServiceInterface {
 	/**
 	 * Удаление Price
 	 */
-	private Price deletePrice (Long priceId) {
+	private Price deletePrice(Long priceId) {
 
 		Price price = findPriceById(priceId);
 		price.setActive(false);
@@ -126,20 +127,20 @@ public class PriceService implements PriceServiceInterface {
 	 * Получение всех цен в PriceDto
 	 */
 	@Override
-	public Set<PriceDto> getItemPriciesDto(Set<Price> pricies) {
+	public Set<PriceDto> getItempricesDto(Set<Price> prices) {
 
-		Set<Price> activePricies = pricies.stream().filter(price -> price.getActive() == true)
+		Set<Price> activeprices = prices.stream().filter(price -> price.getActive() == true)
 				.collect(Collectors.toSet());
-		
-		if (activePricies == null) {
+
+		if (activeprices == null) {
 			logger.error("Нет активных Item");
 			throw new ResourceNotFoundException("Price", "active", true);
 		}
 
-		Set<PriceDto> priciesDto = activePricies.stream()
+		Set<PriceDto> pricesDto = activeprices.stream()
 				.map(activePrice -> getItemPriceDto(activePrice.getId())).collect(Collectors.toSet());
-		
-		return priciesDto;
+
+		return pricesDto;
 	}
 
 	/**
@@ -147,7 +148,7 @@ public class PriceService implements PriceServiceInterface {
 	 */
 	private PriceDto getItemPriceDto(Long priceId) {
 		Price price = findPriceById(priceId);
-		if (!price.isActive()){
+		if (!price.isActive()) {
 			logger.error("Цена  " + priceId + " не активна");
 			throw new ResourceNotFoundException("Price", "active", true);
 		}
@@ -158,13 +159,13 @@ public class PriceService implements PriceServiceInterface {
 	 * Получение у Item цены в конкретной валюте
 	 */
 	public String getCostInCurrency(Set<Price> prices, String currencyTitle) {
-		
+
 		DomesticCurrency domesticCurrency = domesticCurrencyService.findCurrencyByTitile(currencyTitle);
-		
+
 		Price price = prices.stream().filter(itemPrice -> domesticCurrency.equals(itemPrice.getDomesticCurrency()))
-			.findAny().orElseThrow(() -> new ResourceNotFoundException("Item", "price", currencyTitle));
+				.findAny().orElseThrow(() -> new ResourceNotFoundException("Item", "price", currencyTitle));
 		if (!price.isActive()) {
-			logger.info("Цена в валюте " + domesticCurrency.getTitle() + " не активна" );
+			logger.info("Цена в валюте " + domesticCurrency.getTitle() + " не активна");
 			throw new ResourceNotFoundException("Цена", "active", true);
 		}
 
@@ -184,7 +185,7 @@ public class PriceService implements PriceServiceInterface {
 		price.setDomesticCurrency(domesticCurrency);
 		price.setActive(priceRequest.getActive());
 		return price;
-	} 
+	}
 
 	/**
 	 * Валидация PriceRequest
@@ -196,11 +197,11 @@ public class PriceService implements PriceServiceInterface {
 			throw new InvalidAmountFormat("Стоимость", "price", (priceRequest.getCost()));
 		}
 
-		if (!priceRequest.isActive()){
+		if (!priceRequest.isActive()) {
 			logger.error("Цена " + priceRequest.getCurrency() + " не активна");
 			return false;
 		}
-		return true; 
+		return true;
 	}
 
 	/**
@@ -208,11 +209,11 @@ public class PriceService implements PriceServiceInterface {
 	 */
 	private boolean validateCostInPriceRequest(String cost) {
 		try {
-			int i = Integer.parseInt(cost); 
-		if (i < 0 ) {
-			return false;
-		}
-		return true;
+			int i = Integer.parseInt(cost);
+			if (i < 0) {
+				return false;
+			}
+			return true;
 
 		} catch (NumberFormatException e) {
 			throw new InvalidAmountFormat("Сумма", "cost", cost);
@@ -223,8 +224,8 @@ public class PriceService implements PriceServiceInterface {
 	 * Сохранение списка Price
 	 */
 	@Override
-	public Set<Price> savePricies(Set<Price> pricies) {
-		return pricies.stream().map(price -> savePrice(price)).collect(Collectors.toSet());
+	public Set<Price> saveprices(Set<Price> prices) {
+		return prices.stream().map(price -> savePrice(price)).collect(Collectors.toSet());
 	}
 
 	/**
@@ -236,9 +237,7 @@ public class PriceService implements PriceServiceInterface {
 
 	public Price findPriceById(Long priceId) {
 		return priceRepository.findById(priceId)
-			.orElseThrow(() -> new ResourceNotFoundException("Price", "id", priceId));
+				.orElseThrow(() -> new ResourceNotFoundException("Price", "id", priceId));
 	}
 
-	
-	
 }
