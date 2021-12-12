@@ -155,7 +155,7 @@ public class ItemService implements ItemServiceInterface {
 
 		Item item = findById(itemId);
 		Price newPrice = priceService.getValidatedPrice(item.getPrices(), priceRequest);
-		item.getPrices().add(newPrice); // TODO: getPric IES
+		item.getPrices().add(newPrice); 
 		priceService.saveprices(item.getPrices());
 		Item savedItem = saveItem(item);
 		logger.info("Добавлена новая цена для " + savedItem.getName());

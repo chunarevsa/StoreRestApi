@@ -27,14 +27,14 @@ public class RefreshToken extends DateAudit {
 	private Long id;
 
 	@Column(name = "TOKEN", nullable = false, unique = true)
-	@NaturalId(mutable = true) // TODO: ?
+	@NaturalId(mutable = true) 
 	private String token;
 
 	@OneToOne(optional = false, cascade = CascadeType.ALL)
 	@JoinColumn(name = "USER_DEVICE_ID", unique = true)
 	private UserDevice userDevice;
 
-	@Column(name = "REFRESH_COUNT") // TODO: ?
+	@Column(name = "REFRESH_COUNT") 
 	private Long refreshCount;
 
 	@Column(name = "EXPIRY_DT", nullable = false)

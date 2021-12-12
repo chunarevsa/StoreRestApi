@@ -107,7 +107,7 @@ public class AuthController {
 					.map(refreshToken -> {
 						String jwtToken = authService.createToken(jwtUser);
 						return ResponseEntity.ok(new JwtAuthenticationResponse(jwtToken, refreshToken,  jwtTokenProvider.getExpiryDuration()));
-					}).orElseThrow(() -> new UserLoginException("Couldn't create refresh token for:" + loginRequestDto.getEmail())); // TODO: стиль
+					}).orElseThrow(() -> new UserLoginException("Couldn't create refresh token for:" + loginRequestDto.getEmail()));
 
 	} 
 } 

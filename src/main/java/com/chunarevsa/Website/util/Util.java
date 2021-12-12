@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public class Util {
 
-	private Util () { // TODO: ?
+	private Util () { 
 		throw new UnsupportedOperationException("Ошибка создание класса Util");
 	}
 

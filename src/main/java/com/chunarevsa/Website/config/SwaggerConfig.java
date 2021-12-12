@@ -23,7 +23,7 @@ public class SwaggerConfig {
                 .ignoredParameterTypes(JwtUser.class)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.chunarevsa.Website"))
-                .paths(PathSelectors.regex("/api.*"))
+                .paths(PathSelectors.regex("/.*"))
                 .build()
                 .apiInfo(metaInfo());
     }

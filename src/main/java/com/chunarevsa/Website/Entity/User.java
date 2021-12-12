@@ -45,7 +45,7 @@ public class User extends DateAudit {
 	@Column(name = "IS_ACTIVE", nullable = false)
 	private Boolean active;
 
-	@Column(name = "AVATAR") //TODO:
+	@Column(name = "AVATAR") 
 	private String avatar;
 
 	@Column(name = "IS_EMAIL_VERIFIED", nullable = false)

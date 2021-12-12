@@ -58,8 +58,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override // TODO: прибратсься
 	public void configure (WebSecurity webSecurity) {
-		webSecurity.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/**",
-		"/swagger-ui.html", "/webjars/**");
+		webSecurity.ignoring().antMatchers("/v2/api-docs", 
+													  "/configuration/ui", 
+													  "/swagger-resources/**", 
+													  "/configuration/**",
+													  "/swagger-ui.html", 
+													  "/webjars/**");
 	}
 
 	@Override
@@ -76,7 +80,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.and()
 						.authorizeRequests()
 						.antMatchers( // Доступны без авторизации
-									"/auth/*"
+									"/auth/*",
+									"/**",
+									"/**/*"
 									).permitAll()
 						.anyRequest().authenticated(); // остально только для авторизованых	
 		
