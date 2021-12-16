@@ -4,6 +4,87 @@
 Системы управления товарами для площадки электронной коммерции.
 
 ####	Реализовано: ####
+* Регистрация пользователя с подтверждением через почту
+* Авторизация пользователя с использованием Spring Security и JWT
+* Поддержка входа и выхода с нескольких устройств.
+* Возможность создания/редактировани/удаления товаров и внутренней валюты администратором
+* Приобретение внутренней валюты со списанием средств ($) у пользователя
+* Счета пользователя в разной внутренней валюте (gold: 100; silver: 50 ...)
+* Приобретение товаров за внутреннюю валюту
+* Пользовательский инвентарь для хранения товаров
+* Вадыча исключений при ошибках
+* Миграция баз данных с помощью Flayway
+
+* (в разработке ) запуск с помощью Docker
+
+## Getting Started ##
+
+<h4> Загрузка проекта </h4>
+
+```bash
+$ git clone https://github.com/chunarevsa/StoreRestApi.git
+$ cd StoreRestApi
+```
+
+<h4> Create a MySQL database </h4>
+
+База данных создаётся автоматически при отсутствии 
+Если с этим возникли проблемы то:
+
+```bash
+$ create database websitechsa
+```
+
+<h4> Измените имя пользователя и пароль MySQL в application.properties </h4>
+
+* `spring.datasource.username`
+* `spring.datasource.password`
+
+<h4> Измените имя пользователя и пароль для рассылки в mail.properties </h4>
+
+* `spring.mail.username`
+* `spring.mail.password` 
+
+<h4> Запуск </h4>
+
+* Проект запускается с параметром `server.port:8088`
+
+```bash
+$ ./mvnw spring-boot:run   # для UNIX/Linux 
+$ mvnw.cmd spring-boot:run # для Windows 
+```
+
+## API ##
+
+Если вы используете Postman можно импортировать запросы из фаила 
+`Website.postman_collection.json`
+
+<h4> Аутентификация </h4>
+
+* Регистрация на основе email с подтверждение через почту
+* Авторизация с использование Spring Security и JWT
+* Login и Logout с нескольких устройств
+* Разграничение функциональности по ролям (USER, ADMIN)
+
+
+<details>
+<summary>Регистрация</summary>
+
+```
+curl --location --request POST 'localhost:8088//auth/register' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "email": "admin@gmail.com",
+    "password": "test1",
+    "registerAsAdmin": true
+}'
+```
+
+* "registerAsAdmin" - будет ли являться пользователь администратором
+* Почта и имя пользователя должны быть уникальными
+
+</details>
+
 Аутентификация
 * Регистрация на основе email с подтверждение через почту
 * Авторизация с использование Spring Security и JWT

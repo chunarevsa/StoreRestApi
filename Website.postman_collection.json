@@ -1,0 +1,851 @@
+{
+	"info": {
+		"_postman_id": "dc01a5a2-5948-417e-86c5-aed63c7cb99e",
+		"name": "Website",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Currency",
+			"item": [
+				{
+					"name": "/currency/all",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNjM5MzMyMjc1LCJleHAiOjE2NDE5MjQyNzUsImF1dGhvcml0aWVzIjoiUk9MRV9BRE1JTixST0xFX1VTRVIifQ.ccZ_X4k0xDSFR20ia5xyoMmwiCXwg2UYKOuyxIkj9u1EItPpQe7uZv005kGeCFmI6XPjbeQtDMCEE5WtLJwBvg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8088/currency/all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"currency",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/currency/{title}",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk3MzkxLCJleHAiOjE2NDE4ODkzOTEsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.r08_vs4QFd5IExZbYot9pBRqGCffLRLcO3oPxPz8o0XsOYECXp1fdMFRFXylS9mXyuPbkbYKgvjv_i-8AtkcGQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8088/currency/gold",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"currency",
+								"gold"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/currency/buy?title=gold&amount=100",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk3MzkxLCJleHAiOjE2NDE4ODkzOTEsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.r08_vs4QFd5IExZbYot9pBRqGCffLRLcO3oPxPz8o0XsOYECXp1fdMFRFXylS9mXyuPbkbYKgvjv_i-8AtkcGQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8088/currency/buy?title=gold&amount=100",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"currency",
+								"buy"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "gold"
+								},
+								{
+									"key": "amount",
+									"value": "100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/currency/add",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk3MzkxLCJleHAiOjE2NDE4ODkzOTEsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.r08_vs4QFd5IExZbYot9pBRqGCffLRLcO3oPxPz8o0XsOYECXp1fdMFRFXylS9mXyuPbkbYKgvjv_i-8AtkcGQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"gold\",\r\n    \"cost\": \"10\",\r\n    \"active\": \"true\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8088/currency/add",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"currency",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/currency/{title}/edit",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNjM5MTY0NDkzLCJleHAiOjE2NDE3NTY0OTMsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.3ojAZ37PAzWqKmn53cH-mbEhyH_U_Uz8yJ20egQiio4Pw3jnYzHZisKUvc-YjAcYj8b8EKhtD11Syk4mPSZSWA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"gold\",\r\n    \"cost\": \"12\",\r\n    \"active\": \"true\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8088/currency/silver/edit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"currency",
+								"silver",
+								"edit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/currency/{title}/delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNjM5MTY0NDkzLCJleHAiOjE2NDE3NTY0OTMsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.3ojAZ37PAzWqKmn53cH-mbEhyH_U_Uz8yJ20egQiio4Pw3jnYzHZisKUvc-YjAcYj8b8EKhtD11Syk4mPSZSWA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8088/currency/silver/delete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"currency",
+								"silver",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Item",
+			"item": [
+				{
+					"name": "/item/all",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5MzI2MTMzLCJleHAiOjE2NDE5MTgxMzMsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSIn0.2AN7GE3XJ_Iw2bNJeYkfodbSCZ42yZenOoKiuWQqwPt6tv_kHjR286uom1XynwuL9uJj1jpuGFiN_eoi6EvL8A",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8088/item/all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"item",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/item/{itemId}",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk3MzkxLCJleHAiOjE2NDE4ODkzOTEsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.r08_vs4QFd5IExZbYot9pBRqGCffLRLcO3oPxPz8o0XsOYECXp1fdMFRFXylS9mXyuPbkbYKgvjv_i-8AtkcGQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8088/item/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"item",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/item/{itemId}/prices",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk3MzkxLCJleHAiOjE2NDE4ODkzOTEsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.r08_vs4QFd5IExZbYot9pBRqGCffLRLcO3oPxPz8o0XsOYECXp1fdMFRFXylS9mXyuPbkbYKgvjv_i-8AtkcGQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8088/item/1/prices",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"item",
+								"1",
+								"prices"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/item/{itemId}/bye?currencytitle=gold&amountitem=2",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk3MzkxLCJleHAiOjE2NDE4ODkzOTEsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.r08_vs4QFd5IExZbYot9pBRqGCffLRLcO3oPxPz8o0XsOYECXp1fdMFRFXylS9mXyuPbkbYKgvjv_i-8AtkcGQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8088/item/1/buy?currencytitle=gold&amountitem=2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"item",
+								"1",
+								"buy"
+							],
+							"query": [
+								{
+									"key": "currencytitle",
+									"value": "gold"
+								},
+								{
+									"key": "amountitem",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/item/add",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk3MzkxLCJleHAiOjE2NDE4ODkzOTEsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.r08_vs4QFd5IExZbYot9pBRqGCffLRLcO3oPxPz8o0XsOYECXp1fdMFRFXylS9mXyuPbkbYKgvjv_i-8AtkcGQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Ломик Гордона Фримена\",\r\n    \"type\": \"Weapon\",\r\n    \"description\": \"Cool weapon \",\r\n    \"active\": \"true\",\r\n        \"prices\": [\r\n            {\r\n                \"cost\": \"5\",\r\n                \"currency\": \"gold\",\r\n                \"active\": \"true\"\r\n            },\r\n            {\r\n                \"cost\": \"50\",\r\n                \"currency\": \"silver\",\r\n                \"active\": \"true\"\r\n            }\r\n                    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8088/item/add",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"item",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "item/{itemId}/prices/add",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk3MzkxLCJleHAiOjE2NDE4ODkzOTEsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.r08_vs4QFd5IExZbYot9pBRqGCffLRLcO3oPxPz8o0XsOYECXp1fdMFRFXylS9mXyuPbkbYKgvjv_i-8AtkcGQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cost\": \"10\",\r\n    \"currency\": \"gold\",\r\n    \"active\": \"true\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8088/item/1/prices/add",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"item",
+								"1",
+								"prices",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/item/{itemId}/edit",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk3MzkxLCJleHAiOjE2NDE4ODkzOTEsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.r08_vs4QFd5IExZbYot9pBRqGCffLRLcO3oPxPz8o0XsOYECXp1fdMFRFXylS9mXyuPbkbYKgvjv_i-8AtkcGQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Легендарный плащ\",\r\n    \"type\": \"skin\",\r\n    \"description\": \"обычный плащ\",\r\n    \"active\": \"true\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8088/item/1/edit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"item",
+								"1",
+								"edit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/item/price/{priceId}/edit",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk3MzkxLCJleHAiOjE2NDE4ODkzOTEsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.r08_vs4QFd5IExZbYot9pBRqGCffLRLcO3oPxPz8o0XsOYECXp1fdMFRFXylS9mXyuPbkbYKgvjv_i-8AtkcGQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cost\": \"10\",\r\n    \"currency\": \"silver\",\r\n    \"active\": \"true\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8088/item/price/1/edit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"item",
+								"price",
+								"1",
+								"edit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/item/{id}/delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk3MzkxLCJleHAiOjE2NDE4ODkzOTEsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.r08_vs4QFd5IExZbYot9pBRqGCffLRLcO3oPxPz8o0XsOYECXp1fdMFRFXylS9mXyuPbkbYKgvjv_i-8AtkcGQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8088/item/1/delete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"item",
+								"1",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "/user/profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk2NTEwLCJleHAiOjE2NDE4ODg1MTAsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.v-EYaLqelzIn0emvlRPTzg7LIA4-y-Q0zsa9NREAJvTmh38gugeN0WIdbAQMKI10ql87fs9A4EncNeH3WydLdA",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8088/user/profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"user",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/user/{username}",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk2NTEwLCJleHAiOjE2NDE4ODg1MTAsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.v-EYaLqelzIn0emvlRPTzg7LIA4-y-Q0zsa9NREAJvTmh38gugeN0WIdbAQMKI10ql87fs9A4EncNeH3WydLdA",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8088/user/admin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"user",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/user/profile/inventory",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk2NTEwLCJleHAiOjE2NDE4ODg1MTAsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.v-EYaLqelzIn0emvlRPTzg7LIA4-y-Q0zsa9NREAJvTmh38gugeN0WIdbAQMKI10ql87fs9A4EncNeH3WydLdA",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8088/user/profile/inventory",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"user",
+								"profile",
+								"inventory"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/user/all",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk3MzkxLCJleHAiOjE2NDE4ODkzOTEsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.r08_vs4QFd5IExZbYot9pBRqGCffLRLcO3oPxPz8o0XsOYECXp1fdMFRFXylS9mXyuPbkbYKgvjv_i-8AtkcGQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8088/user/all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"user",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/user/logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk2NTEwLCJleHAiOjE2NDE4ODg1MTAsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.v-EYaLqelzIn0emvlRPTzg7LIA4-y-Q0zsa9NREAJvTmh38gugeN0WIdbAQMKI10ql87fs9A4EncNeH3WydLdA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"deviceInfo\": {\r\n        \"deviceId\": \"D1\",\r\n        \"deviceType\": \"DEVICE_TYPE_ANDROID\",\r\n        \"notificationToken\": \"N1\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8088/user/logout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"user",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "/auth/register USER",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"user\",\r\n    \"password\": \"test1\",\r\n    \"email\": \"user@gamil.com\",\r\n    \"registerAsAdmin\": \"false\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8088/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/auth/register ADMIN",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"test1\",\r\n    \"email\": \"admin@gmail.com\",\r\n    \"registerAsAdmin\": \"true\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8088/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/auth/registrationConfirmation?token={token}",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8088/auth/registrationConfirmation?token=e3fe7b2d-abe5-4500-88fe-ad4dd39e84cf",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"auth",
+								"registrationConfirmation"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "e3fe7b2d-abe5-4500-88fe-ad4dd39e84cf"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/auth/login USER",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"user@gmail.com\",\r\n    \"password\": \"test1\",\r\n    \"deviceInfo\": {\r\n        \"deviceId\": \"D1\",\r\n        \"deviceType\": \"DEVICE_TYPE_ANDROID\",\r\n        \"notificationToken\": \"N1\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8088/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/auth/login ADMIN",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"admin@gmail.com\",\r\n    \"password\": \"test1\",\r\n    \"deviceInfo\": {\r\n        \"deviceId\": \"D1\",\r\n        \"deviceType\": \"DEVICE_TYPE_ANDROID\",\r\n        \"notificationToken\": \"N1\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8088/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "admin/addmoney?",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNjM5MTY0NDkzLCJleHAiOjE2NDE3NTY0OTMsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.3ojAZ37PAzWqKmn53cH-mbEhyH_U_Uz8yJ20egQiio4Pw3jnYzHZisKUvc-YjAcYj8b8EKhtD11Syk4mPSZSWA",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8088/admin/addmoney?amount=1000&username=admin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"admin",
+								"addmoney"
+							],
+							"query": [
+								{
+									"key": "amount",
+									"value": "1000"
+								},
+								{
+									"key": "username",
+									"value": "admin"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
