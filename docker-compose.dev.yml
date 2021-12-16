@@ -20,7 +20,7 @@ services:
       - 8088:8088
     environment:
       - SERVER_PORT=8088
-      - MYSQL_URL=jdbc:mysql://mysqlserver/websitechsa
+      - MYSQL_URL=jdbc:mysql://mysqlserver:3306/websitechsa
     depends_on:
       - mysqlserver
     networks: 
