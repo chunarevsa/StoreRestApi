@@ -155,7 +155,7 @@ curl --location --request POST 'localhost:8088/user/logout' \
 
 ---
 
-### Функции администратора 
+## Функции администратора 
 
 <details>
 <summary> Пополнение счёта пользователя </summary>
