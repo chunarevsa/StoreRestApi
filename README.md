@@ -31,8 +31,8 @@
 <h4> Загрузка проекта </h4>
 
 ```bash
-$ git clone https://github.com/chunarevsa/StoreRestApi.git
-$ cd StoreRestApi
+git clone https://github.com/chunarevsa/StoreRestApi.git
+cd StoreRestApi
 ```
 
 <h4> Создание базы данных MYSQL </h4>
@@ -42,7 +42,7 @@ $ cd StoreRestApi
 Если с этим возникли проблемы то:
 
 ```bash
-$ create database websitechsa
+create database websitechsa
 ```
 
 <h4> Измените имя пользователя и пароль MySQL в application.properties </h4>
@@ -58,8 +58,8 @@ $ create database websitechsa
 <h4> Запуск </h4>
 
 ```bash
-$ ./mvnw spring-boot:run   # для UNIX/Linux 
-$ mvnw.cmd spring-boot:run # для Windows 
+./mvnw spring-boot:run   # для UNIX/Linux 
+mvnw.cmd spring-boot:run # для Windows 
 ```
 Проект запускается с параметром `server.port:8088`
 
