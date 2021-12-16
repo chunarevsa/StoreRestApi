@@ -26,7 +26,40 @@
 * MYSQL
 * Git
 
-## Запуск проекта ##
+## Запуск проекта с помощью Docker ##
+
+<h4> Загрузка  </h4>
+
+```bash
+git clone https://github.com/chunarevsa/StoreRestApi.git
+cd StoreRestApi
+
+```
+
+<h4> Измените имя пользователя и пароль MySQL в application.properties </h4>
+
+* `spring.datasource.username`
+* `spring.datasource.password`
+
+MYSQL сервер запускается с параметром ports:`3306:3306`
+
+<h4> Измените имя пользователя и пароль для рассылки в mail.properties </h4>
+
+* `spring.mail.username`
+* `spring.mail.password` 
+
+<h4> Запуск </h4>
+
+```bash
+docker-compose -f docker-compose.dev.yml up --build
+
+```
+
+Проект запускается с параметром `server.port:8088`
+
+---
+
+## Запуск проекта без Docker ##
 
 <h4> Загрузка  </h4>
 
