@@ -153,7 +153,9 @@ curl --location --request POST 'localhost:8088/user/logout' \
 
 ---
 
+>
 > <h3> Функции администратора </h3>
+>
 
 <details>
 <summary> Пополнение счёта пользователя </summary>
@@ -461,7 +463,9 @@ curl --location --request POST 'localhost:8088/item/1/buy?currencytitle=gold&amo
 
 ---
 
+>
 > <h3> Пользователь </h3>
+>
 
 <details>
 <summary> Свой профиль </summary>
