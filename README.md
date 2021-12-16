@@ -78,7 +78,7 @@ curl --location --request POST 'localhost:8088//auth/register' \
 }'
 ```
 
-* "registerAsAdmin" - будет ли являться пользователь администратором
+* `registerAsAdmin` - будет ли являться пользователь администратором
 * Почта и имя пользователя должны быть уникальными
 
 </details>
@@ -89,17 +89,36 @@ curl --location --request POST 'localhost:8088//auth/register' \
 <summary> Подстверждение регистрации </summary>
 
 ```
-curl --location --request POST 'localhost:8088//auth/register' \
+curl --location --request GET 'localhost:8088/auth/registrationConfirmation?token=bcbf8764-dbf2-4676-9ebd-2c74436293b9' \
+--header 'Content-Type: application/json' 
+```
+
+* 
+* 
+
+</details>
+
+---
+
+<details>
+<summary> Login </summary>
+
+```
+curl --location --request POST 'localhost:8088/auth/login' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "email": "admin@gmail.com",
     "password": "test1",
-    "registerAsAdmin": true
+    "deviceInfo": {
+        "deviceId": "D1",
+        "deviceType": "DEVICE_TYPE_ANDROID",
+        "notificationToken": "N1"
+    }
 }'
 ```
 
-* "registerAsAdmin" - будет ли являться пользователь администратором
-* Почта и имя пользователя должны быть уникальными
+* 
+* 
 
 </details>
 
@@ -109,17 +128,335 @@ curl --location --request POST 'localhost:8088//auth/register' \
 <summary> Logout </summary>
 
 ```
-curl --location --request POST 'localhost:8088//auth/register' \
+curl --location --request POST 'localhost:8088/user/logout' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk2NTEwLCJleHAiOjE2NDE4ODg1MTAsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.v-EYaLqelzIn0emvlRPTzg7LIA4-y-Q0zsa9NREAJvTmh38gugeN0WIdbAQMKI10ql87fs9A4EncNeH3WydLdA' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "email": "admin@gmail.com",
-    "password": "test1",
-    "registerAsAdmin": true
+    "deviceInfo": {
+        "deviceId": "D1",
+        "deviceType": "DEVICE_TYPE_ANDROID",
+        "notificationToken": "N1"
+    }
 }'
 ```
 
-* "registerAsAdmin" - будет ли являться пользователь администратором
-* Почта и имя пользователя должны быть уникальными
+* 
+* 
+
+</details>
+
+<h3> Функции администратора </h3>
+
+<details>
+<summary> Пополнение счёта пользователя </summary>
+
+```
+curl --location --request POST 'localhost:8088/uadmin/addmoney?amount=1000&username=admin' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk2NTEwLCJleHAiOjE2NDE4ODg1MTAsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.v-EYaLqelzIn0emvlRPTzg7LIA4-y-Q0zsa9NREAJvTmh38gugeN0WIdbAQMKI10ql87fs9A4EncNeH3WydLdA' \
+--header 'Content-Type: application/json' 
+
+```
+
+* 
+* 
+
+</details>
+
+---
+
+<h3> Внутренняя валюта  </h3>
+
+<details>
+<summary> Добавление новый валюты </summary>
+
+```
+curl --location --request POST 'localhost:8088/currency/add' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk2NTEwLCJleHAiOjE2NDE4ODg1MTAsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.v-EYaLqelzIn0emvlRPTzg7LIA4-y-Q0zsa9NREAJvTmh38gugeN0WIdbAQMKI10ql87fs9A4EncNeH3WydLdA' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "title": "gold",
+    "cost": "10",
+    "active": "true"
+}'
+```
+
+* 
+* 
+
+</details>
+
+---
+
+<details>
+<summary> Изменение валюты </summary>
+
+```
+curl --location --request POST 'localhost:8088/currency/gold/edit' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk2NTEwLCJleHAiOjE2NDE4ODg1MTAsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.v-EYaLqelzIn0emvlRPTzg7LIA4-y-Q0zsa9NREAJvTmh38gugeN0WIdbAQMKI10ql87fs9A4EncNeH3WydLdA' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "title": "gold",
+    "cost": "12",
+    "active": "true"
+}'
+```
+
+* 
+* 
+
+</details>
+
+---
+
+<details>
+<summary> Удаление валюты </summary>
+
+```
+curl --location --request POST 'localhost:8088/currency/gold/delete' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk2NTEwLCJleHAiOjE2NDE4ODg1MTAsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.v-EYaLqelzIn0emvlRPTzg7LIA4-y-Q0zsa9NREAJvTmh38gugeN0WIdbAQMKI10ql87fs9A4EncNeH3WydLdA' \
+--header 'Content-Type: application/json' 
+
+```
+
+* 
+* 
+
+</details>
+
+---
+
+<details>
+<summary> Получение списка всех валют </summary>
+
+```
+curl --location --request GET 'localhost:8088/currency/all' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk2NTEwLCJleHAiOjE2NDE4ODg1MTAsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.v-EYaLqelzIn0emvlRPTzg7LIA4-y-Q0zsa9NREAJvTmh38gugeN0WIdbAQMKI10ql87fs9A4EncNeH3WydLdA' \
+--header 'Content-Type: application/json' 
+
+```
+
+* Результат зависит от роли пользователя 
+* 
+
+</details>
+
+---
+
+<details>
+<summary> Получение информации о валюте </summary>
+
+```
+curl --location --request GET 'localhost:8088/currency/gold' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk2NTEwLCJleHAiOjE2NDE4ODg1MTAsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.v-EYaLqelzIn0emvlRPTzg7LIA4-y-Q0zsa9NREAJvTmh38gugeN0WIdbAQMKI10ql87fs9A4EncNeH3WydLdA' \
+--header 'Content-Type: application/json' 
+
+```
+
+* Результат зависит от роли пользователя 
+* 
+
+</details>
+
+---
+
+<details>
+<summary> Покупка валюты </summary>
+
+```
+curl --location --request POST 'localhost:8088/currency/buy?title=gold&amount=100' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk2NTEwLCJleHAiOjE2NDE4ODg1MTAsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.v-EYaLqelzIn0emvlRPTzg7LIA4-y-Q0zsa9NREAJvTmh38gugeN0WIdbAQMKI10ql87fs9A4EncNeH3WydLdA' \
+--header 'Content-Type: application/json' \
+
+```
+
+* 
+* 
+
+</details>
+
+---
+
+<h3> Товары  </h3>
+
+<details>
+<summary> Добавление нового товара </summary>
+
+```
+curl --location --request POST 'localhost:8088/item/add' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk2NTEwLCJleHAiOjE2NDE4ODg1MTAsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.v-EYaLqelzIn0emvlRPTzg7LIA4-y-Q0zsa9NREAJvTmh38gugeN0WIdbAQMKI10ql87fs9A4EncNeH3WydLdA' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "Ломик Гордона Фримена",
+    "type": "Weapon",
+    "description": "Cool weapon ",
+    "active": "true",
+        "prices": [
+            {
+                "cost": "5",
+                "currency": "gold",
+                "active": "true"
+            },
+            {
+                "cost": "50",
+                "currency": "silver",
+                "active": "true"
+            }
+                    ]
+}'
+```
+
+* 
+* 
+
+</details>
+
+---
+
+
+<details>
+<summary> Добавление новой цены товару </summary>
+
+```
+curl --location --request POST 'localhost:8088/item/1/prices/add' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk2NTEwLCJleHAiOjE2NDE4ODg1MTAsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.v-EYaLqelzIn0emvlRPTzg7LIA4-y-Q0zsa9NREAJvTmh38gugeN0WIdbAQMKI10ql87fs9A4EncNeH3WydLdA' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "cost": "10",
+    "currency": "silver",
+    "active": "true"
+}'
+```
+
+* 
+* 
+
+</details>
+
+---
+
+<details>
+<summary> Изменение товара </summary>
+
+```
+curl --location --request POST 'localhost:8088/item/1/edit' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk2NTEwLCJleHAiOjE2NDE4ODg1MTAsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.v-EYaLqelzIn0emvlRPTzg7LIA4-y-Q0zsa9NREAJvTmh38gugeN0WIdbAQMKI10ql87fs9A4EncNeH3WydLdA' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "Легендарный плащ",
+    "type": "skin",
+    "description": "обычный плащ",
+    "active": "true"
+}'
+```
+
+* 
+* 
+
+</details>
+
+---
+
+<details>
+<summary> Изменение цены товара </summary>
+
+```
+curl --location --request POST 'localhost:8088/item/price/1/edit' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk2NTEwLCJleHAiOjE2NDE4ODg1MTAsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.v-EYaLqelzIn0emvlRPTzg7LIA4-y-Q0zsa9NREAJvTmh38gugeN0WIdbAQMKI10ql87fs9A4EncNeH3WydLdA' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "cost": "10",
+    "currency": "silver",
+    "active": "true"
+}'
+```
+
+* 
+* 
+
+</details>
+
+---
+
+<details>
+<summary> Удаление товара </summary>
+
+```
+curl --location --request POST 'localhost:8088/item/1/delete' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk2NTEwLCJleHAiOjE2NDE4ODg1MTAsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.v-EYaLqelzIn0emvlRPTzg7LIA4-y-Q0zsa9NREAJvTmh38gugeN0WIdbAQMKI10ql87fs9A4EncNeH3WydLdA' \
+--header 'Content-Type: application/json' 
+
+```
+
+* 
+* 
+
+</details>
+
+---
+
+<details>
+<summary> Получение списка всех товаров </summary>
+
+```
+curl --location --request GET 'localhost:8088/item/all' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk2NTEwLCJleHAiOjE2NDE4ODg1MTAsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.v-EYaLqelzIn0emvlRPTzg7LIA4-y-Q0zsa9NREAJvTmh38gugeN0WIdbAQMKI10ql87fs9A4EncNeH3WydLdA' \
+--header 'Content-Type: application/json' 
+
+```
+
+* Результат зависит от роли пользователя 
+* 
+
+</details>
+
+---
+
+<details>
+<summary> Получение информации о товаре </summary>
+
+```
+curl --location --request GET 'localhost:8088/item/1' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk2NTEwLCJleHAiOjE2NDE4ODg1MTAsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.v-EYaLqelzIn0emvlRPTzg7LIA4-y-Q0zsa9NREAJvTmh38gugeN0WIdbAQMKI10ql87fs9A4EncNeH3WydLdA' \
+--header 'Content-Type: application/json' 
+
+```
+
+* Результат зависит от роли пользователя 
+* 
+
+</details>
+
+---
+
+<details>
+<summary> Получение всех цен товара </summary>
+
+```
+curl --location --request GET 'localhost:8088/item/1/prices' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk2NTEwLCJleHAiOjE2NDE4ODg1MTAsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.v-EYaLqelzIn0emvlRPTzg7LIA4-y-Q0zsa9NREAJvTmh38gugeN0WIdbAQMKI10ql87fs9A4EncNeH3WydLdA' \
+--header 'Content-Type: application/json' 
+
+```
+
+* Результат зависит от роли пользователя 
+* 
+
+</details>
+
+---
+
+<details>
+<summary> Покупка товара </summary>
+
+```
+curl --location --request POST 'localhost:8088/item/1/buy?currencytitle=gold&amountitem=2' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk2NTEwLCJleHAiOjE2NDE4ODg1MTAsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.v-EYaLqelzIn0emvlRPTzg7LIA4-y-Q0zsa9NREAJvTmh38gugeN0WIdbAQMKI10ql87fs9A4EncNeH3WydLdA' \
+--header 'Content-Type: application/json' 
+
+```
+
+* 
+* 
 
 </details>
 
@@ -131,38 +468,72 @@ curl --location --request POST 'localhost:8088//auth/register' \
 <summary> Свой профиль </summary>
 
 ```
-curl --location --request POST 'localhost:8088//auth/register' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "email": "admin@gmail.com",
-    "password": "test1",
-    "registerAsAdmin": true
-}'
+curl --location --request GET 'localhost:8088/user/profile' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk2NTEwLCJleHAiOjE2NDE4ODg1MTAsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.v-EYaLqelzIn0emvlRPTzg7LIA4-y-Q0zsa9NREAJvTmh38gugeN0WIdbAQMKI10ql87fs9A4EncNeH3WydLdA' \
+--header 'Content-Type: application/json' 
 ```
 
-* "registerAsAdmin" - будет ли являться пользователь администратором
-* Почта и имя пользователя должны быть уникальными
+* 
+* 
 
 </details>
+
 ---
+
+<details>
+<summary> Просмотр своего инвенторя  </summary>
+
+```
+curl --location --request GET 'localhost:8088/user/profile/inventory' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk2NTEwLCJleHAiOjE2NDE4ODg1MTAsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.v-EYaLqelzIn0emvlRPTzg7LIA4-y-Q0zsa9NREAJvTmh38gugeN0WIdbAQMKI10ql87fs9A4EncNeH3WydLdA' \
+--header 'Content-Type: application/json' 
+
+```
+
+* 
+* 
+
+</details>
+
+---
+
 <details>
 <summary> Просмотр профля любого пользователя  </summary>
 
 ```
-curl --location --request POST 'localhost:8088//auth/register' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "email": "admin@gmail.com",
-    "password": "test1",
-    "registerAsAdmin": true
-}'
+curl --location --request GET 'localhost:8088/user/admin' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk2NTEwLCJleHAiOjE2NDE4ODg1MTAsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.v-EYaLqelzIn0emvlRPTzg7LIA4-y-Q0zsa9NREAJvTmh38gugeN0WIdbAQMKI10ql87fs9A4EncNeH3WydLdA' \
+--header 'Content-Type: application/json' 
+
 ```
 
-* "registerAsAdmin" - будет ли являться пользователь администратором
-* Почта и имя пользователя должны быть уникальными
+* 
+* 
 
 </details>
+
 ---
+
+<details>
+<summary> Получение списка всех пользователей  </summary>
+
+```
+curl --location --request GET 'localhost:8088/user/admin' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5Mjk2NTEwLCJleHAiOjE2NDE4ODg1MTAsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSLFJPTEVfQURNSU4ifQ.v-EYaLqelzIn0emvlRPTzg7LIA4-y-Q0zsa9NREAJvTmh38gugeN0WIdbAQMKI10ql87fs9A4EncNeH3WydLdA' \
+--header 'Content-Type: application/json' 
+
+```
+
+* 
+* 
+
+</details>
+
+---
+
+---
+
+
 
 Аутентификация
 * Регистрация на основе email с подтверждение через почту
