@@ -28,22 +28,17 @@
 
 ## Запуск проекта ##
 
-<h4> Загрузка проекта </h4>
+<h4> Загрузка  </h4>
 
 ```bash
 git clone https://github.com/chunarevsa/StoreRestApi.git
 cd StoreRestApi
+
 ```
 
-<h4> Создание базы данных MYSQL </h4>
+<h4> Подготовка </h4>
 
 Необходимо запустить MYSQL сервер с портом `3306` 
-База данных `websitechsa` создаётся автоматически при отсутствии
-Если с этим возникли проблемы то:
-
-```bash
-create database websitechsa
-```
 
 <h4> Измените имя пользователя и пароль MySQL в application.properties </h4>
 
@@ -60,8 +55,19 @@ create database websitechsa
 ```bash
 ./mvnw spring-boot:run   # для UNIX/Linux 
 mvnw.cmd spring-boot:run # для Windows 
+
 ```
+
 Проект запускается с параметром `server.port:8088`
+
+База данных `websitechsa` создаётся автоматически при отсутствии
+
+Если с этим возникли проблемы то:
+
+```bash
+create database websitechsa
+
+```
 
 ---
 
