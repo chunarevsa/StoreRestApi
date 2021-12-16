@@ -6,6 +6,7 @@
 ####	Реализовано: ####
 - Регистрация пользователя с подтверждением через почту
 - Авторизация пользователя с использованием Spring Security и JWT
+- Разграничение функциональности по ролям (USER, ADMIN)
 - Поддержка входа и выхода с нескольких устройств.
 - Возможность создания/редактировани/удаления товаров и внутренней валюты администратором
 - Приобретение внутренней валюты со списанием средств ($) у пользователя
@@ -61,14 +62,8 @@ $ mvnw.cmd spring-boot:run # для Windows
 
 <h3> Аутентификация </h3>
 
-- Регистрация на основе email с подтверждение через почту
-- Авторизация с использование Spring Security и JWT
-- Login и Logout с нескольких устройств
-- Разграничение функциональности по ролям (USER, ADMIN)
-
-
 <details>
-<summary>Регистрация</summary>
+<summary> Регистрация </summary>
 
 ```
 curl --location --request POST 'localhost:8088//auth/register' \
@@ -84,6 +79,77 @@ curl --location --request POST 'localhost:8088//auth/register' \
 * Почта и имя пользователя должны быть уникальными
 
 </details>
+<details>
+<summary> Подстверждение регистрации </summary>
+
+```
+curl --location --request POST 'localhost:8088//auth/register' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "email": "admin@gmail.com",
+    "password": "test1",
+    "registerAsAdmin": true
+}'
+```
+
+* "registerAsAdmin" - будет ли являться пользователь администратором
+* Почта и имя пользователя должны быть уникальными
+
+</details>
+<details>
+<summary> Logout </summary>
+
+```
+curl --location --request POST 'localhost:8088//auth/register' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "email": "admin@gmail.com",
+    "password": "test1",
+    "registerAsAdmin": true
+}'
+```
+
+* "registerAsAdmin" - будет ли являться пользователь администратором
+* Почта и имя пользователя должны быть уникальными
+
+</details>
+<h3> Пользователь </h3>
+
+<details>
+<summary> Свой профиль </summary>
+
+```
+curl --location --request POST 'localhost:8088//auth/register' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "email": "admin@gmail.com",
+    "password": "test1",
+    "registerAsAdmin": true
+}'
+```
+
+* "registerAsAdmin" - будет ли являться пользователь администратором
+* Почта и имя пользователя должны быть уникальными
+
+</details>
+<details>
+<summary> Просмотр профля любого пользователя  </summary>
+
+```
+curl --location --request POST 'localhost:8088//auth/register' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "email": "admin@gmail.com",
+    "password": "test1",
+    "registerAsAdmin": true
+}'
+```
+
+* "registerAsAdmin" - будет ли являться пользователь администратором
+* Почта и имя пользователя должны быть уникальными
+
+</details>
+
 
 Аутентификация
 * Регистрация на основе email с подтверждение через почту
