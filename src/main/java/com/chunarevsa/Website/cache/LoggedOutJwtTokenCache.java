@@ -1,11 +1,11 @@
-package com.chunarevsa.Website.cache;
+package com.chunarevsa.website.cache;
 
 import java.time.Instant;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import com.chunarevsa.Website.event.UserLogoutSuccess;
-import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
+import com.chunarevsa.website.event.UserLogoutSuccess;
+import com.chunarevsa.website.security.jwt.JwtTokenProvider;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

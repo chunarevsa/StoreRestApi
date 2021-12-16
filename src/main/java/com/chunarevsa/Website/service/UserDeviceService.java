@@ -1,10 +1,10 @@
-package com.chunarevsa.Website.service;
+package com.chunarevsa.website.service;
 
 import java.util.Optional;
 
-import com.chunarevsa.Website.entity.UserDevice;
-import com.chunarevsa.Website.payload.DeviceInfo;
-import com.chunarevsa.Website.repo.UserDeviceRepository;
+import com.chunarevsa.website.entity.UserDevice;
+import com.chunarevsa.website.payload.DeviceInfo;
+import com.chunarevsa.website.repo.UserDeviceRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

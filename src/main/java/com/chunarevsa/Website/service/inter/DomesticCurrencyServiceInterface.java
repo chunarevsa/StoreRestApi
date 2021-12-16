@@ -1,12 +1,12 @@
-package com.chunarevsa.Website.service.inter;
+package com.chunarevsa.website.service.inter;
 
 import java.util.Optional;
 
-import com.chunarevsa.Website.entity.DomesticCurrency;
-import com.chunarevsa.Website.exception.InvalidAmountFormat;
-import com.chunarevsa.Website.exception.ResourceNotFoundException;
-import com.chunarevsa.Website.payload.DomesticCurrencyRequest;
-import com.chunarevsa.Website.security.jwt.JwtUser;
+import com.chunarevsa.website.entity.DomesticCurrency;
+import com.chunarevsa.website.exception.InvalidAmountFormat;
+import com.chunarevsa.website.exception.ResourceNotFoundException;
+import com.chunarevsa.website.payload.DomesticCurrencyRequest;
+import com.chunarevsa.website.security.jwt.JwtUser;
 
 import org.springframework.data.domain.Pageable;
 

@@ -1,11 +1,11 @@
-package com.chunarevsa.Website.service;
+package com.chunarevsa.website.service;
 
 import java.nio.charset.StandardCharsets;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-import com.chunarevsa.Website.payload.Mail;
+import com.chunarevsa.website.payload.Mail;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

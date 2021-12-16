@@ -1,4 +1,4 @@
-package com.chunarevsa.Website.entity;
+package com.chunarevsa.website.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
-import com.chunarevsa.Website.entity.token.RefreshToken;
+import com.chunarevsa.website.entity.token.RefreshToken;
 
 @Entity(name = "USER_DEVICE")
 public class UserDevice extends DateAudit {

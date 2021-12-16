@@ -1,12 +1,12 @@
-package com.chunarevsa.Website.service;
+package com.chunarevsa.website.service;
 
 import java.util.Set;
 
-import com.chunarevsa.Website.entity.Account;
-import com.chunarevsa.Website.entity.User;
-import com.chunarevsa.Website.exception.NotEnoughResourcesException;
-import com.chunarevsa.Website.repo.AccountRepository;
-import com.chunarevsa.Website.service.inter.AccountServiceInterface;
+import com.chunarevsa.website.entity.Account;
+import com.chunarevsa.website.entity.User;
+import com.chunarevsa.website.exception.NotEnoughResourcesException;
+import com.chunarevsa.website.repo.AccountRepository;
+import com.chunarevsa.website.service.inter.AccountServiceInterface;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

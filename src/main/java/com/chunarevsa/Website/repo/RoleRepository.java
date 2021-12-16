@@ -1,6 +1,6 @@
-package com.chunarevsa.Website.repo;
+package com.chunarevsa.website.repo;
 
-import com.chunarevsa.Website.entity.Role;
+import com.chunarevsa.website.entity.Role;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

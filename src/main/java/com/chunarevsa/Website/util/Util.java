@@ -1,4 +1,4 @@
-package com.chunarevsa.Website.util;
+package com.chunarevsa.website.util;
 
 import java.util.UUID;
 

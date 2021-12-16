@@ -1,23 +1,23 @@
-package com.chunarevsa.Website.service;
+package com.chunarevsa.website.service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.chunarevsa.Website.dto.AccountDto;
-import com.chunarevsa.Website.dto.DomesticCurrencyDto;
-import com.chunarevsa.Website.entity.Account;
-import com.chunarevsa.Website.entity.DomesticCurrency;
-import com.chunarevsa.Website.entity.User;
-import com.chunarevsa.Website.exception.AlreadyUseException;
-import com.chunarevsa.Website.exception.InvalidAmountFormat;
-import com.chunarevsa.Website.exception.NotEnoughResourcesException;
-import com.chunarevsa.Website.exception.ResourceNotFoundException;
-import com.chunarevsa.Website.payload.DomesticCurrencyRequest;
-import com.chunarevsa.Website.repo.DomesticCurrencyRepository;
-import com.chunarevsa.Website.security.jwt.JwtUser;
-import com.chunarevsa.Website.service.inter.DomesticCurrencyServiceInterface;
+import com.chunarevsa.website.dto.AccountDto;
+import com.chunarevsa.website.dto.DomesticCurrencyDto;
+import com.chunarevsa.website.entity.Account;
+import com.chunarevsa.website.entity.DomesticCurrency;
+import com.chunarevsa.website.entity.User;
+import com.chunarevsa.website.exception.AlreadyUseException;
+import com.chunarevsa.website.exception.InvalidAmountFormat;
+import com.chunarevsa.website.exception.NotEnoughResourcesException;
+import com.chunarevsa.website.exception.ResourceNotFoundException;
+import com.chunarevsa.website.payload.DomesticCurrencyRequest;
+import com.chunarevsa.website.repo.DomesticCurrencyRepository;
+import com.chunarevsa.website.security.jwt.JwtUser;
+import com.chunarevsa.website.service.inter.DomesticCurrencyServiceInterface;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

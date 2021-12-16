@@ -1,9 +1,9 @@
-package com.chunarevsa.Website.dto;
+package com.chunarevsa.website.dto;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.chunarevsa.Website.entity.UserInventory;
+import com.chunarevsa.website.entity.UserInventory;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)

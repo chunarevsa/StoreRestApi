@@ -1,18 +1,18 @@
-package com.chunarevsa.Website.service.inter;
+package com.chunarevsa.website.service.inter;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import com.chunarevsa.Website.dto.InventoryUnitDto;
-import com.chunarevsa.Website.dto.UserDto;
-import com.chunarevsa.Website.dto.UserInventoryDto;
-import com.chunarevsa.Website.dto.UserProfileDto;
-import com.chunarevsa.Website.entity.Item;
-import com.chunarevsa.Website.entity.User;
-import com.chunarevsa.Website.payload.LogOutRequest;
-import com.chunarevsa.Website.payload.RegistrationRequest;
-import com.chunarevsa.Website.security.jwt.JwtUser;
+import com.chunarevsa.website.dto.InventoryUnitDto;
+import com.chunarevsa.website.dto.UserDto;
+import com.chunarevsa.website.dto.UserInventoryDto;
+import com.chunarevsa.website.dto.UserProfileDto;
+import com.chunarevsa.website.entity.Item;
+import com.chunarevsa.website.entity.User;
+import com.chunarevsa.website.payload.LogOutRequest;
+import com.chunarevsa.website.payload.RegistrationRequest;
+import com.chunarevsa.website.security.jwt.JwtUser;
 
 public interface UserServiceInterface {
 	

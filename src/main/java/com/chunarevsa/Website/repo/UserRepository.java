@@ -1,9 +1,9 @@
-package com.chunarevsa.Website.repo;
+package com.chunarevsa.website.repo;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.chunarevsa.Website.entity.User;
+import com.chunarevsa.website.entity.User;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

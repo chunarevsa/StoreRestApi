@@ -1,14 +1,14 @@
-package com.chunarevsa.Website.service;
+package com.chunarevsa.website.service;
 
 import java.time.Instant;
 import java.util.UUID;
 
-import com.chunarevsa.Website.entity.User;
-import com.chunarevsa.Website.entity.token.EmailVerificationToken;
-import com.chunarevsa.Website.entity.token.TokenStatus;
-import com.chunarevsa.Website.exception.InvalidTokenRequestException;
-import com.chunarevsa.Website.exception.ResourceNotFoundException;
-import com.chunarevsa.Website.repo.EmailVerificationTokenRepository;
+import com.chunarevsa.website.entity.User;
+import com.chunarevsa.website.entity.token.EmailVerificationToken;
+import com.chunarevsa.website.entity.token.TokenStatus;
+import com.chunarevsa.website.exception.InvalidTokenRequestException;
+import com.chunarevsa.website.exception.ResourceNotFoundException;
+import com.chunarevsa.website.repo.EmailVerificationTokenRepository;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

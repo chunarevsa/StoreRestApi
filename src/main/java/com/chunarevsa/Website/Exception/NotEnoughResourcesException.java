@@ -1,4 +1,4 @@
-package com.chunarevsa.Website.exception;
+package com.chunarevsa.website.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

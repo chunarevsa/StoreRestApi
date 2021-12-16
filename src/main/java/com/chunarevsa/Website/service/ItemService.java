@@ -1,23 +1,23 @@
-package com.chunarevsa.Website.service;
+package com.chunarevsa.website.service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.chunarevsa.Website.dto.InventoryUnitDto;
-import com.chunarevsa.Website.dto.ItemDto;
-import com.chunarevsa.Website.dto.PriceDto;
-import com.chunarevsa.Website.entity.Item;
-import com.chunarevsa.Website.entity.Price;
-import com.chunarevsa.Website.exception.InvalidAmountFormat;
-import com.chunarevsa.Website.exception.ResourceNotFoundException;
-import com.chunarevsa.Website.payload.EditItemRequest;
-import com.chunarevsa.Website.payload.ItemRequest;
-import com.chunarevsa.Website.payload.PriceRequest;
-import com.chunarevsa.Website.repo.ItemRepository;
-import com.chunarevsa.Website.security.jwt.JwtUser;
-import com.chunarevsa.Website.service.inter.ItemServiceInterface;
+import com.chunarevsa.website.dto.InventoryUnitDto;
+import com.chunarevsa.website.dto.ItemDto;
+import com.chunarevsa.website.dto.PriceDto;
+import com.chunarevsa.website.entity.Item;
+import com.chunarevsa.website.entity.Price;
+import com.chunarevsa.website.exception.InvalidAmountFormat;
+import com.chunarevsa.website.exception.ResourceNotFoundException;
+import com.chunarevsa.website.payload.EditItemRequest;
+import com.chunarevsa.website.payload.ItemRequest;
+import com.chunarevsa.website.payload.PriceRequest;
+import com.chunarevsa.website.repo.ItemRepository;
+import com.chunarevsa.website.security.jwt.JwtUser;
+import com.chunarevsa.website.service.inter.ItemServiceInterface;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

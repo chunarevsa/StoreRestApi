@@ -1,14 +1,14 @@
-package com.chunarevsa.Website.service;
+package com.chunarevsa.website.service;
 
 import java.util.Set;
 
-import com.chunarevsa.Website.dto.UserInventoryDto;
-import com.chunarevsa.Website.entity.InventoryUnit;
-import com.chunarevsa.Website.entity.Item;
-import com.chunarevsa.Website.entity.User;
-import com.chunarevsa.Website.entity.UserInventory;
-import com.chunarevsa.Website.repo.InventoryUnitRepository;
-import com.chunarevsa.Website.repo.UserInventoryRepository;
+import com.chunarevsa.website.dto.UserInventoryDto;
+import com.chunarevsa.website.entity.InventoryUnit;
+import com.chunarevsa.website.entity.Item;
+import com.chunarevsa.website.entity.User;
+import com.chunarevsa.website.entity.UserInventory;
+import com.chunarevsa.website.repo.InventoryUnitRepository;
+import com.chunarevsa.website.repo.UserInventoryRepository;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

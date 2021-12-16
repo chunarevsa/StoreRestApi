@@ -1,6 +1,6 @@
-package com.chunarevsa.Website.event;
+package com.chunarevsa.website.event;
 
-import com.chunarevsa.Website.entity.User;
+import com.chunarevsa.website.entity.User;
 
 import org.springframework.context.ApplicationEvent;
 import org.springframework.web.util.UriComponentsBuilder;

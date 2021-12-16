@@ -1,11 +1,11 @@
-package com.chunarevsa.Website.service.inter;
+package com.chunarevsa.website.service.inter;
 
 import java.util.Optional;
 
-import com.chunarevsa.Website.entity.User;
-import com.chunarevsa.Website.entity.token.RefreshToken;
-import com.chunarevsa.Website.payload.LoginRequest;
-import com.chunarevsa.Website.payload.RegistrationRequest;
+import com.chunarevsa.website.entity.User;
+import com.chunarevsa.website.entity.token.RefreshToken;
+import com.chunarevsa.website.payload.LoginRequest;
+import com.chunarevsa.website.payload.RegistrationRequest;
 
 import org.springframework.security.core.Authentication;
 

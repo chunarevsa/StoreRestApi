@@ -1,19 +1,19 @@
-package com.chunarevsa.Website.controllers;
+package com.chunarevsa.website.controllers;
 
 import javax.validation.Valid;
 
-import com.chunarevsa.Website.entity.token.RefreshToken;
-import com.chunarevsa.Website.event.UserRegistrationComplete;
-import com.chunarevsa.Website.exception.InvalidTokenRequestException;
-import com.chunarevsa.Website.exception.UserLoginException;
-import com.chunarevsa.Website.exception.UserRegistrationException;
-import com.chunarevsa.Website.payload.LoginRequest;
-import com.chunarevsa.Website.payload.RegistrationRequest;
-import com.chunarevsa.Website.payload.ApiResponse;
-import com.chunarevsa.Website.payload.JwtAuthenticationResponse;
-import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
-import com.chunarevsa.Website.security.jwt.JwtUser;
-import com.chunarevsa.Website.service.AuthService;
+import com.chunarevsa.website.entity.token.RefreshToken;
+import com.chunarevsa.website.event.UserRegistrationComplete;
+import com.chunarevsa.website.exception.InvalidTokenRequestException;
+import com.chunarevsa.website.exception.UserLoginException;
+import com.chunarevsa.website.exception.UserRegistrationException;
+import com.chunarevsa.website.payload.ApiResponse;
+import com.chunarevsa.website.payload.JwtAuthenticationResponse;
+import com.chunarevsa.website.payload.LoginRequest;
+import com.chunarevsa.website.payload.RegistrationRequest;
+import com.chunarevsa.website.security.jwt.JwtTokenProvider;
+import com.chunarevsa.website.security.jwt.JwtUser;
+import com.chunarevsa.website.service.AuthService;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

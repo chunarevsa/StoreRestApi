@@ -1,17 +1,17 @@
-package com.chunarevsa.Website.service;
+package com.chunarevsa.website.service;
 
 import java.util.Optional;
 
-import com.chunarevsa.Website.entity.User;
-import com.chunarevsa.Website.entity.UserDevice;
-import com.chunarevsa.Website.entity.token.EmailVerificationToken;
-import com.chunarevsa.Website.entity.token.RefreshToken;
-import com.chunarevsa.Website.exception.AlreadyUseException;
-import com.chunarevsa.Website.payload.LoginRequest;
-import com.chunarevsa.Website.payload.RegistrationRequest;
-import com.chunarevsa.Website.security.jwt.JwtTokenProvider;
-import com.chunarevsa.Website.security.jwt.JwtUser;
-import com.chunarevsa.Website.service.inter.AuthServiceInterface;
+import com.chunarevsa.website.entity.User;
+import com.chunarevsa.website.entity.UserDevice;
+import com.chunarevsa.website.entity.token.EmailVerificationToken;
+import com.chunarevsa.website.entity.token.RefreshToken;
+import com.chunarevsa.website.exception.AlreadyUseException;
+import com.chunarevsa.website.payload.LoginRequest;
+import com.chunarevsa.website.payload.RegistrationRequest;
+import com.chunarevsa.website.security.jwt.JwtTokenProvider;
+import com.chunarevsa.website.security.jwt.JwtUser;
+import com.chunarevsa.website.service.inter.AuthServiceInterface;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

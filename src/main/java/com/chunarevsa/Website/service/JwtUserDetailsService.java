@@ -1,11 +1,11 @@
 
-package com.chunarevsa.Website.service;
+package com.chunarevsa.website.service;
 
 import java.util.Optional;
 
-import com.chunarevsa.Website.entity.User;
-import com.chunarevsa.Website.repo.UserRepository;
-import com.chunarevsa.Website.security.jwt.JwtUser;
+import com.chunarevsa.website.entity.User;
+import com.chunarevsa.website.repo.UserRepository;
+import com.chunarevsa.website.security.jwt.JwtUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,9 +1,9 @@
-package com.chunarevsa.Website.service.inter;
+package com.chunarevsa.website.service.inter;
 
 import java.util.Set;
 
-import com.chunarevsa.Website.entity.Account;
-import com.chunarevsa.Website.entity.User;
+import com.chunarevsa.website.entity.Account;
+import com.chunarevsa.website.entity.User;
 
 public interface AccountServiceInterface {
 	

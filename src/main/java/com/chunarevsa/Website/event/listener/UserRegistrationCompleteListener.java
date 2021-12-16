@@ -1,10 +1,10 @@
-package com.chunarevsa.Website.event.listener;
+package com.chunarevsa.website.event.listener;
 
-import com.chunarevsa.Website.entity.User;
-import com.chunarevsa.Website.event.UserRegistrationComplete;
-import com.chunarevsa.Website.exception.MailSendException;
-import com.chunarevsa.Website.service.EmailVerificationTokenService;
-import com.chunarevsa.Website.service.MailService;
+import com.chunarevsa.website.entity.User;
+import com.chunarevsa.website.event.UserRegistrationComplete;
+import com.chunarevsa.website.exception.MailSendException;
+import com.chunarevsa.website.service.EmailVerificationTokenService;
+import com.chunarevsa.website.service.MailService;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

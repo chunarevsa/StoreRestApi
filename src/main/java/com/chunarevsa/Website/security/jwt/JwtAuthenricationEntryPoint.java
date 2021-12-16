@@ -1,4 +1,4 @@
-package com.chunarevsa.Website.security.jwt;
+package com.chunarevsa.website.security.jwt;
 
 import java.io.IOException;
 

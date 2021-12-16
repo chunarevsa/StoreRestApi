@@ -1,4 +1,4 @@
-package com.chunarevsa.Website.security.jwt;
+package com.chunarevsa.website.security.jwt;
 
 import java.io.IOException;
 import java.util.List;
@@ -8,7 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.chunarevsa.Website.service.JwtUserDetailsService;
+import com.chunarevsa.website.service.JwtUserDetailsService;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

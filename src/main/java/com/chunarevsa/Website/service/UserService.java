@@ -1,4 +1,4 @@
-package com.chunarevsa.Website.service;
+package com.chunarevsa.website.service;
 
 import java.util.HashSet;
 import java.util.List;
@@ -8,25 +8,25 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import com.chunarevsa.Website.dto.InventoryUnitDto;
-import com.chunarevsa.Website.dto.UserDto;
-import com.chunarevsa.Website.dto.UserInventoryDto;
-import com.chunarevsa.Website.dto.UserProfileDto;
-import com.chunarevsa.Website.entity.Account;
-import com.chunarevsa.Website.entity.InventoryUnit;
-import com.chunarevsa.Website.entity.Item;
-import com.chunarevsa.Website.entity.Role;
-import com.chunarevsa.Website.entity.User;
-import com.chunarevsa.Website.entity.UserDevice;
-import com.chunarevsa.Website.entity.UserInventory;
-import com.chunarevsa.Website.event.UserLogoutSuccess;
-import com.chunarevsa.Website.exception.ResourceNotFoundException;
-import com.chunarevsa.Website.exception.UserLogoutException;
-import com.chunarevsa.Website.payload.LogOutRequest;
-import com.chunarevsa.Website.payload.RegistrationRequest;
-import com.chunarevsa.Website.repo.UserRepository;
-import com.chunarevsa.Website.security.jwt.JwtUser;
-import com.chunarevsa.Website.service.inter.UserServiceInterface;
+import com.chunarevsa.website.dto.InventoryUnitDto;
+import com.chunarevsa.website.dto.UserDto;
+import com.chunarevsa.website.dto.UserInventoryDto;
+import com.chunarevsa.website.dto.UserProfileDto;
+import com.chunarevsa.website.entity.Account;
+import com.chunarevsa.website.entity.InventoryUnit;
+import com.chunarevsa.website.entity.Item;
+import com.chunarevsa.website.entity.Role;
+import com.chunarevsa.website.entity.User;
+import com.chunarevsa.website.entity.UserDevice;
+import com.chunarevsa.website.entity.UserInventory;
+import com.chunarevsa.website.event.UserLogoutSuccess;
+import com.chunarevsa.website.exception.ResourceNotFoundException;
+import com.chunarevsa.website.exception.UserLogoutException;
+import com.chunarevsa.website.payload.LogOutRequest;
+import com.chunarevsa.website.payload.RegistrationRequest;
+import com.chunarevsa.website.repo.UserRepository;
+import com.chunarevsa.website.security.jwt.JwtUser;
+import com.chunarevsa.website.service.inter.UserServiceInterface;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

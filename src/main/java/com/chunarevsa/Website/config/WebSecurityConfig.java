@@ -1,8 +1,8 @@
-package com.chunarevsa.Website.config;
+package com.chunarevsa.website.config;
 
-import com.chunarevsa.Website.security.jwt.JwtAuthenricationEntryPoint;
-import com.chunarevsa.Website.security.jwt.JwtAuthenticationFilter;
-import com.chunarevsa.Website.service.JwtUserDetailsService;
+import com.chunarevsa.website.security.jwt.JwtAuthenricationEntryPoint;
+import com.chunarevsa.website.security.jwt.JwtAuthenticationFilter;
+import com.chunarevsa.website.service.JwtUserDetailsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

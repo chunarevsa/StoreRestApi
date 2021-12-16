@@ -1,6 +1,6 @@
-package com.chunarevsa.Website.config;
+package com.chunarevsa.website.config;
 
-import com.chunarevsa.Website.security.jwt.JwtUser;
+import com.chunarevsa.website.security.jwt.JwtUser;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

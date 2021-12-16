@@ -1,9 +1,9 @@
-package com.chunarevsa.Website.service;
+package com.chunarevsa.website.service;
 
 import java.util.Collection;
 
-import com.chunarevsa.Website.entity.Role;
-import com.chunarevsa.Website.repo.RoleRepository;
+import com.chunarevsa.website.entity.Role;
+import com.chunarevsa.website.repo.RoleRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

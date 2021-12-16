@@ -1,12 +1,11 @@
-package com.chunarevsa.Website.controllers;
+package com.chunarevsa.website.controllers;
 
 import javax.validation.Valid;
 
-
-import com.chunarevsa.Website.payload.ApiResponse;
-import com.chunarevsa.Website.payload.DomesticCurrencyRequest;
-import com.chunarevsa.Website.security.jwt.JwtUser;
-import com.chunarevsa.Website.service.DomesticCurrencyService;
+import com.chunarevsa.website.payload.ApiResponse;
+import com.chunarevsa.website.payload.DomesticCurrencyRequest;
+import com.chunarevsa.website.security.jwt.JwtUser;
+import com.chunarevsa.website.service.DomesticCurrencyService;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;

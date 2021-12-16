@@ -1,10 +1,10 @@
-package com.chunarevsa.Website.service;
+package com.chunarevsa.website.service;
 
 import java.time.Instant;
 
-import com.chunarevsa.Website.entity.token.RefreshToken;
-import com.chunarevsa.Website.repo.RefreshTokenRepository;
-import com.chunarevsa.Website.util.Util;
+import com.chunarevsa.website.entity.token.RefreshToken;
+import com.chunarevsa.website.repo.RefreshTokenRepository;
+import com.chunarevsa.website.util.Util;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

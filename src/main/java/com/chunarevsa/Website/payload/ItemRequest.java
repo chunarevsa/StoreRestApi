@@ -1,4 +1,4 @@
-package com.chunarevsa.Website.payload;
+package com.chunarevsa.website.payload;
 
 import java.util.Set;
 

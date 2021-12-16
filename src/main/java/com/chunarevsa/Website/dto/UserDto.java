@@ -1,6 +1,6 @@
-package com.chunarevsa.Website.dto;
+package com.chunarevsa.website.dto;
 
-import com.chunarevsa.Website.entity.User;
+import com.chunarevsa.website.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)

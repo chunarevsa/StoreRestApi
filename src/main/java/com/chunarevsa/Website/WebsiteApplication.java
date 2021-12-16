@@ -1,4 +1,4 @@
-package com.chunarevsa.Website;
+package com.chunarevsa.website;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

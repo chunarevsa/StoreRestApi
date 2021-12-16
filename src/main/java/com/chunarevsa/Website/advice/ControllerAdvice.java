@@ -1,15 +1,15 @@
-package com.chunarevsa.Website.advice;
+package com.chunarevsa.website.advice;
 
-import com.chunarevsa.Website.exception.AlreadyUseException;
-import com.chunarevsa.Website.exception.InvalidAmountFormat;
-import com.chunarevsa.Website.exception.InvalidTokenRequestException;
-import com.chunarevsa.Website.exception.MailSendException;
-import com.chunarevsa.Website.exception.NotEnoughResourcesException;
-import com.chunarevsa.Website.exception.ResourceNotFoundException;
-import com.chunarevsa.Website.exception.UserLoginException;
-import com.chunarevsa.Website.exception.UserLogoutException;
-import com.chunarevsa.Website.exception.UserRegistrationException;
-import com.chunarevsa.Website.payload.ApiResponse;
+import com.chunarevsa.website.exception.AlreadyUseException;
+import com.chunarevsa.website.exception.InvalidAmountFormat;
+import com.chunarevsa.website.exception.InvalidTokenRequestException;
+import com.chunarevsa.website.exception.MailSendException;
+import com.chunarevsa.website.exception.NotEnoughResourcesException;
+import com.chunarevsa.website.exception.ResourceNotFoundException;
+import com.chunarevsa.website.exception.UserLoginException;
+import com.chunarevsa.website.exception.UserLogoutException;
+import com.chunarevsa.website.exception.UserRegistrationException;
+import com.chunarevsa.website.payload.ApiResponse;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

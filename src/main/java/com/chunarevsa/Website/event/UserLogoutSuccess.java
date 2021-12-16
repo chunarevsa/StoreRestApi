@@ -1,9 +1,9 @@
-package com.chunarevsa.Website.event;
+package com.chunarevsa.website.event;
 
 import java.time.Instant;
 import java.util.Date;
 
-import com.chunarevsa.Website.payload.LogOutRequest;
+import com.chunarevsa.website.payload.LogOutRequest;
 
 import org.springframework.context.ApplicationEvent;
 

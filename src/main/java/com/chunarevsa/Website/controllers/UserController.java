@@ -1,11 +1,11 @@
-package com.chunarevsa.Website.controllers;
+package com.chunarevsa.website.controllers;
 
 import javax.validation.Valid;
 
-import com.chunarevsa.Website.payload.ApiResponse;
-import com.chunarevsa.Website.payload.LogOutRequest;
-import com.chunarevsa.Website.security.jwt.JwtUser;
-import com.chunarevsa.Website.service.UserService;
+import com.chunarevsa.website.payload.ApiResponse;
+import com.chunarevsa.website.payload.LogOutRequest;
+import com.chunarevsa.website.security.jwt.JwtUser;
+import com.chunarevsa.website.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

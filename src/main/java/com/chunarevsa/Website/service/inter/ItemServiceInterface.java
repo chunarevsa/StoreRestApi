@@ -1,15 +1,15 @@
-package com.chunarevsa.Website.service.inter;
+package com.chunarevsa.website.service.inter;
 
 import java.util.Optional;
 import java.util.Set;
 
-import com.chunarevsa.Website.dto.InventoryUnitDto;
-import com.chunarevsa.Website.entity.Item;
-import com.chunarevsa.Website.entity.Price;
-import com.chunarevsa.Website.payload.EditItemRequest;
-import com.chunarevsa.Website.payload.ItemRequest;
-import com.chunarevsa.Website.payload.PriceRequest;
-import com.chunarevsa.Website.security.jwt.JwtUser;
+import com.chunarevsa.website.dto.InventoryUnitDto;
+import com.chunarevsa.website.entity.Item;
+import com.chunarevsa.website.entity.Price;
+import com.chunarevsa.website.payload.EditItemRequest;
+import com.chunarevsa.website.payload.ItemRequest;
+import com.chunarevsa.website.payload.PriceRequest;
+import com.chunarevsa.website.security.jwt.JwtUser;
 
 import org.springframework.data.domain.Pageable;
 

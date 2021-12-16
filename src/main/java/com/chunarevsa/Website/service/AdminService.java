@@ -1,7 +1,7 @@
-package com.chunarevsa.Website.service;
+package com.chunarevsa.website.service;
 
-import com.chunarevsa.Website.entity.User;
-import com.chunarevsa.Website.exception.InvalidAmountFormat;
+import com.chunarevsa.website.entity.User;
+import com.chunarevsa.website.exception.InvalidAmountFormat;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

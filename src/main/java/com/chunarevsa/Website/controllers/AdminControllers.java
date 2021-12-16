@@ -1,7 +1,7 @@
-package com.chunarevsa.Website.controllers;
+package com.chunarevsa.website.controllers;
 
-import com.chunarevsa.Website.payload.ApiResponse;
-import com.chunarevsa.Website.service.AdminService;
+import com.chunarevsa.website.payload.ApiResponse;
+import com.chunarevsa.website.service.AdminService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

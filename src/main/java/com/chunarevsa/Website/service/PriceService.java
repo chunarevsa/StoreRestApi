@@ -1,18 +1,18 @@
-package com.chunarevsa.Website.service;
+package com.chunarevsa.website.service;
 
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.chunarevsa.Website.dto.PriceDto;
-import com.chunarevsa.Website.entity.DomesticCurrency;
-import com.chunarevsa.Website.entity.Price;
-import com.chunarevsa.Website.exception.AlreadyUseException;
-import com.chunarevsa.Website.exception.InvalidAmountFormat;
-import com.chunarevsa.Website.exception.ResourceNotFoundException;
-import com.chunarevsa.Website.payload.PriceRequest;
-import com.chunarevsa.Website.repo.PriceRepository;
-import com.chunarevsa.Website.service.inter.PriceServiceInterface;
+import com.chunarevsa.website.dto.PriceDto;
+import com.chunarevsa.website.entity.DomesticCurrency;
+import com.chunarevsa.website.entity.Price;
+import com.chunarevsa.website.exception.AlreadyUseException;
+import com.chunarevsa.website.exception.InvalidAmountFormat;
+import com.chunarevsa.website.exception.ResourceNotFoundException;
+import com.chunarevsa.website.payload.PriceRequest;
+import com.chunarevsa.website.repo.PriceRepository;
+import com.chunarevsa.website.service.inter.PriceServiceInterface;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

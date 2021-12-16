@@ -1,4 +1,4 @@
-package com.chunarevsa.Website.config;
+package com.chunarevsa.website.config;
 
 import java.util.Properties;
 

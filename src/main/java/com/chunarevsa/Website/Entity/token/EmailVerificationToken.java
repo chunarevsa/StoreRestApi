@@ -1,4 +1,4 @@
-package com.chunarevsa.Website.entity.token;
+package com.chunarevsa.website.entity.token;
 
 import java.time.Instant;
 
@@ -13,7 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
-import com.chunarevsa.Website.entity.User;
+import com.chunarevsa.website.entity.User;
 
 
 @Entity(name = "VERIFICATION_TOKEN")

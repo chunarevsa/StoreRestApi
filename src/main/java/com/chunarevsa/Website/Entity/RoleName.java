@@ -1,4 +1,4 @@
-package com.chunarevsa.Website.entity;
+package com.chunarevsa.website.entity;
 
 public enum RoleName {
 	ROLE_ADMIN,

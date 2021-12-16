@@ -1,10 +1,10 @@
-package com.chunarevsa.Website.security.jwt;
+package com.chunarevsa.website.security.jwt;
 
 import java.util.Date;
 
-import com.chunarevsa.Website.cache.LoggedOutJwtTokenCache;
-import com.chunarevsa.Website.event.UserLogoutSuccess;
-import com.chunarevsa.Website.exception.InvalidTokenRequestException;
+import com.chunarevsa.website.cache.LoggedOutJwtTokenCache;
+import com.chunarevsa.website.event.UserLogoutSuccess;
+import com.chunarevsa.website.exception.InvalidTokenRequestException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

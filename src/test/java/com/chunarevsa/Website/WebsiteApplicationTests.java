@@ -1,4 +1,4 @@
-package com.chunarevsa.Website;
+package com.chunarevsa.website;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

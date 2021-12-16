@@ -1,13 +1,13 @@
-package com.chunarevsa.Website.controllers;
+package com.chunarevsa.website.controllers;
 
 import javax.validation.Valid;
 
-import com.chunarevsa.Website.payload.ApiResponse;
-import com.chunarevsa.Website.payload.EditItemRequest;
-import com.chunarevsa.Website.payload.ItemRequest;
-import com.chunarevsa.Website.payload.PriceRequest;
-import com.chunarevsa.Website.security.jwt.JwtUser;
-import com.chunarevsa.Website.service.ItemService;
+import com.chunarevsa.website.payload.ApiResponse;
+import com.chunarevsa.website.payload.EditItemRequest;
+import com.chunarevsa.website.payload.ItemRequest;
+import com.chunarevsa.website.payload.PriceRequest;
+import com.chunarevsa.website.security.jwt.JwtUser;
+import com.chunarevsa.website.service.ItemService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;

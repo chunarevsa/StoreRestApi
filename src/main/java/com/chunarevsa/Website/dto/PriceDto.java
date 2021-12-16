@@ -1,7 +1,7 @@
-package com.chunarevsa.Website.dto;
+package com.chunarevsa.website.dto;
 
-import com.chunarevsa.Website.entity.DomesticCurrency;
-import com.chunarevsa.Website.entity.Price;
+import com.chunarevsa.website.entity.DomesticCurrency;
+import com.chunarevsa.website.entity.Price;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
