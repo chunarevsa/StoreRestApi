@@ -42,6 +42,7 @@ cd StoreRestApi
 * `spring.datasource.password`
 
 MYSQL сервер запускается с параметром ports:`3306:3306`
+База данных `websitechsa` создаётся автоматически при отсутствии
 
 <h4> Измените имя пользователя и пароль для рассылки в mail.properties </h4>
 
@@ -83,11 +84,10 @@ cd StoreRestApi
 * `spring.mail.username`
 * `spring.mail.password` 
 
-<h4> Запуск </h4>
+<h4> Запуск через Git bash </h4>
 
 ```bash
-./mvnw spring-boot:run   # для UNIX/Linux 
-mvnw.cmd spring-boot:run # для Windows 
+./mvnw spring-boot:run
 
 ```
 
