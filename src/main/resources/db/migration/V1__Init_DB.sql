@@ -121,6 +121,7 @@ create table user (
 	inventory_id bigint not null, 
 	primary key (user_id)
 	) engine=InnoDB;
+	
 create table user_authority (
 	user_id bigint not null, 
 	role_id bigint not null, 
