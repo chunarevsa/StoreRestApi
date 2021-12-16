@@ -70,7 +70,7 @@ $ mvnw.cmd spring-boot:run # для Windows
 Если вы используете Postman можно импортировать запросы из фаила 
 `Website.postman_collection.json`
 
-<h3> Аутентификация </h3>
+> <h3> Аутентификация </h3>
 
 <details>
 <summary> Регистрация </summary>
@@ -153,8 +153,6 @@ curl --location --request POST 'localhost:8088/user/logout' \
 
 ---
 
----
-
 > <h3> Функции администратора </h3>
 
 <details>
@@ -173,9 +171,8 @@ curl --location --request POST 'localhost:8088/uadmin/addmoney?amount=1000&usern
 
 ---
 
----
 
-<h3> Внутренняя валюта  </h3>
+> <h3> Внутренняя валюта  </h3>
 
 <details>
 <summary> Добавление новый валюты </summary>
@@ -283,9 +280,7 @@ curl --location --request POST 'localhost:8088/currency/buy?title=gold&amount=10
 
 ---
 
----
-
-<h3> Товары  </h3>
+> <h3> Товары  </h3>
 
 <details>
 <summary> Добавление нового товара </summary>
@@ -466,9 +461,7 @@ curl --location --request POST 'localhost:8088/item/1/buy?currencytitle=gold&amo
 
 ---
 
----
-
-<h3> Пользователь </h3>
+> <h3> Пользователь </h3>
 
 <details>
 <summary> Свой профиль </summary>
