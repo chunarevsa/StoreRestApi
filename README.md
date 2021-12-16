@@ -19,7 +19,7 @@
 
 ---
 
-## Getting Started ##
+## Запуск проекта ##
 
 <h4> Загрузка проекта </h4>
 
@@ -28,7 +28,7 @@ $ git clone https://github.com/chunarevsa/StoreRestApi.git
 $ cd StoreRestApi
 ```
 
-<h4> Create a MySQL database </h4>
+<h4> Создание базы данных MYSQL </h4>
 
 База данных создаётся автоматически при отсутствии 
 Если с этим возникли проблемы то:
@@ -82,7 +82,9 @@ curl --location --request POST 'localhost:8088//auth/register' \
 * Почта и имя пользователя должны быть уникальными
 
 </details>
+
 ---
+
 <details>
 <summary> Подстверждение регистрации </summary>
 
@@ -100,7 +102,9 @@ curl --location --request POST 'localhost:8088//auth/register' \
 * Почта и имя пользователя должны быть уникальными
 
 </details>
+
 ---
+
 <details>
 <summary> Logout </summary>
 
@@ -118,7 +122,9 @@ curl --location --request POST 'localhost:8088//auth/register' \
 * Почта и имя пользователя должны быть уникальными
 
 </details>
+
 ---
+
 <h3> Пользователь </h3>
 
 <details>
