@@ -22,7 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity (debug = true)
-@EnableJpaRepositories (basePackages = "com.chunarevsa.Website.repo") 
+@EnableJpaRepositories (basePackages = "com.chunarevsa.website.repo") 
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	

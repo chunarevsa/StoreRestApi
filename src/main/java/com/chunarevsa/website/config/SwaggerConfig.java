@@ -22,7 +22,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .ignoredParameterTypes(JwtUser.class)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.chunarevsa.Website"))
+                .apis(RequestHandlerSelectors.basePackage("com.chunarevsa.website"))
                 .paths(PathSelectors.regex("/.*"))
                 .build()
                 .apiInfo(metaInfo());
