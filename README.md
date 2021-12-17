@@ -23,11 +23,13 @@
 
 ## Что потребуется для запуска
 
+* Docker
+* Git
+или 
 * Java
 * Maven
 * MYSQL
 * Git
-* Docker
 
 ## Запуск проекта с помощью Docker ##
 
@@ -78,17 +80,19 @@ cd StoreRestApi
 
 Необходимо запустить MYSQL сервер с портом `3306` 
 
-<h4> Измените имя пользователя и пароль MySQL в application.properties </h4>
+<h4> Внесите изменения в application.properties </h4>
 
 * `spring.datasource.username`
 * `spring.datasource.password`
+
+Переключить `spring.datasource.url` с "Для Docker" на "Без Docker"
 
 <h4> Измените имя пользователя и пароль для рассылки в mail.properties </h4>
 
 * `spring.mail.username`
 * `spring.mail.password` 
 
-<h4> Запуск через Git bash </h4>
+<h4> Запуск через Bash </h4>
 
 ```bash
 ./mvnw spring-boot:run
@@ -98,13 +102,6 @@ cd StoreRestApi
 Проект запускается с параметром `server.port:8088`
 
 База данных `websitechsa` создаётся автоматически
-
-Если с этим возникли проблемы, то:
-
-```bash
-create database websitechsa
-
-```
 
 ---
 
