@@ -106,7 +106,7 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 
 		if (userBalance < sum) {
 			logger.info("Суммы баланса пользователя " + user.getUsername() + "не достаточно для покупки валюты " + currencyTitle);
-			throw new NotEnoughResourcesException("Покупка", Double.toString(sum), currencyTitle);
+			throw new NotEnoughResourcesException("Покупка", Double.toString(sum), "$");
 		}
 
 		double newUserBalance = Math.round(userBalance - sum);
