@@ -96,7 +96,7 @@ public class AuthController {
 	public ResponseEntity login (@Valid @RequestBody LoginRequest loginRequestDto) {
 		
 		Authentication authentication = authService.authenticateUser(loginRequestDto)
-			.orElseThrow(() -> new UserLoginException("Не удалось войти в систему - " + loginRequestDto.getEmail()));
+			.orElseThrow(() -> new UserLoginException("аутентификации", loginRequestDto.getEmail()));
 
 		JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
 		logger.info("Вход в систему  " + jwtUser.getUsername());
@@ -107,7 +107,7 @@ public class AuthController {
 					.map(refreshToken -> {
 						String jwtToken = authService.createToken(jwtUser);
 						return ResponseEntity.ok(new JwtAuthenticationResponse(jwtToken, refreshToken,  jwtTokenProvider.getExpiryDuration()));
-					}).orElseThrow(() -> new UserLoginException("Couldn't create refresh token for:" + loginRequestDto.getEmail()));
+					}).orElseThrow(() -> new UserLoginException("создания токена", loginRequestDto.getEmail()));
 
 	} 
 } 

@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.chunarevsa.website.exception.ResourceNotFoundException;
 import com.chunarevsa.website.service.JwtUserDetailsService;
 
 import org.apache.logging.log4j.LogManager;
@@ -44,7 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, 
 							FilterChain filterChain) throws ServletException, IOException {
-		try {
+		try { 
 			String jwt = getJwtFromRequest(request);
 
 			if (StringUtils.hasText(jwt) && jwtTokenValidator.validateToken(jwt)) {
@@ -56,10 +57,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 		  }
+		} catch (ResourceNotFoundException e) {
+			logger.error(e.toString());
 		} catch (Exception e) {
 			logger.error("Ошибка авторизации пользователя :" + e.toString());
 			throw e;
-
 		}
 		filterChain.doFilter(request, response);
 	}

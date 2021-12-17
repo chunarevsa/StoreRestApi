@@ -11,7 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 
-public class JwtUser extends User implements UserDetails{
+public class JwtUser extends User implements UserDetails {
 
 	public JwtUser (final User user) {
 		super(user);

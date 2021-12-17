@@ -4,6 +4,7 @@ package com.chunarevsa.website.service;
 import java.util.Optional;
 
 import com.chunarevsa.website.entity.User;
+import com.chunarevsa.website.exception.ResourceNotFoundException;
 import com.chunarevsa.website.repo.UserRepository;
 import com.chunarevsa.website.security.jwt.JwtUser;
 
@@ -24,18 +25,20 @@ public class JwtUserDetailsService implements UserDetailsService{
 	}
 
 	@Override
-	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-
+	public UserDetails loadUserByUsername(String email) {
+		
 		Optional<User> user = userRepository.findByEmail(email);
 		return user.map(JwtUser::new)
 			.orElseThrow(() -> new UsernameNotFoundException("Не удалось найти пользователя " + email));
-	}
+		
+	} 
 
-	public UserDetails loadUserById(Long id) {
+	public UserDetails loadUserById(Long id)  {
 
 		Optional<User> user = userRepository.findById(id);
 		return user.map(JwtUser::new)
-			.orElseThrow(() -> new UsernameNotFoundException("Не удалось найти пользователя " + id));
-  }
+			.orElseThrow(() -> new ResourceNotFoundException("Ошибка авторизации. Пользователя", "параметром id", id));
+
+	} 
 	
 }  
