@@ -18,6 +18,7 @@
 - События (events и listeners)
 - Миграция баз данных с помощью Flayway
 - Запуск MYSQL сервера и проекта с помощью Docker
+- Документация Swagger Docs
 
 ---
 
@@ -106,6 +107,13 @@ cd StoreRestApi
 База данных `websitechsa` создаётся автоматически
 
 ---
+
+## Документация Swagger ##
+
+Документаци доступна по адресу:
+
+`http://localhost:8088/swagger-ui.html`
+
 
 ## API ##
 
