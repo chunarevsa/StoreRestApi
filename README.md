@@ -117,7 +117,9 @@ cd StoreRestApi
 
 ## API ##
 
-Запросы из `Postman` доступны в файле `Website.postman_collection.json`
+Для удобства запросы из `Postman` доступны в файле 
+
+* `Website.postman_collection.json`
 
 > <h3> Аутентификация </h3>
 
