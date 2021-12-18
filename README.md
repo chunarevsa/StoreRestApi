@@ -117,7 +117,7 @@ cd StoreRestApi
 
 ## API ##
 
-Если вы используете Postman - можно импортировать запросы из файла 
+Запросы из `Postman` доступны в файле  
 `Website.postman_collection.json`
 
 > <h3> Аутентификация </h3>
