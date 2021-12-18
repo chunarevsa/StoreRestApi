@@ -56,14 +56,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 	}
 
-	@Override // TODO: прибратсься
-	public void configure (WebSecurity webSecurity) {
-		webSecurity.ignoring().antMatchers("/v2/api-docs", 
-													  "/configuration/ui", 
-													  "/swagger-resources/**", 
-													  "/configuration/**",
-													  "/swagger-ui.html", 
-													  "/webjars/**");
+	@Override 
+	public void configure (WebSecurity web) throws Exception {
+		System.err.println("configure");
+		web.ignoring().antMatchers("/v2/api-docs", 
+											"/configuration/ui", 
+											"/swagger-resources/**", 
+											"/configuration/**",
+											"/swagger-ui.html",
+											"/swagger-ui",  
+											"/webjars/**",
+											"/swagger-ui/**");
 	}
 
 	@Override
@@ -75,14 +78,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						.csrf().disable() 
 						.exceptionHandling().authenticationEntryPoint(jwtAuthenricationEntryPoint)
 					.and()	
-						
 						.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 					.and()
 						.authorizeRequests()
 						.antMatchers( // Доступны без авторизации
-									"/auth/*",
-									"/**",
-									"/**/*"
+									"/auth/*"
 									).permitAll()
 						.anyRequest().authenticated(); // остально только для авторизованых	
 		

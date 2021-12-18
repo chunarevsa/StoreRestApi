@@ -33,6 +33,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping("/auth/")
@@ -59,10 +60,12 @@ public class AuthController {
 	 * Регистрация пользователя
 	 * "registerAsAdmin": "true" - зарегистрировать администратором
 	 * @param registrationRequest
+	 * @return
 	 */
 	@PostMapping ("/register")
 	@ApiOperation(value = "Регистрация пользователя")
-	public ResponseEntity registration (@Valid @RequestBody RegistrationRequest registrationRequest ) {
+	public ResponseEntity registration (
+		@ApiParam(value = "RegistrationRequest") @Valid @RequestBody RegistrationRequest registrationRequest ) {
 		
 		return authService.registrationUser(registrationRequest)
 					.map(user -> {
@@ -77,10 +80,12 @@ public class AuthController {
 	/**
 	 * Подтверждение учетной записи
 	 * @param token
+	 * @return
 	 */
 	@GetMapping("/registrationConfirmation")
 	@ApiOperation(value = "Подтверждение учетной записи")
-	public ResponseEntity confirmRegistration (@RequestParam("token") String token) {
+	public ResponseEntity confirmRegistration(
+		@ApiParam(value = "token") @RequestParam("token") String token) {
 
 		return authService.confirmEmailRegistration(token)
 					.map(user -> ResponseEntity.ok(new ApiResponse(true, "Учётная запись подтверждена")))
@@ -89,25 +94,26 @@ public class AuthController {
 
 	/**
 	 * Логин по почте, паролю и устройству
-	 * @param loginRequestDto
+	 * @param loginRequest
+	 * @return
 	 */
 	@PostMapping("/login")
 	@ApiOperation(value = "Логин по почте, паролю и устройству")
-	public ResponseEntity login (@Valid @RequestBody LoginRequest loginRequestDto) {
+	public ResponseEntity login (@Valid @RequestBody LoginRequest loginRequest) {
 		
-		Authentication authentication = authService.authenticateUser(loginRequestDto)
-			.orElseThrow(() -> new UserLoginException("аутентификации", loginRequestDto.getEmail()));
+		Authentication authentication = authService.authenticateUser(loginRequest)
+			.orElseThrow(() -> new UserLoginException("аутентификации", loginRequest.getEmail()));
 
 		JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
 		logger.info("Вход в систему  " + jwtUser.getUsername());
 		SecurityContextHolder.getContext().setAuthentication(authentication);  
 		
-		return authService.createAndPersistRefreshTokenForDevice(authentication, loginRequestDto)
+		return authService.createAndPersistRefreshTokenForDevice(authentication, loginRequest)
 					.map(RefreshToken::getToken)
 					.map(refreshToken -> {
 						String jwtToken = authService.createToken(jwtUser);
 						return ResponseEntity.ok(new JwtAuthenticationResponse(jwtToken, refreshToken,  jwtTokenProvider.getExpiryDuration()));
-					}).orElseThrow(() -> new UserLoginException("создания токена", loginRequestDto.getEmail()));
+					}).orElseThrow(() -> new UserLoginException("создания токена", loginRequest.getEmail()));
 
 	} 
 } 

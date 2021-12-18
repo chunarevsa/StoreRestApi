@@ -28,14 +28,16 @@ public class AdminControllers {
 
 	/**
 	 * Добавление $ пользователю
-	 * @param username 
+	 * @param username
 	 * @param amount
+	 * @return
 	 */
 	@PostMapping("/addmoney")
 	@PreAuthorize("hasRole('ADMIN')")
 	@ApiOperation(value = "Добавление $ пользователю")
 	public ResponseEntity addMoneyToUser (@RequestParam String username, 
 			@RequestParam String amount) {
+
 		adminService.addMoneyToUser(username, amount);
 		return ResponseEntity.ok(new ApiResponse(true, "Сумма " + amount + " $ добавлена пользователю " + username));
 	}

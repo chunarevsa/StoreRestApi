@@ -8,7 +8,6 @@ import com.chunarevsa.website.security.jwt.JwtUser;
 import com.chunarevsa.website.service.DomesticCurrencyService;
 
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,11 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import springfox.documentation.annotations.ApiIgnore;
 
-/**
- * Внутренняя валюта gold, silver..
- * 
- */
 @RestController
 @RequestMapping("/currency")
 @Api(value = "Currency Rest API", description = "Внутренняя валюта (gold, silver...)")
@@ -45,12 +42,13 @@ public class DomesticCurrencyController {
 	 * Если ADMIN -> page Currencies, если USER -> set CurrenciesDto
 	 * @param pageable
 	 * @param jwtUser
+	 * @return
 	 */
 	@GetMapping("/all")
 	@PreAuthorize("hasRole('USER')")
 	@ApiOperation(value = "Получение всех Currency. Формат ответа зависить от роли")
-	public ResponseEntity getCurrencies(@PageableDefault Pageable pageable,
-				@AuthenticationPrincipal JwtUser jwtUser) { 
+	public ResponseEntity getCurrencies(@ApiIgnore Pageable pageable,
+				@ApiIgnore JwtUser jwtUser) { 
 
 		return  ResponseEntity.ok().body(domesticCurrencyService.getCurrencies(pageable, jwtUser));
 	}
@@ -60,12 +58,13 @@ public class DomesticCurrencyController {
 	 * Если ADMIN -> Currency, если USER ->  CurrencyDto
 	 * @param title
 	 * @param jwtUser
+	 * @return
 	 */
 	@GetMapping("/{title}") 
 	@PreAuthorize("hasRole('USER')")
 	@ApiOperation(value = "Получить Currency. Формат ответа зависить от роли")
 	public ResponseEntity getCurrencyByTitle(@PathVariable(value = "title") String title,
-				@AuthenticationPrincipal JwtUser jwtUser) { 
+		@ApiIgnore @AuthenticationPrincipal JwtUser jwtUser) { 
 
 		return ResponseEntity.ok().body(domesticCurrencyService.getCurrency(title ,jwtUser));
 	}
@@ -75,13 +74,14 @@ public class DomesticCurrencyController {
 	 * @param title
 	 * @param amount
 	 * @param jwtUser
+	 * @return
 	 */
 	@PostMapping("/buy")
 	@PreAuthorize("hasRole('USER')")
 	@ApiOperation(value = "Покупка внутренней валюты за $ ")
 	public ResponseEntity buyCurrency(@RequestParam String title,
 					@RequestParam String amount,
-					@AuthenticationPrincipal JwtUser jwtUser) {
+					@ApiIgnore @AuthenticationPrincipal JwtUser jwtUser) {
 
 		return ResponseEntity.ok().body(domesticCurrencyService.buyCurrency(title, amount, jwtUser));
 	} 
@@ -89,6 +89,7 @@ public class DomesticCurrencyController {
 	/**
 	 * Добавление Currency
 	 * @param currencyRequest
+	 * @return
 	 */
 	@PostMapping("/add")
 	@PreAuthorize("hasRole('ADMIN')")
@@ -102,7 +103,7 @@ public class DomesticCurrencyController {
 	 * Изменение Currency
 	 * @param title
 	 * @param currencyRequest
-
+	 * @return
 	 */
 	@PutMapping("/{title}/edit") 
 	@PreAuthorize("hasRole('ADMIN')")
@@ -114,8 +115,10 @@ public class DomesticCurrencyController {
 	} 
 
 	/**
-	 * Удаление (выключение)
+	 * Получение своего инвенторя
+	 * Вся информация выдаётся через DTO
 	 * @param title
+	 * @return
 	 */
 	@DeleteMapping("/{title}/delete")
 	@PreAuthorize("hasRole('ADMIN')")

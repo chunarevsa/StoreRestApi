@@ -11,7 +11,6 @@ import com.chunarevsa.website.service.ItemService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,14 +26,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
-/**
- * Товар который можно приобрести за внутреннюю валюту
- * Например: броня, стрелы, скин... что угодно.
- */
 @RestController
 @RequestMapping("/item")
-@Api(value = "Item Rest API", description = "Товар который можно приобрести за внутреннюю валюту")
+@Api(value = "Item Rest API", description = "Товар, который можно приобрести за внутреннюю валюту")
 public class ItemController {
 
 	private final ItemService itemService;
@@ -47,12 +43,15 @@ public class ItemController {
 	/**
 	 * Получение Items
 	 * Если ADMIN -> page Items, если USER -> set ItemsDto
+	 * @param pageable
+	 * @param jwtUser
+	 * @return
 	 */
 	@GetMapping("/all")
 	@PreAuthorize("hasRole('USER')")
 	@ApiOperation(value = "Получение Items. Формат ответа зависить от роли")
-	public ResponseEntity getItems(@PageableDefault Pageable pageable,
-			@AuthenticationPrincipal JwtUser jwtUser) {
+	public ResponseEntity getItems(@ApiIgnore Pageable pageable,
+		@ApiIgnore @AuthenticationPrincipal JwtUser jwtUser) {
 
 		return ResponseEntity.ok().body(itemService.getItems(pageable, jwtUser));
 	}
@@ -60,12 +59,15 @@ public class ItemController {
 	/**
 	 * Получение Item
 	 * Если ADMIN -> Item, если USER -> ItemDto
+	 * @param id
+	 * @param jwtUser
+	 * @return
 	 */
 	@GetMapping("/{id}")
 	@PreAuthorize("hasRole('USER')")
 	@ApiOperation(value = "Получение Item. Формат ответа зависить от роли")
 	public ResponseEntity getItem(@PathVariable(value = "id") Long id,
-			@AuthenticationPrincipal JwtUser jwtUser) {
+			@ApiIgnore @AuthenticationPrincipal JwtUser jwtUser) {
 
 		return ResponseEntity.ok().body(itemService.getItem(id, jwtUser));
 	}
@@ -73,26 +75,26 @@ public class ItemController {
 	/**
 	 * Получение у Item списка всех Price
 	 * Если ADMIN -> set prices, если USER -> set pricesDto
-	 * 
 	 * @param itemId
 	 * @param jwtUser
+	 * @return
 	 */
 	@GetMapping("/{id}/prices")
 	@PreAuthorize("hasRole('USER')")
 	@ApiOperation(value = "Получение у Item списка всех Price. Формат ответа зависить от роли")
 	public ResponseEntity getItemprices(@PathVariable(value = "id") Long itemId,
-			@AuthenticationPrincipal JwtUser jwtUser) {
+			@ApiIgnore @AuthenticationPrincipal JwtUser jwtUser) {
 
 		return ResponseEntity.ok().body(itemService.getItemprices(itemId, jwtUser));
 	}
 
 	/**
 	 * Покупка Item за внутреннюю валюту
-	 * 
 	 * @param itemId
 	 * @param amountitem
 	 * @param currencytitle
 	 * @param jwtUser
+	 * @return
 	 */
 	@PostMapping("/{id}/buy")
 	@PreAuthorize("hasRole('USER')")
@@ -100,15 +102,15 @@ public class ItemController {
 	public ResponseEntity buyItem(@PathVariable(value = "id") Long itemId,
 			@RequestParam String amountitem,
 			@RequestParam String currencytitle,
-			@AuthenticationPrincipal JwtUser jwtUser) {
+			@ApiIgnore @AuthenticationPrincipal JwtUser jwtUser) {
 
 		return ResponseEntity.ok().body(itemService.buyItem(itemId, amountitem, currencytitle, jwtUser));
 	}
 
 	/**
 	 * Добавление Item
-	 * 
 	 * @param itemRequest
+	 * @return
 	 */
 	@PostMapping("/add")
 	@PreAuthorize("hasRole('ADMIN')")
@@ -120,9 +122,9 @@ public class ItemController {
 
 	/**
 	 * Изменение Item (без цен)
-	 * 
 	 * @param id
-	 * @param itemRequest
+	 * @param editItemRequest
+	 * @return
 	 */
 	@PutMapping("/{id}/edit")
 	@PreAuthorize("hasRole('ADMIN')")
@@ -135,9 +137,9 @@ public class ItemController {
 
 	/**
 	 * Добавление цены Item
-	 * 
 	 * @param itemId
 	 * @param priceRequest
+	 * @return
 	 */
 	@PostMapping("/{id}/prices/add")
 	@PreAuthorize("hasRole('ADMIN')")
@@ -150,6 +152,9 @@ public class ItemController {
 
 	/**
 	 * Изменение и удаление (выключение) Price
+	 * @param priceId
+	 * @param priceRequest
+	 * @return
 	 */
 	@PutMapping("/price/{priceId}/edit")
 	@PreAuthorize("hasRole('ADMIN')")
@@ -161,9 +166,9 @@ public class ItemController {
 	}
 
 	/**
-	 * Удаление (Выключение) Item
-	 * 
+	 *  Удаление (Выключение) Item
 	 * @param id
+	 * @return
 	 */
 	@DeleteMapping("/{id}/delete")
 	@PreAuthorize("hasRole('ADMIN')")
