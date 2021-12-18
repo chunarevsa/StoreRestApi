@@ -110,7 +110,7 @@ cd StoreRestApi
 
 ## Документация Swagger ##
 
-Документаци доступна по адресу:
+Документация доступна по адресу:
 
 `http://localhost:8088/swagger-ui.html`
 
