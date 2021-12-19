@@ -25,6 +25,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import springfox.documentation.annotations.ApiIgnore;
 
+
 @RestController
 @RequestMapping("/currency")
 @Api(value = "Currency Rest API", description = "Внутренняя валюта (gold, silver...)")
