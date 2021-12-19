@@ -1,176 +1,227 @@
-
-
-create table account (
-	account_id bigint not null, 
-	created datetime, 
-	updated datetime, 
-	amount varchar(255), 
-	currency varchar(255), 
-	user_id bigint, 
-	primary key (account_id)
-	) engine=InnoDB;
-
-create table account_seq (
-	next_val bigint
-	) engine=InnoDB;
-insert into account_seq values ( 1 );
-
-create table domestic_currency (
-	domestic_currency_id bigint not null, 
-	created datetime, 
-	updated datetime, 
-	is_active bit not null, 
-	domestic_currency_price varchar(255) not null, 
-	domestic_currency_title varchar(255), 
-	primary key (domestic_currency_id)
-	) engine=InnoDB;
-
-create table domestic_currency_seq (
-	next_val bigint
-	) engine=InnoDB;
-insert into domestic_currency_seq values ( 1 );
-
-create table inventory (
-	inventory_id bigint not null, 
-	created datetime, 
-	updated datetime, 
-	primary key (inventory_id)
-	) engine=InnoDB;
-
-create table inventory_seq (
-	next_val bigint
-	) engine=InnoDB;
-insert into inventory_seq values ( 1 );
-insert into inventory_seq values ( 1 );
-create table inventory_unit (
-	unit_id bigint not null, 
-	created datetime, 
-	updated datetime, 
-	amount_items varchar(255), 
-	item_id bigint, 
-	inventory_id bigint, 
-	primary key (unit_id)
-	) engine=InnoDB;
-
-create table item (
-	item_id bigint not null, 
-	created datetime, 
-	updated datetime, 
-	is_active bit not null, 
-	description varchar(255), 
-	name varchar(255) not null, 
-	type varchar(255) not null, 
-	primary key (item_id)
-	) engine=InnoDB;
-create table item_seq (
-	next_val bigint
-	) engine=InnoDB;
-insert into item_seq values ( 1 );
-
-create table price (
-	price_id bigint not null, 
-	created datetime, 
-	updated datetime, 
-	is_active bit, 
-	cost varchar(255), 
-	domestic_currency_id bigint, 
-	item_id bigint, 
-	primary key (price_id)
-	) engine=InnoDB;
-create table price_seq (
-	next_val bigint
-	) engine=InnoDB;
-insert into price_seq values ( 1 );
-
-create table refresh_token (
-	token_id bigint not null, 
-	created datetime, 
-	updated datetime, 
-	expiry_dt datetime not null, 
-	refresh_count bigint, 
-	token varchar(255) not null, 
-	user_device_id bigint not null, 
-	primary key (token_id)
-	) engine=InnoDB;
-create table refresh_token_seq (
-	next_val bigint
-	) engine=InnoDB;
-insert into refresh_token_seq values ( 1 );
-
-create table role (
-	role_id bigint not null auto_increment, 
-	role_name varchar(255), 
-	primary key (role_id)
-	) engine=InnoDB;
-create table unit_seq (
-	next_val bigint
-	) engine=InnoDB;
-insert into unit_seq values ( 1 );
-
-create table user (
-	user_id bigint not null, 
-	created datetime, 
-	updated datetime, 
-	is_active bit not null, 
-	avatar varchar(255), 
-	balance varchar(255), 
-	email varchar(255), 
-	is_email_verified bit not null, 
-	password varchar(255) not null, 
-	username varchar(255) not null, 
-	inventory_id bigint not null, 
-	primary key (user_id)
-	) engine=InnoDB;
-	
-create table user_authority (
-	user_id bigint not null, 
-	role_id bigint not null, 
-	primary key (user_id, role_id)
-	) engine=InnoDB;
-create table user_device (
-	user_device_id bigint not null, 
-	created datetime, 
-	updated datetime, 
-	device_id varchar(255) not null, 
-	device_type varchar(255), 
-	is_refresh_active bit, 
-	notification_token varchar(255), 
-	user_id bigint not null, 
-	primary key (user_device_id)
-	) engine=InnoDB;
-create table user_device_seq (
-	next_val bigint
-	) engine=InnoDB;
-insert into user_device_seq values ( 1 );
-create table user_seq (
-	next_val bigint
-	) engine=InnoDB;
-insert into user_seq values ( 1 );
-create table verification_token (
-	token_id bigint not null auto_increment, 
-	expiry_dt datetime not null, 
-	token varchar(255) not null, 
-	token_status varchar(255),
-	user_id bigint not null, 
-	primary key (token_id)
-	) engine=InnoDB;
-alter table domestic_currency add constraint UK_k02teyvggt4asf6d8t9sy03ir unique (domestic_currency_title);
-alter table refresh_token add constraint UK_8ogx3ejsbfbf2xsgl4758otrm unique (user_device_id);
-alter table refresh_token add constraint UK_r4k4edos30bx9neoq81mdvwph unique (token);
-alter table role add constraint UK_epk9im9l9q67xmwi4hbed25do unique (role_name);
-alter table user add constraint UK_2its1oh0ku235njjgsxsgc64m unique (inventory_id);
-alter table user add constraint UK_ob8kqyqqgmefl0aco34akdtpe unique (email);
-alter table user add constraint UK_sb8bbouer5wak8vyiiy4pf2bx unique (username);
-alter table verification_token add constraint UK_p678btf3r9yu6u8aevyb4ff0m unique (token);
-alter table account add constraint FK7m8ru44m93ukyb61dfxw0apf6 foreign key (user_id) references user (user_id);
-alter table inventory_unit add constraint FKg63n1jatlwrrdjh69sqw4qimd foreign key (item_id) references item (item_id);
-alter table inventory_unit add constraint FKaaxbal8bbo4bq638oj8kb83ir foreign key (inventory_id) references inventory (inventory_id);
-;alter table price add constraint FK4ft2mb2yj1jpi3sw1ltcw88sp foreign key (domestic_currency_id) references domestic_currency (domestic_currency_id);
-alter table price add constraint FKndp5uoh7s7ibg1yjtbe9u6jc7 foreign key (item_id) references item (item_id);
-alter table refresh_token add constraint FKr92opronarwe7pn1c41621grv foreign key (user_device_id) references user_device (user_device_id);
-alter table user add constraint FKalo4ugar5xpb802kfh7lqlcj4 foreign key (inventory_id) references inventory (inventory_id);
-alter table user_authority add constraint FKash3fy9hdayq3o73fir11n3th foreign key (role_id) references role (role_id);
-alter table user_authority add constraint FKpqlsjpkybgos9w2svcri7j8xy foreign key (user_id) references user (user_id);
-alter table user_device add constraint FKd2lb0k09c4nnfpvku8r61g92n foreign key (user_id) references user (user_id);
-alter table verification_token add constraint FKrdn0mss276m9jdobfhhn2qogw foreign key (user_id) references user (user_id);
-
+CREATE TABLE account (
+  account_id BIGINT NOT NULL,
+  created DATETIME,
+  updated DATETIME,
+  amount VARCHAR(255),
+  currency VARCHAR(255) NOT NULL,
+  user_id BIGINT,
+  PRIMARY KEY (account_id)
+) ENGINE = InnoDB;
+CREATE TABLE account_seq (next_val BIGINT) ENGINE = InnoDB;
+INSERT INTO
+  account_seq
+VALUES
+  (1);
+CREATE TABLE domestic_currency (
+    domestic_currency_id BIGINT NOT NULL,
+    created DATETIME,
+    updated DATETIME,
+    is_active BIT NOT NULL,
+    domestic_currency_cost VARCHAR(255) NOT NULL,
+    domestic_currency_title VARCHAR(255) NOT NULL,
+    PRIMARY KEY (domestic_currency_id)
+  ) ENGINE = InnoDB;
+CREATE TABLE domestic_currency_seq (next_val BIGINT) ENGINE = InnoDB;
+INSERT INTO
+  domestic_currency_seq
+VALUES
+  (1);
+CREATE TABLE inventory (
+    inventory_id BIGINT NOT NULL,
+    created DATETIME,
+    updated DATETIME,
+    PRIMARY KEY (inventory_id)
+  ) ENGINE = InnoDB;
+CREATE TABLE inventory_seq (next_val BIGINT) ENGINE = InnoDB;
+INSERT INTO
+  inventory_seq
+VALUES
+  (1);
+CREATE TABLE inventory_unit (
+    unit_id BIGINT NOT NULL,
+    created DATETIME,
+    updated DATETIME,
+    amount_items VARCHAR(255),
+    item_id BIGINT,
+    inventory_id BIGINT,
+    PRIMARY KEY (unit_id)
+  ) ENGINE = InnoDB;
+CREATE TABLE item (
+    item_id BIGINT NOT NULL,
+    created DATETIME,
+    updated DATETIME,
+    is_active BIT NOT NULL,
+    description VARCHAR(255),
+    name VARCHAR(255) NOT NULL,
+    type VARCHAR(255) NOT NULL,
+    PRIMARY KEY (item_id)
+  ) ENGINE = InnoDB;
+CREATE TABLE item_seq (next_val BIGINT) ENGINE = InnoDB;
+INSERT INTO
+  item_seq
+VALUES
+  (1);
+CREATE TABLE price (
+    price_id BIGINT NOT NULL,
+    created DATETIME,
+    updated DATETIME,
+    is_active BIT NOT NULL,
+    cost VARCHAR(255),
+    domestic_currency_id BIGINT,
+    item_id BIGINT,
+    PRIMARY KEY (price_id)
+  ) ENGINE = InnoDB;
+CREATE TABLE price_seq (next_val BIGINT) ENGINE = InnoDB;
+INSERT INTO
+  price_seq
+VALUES
+  (1);
+CREATE TABLE refresh_token (
+    token_id BIGINT NOT NULL,
+    created DATETIME,
+    updated DATETIME,
+    expiry_dt DATETIME NOT NULL,
+    refresh_count BIGINT,
+    token VARCHAR(255) NOT NULL,
+    user_device_id BIGINT NOT NULL,
+    PRIMARY KEY (token_id)
+  ) ENGINE = InnoDB;
+CREATE TABLE refresh_token_seq (next_val BIGINT) ENGINE = InnoDB;
+INSERT INTO
+  refresh_token_seq
+VALUES
+  (1);
+CREATE TABLE role (
+    role_id BIGINT NOT NULL auto_increment,
+    role_name VARCHAR(255),
+    PRIMARY KEY (role_id)
+  ) ENGINE = InnoDB;
+CREATE TABLE unit_seq (next_val BIGINT) ENGINE = InnoDB;
+INSERT INTO
+  unit_seq
+VALUES
+  (1);
+CREATE TABLE user (
+    user_id BIGINT NOT NULL,
+    created DATETIME,
+    updated DATETIME,
+    is_active BIT NOT NULL,
+    avatar VARCHAR(255),
+    balance VARCHAR(255),
+    email VARCHAR(255) NOT NULL,
+    is_email_verified BIT NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL,
+    inventory_id BIGINT NOT NULL,
+    PRIMARY KEY (user_id)
+  ) ENGINE = InnoDB;
+CREATE TABLE user_authority (
+    user_id BIGINT NOT NULL,
+    role_id BIGINT NOT NULL,
+    PRIMARY KEY (user_id, role_id)
+  ) ENGINE = InnoDB;
+CREATE TABLE user_device (
+    user_device_id BIGINT NOT NULL,
+    created DATETIME,
+    updated DATETIME,
+    device_id VARCHAR(255) NOT NULL,
+    device_type VARCHAR(255),
+    is_refresh_active BIT,
+    notification_token VARCHAR(255),
+    user_id BIGINT NOT NULL,
+    PRIMARY KEY (user_device_id)
+  ) ENGINE = InnoDB;
+CREATE TABLE user_device_seq (next_val BIGINT) ENGINE = InnoDB;
+INSERT INTO
+  user_device_seq
+VALUES
+  (1);
+CREATE TABLE user_seq (next_val BIGINT) ENGINE = InnoDB;
+INSERT INTO
+  user_seq
+VALUES
+  (1);
+CREATE TABLE verification_token (
+    token_id BIGINT NOT NULL auto_increment,
+    expiry_dt DATETIME NOT NULL,
+    token VARCHAR(255) NOT NULL,
+    token_status VARCHAR(255),
+    user_id BIGINT NOT NULL,
+    PRIMARY KEY (token_id)
+  ) ENGINE = InnoDB;
+ALTER TABLE
+  domestic_currency
+ADD
+  CONSTRAINT UK_k02teyvggt4asf6d8t9sy03ir UNIQUE (domestic_currency_title);
+ALTER TABLE
+  refresh_token
+ADD
+  CONSTRAINT UK_8ogx3ejsbfbf2xsgl4758otrm UNIQUE (user_device_id);
+ALTER TABLE
+  refresh_token
+ADD
+  CONSTRAINT UK_r4k4edos30bx9neoq81mdvwph UNIQUE (token);
+ALTER TABLE
+  role
+ADD
+  CONSTRAINT UK_epk9im9l9q67xmwi4hbed25do UNIQUE (role_name);
+ALTER TABLE
+  user
+ADD
+  CONSTRAINT UK_2its1oh0ku235njjgsxsgc64m UNIQUE (inventory_id);
+ALTER TABLE
+  user
+ADD
+  CONSTRAINT UK_ob8kqyqqgmefl0aco34akdtpe UNIQUE (email);
+ALTER TABLE
+  user
+ADD
+  CONSTRAINT UK_sb8bbouer5wak8vyiiy4pf2bx UNIQUE (username);
+ALTER TABLE
+  verification_token
+ADD
+  CONSTRAINT UK_p678btf3r9yu6u8aevyb4ff0m UNIQUE (token);
+ALTER TABLE
+  account
+ADD
+  CONSTRAINT FK7m8ru44m93ukyb61dfxw0apf6 FOREIGN KEY (user_id) REFERENCES user (user_id);
+ALTER TABLE
+  inventory_unit
+ADD
+  CONSTRAINT FKg63n1jatlwrrdjh69sqw4qimd FOREIGN KEY (item_id) REFERENCES item (item_id);
+ALTER TABLE
+  inventory_unit
+ADD
+  CONSTRAINT FKaaxbal8bbo4bq638oj8kb83ir FOREIGN KEY (inventory_id) REFERENCES inventory (inventory_id);;
+ALTER TABLE
+  price
+ADD
+  CONSTRAINT FK4ft2mb2yj1jpi3sw1ltcw88sp FOREIGN KEY (domestic_currency_id) REFERENCES domestic_currency (domestic_currency_id);
+ALTER TABLE
+  price
+ADD
+  CONSTRAINT FKndp5uoh7s7ibg1yjtbe9u6jc7 FOREIGN KEY (item_id) REFERENCES item (item_id);
+ALTER TABLE
+  refresh_token
+ADD
+  CONSTRAINT FKr92opronarwe7pn1c41621grv FOREIGN KEY (user_device_id) REFERENCES user_device (user_device_id);
+ALTER TABLE
+  user
+ADD
+  CONSTRAINT FKalo4ugar5xpb802kfh7lqlcj4 FOREIGN KEY (inventory_id) REFERENCES inventory (inventory_id);
+ALTER TABLE
+  user_authority
+ADD
+  CONSTRAINT FKash3fy9hdayq3o73fir11n3th FOREIGN KEY (role_id) REFERENCES role (role_id);
+ALTER TABLE
+  user_authority
+ADD
+  CONSTRAINT FKpqlsjpkybgos9w2svcri7j8xy FOREIGN KEY (user_id) REFERENCES user (user_id);
+ALTER TABLE
+  user_device
+ADD
+  CONSTRAINT FKd2lb0k09c4nnfpvku8r61g92n FOREIGN KEY (user_id) REFERENCES user (user_id);
+ALTER TABLE
+  verification_token
+ADD
+  CONSTRAINT FKrdn0mss276m9jdobfhhn2qogw FOREIGN KEY (user_id) REFERENCES user (user_id);

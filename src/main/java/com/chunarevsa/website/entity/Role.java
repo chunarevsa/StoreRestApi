@@ -28,7 +28,7 @@ public class Role  {
 
 	@Column(name = "ROLE_NAME")
 	@Enumerated (EnumType.STRING)
-	@NaturalId // ? - доделать
+	@NaturalId
 	private RoleName role;
 
 	@ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)

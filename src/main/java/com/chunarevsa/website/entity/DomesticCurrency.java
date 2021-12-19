@@ -20,11 +20,11 @@ public class DomesticCurrency extends DateAudit {
 	@SequenceGenerator(name = "domestic_currency_seq", allocationSize = 1)
 	private Long id;
 
-	@Column(name = "DOMESTIC_CURRENCY_TITLE", unique=true)
+	@Column(name = "DOMESTIC_CURRENCY_TITLE", unique=true, nullable = false)
 	private String title;
 
 	// Цена вертуальной валюты в USD
-	@Column(name = "DOMESTIC_CURRENCY_PRICE", nullable = false)
+	@Column(name = "DOMESTIC_CURRENCY_COST", nullable = false)
 	private String cost; 
 
 	@Column(name = "IS_ACTIVE", nullable = false)

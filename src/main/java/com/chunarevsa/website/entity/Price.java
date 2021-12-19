@@ -31,7 +31,7 @@ public class Price extends DateAudit {
 	@JoinColumn(name = "DOMESTIC_CURRENCY_ID", referencedColumnName = "DOMESTIC_CURRENCY_ID")
 	private DomesticCurrency domesticCurrency;
 
-	@Column(name = "IS_ACTIVE")
+	@Column(name = "IS_ACTIVE", nullable = false)
 	private Boolean active;
 
 	@JsonIgnore

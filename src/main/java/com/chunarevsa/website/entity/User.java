@@ -34,7 +34,7 @@ public class User extends DateAudit {
 	@Column(name = "USERNAME", unique = true, nullable = false)
 	private String username;
 
-	@Column(name = "EMAIL", unique = true)
+	@Column(name = "EMAIL", unique = true, nullable = false)
 	@NotBlank (message = "Еmail cannot be null")
 	private String email;
 
@@ -54,11 +54,9 @@ public class User extends DateAudit {
 	@Column(name = "BALANCE") 
 	private String balance;
 
-	@ManyToMany(fetch = FetchType.EAGER) // Каскады - доделать
-	@JoinTable(name = "USER_AUTHORITY", // связь через промежуточную таблицу 
-			// колонка 1 называется USER_ID и ссылается на USER_ID из user
+	@ManyToMany(fetch = FetchType.EAGER) 
+	@JoinTable(name = "USER_AUTHORITY",
 			joinColumns = { @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID") },
-			// колонка 2 называется ROLE_ID и ссылается на ROLE_ID
 			inverseJoinColumns = { @JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID") })
 	private Set<Role> roles = new HashSet<>();
 
