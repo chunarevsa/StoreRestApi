@@ -47,7 +47,7 @@ public class DomesticCurrencyController {
 	@PreAuthorize("hasRole('USER')")
 	@ApiOperation(value = "Получение всех Currency. Формат ответа зависить от роли")
 	public ResponseEntity getCurrencies(@ApiIgnore Pageable pageable,
-				@ApiIgnore JwtUser jwtUser) { 
+				@ApiIgnore @AuthenticationPrincipal JwtUser jwtUser) { 
 
 		return  ResponseEntity.ok().body(domesticCurrencyService.getCurrencies(pageable, jwtUser));
 	}
