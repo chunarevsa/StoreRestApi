@@ -9,8 +9,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 //  Внутренняя вертуальная валюта - gold, silver...
-@Entity 
-@Table(name = "DOMESTIC_CURRENCY")
+/*@Entity 
+@Table(name = "CURRENCY")
 public class DomesticCurrency extends DateAudit {
 
 	@Id
@@ -87,4 +87,4 @@ public class DomesticCurrency extends DateAudit {
 			"}";
 	}
 
-}
+} */

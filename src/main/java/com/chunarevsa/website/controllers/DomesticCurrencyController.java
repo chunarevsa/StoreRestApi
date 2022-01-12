@@ -5,7 +5,7 @@ import javax.validation.Valid;
 import com.chunarevsa.website.payload.ApiResponse;
 import com.chunarevsa.website.payload.DomesticCurrencyRequest;
 import com.chunarevsa.website.security.jwt.JwtUser;
-import com.chunarevsa.website.service.DomesticCurrencyService;
+import com.chunarevsa.website.service.CurrencyService;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -31,9 +31,9 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api(value = "Currency Rest API", description = "Внутренняя валюта (gold, silver...)")
 public class DomesticCurrencyController {
 	
-	private final DomesticCurrencyService domesticCurrencyService;
+	private final CurrencyService domesticCurrencyService;
 
-	public DomesticCurrencyController (DomesticCurrencyService domesticCurrencyService) {
+	public DomesticCurrencyController (CurrencyService domesticCurrencyService) {
 		this.domesticCurrencyService = domesticCurrencyService;
 	}
 

@@ -2,7 +2,7 @@ package com.chunarevsa.website.service;
 
 import java.util.Set;
 
-import com.chunarevsa.website.entity.Account;
+import com.chunarevsa.website.entity.UserAccount;
 import com.chunarevsa.website.entity.User;
 import com.chunarevsa.website.exception.NotEnoughResourcesException;
 import com.chunarevsa.website.repo.AccountRepository;
@@ -32,18 +32,18 @@ public class AccountService implements AccountServiceInterface {
 	 * Зачисляется новый баланс
 	 */
 	@Override
-	public Set<Account> buyCurrency(String currencyTitle, String amountDomesticCurrency, User user) {
+	public Set<UserAccount> buyCurrency(String currencyTitle, String amountDomesticCurrency, User user) {
 	
-		Set<Account> userAccounts = user.getAccounts();
-		Account userAccount = userAccounts.stream()
+		Set<UserAccount> userAccounts = user.getAccounts();
+		UserAccount userAccount = userAccounts.stream()
 				.filter(acc -> currencyTitle.equals(acc.getCurrencyTitle()))
 				.findAny().orElse(null);
 		
 		if (userAccount == null) {
-			Account newAccount = new Account();
+			UserAccount newAccount = new UserAccount();
 			newAccount.setAmount(amountDomesticCurrency);
 			newAccount.setCurrencyTitle(currencyTitle);
-			Account savedAccount = accountRepository.save(newAccount);
+			UserAccount savedAccount = accountRepository.save(newAccount);
 			userAccounts.add(savedAccount);
 			logger.info("Создан новый счёт " + user.getUsername() +" пользователя для " + currencyTitle);
 		} else {
@@ -65,10 +65,10 @@ public class AccountService implements AccountServiceInterface {
 	 * @param amountItems
 	 */
 	@Override
-	public Set<Account> getNewUserAccounts(Set<Account> userAccounts, String currencyTitle,
+	public Set<UserAccount> getNewUserAccounts(Set<UserAccount> userAccounts, String currencyTitle,
 			String cost, String amountItems) {
 
-		Account userAccount = userAccounts.stream()
+		UserAccount userAccount = userAccounts.stream()
 				.filter(acc -> currencyTitle.equals(acc.getCurrencyTitle())).findAny()
 				.orElseThrow(() -> new NotEnoughResourcesException("Покупка", amountItems, currencyTitle));
 

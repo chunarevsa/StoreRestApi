@@ -30,7 +30,7 @@ public class SwaggerConfig {
 
 	private ApiInfo metaInfo() {
 		return new ApiInfoBuilder()
-						.description("StoreApi 1") // TODO: Swagger название
+						.description("StoreApi") 
 						.title("Store API")
 						.version("")
 						.build();

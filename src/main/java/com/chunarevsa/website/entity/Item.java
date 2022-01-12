@@ -28,14 +28,14 @@ public class Item extends DateAudit {
 	@Column(name = "NAME", nullable = false)
 	private String name;
 
+	@Column(name = "IS_ACTIVE", nullable = false)
+	private Boolean active;
+
 	@Column(name = "TYPE", nullable = false)
 	private String type;
 
-	@Column(name = "DESCRIPTION")
-	private String description;
-
-	@Column(name = "IS_ACTIVE", nullable = false)
-	private Boolean active;
+	/* @Column(name = "DESCRIPTION")
+	private String description;  */
 
 	@OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "ITEM_ID")
@@ -48,13 +48,14 @@ public class Item extends DateAudit {
 	public Item(Long id, 
 					String name, 
 					String type, 
-					String description, 
+					//String description, 
 					Boolean active, 
-					Set<Price> prices) {
+					Set<Price> prices
+					) {
 		this.id = id;
 		this.name = name;
 		this.type = type;
-		this.description = description;
+		//this.description = description;
 		this.active = active;
 		this.prices = prices;		
 	}
@@ -83,13 +84,13 @@ public class Item extends DateAudit {
 		this.type = type;
 	}
 
-	public String getDescription() {
+	/*public String getDescription() {
 		return this.description;
 	}
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
+	} */
 
 	public Boolean isActive() {
 		return this.active;
@@ -109,18 +110,8 @@ public class Item extends DateAudit {
 
 	public void setPrices(Set<Price> prices) {
 		this.prices = prices;
-	}
+	} 
 
-	@Override
-	public String toString() {
-		return "{" +
-			" id='" + getId() + "'" +
-			", name='" + getName() + "'" +
-			", type='" + getType() + "'" +
-			", description='" + getDescription() + "'" +
-			", active='" + isActive() + "'" +
-			", prices='" + getPrices() + "'" +
-			"}";
-	}
+
 
 }

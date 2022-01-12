@@ -1,6 +1,6 @@
 package com.chunarevsa.website.dto;
 
-import com.chunarevsa.website.entity.Account;
+import com.chunarevsa.website.entity.UserAccount;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -12,7 +12,7 @@ public class AccountDto {
 	public AccountDto() {
 	}
 
-	public static AccountDto fromUser (Account account) {
+	public static AccountDto fromUser (UserAccount account) {
 		AccountDto accountDto = new AccountDto();
 		accountDto.setAmount(account.getAmount());
 		accountDto.setCurrencyTitle(account.getCurrencyTitle());

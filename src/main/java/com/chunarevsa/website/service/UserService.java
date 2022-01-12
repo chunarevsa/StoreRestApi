@@ -12,7 +12,7 @@ import com.chunarevsa.website.dto.InventoryUnitDto;
 import com.chunarevsa.website.dto.UserDto;
 import com.chunarevsa.website.dto.UserInventoryDto;
 import com.chunarevsa.website.dto.UserProfileDto;
-import com.chunarevsa.website.entity.Account;
+import com.chunarevsa.website.entity.UserAccount;
 import com.chunarevsa.website.entity.InventoryUnit;
 import com.chunarevsa.website.entity.Item;
 import com.chunarevsa.website.entity.Role;
@@ -165,9 +165,9 @@ public class UserService implements UserServiceInterface{
 
 		String username = jwtUser.getUsername().toString();
 		User user = findByUsername(username);
-		Set<Account> userAccounts = user.getAccounts();
+		Set<UserAccount> userAccounts = user.getAccounts();
 
-		Set<Account> newUserAccounts = accountService.getNewUserAccounts(userAccounts, currencyTitle, cost, amountItems);
+		Set<UserAccount> newUserAccounts = accountService.getNewUserAccounts(userAccounts, currencyTitle, cost, amountItems);
 		user.setAccounts(newUserAccounts); 
 
 		User savedUser = saveUser(user); 

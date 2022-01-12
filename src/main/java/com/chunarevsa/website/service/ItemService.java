@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import com.chunarevsa.website.dto.InventoryUnitDto;
 import com.chunarevsa.website.dto.ItemDto;
 import com.chunarevsa.website.dto.PriceDto;
+import com.chunarevsa.website.entity.Currency;
 import com.chunarevsa.website.entity.Item;
 import com.chunarevsa.website.entity.Price;
 import com.chunarevsa.website.exception.InvalidAmountFormat;
@@ -28,7 +29,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ItemService implements ItemServiceInterface {
+public class ItemService {
 
 	private static final Logger logger = LogManager.getLogger(ItemService.class);
 
@@ -117,18 +118,71 @@ public class ItemService implements ItemServiceInterface {
 	@Override
 	public Optional<Item> addItem(ItemRequest itemRequest) {
 
-		Set<Price> prices = priceService.getItempricesFromRequest(itemRequest.getprices());
+		ItemFactoryInterface itemFactory = createItemByType(itemRequest.getType());
+		Item item = itemFactory.createItem(itemRequest);
 
-		Item newItem = new Item();
+		//Set<Price> prices = priceService.getItemPricesFromRequest(itemRequest.getprices());
+		Set<Price> prices = getItemPricesFromRequest(itemRequest);
+
+
+
+
+
+		return Optional.of(savedItem);
+
+		
+
+		/* Item newItem = new Item();
 		newItem.setName(itemRequest.getName());
-		newItem.setDescription(itemRequest.getDescription());
+		//newItem.setDescription(itemRequest.getDescription());
 		newItem.setType(itemRequest.getType());
-		newItem.setActive(itemRequest.getActive());
+		newItem.setActive(itemRequest.getActive()); */
 		newItem.setPrices(prices);
 		priceService.saveprices(newItem.getPrices());
 		Item savedItem = saveItem(newItem);
 		logger.info("Создан новый Item :" + savedItem.getName());
 		return Optional.of(savedItem);
+	}
+
+	static ItemFactoryInterface createItemByType(String type) {
+		if (type.equalsIgnoreCase("GlobalCurrency")) {
+			return new GlobalCurrencyFactory(); // без описания
+		} else if (type.equalsIgnoreCase("Coin")){
+			return new CoinFactory();
+		} else if (type.equalsIgnoreCase("Weapon")) {
+			return new WeaponFactory(); // с Описанием
+		} else if (type.equalsIgnoreCase("Skin")) {
+			return new SkinFactory();
+		} else {
+			throw new ResourceNotFoundException("Item", "с типом", type);
+		}
+		
+	}
+
+	public Set<Price> getItemPricesFromRequest(ItemRequest itemRequest) {
+
+		Set<Price> prices = itemRequest.getprices().stream()
+				.map(priceRequest -> getItemPriceFromRequest(itemRequest.getType(), priceRequest))
+				.collect(Collectors.toSet());
+		return prices;
+	}
+
+	private Price getItemPriceFromRequest(String itemType, PriceRequest priceRequest ) {
+
+		Currency currency = findCurrencyByTitile(priceRequest.getCurrency());
+		priceService.createPrice(priceRequest, currency, itemType);
+		
+
+		Price price = new Price();
+		price.setCost(priceRequest.getCost());
+		price.setCurrency(currency);
+		price.setActive(priceRequest.getActive());
+		return price;
+	}
+
+	public Currency findCurrencyByTitile(String title) {
+		return itemRepository.findByTitle(title)
+			.orElseThrow(() -> new ResourceNotFoundException("Валюта", "title", title));
 	}
 
 	/**

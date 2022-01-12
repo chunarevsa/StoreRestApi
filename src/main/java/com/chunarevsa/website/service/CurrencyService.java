@@ -7,15 +7,14 @@ import java.util.stream.Collectors;
 
 import com.chunarevsa.website.dto.AccountDto;
 import com.chunarevsa.website.dto.DomesticCurrencyDto;
-import com.chunarevsa.website.entity.Account;
-import com.chunarevsa.website.entity.DomesticCurrency;
+import com.chunarevsa.website.entity.UserAccount;
+import com.chunarevsa.website.entity.Currency;
 import com.chunarevsa.website.entity.User;
 import com.chunarevsa.website.exception.AlreadyUseException;
 import com.chunarevsa.website.exception.InvalidAmountFormat;
 import com.chunarevsa.website.exception.NotEnoughResourcesException;
 import com.chunarevsa.website.exception.ResourceNotFoundException;
 import com.chunarevsa.website.payload.DomesticCurrencyRequest;
-import com.chunarevsa.website.repo.DomesticCurrencyRepository;
 import com.chunarevsa.website.security.jwt.JwtUser;
 import com.chunarevsa.website.service.inter.DomesticCurrencyServiceInterface;
 
@@ -29,20 +28,19 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class DomesticCurrencyService implements DomesticCurrencyServiceInterface {
+public class CurrencyService {
 
-	private static final Logger logger = LogManager.getLogger(DomesticCurrencyService.class);
+	private static final Logger logger = LogManager.getLogger(CurrencyService.class);
 
-	private final DomesticCurrencyRepository domesticCurrencyRepository;
 	private final UserService userService;
 	private final AccountService accountService;
 
 	@Autowired
-	public DomesticCurrencyService(
-				DomesticCurrencyRepository domesticCurrencyRepository,
+	public CurrencyService(
+				
 				UserService userService,
 				AccountService accountService) {
-		this.domesticCurrencyRepository = domesticCurrencyRepository;
+		
 		this.userService = userService;
 		this.accountService = accountService;
 	}
@@ -112,7 +110,7 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 		double newUserBalance = Math.round(userBalance - sum);
 		user.setBalance(Double.toString(newUserBalance));
 
-		Set<Account> accounts = accountService.buyCurrency(currencyTitle, amountDomesticCurrency, user);
+		Set<UserAccount> accounts = accountService.buyCurrency(currencyTitle, amountDomesticCurrency, user);
 		user.setAccounts(accounts);
 		userService.saveUser(user);
 		logger.info("Пользователь " + user.getUsername() + " приобрел валюту " 
@@ -188,8 +186,8 @@ public class DomesticCurrencyService implements DomesticCurrencyServiceInterface
 	/**
 	 * Получение валюты по Title
 	 */
-	@Override
-	public DomesticCurrency findCurrencyByTitile(String title) {
+
+	public Currency findCurrencyByTitile(String title) {
 		return domesticCurrencyRepository.findByTitle(title)
 			.orElseThrow(() -> new ResourceNotFoundException("Валюта", "title", title));
 	}

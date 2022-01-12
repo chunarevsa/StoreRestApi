@@ -28,8 +28,8 @@ public class Price extends DateAudit {
 	private String cost;
 
 	@OneToOne
-	@JoinColumn(name = "DOMESTIC_CURRENCY_ID", referencedColumnName = "DOMESTIC_CURRENCY_ID")
-	private DomesticCurrency domesticCurrency;
+	@JoinColumn(name = "CURRENCY_ID", referencedColumnName = "CURRENCY_ID")
+	private Currency currency;
 
 	@Column(name = "IS_ACTIVE", nullable = false)
 	private Boolean active;
@@ -43,10 +43,10 @@ public class Price extends DateAudit {
 		super();
 	}
 
-	public Price(Long id, String cost, DomesticCurrency domesticCurrency, Boolean active, Item item) {
+	public Price(Long id, String cost, Currency currency, Boolean active, Item item) {
 		this.id = id;
 		this.cost = cost;
-		this.domesticCurrency = domesticCurrency;
+		this.currency = currency;
 		this.active = active;
 		this.item = item;
 	}
@@ -68,13 +68,14 @@ public class Price extends DateAudit {
 	}
 
 
-	public DomesticCurrency getDomesticCurrency() {
-		return this.domesticCurrency;
+	public Currency getCurrency() {
+		return this.currency;
 	}
 
-	public void setDomesticCurrency(DomesticCurrency domesticCurrency) {
-		this.domesticCurrency = domesticCurrency;
+	public void setCurrency(Currency currency) {
+		this.currency = currency;
 	}
+
 	
 	public Boolean isActive() {
 		return this.active;
@@ -94,17 +95,6 @@ public class Price extends DateAudit {
 
 	public void setItem(Item item) {
 		this.item = item;
-	}
-
-	@Override
-	public String toString() {
-		return "{" +
-			" id='" + getId() + "'" +
-			", cost='" + getCost() + "'" +
-			", domesticCurrency='" + getDomesticCurrency() + "'" +
-			", active='" + isActive() + "'" +
-			", item='" + getItem() + "'" +
-			"}";
 	}
 
 }

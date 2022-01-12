@@ -51,9 +51,6 @@ public class User extends DateAudit {
 	@Column(name = "IS_EMAIL_VERIFIED", nullable = false)
 	private Boolean isEmailVerified;
 
-	@Column(name = "BALANCE") 
-	private String balance;
-
 	@ManyToMany(fetch = FetchType.EAGER) 
 	@JoinTable(name = "USER_AUTHORITY",
 			joinColumns = { @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID") },
@@ -62,7 +59,7 @@ public class User extends DateAudit {
 
 	@OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "USER_ID")
-	private Set<Account> accounts = new HashSet<>();
+	private Set<UserAccount> accounts = new HashSet<>();
 
 	@OneToOne(optional = false, cascade = CascadeType.ALL)
 	@JoinColumn(name ="INVENTORY_ID", unique = true)
@@ -80,7 +77,6 @@ public class User extends DateAudit {
 		this.active = user.active;
 		this.avatar = user.avatar;
 		this.isEmailVerified = user.isEmailVerified;
-		this.balance = user.balance;
 		this.roles = user.roles;
 		this.accounts = user.accounts;
 		this.userInventory = user.userInventory;
@@ -93,9 +89,8 @@ public class User extends DateAudit {
 					Boolean active, 
 					String avatar, 
 					Boolean isEmailVerified, 
-					String balance, 
 					Set<Role> roles, 
-					Set<Account> accounts,
+					Set<UserAccount> accounts,
 					UserInventory userInventory) {
 		this.id = id;
 		this.username = username;
@@ -104,7 +99,6 @@ public class User extends DateAudit {
 		this.active = active;
 		this.avatar = avatar;
 		this.isEmailVerified = isEmailVerified;
-		this.balance = balance;
 		this.roles = roles;
 		this.accounts = accounts;
 		this.userInventory = userInventory;
@@ -195,19 +189,11 @@ public class User extends DateAudit {
 		this.isEmailVerified = isEmailVerified;
 	}
 
-	public String getBalance() {
-		return this.balance;
-	}
-
-	public void setBalance(String balance) {
-		this.balance = balance;
-	}
-
-	public Set<Account> getAccounts() {
+	public Set<UserAccount> getAccounts() {
 		return this.accounts;
 	}
 
-	public void setAccounts(Set<Account> accounts) {
+	public void setAccounts(Set<UserAccount> accounts) {
 		this.accounts = accounts;
 	}
 
@@ -217,23 +203,6 @@ public class User extends DateAudit {
 
 	public void setUserInventory(UserInventory userInventory) {
 		this.userInventory = userInventory;
-	}
-
-	@Override
-	public String toString() {
-		return "{" +
-			" id='" + getId() + "'" +
-			", username='" + getUsername() + "'" +
-			", email='" + getEmail() + "'" +
-			", password='" + getPassword() + "'" +
-			", active='" + isActive() + "'" +
-			", avatar='" + getAvatar() + "'" +
-			", isEmailVerified='" + isIsEmailVerified() + "'" +
-			", balance='" + getBalance() + "'" +
-			", roles='" + getRoles() + "'" +
-			", accounts='" + getAccounts() + "'" +
-			", userInventory='" + getUserInventory() + "'" +
-			"}";
 	}
 	
 }

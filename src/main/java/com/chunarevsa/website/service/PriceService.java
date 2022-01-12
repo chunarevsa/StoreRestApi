@@ -5,7 +5,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.chunarevsa.website.dto.PriceDto;
-import com.chunarevsa.website.entity.DomesticCurrency;
+import com.chunarevsa.website.entity.Currency;
 import com.chunarevsa.website.entity.Price;
 import com.chunarevsa.website.exception.AlreadyUseException;
 import com.chunarevsa.website.exception.InvalidAmountFormat;
@@ -20,26 +20,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PriceService implements PriceServiceInterface {
+public class PriceService {
 
 	private static final Logger logger = LogManager.getLogger(PriceService.class);
 
 	private final PriceRepository priceRepository;
-	private final DomesticCurrencyService domesticCurrencyService;
+	private final CurrencyService currencyService;
 
 	@Autowired
 	public PriceService(
 			PriceRepository priceRepository,
-			DomesticCurrencyService domesticCurrencyService) {
+			CurrencyService currencyService) {
 		this.priceRepository = priceRepository;
-		this.domesticCurrencyService = domesticCurrencyService;
+		this.currencyService = currencyService;
 	}
 
 	/**
 	 * Получение списка Price из списка PriceRequest
 	 */
-	@Override
-	public Set<Price> getItempricesFromRequest(Set<PriceRequest> pricesRequest) {
+	public Set<Price> getItemPricesFromRequest(Set<PriceRequest> pricesRequest) {
 
 		Set<Price> prices = pricesRequest.stream()
 				.map(priceRequest -> getItemPriceFromRequest(priceRequest))
@@ -126,18 +125,18 @@ public class PriceService implements PriceServiceInterface {
 	/**
 	 * Получение всех цен в PriceDto
 	 */
-	@Override
-	public Set<PriceDto> getItempricesDto(Set<Price> prices) {
 
-		Set<Price> activeprices = prices.stream().filter(price -> price.getActive() == true)
+	public Set<PriceDto> getItemPricesDto(Set<Price> prices) {
+
+		Set<Price> activePrices = prices.stream().filter(price -> price.getActive() == true)
 				.collect(Collectors.toSet());
 
-		if (activeprices == null) {
+		if (activePrices == null) {
 			logger.error("Нет активных Item");
 			throw new ResourceNotFoundException("Price", "active", true);
 		}
 
-		Set<PriceDto> pricesDto = activeprices.stream()
+		Set<PriceDto> pricesDto = activePrices.stream()
 				.map(activePrice -> getItemPriceDto(activePrice.getId())).collect(Collectors.toSet());
 
 		return pricesDto;
@@ -176,6 +175,9 @@ public class PriceService implements PriceServiceInterface {
 	 * Получение Price из PriceRequest
 	 */
 	private Price getItemPriceFromRequest(PriceRequest priceRequest) {
+
+		Currency currency = currencyService.findCurrencyByTitile(priceRequest.getCurrency());
+
 
 		DomesticCurrency domesticCurrency = domesticCurrencyService.findCurrencyByTitile(priceRequest.getCurrency());
 		validatePriceRequest(priceRequest);
@@ -238,6 +240,25 @@ public class PriceService implements PriceServiceInterface {
 	public Price findPriceById(Long priceId) {
 		return priceRepository.findById(priceId)
 				.orElseThrow(() -> new ResourceNotFoundException("Price", "id", priceId));
+	}
+
+	public Price createPrice(PriceRequest priceRequest, Currency currency, String itemType) {
+
+		PriceFactoryInterface priceFactory = createPriceByType(itemType);
+		Price price = priceFactory.createPrice(priceRequest);
+
+		currency.
+		validatePriceRequest(priceRequest);
+
+	}
+
+	static ItemFactoryInterface createPriceByType(String itemType) {
+		if (itemType.equalsIgnoreCase("GlobalCurrency") ) {
+			return new CoinPriceFactory();
+		} else {
+			return new ItemPriceFactory();
+		}
+		
 	}
 
 }

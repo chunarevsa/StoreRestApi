@@ -80,10 +80,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 					.and()
 						.authorizeRequests()
-						.antMatchers( // Доступны без авторизации
+						.antMatchers( 
 									"/auth/*"
 									).permitAll()
-						.anyRequest().authenticated(); // остально только для авторизованых	
+						.anyRequest().authenticated(); 
 		
 		httpSecurity.addFilterBefore(JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 	} 

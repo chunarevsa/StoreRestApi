@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 @Configuration
 @PropertySource("classpath:mail.properties")
-@EnableAsync // ? - доделать
+@EnableAsync
 public class  MailConfig {
 	
 	@Value("${spring.mail.default-encoding}")
